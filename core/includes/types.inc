@@ -203,6 +203,7 @@ define('QE_PAYMENT', '1');
 define('QE_DEPOSIT', '2');
 define('QE_JOURNAL', '3');
 define('QE_SUPPINV', '4');
+define('QE_INACTIVE', '5');
 
 //----------------------------------------------------------------------------------
 //	Special option values for various list selectors.
@@ -273,4 +274,5 @@ defined('ICON_SUBMIT') || define('ICON_SUBMIT', 'ok.gif');
 defined('ICON_ESCAPE') || define('ICON_ESCAPE', 'escape.png');
 defined('ICON_ALLOC') || define('ICON_ALLOC', 'alloc.png');
 defined('ICON_CLOSED') || define('ICON_CLOSED', 'closed.png');
+
 

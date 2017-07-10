@@ -91,20 +91,24 @@ function _set_combo_input(e) {
 			  var byid = string_contains(this.className, 'combo') || string_contains(this.className, 'combo3');
 			  var ac = this.value.toUpperCase();
 			  select.options[select.selectedIndex].selected = false;
+			  var selIndex = -1;
 			  for (i = 0; i < len; i++) {
 				var txt = byid ? select.options[i].value : select.options[i].text;
 				if (string_contains(this.className, 'combo3')) {
 				  if(txt.toUpperCase().indexOf(ac) == 0) {
-					select.options[i].selected = true;
+					selIndex=i;
 				  	break;
 				  }
 				} else {
 				  if(txt.toUpperCase().indexOf(ac) >= 0) {
-					select.options[i].selected = true;
-				  	break;
-				  }
+					selIndex=i;
+					select.options[i].removeAttribute("hidden");
+				  } else
+					select.options[i].setAttribute("hidden", true);
 				}
 			  }
+			  if (selIndex != -1)
+				select.options[selIndex].selected = true;
 			}
 		};
     	e.onkeydown = function(ev) {
@@ -118,7 +122,7 @@ function _set_combo_input(e) {
 }
 
 function _update_box(s) {
-	var byid = string_contains(s.className, 'combo') || string_contains(s.className, 'combo3');
+	var byid = string_contains(s.className, 'combo') || string_contains(s.className, 'combo4') || string_contains(s.className, 'combo3');
 	var rel = s.getAttribute('rel');
 	var box = document.getElementsByName(rel)[0];
 		if(box && s.selectedIndex>=0) {
@@ -140,14 +144,14 @@ function _set_combo_select(e) {
 		e.onblur = function() {
 		    var box = document.getElementsByName(this.getAttribute('rel'))[0];
 			if ((this.selectedIndex != this.getAttribute('_last'))
-				||((string_contains(this.className, 'combo') || string_contains(this.className, 'combo3')) && _update_box(this))
+				||((string_contains(this.className, 'combo') || string_contains(this.className, 'combo4') || string_contains(this.className, 'combo3')) && _update_box(this))
 				)
 					this.onchange();
 		}
 		e.onchange = function() {
 			var s = this;
 			this.setAttribute('_last', this.selectedIndex);
-			if(string_contains(s.className, 'combo') || string_contains(this.className, 'combo3'))
+			if(string_contains(s.className, 'combo') || string_contains(s.className, 'combo4') || string_contains(this.className, 'combo3'))
 			    _update_box(s);
 			if(s.selectedIndex>=0) {
 				 var sname = '_'+s.name+'_update';
@@ -280,11 +284,11 @@ var inserts = {
 		if(e.onfocus==undefined) {
 			e.onfocus = function() {
 				save_focus(this);
-				if (string_contains(this.className, 'combo') || string_contains(this.className, 'combo3'))
+				if (string_contains(this.className, 'combo') || string_contains(this.className, 'combo4') || string_contains(this.className, 'combo3'))
 					this.select();
 			};
 		}
-		if (string_contains(e.className, 'combo') || string_contains(e.className, 'combo2') || string_contains(e.className, 'combo3')) {
+		if (string_contains(e.className, 'combo') || string_contains(e.className, 'combo4') || string_contains(e.className, 'combo2') || string_contains(e.className, 'combo3')) {
 				_set_combo_input(e);
 		}
 		else
@@ -406,7 +410,7 @@ var inserts = {
 			};
 		}
   		var c = e.className;
-		if (string_contains(c, 'combo') || string_contains(c, 'combo2') || string_contains(c, 'combo3'))
+		if (string_contains(c, 'combo') || string_contains(c, 'combo4') || string_contains(c, 'combo2') || string_contains(c, 'combo3'))
 			_set_combo_select(e);
 		else {
 			e.onkeydown = function(ev) {	// block unintentional page escape with 'history back' key pressed on buttons

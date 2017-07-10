@@ -206,13 +206,15 @@ if ($Mode == 'Delete')
 
 if (get_post('Refresh')) {
 	$comp = get_post('extset');
-	$exts = get_company_extensions($comp);
+	$exts = get_company_extensions();
 
 	$result = true;
 	foreach($exts as $i => $ext) {
 		if ($ext['package'] && ($ext['active'] ^ check_value('Active'.$i))) 
 		{
-			if (check_value('Active'.$i) && !check_src_ext_version($ext['version']))
+			if (check_value('Active'.$i)
+				&& $ext['version'] != "-"	// jrb: how is the version set for a local extension?
+				&& !check_src_ext_version($ext['version']))
 			{
 				display_warning(sprintf(_("Package '%s' is incompatible with current application version and cannot be activated.\n")
 					. _("Check Install/Activate page for newer package version."), $ext['name']));
@@ -226,10 +228,13 @@ if (get_post('Refresh')) {
 				$exts[$i]['active'] = check_value('Active'.$i);
 		}
 	}
-	write_extensions($exts, get_post('extset'));
+	$written = write_extensions($exts, get_post('extset'));
+	if ($written !== null)
+		$result &= $written;
+	
 	if (get_post('extset') == user_company())
 		$installed_extensions = $exts;
-	
+
 	if(!$result) {
 		display_error(_('Status change for some extensions failed.'));
 		$Ajax->activate('ext_tbl'); // refresh settings display
@@ -274,3 +279,4 @@ if ($set == -1)
 end_form();
 
 end_page();
+

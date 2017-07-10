@@ -918,9 +918,9 @@ class FrontReport extends Cpdf
 
 		$this->pageNumber++;
 		parent::newPage();
+		$this->row = $this->pageHeight - $this->topMargin; // reset row
 
 		if ($this->tmplSize) {
-			$this->row = $this->pageHeight - $this->topMargin; // reset row
 			$id = $this->importPage(min($this->pageNumber, $this->tmplSize));
 			$this->useTemplate($id);
 		}
@@ -1073,4 +1073,5 @@ class FrontReport extends Cpdf
 		}
 	}
 }
+
 

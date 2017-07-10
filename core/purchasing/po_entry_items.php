@@ -480,7 +480,11 @@ start_table(TABLESTYLE2);
 
 
 if ($_SESSION['PO']->trans_type == ST_SUPPINVOICE) {
-	cash_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
+	// Do not restrict immediate supplier payment to cash accounts.
+	// The user could have paid with a check or a credit card,
+	// so there is no reason to create allocations for delayed
+	// payment.
+	bank_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
 }
 
 textarea_row(_("Memo:"), 'Comments', null, 70, 4);

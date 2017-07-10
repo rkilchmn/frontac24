@@ -6862,7 +6862,7 @@ msgid "Savings Account"
 msgstr ""
 
 #: includes/sysnames.inc:82
-msgid "Chequing Account"
+msgid "Checking Account"
 msgstr ""
 
 #: includes/sysnames.inc:83 manufacturing/work_order_costs.php:146

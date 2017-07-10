@@ -37,7 +37,7 @@ class sys_prefs
 			$this->time_zone = ini_get('date.timezone');
 
 		if (!$this->time_zone)
-			$this->time_zone = 'Europe/Berlin';
+			$this->time_zone = 'US/Mountain';
 			
 		if (!isset($this->use_popup_search))
 			$this->use_popup_search = false;

@@ -79,14 +79,14 @@ $type_shortcuts = array(
 //
 $bank_account_types = array (
 	BT_TRANSFER => _("Savings Account"),
-		_("Chequing Account"),
+		_("Checking Account"),
 		_("Credit Account"),
 		_("Cash Account")
 	);
 
 $bank_transfer_types = array(
 	BT_TRANSFER => _("Transfer"),
-			_("Cheque"),
+			_("Check"),
 			_("Credit"),
 			_("Cash")
 	);
@@ -153,7 +153,8 @@ $quick_entry_types = array(
 	QE_DEPOSIT => _("Bank Deposit"),
 	QE_PAYMENT => _("Bank Payment"),
 	QE_JOURNAL => _("Journal Entry"),
-	QE_SUPPINV => _("Supplier Invoice/Credit")
+	QE_SUPPINV => _("Supplier Invoice/Credit"),
+	QE_INACTIVE => _("Inactive")
 );
 
 //----------------------------------------------------------------------------------

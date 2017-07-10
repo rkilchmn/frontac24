@@ -202,10 +202,10 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 	$clear_trial_balance_opening = false;
 
 /*
-	Optional backup path. Use %s in place of company number.
-	If not defined $comp_path/%s/backup/ is used.
+        Sort and item list by description rather than by item number
 */
-//	$backup_path = dirname(__FILE__).'/company/%s/backup/';
+	$sort_item_list_desc = true;
+
 
 /*
 	Optional popup search enabled if this is true.

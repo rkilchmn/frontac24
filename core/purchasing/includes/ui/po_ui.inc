@@ -13,6 +13,35 @@ include_once($path_to_root . "/purchasing/includes/purchasing_db.inc");
 
 //--------------------------------------------------------------------------------------------------
 
+/*
+        This function returns the next suppliers ref
+        To work correctly, references should be numeric or end in a numeric.
+*/
+function next_ref($supplier_id) {
+$sql = "SELECT max(supp_reference) FROM ".TB_PREF."supp_trans WHERE supplier_id="
+                .db_escape($supplier_id)
+                . " AND ov_amount!=0"; // ignore voided invoice references
+
+    $result = db_query($sql, "Can not find max supp_reference");
+    $row = db_fetch_row($result);
+    if (!$row[0]) return null;
+    $offset= numeric_offset($row[0]);
+    $num=substr($row[0], $offset);
+    if (!is_numeric($num))
+        return null;
+    $num += 1;
+    return substr($row[0], 0, $offset) . $num;
+}
+
+function numeric_offset($text) {
+    preg_match('/\d/', $text, $m, PREG_OFFSET_CAPTURE);
+    if (sizeof($m))
+        return $m[0][1];
+
+    // the case when there's no numbers in the string
+    return strlen($text);
+}
+
 function copy_from_cart()
 {
 	$cart = &$_SESSION['PO'];
@@ -166,7 +195,7 @@ function display_po_header(&$order)
 	if ($order->trans_type==ST_SUPPINVOICE)
 		date_row(_("Due Date:"), 'due_date', '', false, 0, 0, 0, null, true);
 
-  	text_row(_("Supplier's Reference:"), 'supp_ref', null, 16, 15);
+  	text_row(_("Supplier's Reference:"), 'supp_ref', next_ref($order->supplier_id), 16, 15);
 
 	if (get_company_pref('use_dimension'))
 		dimensions_list_row(_('Dimension').':', 'dimension', null, true, _('Default'), false, 1);

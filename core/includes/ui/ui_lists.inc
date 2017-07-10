@@ -49,6 +49,7 @@ $opts = array(		// default options
 		// 2 - with (optional) visible search box, search by fragment at the start of id
 		// 3 - TODO reverse: box with hidden selector available via enter; this
 		// would be convenient for optional ad hoc adding of new item
+		// 4 - with (optional) visible search box, search by fragment inside description
 	'search_submit' => true, //search submit button: true/false
 	'size' => 8,	// size and max of box tag
 	'max' => 50,
@@ -80,12 +81,15 @@ $opts = array(		// default options
 	if ($opts['type'] == 0) {
 		$by_id = true;
 		$class = 'combo';
-	} elseif($opts['type'] == 1) {
+	} else if($opts['type'] == 1) {
 		$by_id = false;
 		$class = 'combo2';
-	} else {
+	} else if($opts['type'] == 2) {
 		$by_id = true;
 		$class = 'combo3';
+	} else {
+		$by_id = true;
+		$class = 'combo4';
 	}
 
 	$disabled = $opts['disabled'] ? "disabled" : '';
@@ -104,8 +108,9 @@ $opts = array(		// default options
 			: _('Enter description fragment to search or * for all')) :'';
 
 	if ($selected_id == null) {
-		$selected_id = get_post($name, (string)$opts['default']);
+	 	$selected_id = get_post($name, (string)$opts['default']);
 	}
+
 	if(!is_array($selected_id))
 		$selected_id = array((string)$selected_id); // code is generalized for multiple selection support
 
@@ -805,6 +810,8 @@ function dimensions_list_row($label, $name, $selected_id=null, $no_option=false,
 function stock_items_list($name, $selected_id=null, $all_option=false, 
 	$submit_on_change=false, $opts=array(), $editkey = false, $type = "stock")
 {
+global $SysPrefs ;
+
 	$sql = "SELECT stock_id, s.description, c.description, s.inactive, s.editable
 			FROM ".TB_PREF."stock_master s,".TB_PREF."stock_category c WHERE s.category_id=c.category_id";
 
@@ -816,6 +823,12 @@ function stock_items_list($name, $selected_id=null, $all_option=false,
 	if ($editkey)
 		set_editor('item', $name, $editkey);
 
+	$sort_opts = array(
+		'order' => array('c.description','stock_id'));
+	if (@$SysPrefs->sort_item_list_desc)
+		$sort_opts = array(
+			'type' => 4,	// search by description
+			'order' => array('c.description','s.description', 'stock_id'));
 	$ret = combo_input($name, $selected_id, $sql, 'stock_id', 's.description',
 		array_merge(
 		  array(
@@ -828,11 +841,10 @@ function stock_items_list($name, $selected_id=null, $all_option=false,
 			'size'=>10,
 			'select_submit'=> $submit_on_change,
 			'category' => 2,
-			'order' => array('c.description','stock_id'),
 			'editlink' => $editkey ? add_edit_combo('item') : false,
 			'editable' => false,
 			'max' => 255
-		  ), $opts), $type );
+		  ), $sort_opts, $opts), $type );
 	return $ret;
 }
 
@@ -1696,8 +1708,14 @@ function stock_categories_list($name, $selected_id=null, $spec_opt=false, $submi
 		$where_opts[0] = "dflt_mb_flag!='F'";
 
 	$sql = "SELECT category_id, description, inactive FROM ".TB_PREF."stock_category";
+	global $sort_item_list_desc;
+
+	$sort_opts = array('category_id');
+	if ($sort_item_list_desc == true)
+		array('description', 'category_id');
+
 	return combo_input($name, $selected_id, $sql, 'category_id', 'description',
- 		array('order'=>'category_id',
+ 		array('order' => $sort_opts,
 			'spec_option' => $spec_opt,
 			'spec_id' => -1,
  			'select_submit'=> $submit_on_change,

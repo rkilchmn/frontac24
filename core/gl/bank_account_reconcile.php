@@ -124,6 +124,26 @@ function change_tpl_flag($reconcile_id)
 	return true;
 }
 
+function set_tpl_flag($reconcile_id)
+{
+	global	$Ajax;
+
+	if (check_value("rec_".$reconcile_id))
+		return;
+
+	if (get_post('bank_date')=='')	// new reconciliation
+		$Ajax->activate('bank_date');
+
+	$_POST['bank_date'] = date2sql(get_post('reconcile_date'));
+	$reconcile_value =  ("'".$_POST['bank_date'] ."'");
+	
+	update_reconciled_values($reconcile_id, $reconcile_value, $_POST['reconcile_date'],
+		input_num('end_balance'), $_POST['bank_account']);
+		
+	$Ajax->activate('reconciled');
+	$Ajax->activate('difference');
+}
+
 if (!isset($_POST['reconcile_date'])) { // init page
 	$_POST['reconcile_date'] = new_doc_date();
 //	$_POST['bank_date'] = date2sql(Today());
@@ -148,11 +168,22 @@ $id = find_submit('_rec_');
 if ($id != -1) 
 	change_tpl_flag($id);
 
+/*
 if (isset($_POST['Reconcile'])) {
 	set_focus('bank_date');
 	foreach($_POST['last'] as $id => $value)
 		if ($value != check_value('rec_'.$id))
 			if(!change_tpl_flag($id)) break;
+
+    $Ajax->activate('_page_body');
+}
+*/
+
+if (isset($_POST['ReconcileAll'])) {
+	set_focus('bank_date');
+	foreach($_POST['last'] as $id => $value)
+		set_tpl_flag($id);
+
     $Ajax->activate('_page_body');
 }
 
@@ -243,7 +274,8 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 	display_db_pager($table);
 
 br(1);
-submit_center('Reconcile', _("Reconcile"), true, '', null);
+//submit_center('Reconcile', _("Reconcile"), true, '', null);
+submit_center('ReconcileAll', _("Reconcile All"), true, '');
 
 end_form();
 

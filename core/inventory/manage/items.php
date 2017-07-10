@@ -303,6 +303,34 @@ if (isset($_POST['delete']) && strlen($_POST['delete']) > 1)
 	}
 }
 
+
+function numeric_offset($text) {
+    preg_match('/\d/', $text, $m, PREG_OFFSET_CAPTURE);
+    if (sizeof($m))
+        return $m[0][1];
+
+    // the case when there's no numbers in the string
+    return strlen($text);
+}
+
+
+/*
+	This function returns the next unused stock_id in stock_master.
+	To work correctly, stock_ids should be numeric or end in a numeric.
+*/
+function next_stock_id() {
+    $sql = "SELECT max(stock_id) as max FROM ".TB_PREF."stock_master";
+    $result = db_query($sql, "Can not find max stock_id");
+    $row = db_fetch_row($result);
+    if (!$row[0]) return null;
+    $offset= numeric_offset($row[0]);
+    $num=substr($row[0], $offset);
+    if (!is_numeric($num))
+	return null;
+    $num += 1;
+    return substr($row[0], 0, $offset) . $num;
+}
+
 function item_settings(&$stock_id, $new_item) 
 {
 	global $SysPrefs, $path_to_root, $page_nested, $depreciation_methods;
@@ -316,7 +344,7 @@ function item_settings(&$stock_id, $new_item)
 	//------------------------------------------------------------------------------------
 	if ($new_item) 
 	{
-		text_row(_("Item Code:"), 'NewStockID', null, 21, 20);
+		text_row(_("Item Code:"), 'NewStockID', next_stock_id(), 21, 20);
 
 		$_POST['inactive'] = 0;
 	} 
