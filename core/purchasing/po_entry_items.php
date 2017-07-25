@@ -484,6 +484,7 @@ if ($_SESSION['PO']->trans_type == ST_SUPPINVOICE) {
 	// The user could have paid with a check or a credit card,
 	// so there is no reason to create allocations for delayed
 	// payment.
+	// cash_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
 	bank_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
 }
 

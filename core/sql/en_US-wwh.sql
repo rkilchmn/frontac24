@@ -121,13 +121,9 @@ INSERT INTO `0_bank_accounts` VALUES ('1061', 0, 'Wells Fargo Savings (1277)', '
 INSERT INTO `0_bank_accounts` VALUES ('1062', 0, 'Vanguard - ST Bond', 'N/A', 'N/A', '', 'USD', 0, 5, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1072', 0, 'Thornton Tax Dep', 'N/A', 'N/A', '', 'USD', 0, 6, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1095', 0, 'QB Banks', 'N/A', 'N/A', '', 'USD', 0, 6, '5690', '0000-00-00 00:00:00', 0, 0);
--- Partner Contributions is like a credit card account when the partners
--- use their personal credit cards to make payment
-INSERT INTO `0_bank_accounts` VALUES ('3300', 2, 'Partner Contributions', 'N/A', 'N/A', '', 'USD', 0, 7, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('2210', 2, 'Square', 'N/A', 'N/A', '', 'USD', 0, 7, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1070', 0, 'Fruita Consumers Coop Cap. Acct', 'N/A', 'N/A', '', 'USD', 0, 8, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('2200', 2, 'Credit card', 'N/A', 'N/A', '', 'USD', 0, 9, '5690', '0000-00-00 00:00:00', 0, 0);
-INSERT INTO `0_bank_accounts` VALUES ('1595', 3, 'QB Inventory Assets', 'N/A', 'N/A', '', 'USD', 0, 2, '5690', '0000-00-00 00:00:00', 0, 0);
 -- --------------------------------------------------------
 
 --
@@ -272,7 +268,6 @@ INSERT INTO `0_chart_master` VALUES ('2140', '', 'Accrued Real &amp; Personal Pr
 INSERT INTO `0_chart_master` VALUES ('2150', '', 'Sales Tax','4','0');
 INSERT INTO `0_chart_master` VALUES ('2200', '', 'United Bus Card(0672,7697,3541)','4','0');
 INSERT INTO `0_chart_master` VALUES ('2295', '', 'QB Current Liabilities','4','0');
-INSERT INTO `0_chart_master` VALUES ('1595', '', 'QB Inventory Assets','2','0');
 INSERT INTO `0_chart_master` VALUES ('1800', '', 'Accumulated Depreciation','3','0');
 INSERT INTO `0_chart_master` VALUES ('1080', '', 'Undeposited Funds','1','0');
 INSERT INTO `0_chart_master` VALUES ('1061', '', 'Wells Fargo Savings (1277)','1','0');
@@ -290,7 +285,6 @@ INSERT INTO `0_chart_master` VALUES ('5640', '', 'Depreciation (Section 179)','1
 INSERT INTO `0_chart_master` VALUES ('4450', '', 'Foreign Exchange Gain','9','0');
 INSERT INTO `0_chart_master` VALUES ('4500', '', 'Prompt Payment Discounts','9','0');
 INSERT INTO `0_chart_master` VALUES ('4510', '', 'Discounts Given','9','0');
-INSERT INTO `0_chart_master` VALUES ('5010', '', 'Cost of Goods Sold - Retail','10','0');
 INSERT INTO `0_chart_master` VALUES ('5020', '', 'Production Losses','10','0');
 INSERT INTO `0_chart_master` VALUES ('5030', '', 'Winery Common Expenses','10','0');
 INSERT INTO `0_chart_master` VALUES ('5040', '', 'Purchase price Variance','10','0');
@@ -1618,10 +1612,10 @@ CREATE TABLE IF NOT EXISTS `0_stock_category` (
 -- Dumping data for table `0_stock_category`
 --
 
-INSERT INTO `0_stock_category` VALUES (1, 'Components', 1, 'each', 'B', '4010', '5010', '1510', '5040', '1530', 0, 0, 0, 0, 0);
-INSERT INTO `0_stock_category` VALUES (2, 'Charges', 1, 'each', 'D', '4010', '5010', '1510', '5040', '1530', 0, 0, 0, 0, 0);
-INSERT INTO `0_stock_category` VALUES (3, 'Systems', 1, 'each', 'M', '4010', '5010', '1510', '5040', '1530', 0, 0, 0, 0, 0);
-INSERT INTO `0_stock_category` VALUES (4, 'Services', 1, 'hr', 'D', '4010', '5010', '1510', '5040', '1530', 0, 0, 0, 0, 0);
+INSERT INTO `0_stock_category` VALUES (1, 'Components', 1, 'each', 'B', '4010', '5054', '1510', '5040', '1530', 0, 0, 0, 0, 0);
+INSERT INTO `0_stock_category` VALUES (2, 'Charges', 1, 'each', 'D', '4010', '5054', '1510', '5040', '1530', 0, 0, 0, 0, 0);
+INSERT INTO `0_stock_category` VALUES (3, 'Systems', 1, 'each', 'M', '4010', '5054', '1510', '5040', '1530', 0, 0, 0, 0, 0);
+INSERT INTO `0_stock_category` VALUES (4, 'Services', 1, 'hr', 'D', '4010', '5054', '1510', '5040', '1530', 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1901,7 +1895,7 @@ INSERT INTO `0_sys_prefs` VALUES ('po_over_receive', 'glsetup.purchase', 'int', 
 INSERT INTO `0_sys_prefs` VALUES ('po_over_charge', 'glsetup.purchase', 'int', 11, '10');
 INSERT INTO `0_sys_prefs` VALUES ('allow_negative_stock', 'glsetup.inventory', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('default_inventory_act', 'glsetup.items', 'varchar', 15, '1510');
-INSERT INTO `0_sys_prefs` VALUES ('default_cogs_act', 'glsetup.items', 'varchar', 15, '5010');
+INSERT INTO `0_sys_prefs` VALUES ('default_cogs_act', 'glsetup.items', 'varchar', 15, '5054');
 INSERT INTO `0_sys_prefs` VALUES ('default_adj_act', 'glsetup.items', 'varchar', 15, '5040');
 INSERT INTO `0_sys_prefs` VALUES ('default_inv_sales_act', 'glsetup.items', 'varchar', 15, '4010');
 INSERT INTO `0_sys_prefs` VALUES ('default_wip_act', 'glsetup.items', 'varchar', 15, '1530');

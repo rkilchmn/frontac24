@@ -1576,19 +1576,19 @@ function bank_accounts_list($name, $selected_id=null, $submit_on_change=false, $
 		) );
 }
 
-function bank_accounts_list_cells($label, $name, $selected_id=null, $submit_on_change=false)
+function bank_accounts_list_cells($label, $name, $selected_id=null, $submit_on_change=false, $all_option=false)
 {
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo "<td>";
-	echo bank_accounts_list($name, $selected_id, $submit_on_change);
+	echo bank_accounts_list($name, $selected_id, $submit_on_change, $all_option);
 	echo "</td>\n";
 }
 
-function bank_accounts_list_row($label, $name, $selected_id=null, $submit_on_change=false)
+function bank_accounts_list_row($label, $name, $selected_id=null, $submit_on_change=false, $all_option=false)
 {
 	echo "<tr><td class='label'>$label</td>";
-	bank_accounts_list_cells(null, $name, $selected_id, $submit_on_change);
+	bank_accounts_list_cells(null, $name, $selected_id, $submit_on_change, $all_option);
 	echo "</tr>\n";
 }
 //-----------------------------------------------------------------------------------------------

@@ -24,7 +24,7 @@ $sql = "SELECT max(supp_reference) FROM ".TB_PREF."supp_trans WHERE supplier_id=
 
     $result = db_query($sql, "Can not find max supp_reference");
     $row = db_fetch_row($result);
-    if (!$row[0]) return null;
+    if (!$row[0]) return 1;
     $offset= numeric_offset($row[0]);
     $num=substr($row[0], $offset);
     if (!is_numeric($num))
