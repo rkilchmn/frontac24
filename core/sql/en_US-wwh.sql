@@ -120,10 +120,10 @@ INSERT INTO `0_bank_accounts` VALUES ('1080', 0, 'Undeposited Funds', 'N/A', 'N/
 INSERT INTO `0_bank_accounts` VALUES ('1061', 0, 'Wells Fargo Savings (1277)', 'N/A', 'N/A', '', 'USD', 0, 4, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1062', 0, 'Vanguard - ST Bond', 'N/A', 'N/A', '', 'USD', 0, 5, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1072', 0, 'Thornton Tax Dep', 'N/A', 'N/A', '', 'USD', 0, 6, '5690', '0000-00-00 00:00:00', 0, 0);
-INSERT INTO `0_bank_accounts` VALUES ('1095', 0, 'QB Banks', 'N/A', 'N/A', '', 'USD', 0, 6, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('2210', 2, 'Square', 'N/A', 'N/A', '', 'USD', 0, 7, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1070', 0, 'Fruita Consumers Coop Cap. Acct', 'N/A', 'N/A', '', 'USD', 0, 8, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('2200', 2, 'Credit card', 'N/A', 'N/A', '', 'USD', 0, 9, '5690', '0000-00-00 00:00:00', 0, 0);
+INSERT INTO `0_bank_accounts` VALUES ('1095', 0, 'QB Banks', 'N/A', 'N/A', '', 'USD', 0, 10, '5690', '0000-00-00 00:00:00', 0, 0);
 -- --------------------------------------------------------
 
 --
