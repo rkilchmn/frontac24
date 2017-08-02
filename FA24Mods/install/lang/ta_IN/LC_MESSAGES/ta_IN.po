@@ -1,403 +1,396 @@
-# Frontaccounting ERP Installer
-# Copyright (C) 2010 FrontAccounting LLC
+# Frontaccounting ERP Installer Yamil (India) translation file
+# Copyright (C) 2017 FrontAccounting LLC
 # This file is distributed under the same license as the FrontAccounting package.
-# Janusz Dobrowolski <janusz@frontaccounting.eu>
-#
+# Ap.Muthu <apmuthu@usa.net>, 2017.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: FrontAccounting Install Wizard\n"
+"Project-Id-Version: FrontAccounting 2.4 Install Wizard\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-27 20:22+0200\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Janusz Dobrowolski <janusz@frontaccounting.eu>\n"
-"Language-Team: \n"
-"Language: pl\n"
+"PO-Revision-Date: 2017-07-29 16:30+0530\n"
+"Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2017\n"
+"Language-Team: Tamil (https://www.transifex.com/gnuacademy/teams/55037/ta/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"Language: ta_IN\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: install/index.php:20 install/index.php:41
 msgid "FrontAccouting ERP Installation Wizard"
-msgstr "Instalator FrontAccounting ERP"
+msgstr "FrontAccouting ஈஆர்பி நிறுவல் வழிகாட்டி"
 
 #: install/index.php:42
 #, php-format
 msgid "Step %d: %s"
-msgstr "Krok %d: %s"
+msgstr "படி %d: %s"
 
 #: install/index.php:49
 msgid "Chart of accounts"
-msgstr "Plan kont"
+msgstr "கணக்குகளின் அட்டவணை"
 
 #: install/index.php:49 install/index.php:76
 msgid "Encoding"
-msgstr "Kodowanie"
+msgstr "என்கோடிங்"
 
 #: install/index.php:49 install/index.php:76
 msgid "Description"
-msgstr "Opis"
+msgstr "விரித்துரைத்தல்"
 
 #: install/index.php:49 install/index.php:76 install/index.php:403
 #: install/index.php:404
 msgid "Install"
-msgstr "Zainstaluj"
+msgstr "நிறுவுக"
 
 #: install/index.php:66 install/index.php:94
 msgid "Installed"
-msgstr "Zainstalowany"
+msgstr "நிறுவப்பட்ட"
 
 #: install/index.php:76
 msgid "Language"
-msgstr "J�zyk"
+msgstr "மொழி"
 
 #: install/index.php:124
 msgid ""
 "Cannot connect to database. User or password is invalid or you have no "
 "permittions to create database."
 msgstr ""
-"Nie mo�na si� po��czy� z baz� danych. Podany u�ytkownik lub has�o s� "
-"nieprawid�owe lub u�ytkownik nie posiada uprawnie� do tworzenia baz danych."
+"தரவுத்தளத்தில் இணைக்க முடியவில்லை. பயனர் அல்லது கடவுச்சொல் தவறானது அல்லது "
+"தரவுத்தள உருவாக்க உங்களுக்கு அனுமதி இல்லை."
 
 #: install/index.php:165
 msgid "Cannot save system configuration file 'config.php'."
-msgstr "Nie mo�na zapisa� pliku konfiguracyjnego 'config.php'."
+msgstr "கணினி கட்டமைப்பு கோப்பை 'config.php' சேமிக்க முடியவில்லை."
 
 #: install/index.php:172
 msgid "Cannot open 'config_db.php' configuration file."
-msgstr "Nie mo�na utworzy� pliku konfiguracji 'config_db.php'."
+msgstr "'config_db.php' கட்டமைப்பு கோப்பை திறக்க முடியவில்லை."
 
 #: install/index.php:175
 msgid "Cannot write to the 'config_db.php' configuration file."
-msgstr "Nie mo�na zapisa� pliku konfiguracji  'config_db.php'."
+msgstr "'config_db.php' கட்டமைப்பு கோப்பில் எழுத முடியவில்லை."
 
 #: install/index.php:178
 msgid ""
 "Configuration file 'config_db.php' is not writable. Change its permissions "
 "so it is, then re-run installation step."
 msgstr ""
-"Plik konfiguracji 'config_db.php' jest zabezpieczony przed zapisem. Zmie� "
-"prawa dost�pu i powt�rz krok instalacji."
+"கட்டமைப்பு கோப்பு 'config_db.php' எழுத முடியவில்லை. அதன் அனுமதியை "
+"மாற்றவும், அது மீண்டும் நிறுவலை நிறுவவும்."
 
 #: install/index.php:218
 msgid "Host name cannot be empty."
-msgstr "Adres serwera nie mo�e by� pusty."
+msgstr "Host பெயர் காலியாக இருக்க முடியாது."
 
 #: install/index.php:222
 msgid "Database port have to be numeric or empty."
-msgstr "Port serwera musi by� podany w formie numerycznej lub pusty."
+msgstr "தரவுத்தள போர்ட் ஒரு எண் அல்லது காலியாக இருக்க வேண்டும்."
 
 #: install/index.php:226
 msgid "Database user name cannot be empty."
-msgstr "Nazwa u�ytkownika nie mo�e by pusta."
+msgstr "தரவுத்தள பயனர் பெயர் காலியாக இருக்க முடியாது."
 
 #: install/index.php:230
 msgid "Database name cannot be empty."
-msgstr "Nazwa bazy danych nie mo�e by� pusta."
+msgstr "தரவுத்தள பெயர் காலியாக இருக்க முடியாது."
 
 #: install/index.php:285
 msgid "Company name cannot be empty."
-msgstr "Nazwa firmy nie mo�e by pusta."
+msgstr "நிறுவனத்தின் பெயர் காலியாக இருக்க முடியாது."
 
 #: install/index.php:289
 msgid "Company admin name cannot be empty."
-msgstr "Nazwa administratora nie mo�e by� pusta."
+msgstr "நிறுவனத்தின் நிர்வாகி பெயர் காலியாக இருக்க முடியாது."
 
 #: install/index.php:293
 msgid "Company admin password cannot be empty."
-msgstr "Has�o administratora nie mo�e by puste."
+msgstr "நிறுவனத்தின் நிர்வாக கடவுச்சொல் காலியாக இருக்க முடியாது."
 
 #: install/index.php:297
 msgid "Company admin passwords differ."
-msgstr "Wprowadzone has�a r�ni� si�."
+msgstr "நிறுவனத்தின் நிர்வாக கடவுச்சொற்கள் வேறுபடுகின்றன."
 
 #: install/index.php:327
 msgid "System Diagnostics"
-msgstr "Diagnostyka Systemu"
+msgstr "அமைப்பின் கண்டறிதல்"
 
 #: install/index.php:329
 msgid "Select install wizard language:"
-msgstr "Wybierz j�zyk u�ywany przy instalacji:"
+msgstr "வழிகாட்டி மொழியை நிறுவவும்:"
 
 #: install/index.php:335
 msgid ""
 "All application preliminary requirements seems to be correct. Please press "
 "Continue button below."
 msgstr ""
-"Wszystkie wymagania systemu wydaj� si� by� spe�nione. Kliknij klawisz "
-"poni�ej aby rozpocz�� instalacj�."
+"அனைத்து பயன்பாடு ஆரம்ப தேவைகள் சரியானதாக தோன்றுகிறது. கீழே உள்ள buttonனை "
+"அழுத்தவும்."
 
 #: install/index.php:336 install/index.php:365 install/index.php:372
 #: install/index.php:379 install/index.php:366 install/index.php:373
 #: install/index.php:380
 msgid "Continue >>"
-msgstr "Kontynuuj >>"
+msgstr "தொடரவும் >>"
 
 #: install/index.php:338
 msgid ""
 "Application cannot be installed. Please fix problems listed below in red, "
 "and press Refresh button."
 msgstr ""
-"Aplikacja nie mo�e by� zainstalowana. Usu� wskazane problemy i kliknij "
-"klawisz 'Od�wie�'."
+"பயன்பாடு நிறுவப்படவில்லை. சிவப்பு கீழே பட்டியலிடப்பட்டுள்ள சிக்கல்களை "
+"சரிசெய்து, புதுப்பி buttonனை அழுத்தவும்."
 
 #: install/index.php:339
 msgid "Refresh"
-msgstr "Od�wierz"
+msgstr "புதுப்பி"
 
 #: install/index.php:349
 msgid "Database Server Settings"
-msgstr "Ustawienia Serwera Bazy Danych"
+msgstr "டேட்டாபேஸ் சர்வர் அமைப்புகள்"
 
 #: install/index.php:351
 msgid "Server Host:"
-msgstr "Adres Serwera:"
+msgstr "சர்வர் ஹோஸ்ட்:"
 
 #: install/index.php:352
 msgid "Server Port:"
-msgstr "Port Serwera:"
+msgstr "சர்வர் போர்ட்:"
 
 #: install/index.php:353
 msgid "Database Name:"
-msgstr "Nazwa Bazy Danych:"
+msgstr "டேட்டாபேஸ் பெயர்:"
 
 #: install/index.php:354
 msgid "Database User:"
-msgstr "Nazwa U�ytkownika:"
+msgstr "டேட்டாபேஸ் பயனர்:"
 
 #: install/index.php:355
 msgid "Database Password:"
-msgstr "Has�o:"
+msgstr "டேட்டாபேஸ் கடவுச்சொல்:"
 
 #: install/index.php:356
 msgid "Database Collation:"
-msgstr "Porz�dkowanie alfabetyczne danych:"
+msgstr "டேட்டாபேஸ் அடுக்கு Collation:"
 
 #: install/index.php:357
 msgid "Use '0_' Table Prefix:"
-msgstr "Prefiks '0_' dla Nazw Tablic:"
+msgstr "'0_' Table முன்னுரை பயன்படுத்தவும்:"
 
 #: install/index.php:357 includes/system_tests.inc:38
 #: includes/system_tests.inc:113 includes/system_tests.inc:126
 msgid "Yes"
-msgstr "Tak"
+msgstr "ஆம்"
 
 #: install/index.php:357 includes/system_tests.inc:38
 #: includes/system_tests.inc:113 includes/system_tests.inc:126
 msgid "No"
-msgstr "Nie"
+msgstr "இல்லை"
 
 #: install/index.php:358
 msgid "Install Additional Language Packs from FA Repository:"
-msgstr "Instalacja Dodatkowych J�zyk�w z Repozytorium FA:"
+msgstr ""
 
 #: install/index.php:359
 msgid "Install Additional COAs from FA Repository:"
-msgstr "Instalacja Dodatkowych Plan�w Kont z Repozytorium FA:"
+msgstr ""
 
 #: install/index.php:361
 msgid ""
 "Select collation you want to use. If you are unsure or you will use various "
 "languages, select unicode collation."
 msgstr ""
-"Wybierz porz�dkowanie alfabetyczne bazy danych. Je�li nie jeste� pewien "
-"jakiego porz�dkowania chcesz u�ywa�, lub zamierzasz u�ywa� danych w wi�cej "
-"ni� jednym j�zyku, wybierz porz�dkowanie Unicode."
 
 #: install/index.php:362
 msgid ""
-"Use table prefix if you share selected database for more than one FA company "
-"using the same collation."
+"Use table prefix if you share selected database for more than one FA company"
+" using the same collation."
 msgstr ""
-"U�yj prefiksu dla tabel je�li ta sama baza danych b�dzie u�ywana dla kilku "
-"firm z tym samym porz�dkowaniem alfabetycznym."
 
 #: install/index.php:363
 msgid ""
 "Do not select additional langs nor COAs if you have no working internet "
 "connection right now. You can install them later."
 msgstr ""
-"Nie zaznaczaj wyboru dodatkowych j�zyk�w ani plan�w kont je�li w tej chwili "
-"nie masz dost�pu do internetu. B�dziesz je m�g� zainstalowa� r�wnie� p�niej."
 
 #: install/index.php:364 install/index.php:371 install/index.php:378
 #: install/index.php:402 install/index.php:365 install/index.php:372
 #: install/index.php:379 install/index.php:403
 msgid "<< Back"
-msgstr "<< Wr��"
+msgstr "<< திரும்பும்"
 
 #: install/index.php:369 install/index.php:370
 msgid "User Interface Languages Selection"
-msgstr "Wyb�r J�zyk�w Interfejsu U�ytkownika"
+msgstr ""
 
 #: install/index.php:376 install/index.php:377
 msgid "Charts of Accounts Selection"
-msgstr "Wyb�r Plan�w Kont"
+msgstr "கணக்குகளின் அட்டவணை தேர்வு"
 
 #: install/index.php:393 install/index.php:394
 msgid "Company Settings"
-msgstr "Ustawienia Firmy"
+msgstr "நிறுவனத்தின் அமைப்பு"
 
 #: install/index.php:395 install/index.php:396
 msgid "Company Name:"
-msgstr "Nazwa Firmy:"
+msgstr "நிறுவனம் பெயர்:"
 
 #: install/index.php:396 install/index.php:397
 msgid "Admin Login:"
-msgstr "Login Administratora:"
+msgstr "நிர்வாகி உள்நுழைவு:"
 
 #: install/index.php:397 install/index.php:398
 msgid "Admin Password:"
-msgstr "Has�o Administratora:"
+msgstr "நிர்வாகி கடவுச்சொல்:"
 
 #: install/index.php:398 install/index.php:399
 msgid "Reenter Password:"
-msgstr "Powt�rz Has�o:"
+msgstr "கடவுசொல்லை திருப்பி உள்ளிடு:"
 
 #: install/index.php:399 install/index.php:400
 msgid "Select Chart of Accounts:"
-msgstr "Wybierz Plan�w Kont:"
+msgstr "கணக்குகளின் அட்டவணை தேர்வு:"
 
 #: install/index.php:400 install/index.php:401
 msgid "Select Default Language:"
-msgstr "Wybierz J�zyk Domy�lny:"
+msgstr "இயல்பு மொழியை தேர்ந்தெடு:"
 
 #: install/index.php:403 install/index.php:404
 msgid "Start installation process"
-msgstr "Rozpocznij instalacj�"
+msgstr "நிறுவத் தொடங்க"
 
 #: install/index.php:407 install/index.php:408
 msgid "FrontAccounting ERP has been installed successsfully."
-msgstr "Aplikacja FrontAccounting ERP zosta�a zainstalowana pomy�lnie."
+msgstr ""
 
 #: install/index.php:408 install/index.php:409
 msgid "Please do not forget to remove install wizard folder."
-msgstr "Nie zapomnij usun�� folderu instalatora."
+msgstr ""
 
 #: install/index.php:411 install/index.php:412
 msgid "Click here to start."
-msgstr "Kliknij tutaj, aby rozpocz�� prac�."
+msgstr "தொடங்க இங்கு கிளிக் செய்க"
 
 #: includes/system_tests.inc:15
 msgid "Info"
-msgstr "Informacja"
+msgstr "தகவல்"
 
 #: includes/system_tests.inc:16
 msgid "Optional"
-msgstr "Opcjonalne"
+msgstr "விருப்பத்தக்க"
 
 #: includes/system_tests.inc:17
 msgid "Recommended"
-msgstr "Zalecane"
+msgstr "பரிந்துரைக்கப்படுகிறது"
 
 #: includes/system_tests.inc:18
 msgid "Required "
-msgstr "Wymagane"
+msgstr ""
 
 #: includes/system_tests.inc:24
 msgid "MySQL version"
-msgstr "Wersja MySQL"
+msgstr ""
 
 #: includes/system_tests.inc:28
 msgid "Upgrade MySQL server to version at least 4.1"
-msgstr "U�yj wersji serwera MySQL minimum 4.1"
+msgstr ""
 
 #: includes/system_tests.inc:35
 msgid "PHP MySQL extension"
-msgstr "Rozszerzenie PHP MySQL"
+msgstr ""
 
 #: includes/system_tests.inc:40
 msgid "Your PHP has to have MySQL extension enabled."
-msgstr "PHP musi mie� w��czone rozszerzenie MySQL."
+msgstr ""
 
 #: includes/system_tests.inc:46
 msgid "PHP version"
-msgstr "Wersja PHP"
+msgstr ""
 
 #: includes/system_tests.inc:50
 msgid "Upgrade PHP to version at least 5.0.0"
-msgstr "Zainstaluj PHP w wersji co najmniej 5.0.0"
+msgstr ""
 
 #: includes/system_tests.inc:57
 msgid "Server system"
-msgstr "System serwera"
+msgstr ""
 
 #: includes/system_tests.inc:67
 msgid "Session save path"
-msgstr "Katalog zapisu pliku sesji"
+msgstr ""
 
 #: includes/system_tests.inc:79
 msgid "Removed install wizard folder"
-msgstr "Folder instalatora usuni�ty"
+msgstr ""
 
 #: includes/system_tests.inc:82
 msgid "Not removed"
-msgstr "Nie usuni�ty"
+msgstr "அகற்றப்படவில்லை"
 
 #: includes/system_tests.inc:83
 msgid "Remove or rename install wizard folder for security reasons."
-msgstr "Ze wzgl�d�w bezpiecze�stwa usu� lub zmie� nazw� folderu instalatora."
+msgstr ""
 
 #: includes/system_tests.inc:90
 msgid "Browser type"
-msgstr "Typ przegl�darki"
+msgstr ""
 
 #: includes/system_tests.inc:94
 msgid "Any browser is supported"
-msgstr "Mo�e by� u�yty dowolny typ przegl�darki"
+msgstr ""
 
 #: includes/system_tests.inc:101
 msgid "Http server type"
-msgstr "Serwer http"
+msgstr ""
 
 #: includes/system_tests.inc:105
 msgid "Any server is supported"
-msgstr "Dowolny"
+msgstr ""
 
 #: includes/system_tests.inc:112
 msgid "Native gettext"
-msgstr "Biblioteka Gettext "
+msgstr ""
 
 #: includes/system_tests.inc:116
 msgid "In case of no gettext support, php emulation is used"
-msgstr "W przypadku braku wsparcia systemu,  gettext jest emulowany."
+msgstr ""
 
 #: includes/system_tests.inc:124
 msgid "Debugging mode"
-msgstr "Tryb debug"
+msgstr ""
 
 #: includes/system_tests.inc:128
 msgid "To switch debugging on set $go_debug>0 in config.php file"
-msgstr "Aby w��czy� tryb debug ustaw $go_debug>0 in config.php file"
+msgstr ""
 
 #: includes/system_tests.inc:138
 msgid "Error logging"
-msgstr "Logowanie b��d�w"
+msgstr ""
 
 #: includes/system_tests.inc:146
 msgid "Disabled"
-msgstr "Wy��czony"
+msgstr "முடக்கப்பட்டது"
 
 #: includes/system_tests.inc:149
 msgid "To switch error logging set $error_logging in config.php file"
 msgstr ""
-"Aby w��czy� logowanie b��d�w ustaw zmienn� $error_logging w pliku config.php"
 
 #: includes/system_tests.inc:152
 msgid "Log file is not writeable"
-msgstr "Logfile jest niezapisywalny"
+msgstr ""
 
 #: includes/system_tests.inc:162
 msgid "Current database version"
-msgstr "Aktualna wersja bazy danych"
+msgstr ""
 
 #: includes/system_tests.inc:166
 msgid "Database structure seems to be not upgraded to current version"
-msgstr "Struktura bazy danych nie jest zaktualizowana do bie��cej wersji"
+msgstr ""
 
 #: includes/system_tests.inc:181
 msgid "Company subdirectories consistency"
-msgstr "Prawid�owa struktura folder�w firmowych"
+msgstr ""
 
 #: includes/system_tests.inc:194 includes/system_tests.inc:201
 #: includes/system_tests.inc:209 includes/system_tests.inc:226
@@ -405,138 +398,133 @@ msgstr "Prawid�owa struktura folder�w firmowych"
 #: includes/system_tests.inc:359 includes/system_tests.inc:367
 #, php-format
 msgid "'%s' is not writeable"
-msgstr "'%s' jest niezapisywalny"
+msgstr ""
 
 #: includes/system_tests.inc:222
 msgid "Temporary directory"
-msgstr "Katalog plik�w tymczasowych"
+msgstr ""
 
 #: includes/system_tests.inc:234
 msgid "Language configuration consistency"
-msgstr "Konfiguracja j�zykowa"
+msgstr ""
 
 #: includes/system_tests.inc:243
 msgid "Languages folder should be writeable."
-msgstr "Folder j�zyk�w musi by� zapisywalny"
+msgstr ""
 
 #: includes/system_tests.inc:252
 msgid "Languages configuration file should be writeable."
-msgstr "Pliki konfiguracyjny j�zyk�w musi by� zapisywalny."
+msgstr ""
 
 #: includes/system_tests.inc:271
 #, php-format
 msgid "Missing %s translation file."
-msgstr "Brak pliku t�umacze� %s"
+msgstr ""
 
 #: includes/system_tests.inc:276
 #, php-format
 msgid "Missing system locale: %s"
-msgstr "Lokalizacja '%s' nie jest zainstalowana w systemie"
+msgstr ""
 
 #: includes/system_tests.inc:289
 msgid "Main config file"
-msgstr "G��wny plik konfiguracyjny "
+msgstr "பிரதான கட்டமைப்பு கோப்பு"
 
 #: includes/system_tests.inc:296 includes/system_tests.inc:318
 #, php-format
 msgid "Can't write '%s' file. Check FA directory write permissions."
-msgstr "Nie mo�na zapisa� pliku '%s'. Sprawd� prawa zapisu do foderu FA."
+msgstr ""
 
 #: includes/system_tests.inc:297 includes/system_tests.inc:319
 #, php-format
 msgid "'%s' file exists."
-msgstr "Plik '%s' istnieje."
+msgstr "'%s' கோப்பு ஏற்கனவே உள்ளது"
 
 #: includes/system_tests.inc:301
 #, php-format
 msgid "'%s' file should be read-only"
-msgstr "Plik '%s powinien by� zabezpieczony przed zapisem"
+msgstr "'%s' கோப்பினை வாசிக்க-மட்டுமே இருக்க வேண்டும்"
 
 #: includes/system_tests.inc:310
 msgid "Database auth file"
-msgstr "Pik configuracyjny bazy danych"
+msgstr "டேட்டாபேஸ் அங்கீகாரம் கோப்பு"
 
 #: includes/system_tests.inc:323
 #, php-format
 msgid ""
 "'%s' file should be read-only if you do not plan to add or change companies"
 msgstr ""
-"Plik '%s' powinien by� zabezpieczony przed zapisem je�li nie planujesz "
-"dodawania ani zmiany firm"
 
 #: includes/system_tests.inc:334
 msgid "Extensions system"
-msgstr "System rozszerze�"
+msgstr ""
 
 #: includes/system_tests.inc:372
 msgid "Extensions configuration files and directories should be writeable"
-msgstr "Pliki konfiguracyjne i foldery rozszerze� powinny by� zapisywalne"
+msgstr ""
 
 #: includes/system_tests.inc:385
 #, php-format
 msgid "Non-standard theme directory '%s' is not writable"
-msgstr "Niestandardowy folder tematu '%s' jest zazpieczony przed zapisem"
+msgstr ""
 
 #: includes/system_tests.inc:395
 msgid ""
 "OpenSSL PHP extension have to be enabled to use extension repository system."
-msgstr "System pakiet�w wymaga zaisnatlowanego rozszerzenia PHP OpenSSL."
+msgstr ""
 
 #: includes/system_tests.inc:398
 msgid ""
 "OpenSSL have to be available on your server to use extension repository "
 "system."
 msgstr ""
-"Serwer musi mie� zainstalowane OpenSSL �eby mo�na by�o korzysta� z "
-"repozytorium pakiet�w rozszerze� FA."
 
 #: includes/system_tests.inc:421
 msgid "Test"
-msgstr "Test"
+msgstr "சோதனை"
 
 #: includes/system_tests.inc:421
 msgid "Test type"
-msgstr "Typ testu"
+msgstr "சோதனை வகை"
 
 #: includes/system_tests.inc:421
 msgid "Value"
-msgstr "Warto��"
+msgstr "மதிப்பு"
 
 #: includes/system_tests.inc:421
 msgid "Comments"
-msgstr "Komentarz"
+msgstr "கருத்துரைகள்"
 
 #: includes/system_tests.inc:445
 msgid "Ok"
-msgstr "Ok"
+msgstr "சரி"
 
 #: includes/packages.inc:189
 #, php-format
 msgid "No key field '%s' in file '%s'"
-msgstr "Brak pola kluczowego '%s' w  pliku '%s"
+msgstr "முக்கிய புலம் '%s' '%s' கோப்பில் இல்லை "
 
 #: includes/packages.inc:294
 msgid "Cannot download repo index file."
-msgstr "Nie mo�na wczyta� pliku indeksu repozytorium."
+msgstr ""
 
 #: includes/packages.inc:306 includes/packages.inc:343
 #, php-format
 msgid "Cannot delete outdated '%s' file."
-msgstr "Nie mo�na usun�� zb�dnego pliku '%s'."
+msgstr "காலாவதியான '%s' கோப்பு நீக்க முடியாது"
 
 #: includes/packages.inc:310
 msgid "Release file in repository is invalid, or public key is outdated."
 msgstr ""
-"Plik kontrolny wydania jest uszkodzony, lub klucz publiczny jest nieaktualny."
 
 #: includes/packages.inc:327
 msgid "Repository version does not match application version."
-msgstr "Wersja repozytorium nie zgadza si� z wersj� aplikacji."
+msgstr ""
 
 #: includes/packages.inc:335 includes/packages.inc:377
 #, php-format
 msgid "Cannot download '%s' file."
-msgstr "Nie mo�na odczyta� pliku '%s'."
+msgstr ""
 
 #: includes/packages.inc:347
 #, php-format
@@ -544,8 +532,6 @@ msgid ""
 "Security alert: broken index file in repository '%s'. Please inform "
 "repository administrator about this issue."
 msgstr ""
-"Alarm bezpiecze�stwa: uszkodzony plik indeksu repozytorium '%s'. Poinformuj "
-"administratora repozytorium o tym problemie."
 
 #: includes/packages.inc:383
 #, php-format
@@ -553,14 +539,12 @@ msgid ""
 "Security alert: broken package '%s' in repository. Please inform repository "
 "administrator about this issue."
 msgstr ""
-"Alarm bezpiecze�stwa: uszkodzony plik '%s' w repozytorium. Poinformuj "
-"administratora repozytorium o tym problemie."
 
 #: includes/packages.inc:641 includes/packages.inc:696
 #, php-format
 msgid "Package '%s' not found."
-msgstr "Pakiet '%s' nie zosta� znaleziony."
+msgstr "'%s' தொகுப்பு காணப்படவில்லை."
 
 #: install/index.php:364
 msgid "Set Only Port value if you cannot use the default port 3306."
-msgstr "?Ustaw numer portu tylko w przypadku kiedy nie u�ywasz domy��nego portu 3306"
+msgstr ""

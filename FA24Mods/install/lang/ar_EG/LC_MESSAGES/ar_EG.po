@@ -1,403 +1,405 @@
-# Frontaccounting ERP Installer
-# Copyright (C) 2010 FrontAccounting LLC
+# Frontaccounting ERP Installer Arabic (Egypt) translation file
+# Copyright (C) 2017 FrontAccounting LLC
 # This file is distributed under the same license as the FrontAccounting package.
-# Janusz Dobrowolski <janusz@frontaccounting.eu>
-#
+# infotechaccountants.com <hameed@infotechaccountants.com>, 2017.
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: FrontAccounting Install Wizard\n"
+"Project-Id-Version: FrontAccounting 2.4 Install Wizard\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-27 20:22+0200\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Janusz Dobrowolski <janusz@frontaccounting.eu>\n"
-"Language-Team: \n"
-"Language: pl\n"
+"PO-Revision-Date: 2017-07-31 07:30+0400\n"
+"Last-Translator: infotechaccountants.com <hameed@infotechaccountants.com>, 2017\n"
+"Language-Team: Arabic (Egypt) (https://www.transifex.com/gnuacademy/teams/55037/ar_EG/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"Language: ar_EG\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: install/index.php:20 install/index.php:41
 msgid "FrontAccouting ERP Installation Wizard"
-msgstr "Instalator FrontAccounting ERP"
+msgstr ""
+"معالج التثبيت الخاص بالحل المالي لإدارة موارد المؤسسات \"FrontAccounting\""
 
 #: install/index.php:42
 #, php-format
 msgid "Step %d: %s"
-msgstr "Krok %d: %s"
+msgstr "الخطوة %d: %s "
 
 #: install/index.php:49
 msgid "Chart of accounts"
-msgstr "Plan kont"
+msgstr "خريطة الحسابات"
 
 #: install/index.php:49 install/index.php:76
 msgid "Encoding"
-msgstr "Kodowanie"
+msgstr "الترميز"
 
 #: install/index.php:49 install/index.php:76
 msgid "Description"
-msgstr "Opis"
+msgstr "الوصف"
 
 #: install/index.php:49 install/index.php:76 install/index.php:403
 #: install/index.php:404
 msgid "Install"
-msgstr "Zainstaluj"
+msgstr "التثبيت"
 
 #: install/index.php:66 install/index.php:94
 msgid "Installed"
-msgstr "Zainstalowany"
+msgstr "تم تثبيته"
 
 #: install/index.php:76
 msgid "Language"
-msgstr "J�zyk"
+msgstr "اللغة"
 
 #: install/index.php:124
 msgid ""
 "Cannot connect to database. User or password is invalid or you have no "
 "permittions to create database."
 msgstr ""
-"Nie mo�na si� po��czy� z baz� danych. Podany u�ytkownik lub has�o s� "
-"nieprawid�owe lub u�ytkownik nie posiada uprawnie� do tworzenia baz danych."
+"لا يمكن الاتصال بقاعدة البيانات. المستخدم أو كلمة المرور غير صالحة أو ليس "
+"لديك أذونات لإنشاء قاعدة بيانات."
 
 #: install/index.php:165
 msgid "Cannot save system configuration file 'config.php'."
-msgstr "Nie mo�na zapisa� pliku konfiguracyjnego 'config.php'."
+msgstr "لا يمكن حفظ ملف التوصيف الخاص بالنظام  'config.php'"
 
 #: install/index.php:172
 msgid "Cannot open 'config_db.php' configuration file."
-msgstr "Nie mo�na utworzy� pliku konfiguracji 'config_db.php'."
+msgstr "لا يمكن فتح ملف التوصيف 'config_db.php'"
 
 #: install/index.php:175
 msgid "Cannot write to the 'config_db.php' configuration file."
-msgstr "Nie mo�na zapisa� pliku konfiguracji  'config_db.php'."
+msgstr "لا يمكن الكتابة على ملف التوصيف 'config_db.php'"
 
 #: install/index.php:178
 msgid ""
 "Configuration file 'config_db.php' is not writable. Change its permissions "
 "so it is, then re-run installation step."
 msgstr ""
-"Plik konfiguracji 'config_db.php' jest zabezpieczony przed zapisem. Zmie� "
-"prawa dost�pu i powt�rz krok instalacji."
+"ملف التوصيف 'config_db.php' غير قابل للكتابة ، الرجاء تغيير صلاحيات "
+"الأستخدام و بعد ذلك أعد تشغيل خطوة التثبيت مرة أخرى"
 
 #: install/index.php:218
 msgid "Host name cannot be empty."
-msgstr "Adres serwera nie mo�e by� pusty."
+msgstr "أسم المضيف لا يمكن تركه فارغاً "
 
 #: install/index.php:222
 msgid "Database port have to be numeric or empty."
-msgstr "Port serwera musi by� podany w formie numerycznej lub pusty."
+msgstr "يجب أن يكون منفذ قاعدة البيانات رقميا أو فارغا."
 
 #: install/index.php:226
 msgid "Database user name cannot be empty."
-msgstr "Nazwa u�ytkownika nie mo�e by pusta."
+msgstr "أسم مستخدم قاعدة البيانات لا يمكن تركه فارغاً"
 
 #: install/index.php:230
 msgid "Database name cannot be empty."
-msgstr "Nazwa bazy danych nie mo�e by� pusta."
+msgstr "لا يمكن ترك أسم قاعدة البيانات فارغاً"
 
 #: install/index.php:285
 msgid "Company name cannot be empty."
-msgstr "Nazwa firmy nie mo�e by pusta."
+msgstr "لا يمكن ترك أسم الشركة فارغاً"
 
 #: install/index.php:289
 msgid "Company admin name cannot be empty."
-msgstr "Nazwa administratora nie mo�e by� pusta."
+msgstr "لا يمكن ترك أسم مدير النظام فارغاً"
 
 #: install/index.php:293
 msgid "Company admin password cannot be empty."
-msgstr "Has�o administratora nie mo�e by puste."
+msgstr "لا يمكن ترك كلمة مرور مدير النظام فارغاً"
 
 #: install/index.php:297
 msgid "Company admin passwords differ."
-msgstr "Wprowadzone has�a r�ni� si�."
+msgstr "كلمات مرور مدير النظام مختلفة"
 
 #: install/index.php:327
 msgid "System Diagnostics"
-msgstr "Diagnostyka Systemu"
+msgstr "تشخيص النظام"
 
 #: install/index.php:329
 msgid "Select install wizard language:"
-msgstr "Wybierz j�zyk u�ywany przy instalacji:"
+msgstr "أختيار لغة معالج التثبيت"
 
 #: install/index.php:335
 msgid ""
 "All application preliminary requirements seems to be correct. Please press "
 "Continue button below."
 msgstr ""
-"Wszystkie wymagania systemu wydaj� si� by� spe�nione. Kliknij klawisz "
-"poni�ej aby rozpocz�� instalacj�."
+"جميع المتطلبات التمهيدية الخاصة بالتطبيق تبدو صحيحة ، الرجاء الضغط على زر "
+"الأستمرار في الأسفل"
 
 #: install/index.php:336 install/index.php:365 install/index.php:372
 #: install/index.php:379 install/index.php:366 install/index.php:373
 #: install/index.php:380
 msgid "Continue >>"
-msgstr "Kontynuuj >>"
+msgstr "<< الاستمرار"
 
 #: install/index.php:338
 msgid ""
 "Application cannot be installed. Please fix problems listed below in red, "
 "and press Refresh button."
 msgstr ""
-"Aplikacja nie mo�e by� zainstalowana. Usu� wskazane problemy i kliknij "
-"klawisz 'Od�wie�'."
+"لا يمكن تثبيت التطبيق ، الرجاء إصلاح المشاكل الملونة باللون الأحمر و المدرجة"
+" بالأسف ثم الضغط على زر التنشيط"
 
 #: install/index.php:339
 msgid "Refresh"
-msgstr "Od�wierz"
+msgstr "تنشيط"
 
 #: install/index.php:349
 msgid "Database Server Settings"
-msgstr "Ustawienia Serwera Bazy Danych"
+msgstr "إعدادات خادم قاعدة البيانات"
 
 #: install/index.php:351
 msgid "Server Host:"
-msgstr "Adres Serwera:"
+msgstr "الخادم المستضيف :"
 
 #: install/index.php:352
 msgid "Server Port:"
-msgstr "Port Serwera:"
+msgstr "منفذ الخادم:"
 
 #: install/index.php:353
 msgid "Database Name:"
-msgstr "Nazwa Bazy Danych:"
+msgstr "أسم قاعدة البيانات:"
 
 #: install/index.php:354
 msgid "Database User:"
-msgstr "Nazwa U�ytkownika:"
+msgstr "مستخدم قاعدة البيانات:"
 
 #: install/index.php:355
 msgid "Database Password:"
-msgstr "Has�o:"
+msgstr "كلمة مرور قاعدة البيانات:"
 
 #: install/index.php:356
 msgid "Database Collation:"
-msgstr "Porz�dkowanie alfabetyczne danych:"
+msgstr "تجميع قاعدة البيانات:"
 
 #: install/index.php:357
 msgid "Use '0_' Table Prefix:"
-msgstr "Prefiks '0_' dla Nazw Tablic:"
+msgstr "استخدام '0_' كبادئة جدول"
 
 #: install/index.php:357 includes/system_tests.inc:38
 #: includes/system_tests.inc:113 includes/system_tests.inc:126
 msgid "Yes"
-msgstr "Tak"
+msgstr "نعم"
 
 #: install/index.php:357 includes/system_tests.inc:38
 #: includes/system_tests.inc:113 includes/system_tests.inc:126
 msgid "No"
-msgstr "Nie"
+msgstr "لا"
 
 #: install/index.php:358
 msgid "Install Additional Language Packs from FA Repository:"
-msgstr "Instalacja Dodatkowych J�zyk�w z Repozytorium FA:"
+msgstr "تثبيت حزم لغات إضافية من مستودع التطبيق :"
 
 #: install/index.php:359
 msgid "Install Additional COAs from FA Repository:"
-msgstr "Instalacja Dodatkowych Plan�w Kont z Repozytorium FA:"
+msgstr "تثبيت خرائط حسابات أضافية من مستودع التطبيق :"
 
 #: install/index.php:361
 msgid ""
 "Select collation you want to use. If you are unsure or you will use various "
 "languages, select unicode collation."
 msgstr ""
-"Wybierz porz�dkowanie alfabetyczne bazy danych. Je�li nie jeste� pewien "
-"jakiego porz�dkowania chcesz u�ywa�, lub zamierzasz u�ywa� danych w wi�cej "
-"ni� jednym j�zyku, wybierz porz�dkowanie Unicode."
+"حدد الترتيب الذي تريد استخدامه. إذا كنت غير متأكد أو سوف تستخدم لغات مختلفة،"
+" حدد ترتيب ونيكود."
 
 #: install/index.php:362
 msgid ""
-"Use table prefix if you share selected database for more than one FA company "
-"using the same collation."
+"Use table prefix if you share selected database for more than one FA company"
+" using the same collation."
 msgstr ""
-"U�yj prefiksu dla tabel je�li ta sama baza danych b�dzie u�ywana dla kilku "
-"firm z tym samym porz�dkowaniem alfabetycznym."
+"استخدم بادئة الجدول إذا قمت بمشاركة قاعدة البيانات المحددة لأكثر من شركة فا "
+"باستخدام نفس الترتيب."
 
 #: install/index.php:363
 msgid ""
 "Do not select additional langs nor COAs if you have no working internet "
 "connection right now. You can install them later."
 msgstr ""
-"Nie zaznaczaj wyboru dodatkowych j�zyk�w ani plan�w kont je�li w tej chwili "
-"nie masz dost�pu do internetu. B�dziesz je m�g� zainstalowa� r�wnie� p�niej."
+"لا تختار لغات إضافية أو خرائط حسابات إضافية إذا لم يكن لديك الآن توصيلة "
+"أنترنت تعمل بكفاءة ، يمكنك أن تثبت اللغات و خرائط الحسابات في وقت لاحق"
 
 #: install/index.php:364 install/index.php:371 install/index.php:378
 #: install/index.php:402 install/index.php:365 install/index.php:372
 #: install/index.php:379 install/index.php:403
 msgid "<< Back"
-msgstr "<< Wr��"
+msgstr "للخلف >>"
 
 #: install/index.php:369 install/index.php:370
 msgid "User Interface Languages Selection"
-msgstr "Wyb�r J�zyk�w Interfejsu U�ytkownika"
+msgstr "اختيار لغات واجهة المستخدم"
 
 #: install/index.php:376 install/index.php:377
 msgid "Charts of Accounts Selection"
-msgstr "Wyb�r Plan�w Kont"
+msgstr "أختيار خرائط الحسابات"
 
 #: install/index.php:393 install/index.php:394
 msgid "Company Settings"
-msgstr "Ustawienia Firmy"
+msgstr "إعدادات الشركة"
 
 #: install/index.php:395 install/index.php:396
 msgid "Company Name:"
-msgstr "Nazwa Firmy:"
+msgstr "أسم الشركة :"
 
 #: install/index.php:396 install/index.php:397
 msgid "Admin Login:"
-msgstr "Login Administratora:"
+msgstr "أسم الدخول لمدير النظام :"
 
 #: install/index.php:397 install/index.php:398
 msgid "Admin Password:"
-msgstr "Has�o Administratora:"
+msgstr "كلمة مرور مدير النظام :"
 
 #: install/index.php:398 install/index.php:399
 msgid "Reenter Password:"
-msgstr "Powt�rz Has�o:"
+msgstr "إعادة أدخال كلمة المرور :"
 
 #: install/index.php:399 install/index.php:400
 msgid "Select Chart of Accounts:"
-msgstr "Wybierz Plan�w Kont:"
+msgstr "اختيار خريطة الحسابات :"
 
 #: install/index.php:400 install/index.php:401
 msgid "Select Default Language:"
-msgstr "Wybierz J�zyk Domy�lny:"
+msgstr "اختيار اللغة الأفتراضية :"
 
 #: install/index.php:403 install/index.php:404
 msgid "Start installation process"
-msgstr "Rozpocznij instalacj�"
+msgstr "بدء عملية التثبيت"
 
 #: install/index.php:407 install/index.php:408
 msgid "FrontAccounting ERP has been installed successsfully."
-msgstr "Aplikacja FrontAccounting ERP zosta�a zainstalowana pomy�lnie."
+msgstr "تمت عملية تثبيت FrontAccounting ERP بنجاح"
 
 #: install/index.php:408 install/index.php:409
 msgid "Please do not forget to remove install wizard folder."
-msgstr "Nie zapomnij usun�� folderu instalatora."
+msgstr "الرجاء لا تنسى أن تزيل مجلد معالج التثبيت"
 
 #: install/index.php:411 install/index.php:412
 msgid "Click here to start."
-msgstr "Kliknij tutaj, aby rozpocz�� prac�."
+msgstr "الضغط هنا للبدء"
 
 #: includes/system_tests.inc:15
 msgid "Info"
-msgstr "Informacja"
+msgstr "معلومات"
 
 #: includes/system_tests.inc:16
 msgid "Optional"
-msgstr "Opcjonalne"
+msgstr "اختياري"
 
 #: includes/system_tests.inc:17
 msgid "Recommended"
-msgstr "Zalecane"
+msgstr "يوصى به"
 
 #: includes/system_tests.inc:18
 msgid "Required "
-msgstr "Wymagane"
+msgstr "مطلوب"
 
 #: includes/system_tests.inc:24
 msgid "MySQL version"
-msgstr "Wersja MySQL"
+msgstr "إصدار MySQL"
 
 #: includes/system_tests.inc:28
 msgid "Upgrade MySQL server to version at least 4.1"
-msgstr "U�yj wersji serwera MySQL minimum 4.1"
+msgstr "ترقية خادم MySQL إلى الإصدار 4.1 على الأقل"
 
 #: includes/system_tests.inc:35
 msgid "PHP MySQL extension"
-msgstr "Rozszerzenie PHP MySQL"
+msgstr "رابط برمجي بين PHP و MySQL"
 
 #: includes/system_tests.inc:40
 msgid "Your PHP has to have MySQL extension enabled."
-msgstr "PHP musi mie� w��czone rozszerzenie MySQL."
+msgstr "الـ PHP الخاص بك يجب أن يحتوي على رابط برمجي لـ MySQL مفعل"
 
 #: includes/system_tests.inc:46
 msgid "PHP version"
-msgstr "Wersja PHP"
+msgstr "إصدار PHP"
 
 #: includes/system_tests.inc:50
 msgid "Upgrade PHP to version at least 5.0.0"
-msgstr "Zainstaluj PHP w wersji co najmniej 5.0.0"
+msgstr "ترقية PHP إلى الإصدار رقم 5.0.0 على الأقل"
 
 #: includes/system_tests.inc:57
 msgid "Server system"
-msgstr "System serwera"
+msgstr "نظام الخادم"
 
 #: includes/system_tests.inc:67
 msgid "Session save path"
-msgstr "Katalog zapisu pliku sesji"
+msgstr "مسار حفظ جلسة الأستخدام"
 
 #: includes/system_tests.inc:79
 msgid "Removed install wizard folder"
-msgstr "Folder instalatora usuni�ty"
+msgstr "مجلد معالج التثبيت الذي تمت إزالته"
 
 #: includes/system_tests.inc:82
 msgid "Not removed"
-msgstr "Nie usuni�ty"
+msgstr "لم يتم إزالته"
 
 #: includes/system_tests.inc:83
 msgid "Remove or rename install wizard folder for security reasons."
-msgstr "Ze wzgl�d�w bezpiecze�stwa usu� lub zmie� nazw� folderu instalatora."
+msgstr "قم بإزالة أو قم بإعادة تسمية مجلد معالج التثبيت و ذلك لأسباب أمنية"
 
 #: includes/system_tests.inc:90
 msgid "Browser type"
-msgstr "Typ przegl�darki"
+msgstr "نوع المتصفح"
 
 #: includes/system_tests.inc:94
 msgid "Any browser is supported"
-msgstr "Mo�e by� u�yty dowolny typ przegl�darki"
+msgstr "أي مستصفح تم دعمه"
 
 #: includes/system_tests.inc:101
 msgid "Http server type"
-msgstr "Serwer http"
+msgstr "نوع خادم Http"
 
 #: includes/system_tests.inc:105
 msgid "Any server is supported"
-msgstr "Dowolny"
+msgstr "أي خادم تم دعمه"
 
 #: includes/system_tests.inc:112
 msgid "Native gettext"
-msgstr "Biblioteka Gettext "
+msgstr "جيتيكس الطبيعية"
 
 #: includes/system_tests.inc:116
 msgid "In case of no gettext support, php emulation is used"
-msgstr "W przypadku braku wsparcia systemu,  gettext jest emulowany."
+msgstr "في حالة عدم دعم جيتيكس ، فإن محاكي PHP سوف يستخدم "
 
 #: includes/system_tests.inc:124
 msgid "Debugging mode"
-msgstr "Tryb debug"
+msgstr "بيئة تصحيح الأخطاء"
 
 #: includes/system_tests.inc:128
 msgid "To switch debugging on set $go_debug>0 in config.php file"
-msgstr "Aby w��czy� tryb debug ustaw $go_debug>0 in config.php file"
+msgstr ""
+"لتفعيل بيئة تصحيح الأخطاء يجب أن يتم ضبط $go_debug>0 في الملف config.php"
 
 #: includes/system_tests.inc:138
 msgid "Error logging"
-msgstr "Logowanie b��d�w"
+msgstr "سجل وقائع الأخطاء"
 
 #: includes/system_tests.inc:146
 msgid "Disabled"
-msgstr "Wy��czony"
+msgstr "غير مفعل"
 
 #: includes/system_tests.inc:149
 msgid "To switch error logging set $error_logging in config.php file"
 msgstr ""
-"Aby w��czy� logowanie b��d�w ustaw zmienn� $error_logging w pliku config.php"
+"لتفعيل سجل وقائع الأخطاء يجب أن يتم ضبط $error_logging في ملف config.php"
 
 #: includes/system_tests.inc:152
 msgid "Log file is not writeable"
-msgstr "Logfile jest niezapisywalny"
+msgstr "ملف سجل الوقائع غير قابل للكتابة عليه"
 
 #: includes/system_tests.inc:162
 msgid "Current database version"
-msgstr "Aktualna wersja bazy danych"
+msgstr "إصدار قاعدة البيانات الحالي"
 
 #: includes/system_tests.inc:166
 msgid "Database structure seems to be not upgraded to current version"
-msgstr "Struktura bazy danych nie jest zaktualizowana do bie��cej wersji"
+msgstr "يبدو أن هيكل قاعدة البيانات لم تتم ترقيته إلى الإصدار الحالي"
 
 #: includes/system_tests.inc:181
 msgid "Company subdirectories consistency"
-msgstr "Prawid�owa struktura folder�w firmowych"
+msgstr "اتساق الفهارس الفرعية للشركة"
 
 #: includes/system_tests.inc:194 includes/system_tests.inc:201
 #: includes/system_tests.inc:209 includes/system_tests.inc:226
@@ -405,138 +407,139 @@ msgstr "Prawid�owa struktura folder�w firmowych"
 #: includes/system_tests.inc:359 includes/system_tests.inc:367
 #, php-format
 msgid "'%s' is not writeable"
-msgstr "'%s' jest niezapisywalny"
+msgstr "'%s' غير قابل للكتابة عليه"
 
 #: includes/system_tests.inc:222
 msgid "Temporary directory"
-msgstr "Katalog plik�w tymczasowych"
+msgstr "الفهرس المؤقت"
 
 #: includes/system_tests.inc:234
 msgid "Language configuration consistency"
-msgstr "Konfiguracja j�zykowa"
+msgstr "اتساق توصيف اللغة"
 
 #: includes/system_tests.inc:243
 msgid "Languages folder should be writeable."
-msgstr "Folder j�zyk�w musi by� zapisywalny"
+msgstr "مجلد اللغات يجب أن يكون قابل للكتابة عليه"
 
 #: includes/system_tests.inc:252
 msgid "Languages configuration file should be writeable."
-msgstr "Pliki konfiguracyjny j�zyk�w musi by� zapisywalny."
+msgstr "ملف توصيف اللغات يجب أن يكون قابل للكتابة عليه"
 
 #: includes/system_tests.inc:271
 #, php-format
 msgid "Missing %s translation file."
-msgstr "Brak pliku t�umacze� %s"
+msgstr "ملف الترجمة %s مفقود"
 
 #: includes/system_tests.inc:276
 #, php-format
 msgid "Missing system locale: %s"
-msgstr "Lokalizacja '%s' nie jest zainstalowana w systemie"
+msgstr "مسار النظام المفقود : %s"
 
 #: includes/system_tests.inc:289
 msgid "Main config file"
-msgstr "G��wny plik konfiguracyjny "
+msgstr "ملف التوصيف الرئيسي"
 
 #: includes/system_tests.inc:296 includes/system_tests.inc:318
 #, php-format
 msgid "Can't write '%s' file. Check FA directory write permissions."
-msgstr "Nie mo�na zapisa� pliku '%s'. Sprawd� prawa zapisu do foderu FA."
+msgstr ""
+"لا يمكن الكتابة على الملف  '%s' ، قم بفحص صلاحيات الكتابة على مجلد التطبيق"
 
 #: includes/system_tests.inc:297 includes/system_tests.inc:319
 #, php-format
 msgid "'%s' file exists."
-msgstr "Plik '%s' istnieje."
+msgstr "ملف  '%s' موجود"
 
 #: includes/system_tests.inc:301
 #, php-format
 msgid "'%s' file should be read-only"
-msgstr "Plik '%s powinien by� zabezpieczony przed zapisem"
+msgstr "الملف  '%s' يجب أن يكون للقراءة فقط "
 
 #: includes/system_tests.inc:310
 msgid "Database auth file"
-msgstr "Pik configuracyjny bazy danych"
+msgstr "ملف اعتماد قاعدة البيانات"
 
 #: includes/system_tests.inc:323
 #, php-format
 msgid ""
 "'%s' file should be read-only if you do not plan to add or change companies"
 msgstr ""
-"Plik '%s' powinien by� zabezpieczony przed zapisem je�li nie planujesz "
-"dodawania ani zmiany firm"
+"الملف  '%s' يجب أن يكون للقراءة فقط ، إذا كنت تخطط أن تضيف أو تغير الشركات"
 
 #: includes/system_tests.inc:334
 msgid "Extensions system"
-msgstr "System rozszerze�"
+msgstr "نظام الإضافات البرمجية"
 
 #: includes/system_tests.inc:372
 msgid "Extensions configuration files and directories should be writeable"
-msgstr "Pliki konfiguracyjne i foldery rozszerze� powinny by� zapisywalne"
+msgstr "ملفات توصيف الإضافات البرمجية و المجلدات يجب أن تكون قابلة للكتابة"
 
 #: includes/system_tests.inc:385
 #, php-format
 msgid "Non-standard theme directory '%s' is not writable"
-msgstr "Niestandardowy folder tematu '%s' jest zazpieczony przed zapisem"
+msgstr "مجلد الشكل الغير معياري  '%s' يجب أن يكون غير قابل للكتابة"
 
 #: includes/system_tests.inc:395
 msgid ""
 "OpenSSL PHP extension have to be enabled to use extension repository system."
-msgstr "System pakiet�w wymaga zaisnatlowanego rozszerzenia PHP OpenSSL."
+msgstr ""
+"نظام الروابط البرمجية OpenSSL لـ PHP يجب أن يكون مفعل لأستخدام مستودع "
+"الإضافات البرمجية للنظام"
 
 #: includes/system_tests.inc:398
 msgid ""
 "OpenSSL have to be available on your server to use extension repository "
 "system."
 msgstr ""
-"Serwer musi mie� zainstalowane OpenSSL �eby mo�na by�o korzysta� z "
-"repozytorium pakiet�w rozszerze� FA."
+"OpenSSL يجب أن يكون متاح على الخادم حتى يمكنك أستخدام مستودع الإضافات "
+"البرمجية للنظام"
 
 #: includes/system_tests.inc:421
 msgid "Test"
-msgstr "Test"
+msgstr "اختبار"
 
 #: includes/system_tests.inc:421
 msgid "Test type"
-msgstr "Typ testu"
+msgstr "نوع الاختبار"
 
 #: includes/system_tests.inc:421
 msgid "Value"
-msgstr "Warto��"
+msgstr "القيمة"
 
 #: includes/system_tests.inc:421
 msgid "Comments"
-msgstr "Komentarz"
+msgstr "الملاحظات"
 
 #: includes/system_tests.inc:445
 msgid "Ok"
-msgstr "Ok"
+msgstr "موافق"
 
 #: includes/packages.inc:189
 #, php-format
 msgid "No key field '%s' in file '%s'"
-msgstr "Brak pola kluczowego '%s' w  pliku '%s"
+msgstr ""
 
 #: includes/packages.inc:294
 msgid "Cannot download repo index file."
-msgstr "Nie mo�na wczyta� pliku indeksu repozytorium."
+msgstr "يتعذر تنزيل ملف فهرس إعادة الشراء."
 
 #: includes/packages.inc:306 includes/packages.inc:343
 #, php-format
 msgid "Cannot delete outdated '%s' file."
-msgstr "Nie mo�na usun�� zb�dnego pliku '%s'."
+msgstr ""
 
 #: includes/packages.inc:310
 msgid "Release file in repository is invalid, or public key is outdated."
-msgstr ""
-"Plik kontrolny wydania jest uszkodzony, lub klucz publiczny jest nieaktualny."
+msgstr "ملف الإصدار في مستودع التخزين غير صالح، أو أن المفتاح العمومي قديم."
 
 #: includes/packages.inc:327
 msgid "Repository version does not match application version."
-msgstr "Wersja repozytorium nie zgadza si� z wersj� aplikacji."
+msgstr "نسخة مستودع لا يطابق إصدار التطبيق."
 
 #: includes/packages.inc:335 includes/packages.inc:377
 #, php-format
 msgid "Cannot download '%s' file."
-msgstr "Nie mo�na odczyta� pliku '%s'."
+msgstr ""
 
 #: includes/packages.inc:347
 #, php-format
@@ -544,8 +547,6 @@ msgid ""
 "Security alert: broken index file in repository '%s'. Please inform "
 "repository administrator about this issue."
 msgstr ""
-"Alarm bezpiecze�stwa: uszkodzony plik indeksu repozytorium '%s'. Poinformuj "
-"administratora repozytorium o tym problemie."
 
 #: includes/packages.inc:383
 #, php-format
@@ -553,14 +554,12 @@ msgid ""
 "Security alert: broken package '%s' in repository. Please inform repository "
 "administrator about this issue."
 msgstr ""
-"Alarm bezpiecze�stwa: uszkodzony plik '%s' w repozytorium. Poinformuj "
-"administratora repozytorium o tym problemie."
 
 #: includes/packages.inc:641 includes/packages.inc:696
 #, php-format
 msgid "Package '%s' not found."
-msgstr "Pakiet '%s' nie zosta� znaleziony."
+msgstr ""
 
 #: install/index.php:364
 msgid "Set Only Port value if you cannot use the default port 3306."
-msgstr "?Ustaw numer portu tylko w przypadku kiedy nie u�ywasz domy��nego portu 3306"
+msgstr "تعيين قيمة المنفذ فقط إذا لم تتمكن من استخدام المنفذ الافتراضي 3306."

@@ -1,116 +1,118 @@
-# SOME DESCRIPTIVE TITLE.
+# FrontAccounting 2.4.x.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Ap.Muthu <apmuthu@usa.net>, 2017.
+# 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: FrontAccounting 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-27 20:21+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2017-07-29 16:30+0530\n"
+"Last-Translator: Ap.Muthu <apmuthu@usa.net>, 2017\n"
+"Language-Team: Tamil (https://www.transifex.com/gnuacademy/teams/55037/ta/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ta_IN\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: frontaccounting.php:75 frontaccounting.php:76
 msgid "Main  Menu"
-msgstr ""
+msgstr "பிரதான பட்டி"
 
 #: frontaccounting.php:77 access/logout.php:21 themes/default/renderer.php:73
 #: themes/default/renderer.php:87
 msgid "Logout"
-msgstr ""
+msgstr "வெளியேறு"
 
 #: access/login.php:13 access/password_reset.php:13
 msgid "Restricted access"
-msgstr ""
+msgstr "கட்டுப்படுத்தப்பட்ட அணுகல்"
 
 #: access/login.php:27
 msgid "Login as user: demouser and password: password"
-msgstr ""
+msgstr "பயனராக உள்நுழைய: demouser மற்றும் கடவுச்சொல்: password"
 
 #: access/login.php:31
 msgid "Please login here"
-msgstr ""
+msgstr "இங்கே உள்நுழையவும்"
 
 #: access/login.php:33
 msgid "or"
-msgstr ""
+msgstr "அல்லது"
 
 #: access/login.php:33
 msgid "request new password"
-msgstr ""
+msgstr "புதிய கடவுச்சொல்லை கேட்க"
 
 #: access/login.php:39
 msgid "Too many failed login attempts.<br>Please wait a while or try later."
 msgstr ""
+"பல முறை முயற்சித்த.<br>ஒரு காத்திருக்கவும் அல்லது பின்னர் முயற்சிக்கவும்."
 
 #: access/login.php:53 access/login.php:84
 msgid "Authorization timeout"
-msgstr ""
+msgstr "அங்கீகாரம் நேரம் முடிந்தது"
 
 #: access/login.php:53 access/login.php:90
 msgid "Login"
-msgstr ""
+msgstr "உள்நுழைய"
 
 #: access/login.php:90 access/password_reset.php:61
 msgid "Version"
-msgstr ""
+msgstr "பதிப்பு"
 
 #: access/login.php:93
 msgid "User name"
-msgstr ""
+msgstr "பயனர் பெயர்"
 
 #: access/login.php:97 admin/users.php:200
 msgid "Password:"
-msgstr ""
+msgstr "கடவுச்சொல்:"
 
 #: access/login.php:106 access/login.php:112 access/password_reset.php:69
 #: access/password_reset.php:75 admin/create_coy.php:247
 #: admin/create_coy.php:327 admin/inst_upgrade.php:63
 #: includes/sysnames.inc:208
 msgid "Company"
-msgstr ""
+msgstr "நிறுவனம்"
 
 #: access/login.php:120
 msgid "Login -->"
-msgstr ""
+msgstr "உள்நுழைய -->"
 
 #: access/login.php:155 access/password_reset.php:106
 #: admin/display_prefs.php:123 themes/default/renderer.php:136
 msgid "Theme:"
-msgstr ""
+msgstr "வடிவமைப்பு:"
 
 #: access/logout.php:32
 msgid "Thank you for using"
-msgstr ""
+msgstr "பயன்படுத்தியதற்கு நன்றி"
 
 #: access/logout.php:43
 msgid "Click here to Login Again."
-msgstr ""
+msgstr "மீண்டும் உள்நுழைய இங்கே கிளிக் செய்யவும்."
 
 #: access/password_reset.php:31 access/password_reset.php:61
 msgid "Password reset"
-msgstr ""
+msgstr "கடவுச்சொல் மீட்டமைப்பு"
 
 #: access/password_reset.php:63 reporting/rep103.php:274
 #: reporting/rep106.php:94 reporting/rep205.php:186
 #: reporting/includes/header2.inc:112 sales/manage/sales_people.php:99
 msgid "Email"
-msgstr ""
+msgstr "மின்னஞ்சல்"
 
 #: access/password_reset.php:81
 msgid "Send password -->"
-msgstr ""
+msgstr "கடவுச்சொல்லை அனுப்பு -->"
 
 #: admin/attachments.php:71
 msgid "Attach Documents"
-msgstr ""
+msgstr "ஆவணங்களை இணைக்கவும்"
 
 #: admin/attachments.php:83 admin/db/voiding_db.inc:28
 #: admin/db/voiding_db.inc:40 admin/db/voiding_db.inc:53
@@ -118,28 +120,28 @@ msgstr ""
 #: admin/db/voiding_db.inc:90 admin/db/voiding_db.inc:97
 #: admin/db/voiding_db.inc:103 admin/db/voiding_db.inc:111
 msgid "Selected transaction does not exists."
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட பரிமாற்றத்தில் உள்ளது இல்லை"
 
 #: admin/attachments.php:85 admin/attachments.php:90
 msgid "Select attachment file."
-msgstr ""
+msgstr "தேர்ந்தெடு இணைப்பு கோப்பு."
 
 #: admin/attachments.php:88 admin/company_preferences.php:42
 #: inventory/manage/items.php:83
 msgid "The file size is over the maximum allowed."
-msgstr ""
+msgstr "கோப்பு அளவு அதிகபட்ச அனுமதி விட பெரியது."
 
 #: admin/attachments.php:131
 msgid "Attachment has been inserted."
-msgstr ""
+msgstr "இணைப்பு சேர்க்கப்பட்டது."
 
 #: admin/attachments.php:137
 msgid "Attachment has been updated."
-msgstr ""
+msgstr "இணைப்பு மேம்படுத்தப்பட்டது."
 
 #: admin/attachments.php:152
 msgid "Attachment has been deleted."
-msgstr ""
+msgstr "இணைப்பு நீக்கப்பட்டுள்ளது."
 
 #: admin/attachments.php:170 admin/view_print_transaction.php:72
 #: gl/inquiry/journal_inquiry.php:47
@@ -150,7 +152,7 @@ msgstr ""
 #: manufacturing/includes/work_order_issue_ui.inc:166
 #: sales/inquiry/customer_allocation_inquiry.php:47
 msgid "Type:"
-msgstr ""
+msgstr "வகை:"
 
 #: admin/attachments.php:186 admin/create_coy.php:269
 #: admin/crm_categories.php:106 admin/fiscalyears.php:164
@@ -183,15 +185,15 @@ msgstr ""
 #: sales/includes/ui/sales_order_ui.inc:196 taxes/item_tax_types.php:139
 #: taxes/tax_groups.php:140 taxes/tax_types.php:132
 msgid "Edit"
-msgstr ""
+msgstr "திருத்து"
 
 #: admin/attachments.php:191 gl/inquiry/journal_inquiry.php:116
 msgid "View"
-msgstr ""
+msgstr "காண்க"
 
 #: admin/attachments.php:196
 msgid "Download"
-msgstr ""
+msgstr "பதிவிறக்க"
 
 #: admin/attachments.php:201 admin/create_coy.php:272
 #: admin/crm_categories.php:110 admin/fiscalyears.php:166
@@ -224,7 +226,7 @@ msgstr ""
 #: sales/includes/ui/sales_order_ui.inc:198 taxes/item_tax_types.php:140
 #: taxes/tax_groups.php:141 taxes/tax_types.php:133
 msgid "Delete"
-msgstr ""
+msgstr "நீக்குக"
 
 #: admin/attachments.php:208 admin/view_print_transaction.php:126
 #: admin/void_transaction.php:180 dimensions/inquiry/search_dimensions.php:124
@@ -257,7 +259,7 @@ msgstr ""
 #: sales/inquiry/customer_allocation_inquiry.php:147
 #: sales/inquiry/customer_inquiry.php:193
 msgid "#"
-msgstr ""
+msgstr "எண்."
 
 #: admin/attachments.php:209 admin/attachments.php:253
 #: admin/crm_categories.php:88 admin/payment_terms.php:127
@@ -283,60 +285,60 @@ msgstr ""
 #: sales/inquiry/sales_orders_view.php:288 taxes/tax_groups.php:126
 #: taxes/tax_types.php:115
 msgid "Description"
-msgstr ""
+msgstr "விரித்துரைத்தல்"
 
 #: admin/attachments.php:210 admin/backups.php:67 admin/backups.php:152
 msgid "Filename"
-msgstr ""
+msgstr "கோப்புப்பெயர்"
 
 #: admin/attachments.php:211
 msgid "Size"
-msgstr ""
+msgstr "அளவு"
 
 #: admin/attachments.php:212
 msgid "Filetype"
-msgstr ""
+msgstr "கோப்புவகை"
 
 #: admin/attachments.php:213
 msgid "Date Uploaded"
-msgstr ""
+msgstr "பதிவேற்றப்பட்ட தேதி"
 
 #: admin/attachments.php:247 admin/attachments.php:252
 msgid "Transaction #"
-msgstr ""
+msgstr "பரிவர்த்தனை #"
 
 #: admin/attachments.php:254
 msgid "Attached File"
-msgstr ""
+msgstr "இணைக்கப்பட்டுள்ள கோப்பு"
 
 #: admin/backups.php:21 admin/backups.php:40 admin/backups.php:118
 #: admin/backups.php:145 admin/backups.php:158 admin/backups.php:178
 msgid "Select backup file first."
-msgstr ""
+msgstr "முதல் ஒரு காப்பு கோப்பு தேர்வு செய்ய"
 
 #: admin/backups.php:43
 msgid "Backup and Restore Database"
-msgstr ""
+msgstr "டேட்டாபேஸ் காப்பு மற்றும் மீட்டமை "
 
 #: admin/backups.php:52
 msgid "Backup paths have not been set correctly."
-msgstr ""
+msgstr "காப்பு பாதைகள் சரியாக அமைக்கப்படவில்லை"
 
 #: admin/backups.php:53
 msgid "Please contact System Administrator."
-msgstr ""
+msgstr "கணினி நிர்வாகியை தொடர்பு கொள்ளவும்."
 
 #: admin/backups.php:54
 msgid "cannot find backup directory"
-msgstr ""
+msgstr "காப்பு அடைவு கண்டுபிடிக்க முடியவில்லை"
 
 #: admin/backups.php:66
 msgid "Backup successfully generated."
-msgstr ""
+msgstr "காப்பு வெற்றிகரமாக உருவாக்கப்பட்டது."
 
 #: admin/backups.php:69
 msgid "Database backup failed."
-msgstr ""
+msgstr "டேட்டாபேஸ் காப்பு தோல்வியடைந்தது."
 
 #: admin/backups.php:102 admin/create_coy.php:268 admin/fiscalyears.php:155
 #: admin/inst_lang.php:85 admin/inst_lang.php:97
@@ -355,23 +357,23 @@ msgstr ""
 #: sales/manage/sales_points.php:95 sales/manage/sales_types.php:119
 #: taxes/item_tax_types.php:129
 msgid "No"
-msgstr ""
+msgstr "இல்லை"
 
 #: admin/backups.php:142
 msgid "Restore backup completed."
-msgstr ""
+msgstr "காப்பு மீட்க நிறைவு."
 
 #: admin/backups.php:151
 msgid "File successfully deleted."
-msgstr ""
+msgstr "கோப்பு வெற்றிகரமாக நீக்கப்பட்டது."
 
 #: admin/backups.php:156
 msgid "Can't delete backup file."
-msgstr ""
+msgstr "காப்பு கோப்பு நீக்க முடியவில்லை."
 
 #: admin/backups.php:168
 msgid "You can only upload *.sql backup files"
-msgstr ""
+msgstr "நீங்கள் * .sql காப்பு கோப்புகளை மட்டும் பதிவேற்ற முடியும்"
 
 #: admin/backups.php:170
 msgid "Filename contains forbidden chars. Please rename file and try again."
@@ -379,54 +381,56 @@ msgstr ""
 
 #: admin/backups.php:173
 msgid "File uploaded to backup directory"
-msgstr ""
+msgstr "கோப்பு காப்பு அடைவில் பதிவேற்றப்பட்டது"
 
 #: admin/backups.php:176
 msgid "File was not uploaded into the system."
-msgstr ""
+msgstr "கோப்பு அமைப்பில் பதிவேற்றப்படவில்லை."
 
 #: admin/backups.php:185
 msgid "Create backup"
-msgstr ""
+msgstr "காப்பு உருவாக்கு"
 
 #: admin/backups.php:186 sales/includes/ui/sales_order_ui.inc:581
 #: sales/includes/ui/sales_order_ui.inc:637
 msgid "Comments:"
-msgstr ""
+msgstr "கருத்துகள்:"
 
 #: admin/backups.php:187
 msgid "Compression:"
-msgstr ""
+msgstr "குறுக்குதல்:"
 
 #: admin/backups.php:189
 msgid "Create Backup"
-msgstr ""
+msgstr "காப்பு உருவாக்கு"
 
 #: admin/backups.php:191
 msgid "Backup scripts maintenance"
-msgstr ""
+msgstr "காப்பு ஸ்கிரிப்டுகள் பராமரிப்பு"
 
 #: admin/backups.php:197
 msgid "View Backup"
-msgstr ""
+msgstr "காப்பு காண்க"
 
 #: admin/backups.php:198
 msgid "Download Backup"
-msgstr ""
+msgstr "காப்பு பதிவிறக்க"
 
 #: admin/backups.php:199
 msgid "Restore Backup"
-msgstr ""
+msgstr "காப்பு மீட்க"
 
 #: admin/backups.php:200
 msgid ""
 "You are about to restore database from backup file.\n"
 "Do you want to continue?"
 msgstr ""
+"நீங்கள் காப்பு கோப்பிலிருந்து டேட்டாபேஸ் மீட்டெடுக்க போகிறீர்கள்.\n"
+"நீங்கள் தொடர விரும்புகிறீர்களா?"
 
 #: admin/backups.php:202
 msgid "Delete Backup"
-msgstr ""
+msgstr "காப்பு நீக்குக"
 
 #: admin/backups.php:204
 #, php-format
@@ -434,10 +438,12 @@ msgid ""
 "You are about to remove selected backup file.\n"
 "Do you want to continue ?"
 msgstr ""
+"நீங்கள் தேர்ந்தெடுத்த காப்பு கோப்பு நீக்க உள்ளீர்கள்.\n"
+"நீங்கள் தொடர விரும்புகிறீர்களா ?"
 
 #: admin/backups.php:210
 msgid "Update security settings"
-msgstr ""
+msgstr "பாதுகாப்பு அமைப்புகளைப் புதுப்பி"
 
 #: admin/backups.php:211
 msgid "Protect security settings"
@@ -445,68 +451,69 @@ msgstr ""
 
 #: admin/backups.php:215
 msgid "Upload file"
-msgstr ""
+msgstr "கோப்பு பதிவேற்ற"
 
 #: admin/change_current_user_password.php:16
 #: admin/change_current_user_password.php:99 themes/default/renderer.php:81
 msgid "Change password"
-msgstr ""
+msgstr "கடவுச்சொல் மாற்ற"
 
 #: admin/change_current_user_password.php:33
 msgid "Invalid password entered."
-msgstr ""
+msgstr "தவறான கடவுச்சொல் நுழைந்து."
 
 #: admin/change_current_user_password.php:40 admin/users.php:40
 msgid "The password entered must be at least 4 characters long."
 msgstr ""
+"உள்ளிட்ட கடவுச்சொல் குறைந்தபட்சம் 4 எழுத்துக்கள் நீளமானது இருக்க வேண்டும்."
 
 #: admin/change_current_user_password.php:47 admin/users.php:47
 msgid "The password cannot contain the user login."
-msgstr ""
+msgstr "கடவுச்சொல்லை பயனர் புகுபதிவு கொண்டிருக்க முடியாது."
 
 #: admin/change_current_user_password.php:54
 msgid "The passwords entered are not the same."
-msgstr ""
+msgstr "பதிந்த கடவுச்சொற்கள் அதே இல்லை."
 
 #: admin/change_current_user_password.php:68
 msgid "Password cannot be changed in demo mode."
-msgstr ""
+msgstr "கடவுச்சொல் காட்டு முறையில் மாற்றப்பட்டது."
 
 #: admin/change_current_user_password.php:73
 msgid "Your password has been updated."
-msgstr ""
+msgstr "உங்கள் கடவுச்சொல்லை மேம்படுத்தப்பட்டது."
 
 #: admin/change_current_user_password.php:85 admin/users.php:189
 msgid "User login:"
-msgstr ""
+msgstr "பயனர் உள்நுழைவு:"
 
 #: admin/change_current_user_password.php:91
 msgid "Current Password:"
-msgstr ""
+msgstr "தற்போதைய கடவுச்சொல்:"
 
 #: admin/change_current_user_password.php:92
 msgid "New Password:"
-msgstr ""
+msgstr "புதிய கடவுச்சொல்:"
 
 #: admin/change_current_user_password.php:93
 msgid "Repeat New Password:"
-msgstr ""
+msgstr "மறுபடியும் புதிய கடவுச்சொல்:"
 
 #: admin/change_current_user_password.php:95
 msgid "Enter your new password in the fields."
-msgstr ""
+msgstr "துறைகளில் உங்கள் புதிய கடவுச்சொல்லை உள்ளிடவும்."
 
 #: admin/company_preferences.php:16 applications/setup.php:18
 msgid "Company Setup"
-msgstr ""
+msgstr "நிறுவனத்தின் அமைப்பு"
 
 #: admin/company_preferences.php:29
 msgid "Login timeout must be positive number not less than 10."
-msgstr ""
+msgstr "உள்நுழைவு நேரம் முடிதல் நேர்மறை எண்ணிக்கை குறைவாக 10 இருக்க வேண்டும்."
 
 #: admin/company_preferences.php:36
 msgid "The company name must be entered."
-msgstr ""
+msgstr "நிறுவனத்தின் பெயர் உள்ளிட வேண்டும்."
 
 #: admin/company_preferences.php:46
 msgid "Error uploading logo file."
@@ -517,29 +524,31 @@ msgid ""
 "Only jpg and png files are supported - a file extension of .jpg or .png is "
 "expected"
 msgstr ""
+"jpg மற்றும் png கோப்புகளை மட்டும் துணைபுரிகிறது - ஒரு .jpg அல்லது .png "
+"கோப்பு நீட்டிப்பு எதிர்பார்க்கப்படுகிறது"
 
 #: admin/company_preferences.php:65 inventory/manage/items.php:109
 msgid ""
 "The file size is over the maximum allowed. The maximum size allowed in KB is"
-msgstr ""
+msgstr "கோப்பின் அளவு அதிகமாக உள்ளது. அதிகபட்ச KB உள்ள அளவு"
 
 #: admin/company_preferences.php:70 inventory/manage/items.php:99
 #: inventory/manage/items.php:114
 msgid "Only graphics files can be uploaded"
-msgstr ""
+msgstr "பட கோப்புகளை மட்டுமே பதிவேற்றம் "
 
 #: admin/company_preferences.php:78 admin/company_preferences.php:99
 #: inventory/manage/items.php:122
 msgid "The existing image could not be removed"
-msgstr ""
+msgstr "இருக்கும் படத்தை நீக்க முடியவில்லை"
 
 #: admin/company_preferences.php:88
 msgid "Error uploading logo file"
-msgstr ""
+msgstr "சின்னம் கோப்பு பதிவேற்றுதல் பிழை"
 
 #: admin/company_preferences.php:123
 msgid "Company setup has been updated."
-msgstr ""
+msgstr "நிறுவனத்தின் அமைப்பு மேம்படுத்தப்பட்டது."
 
 #: admin/company_preferences.php:169
 msgid "General settings"
@@ -547,69 +556,69 @@ msgstr ""
 
 #: admin/company_preferences.php:171
 msgid "Name (to appear on reports):"
-msgstr ""
+msgstr "(அறிக்கைகளில் தோன்றும்) பெயர்:"
 
 #: admin/company_preferences.php:172 admin/shipping_companies.php:142
 #: includes/ui/contacts_view.inc:106 inventory/manage/locations.php:212
 #: sales/manage/customers.php:234 sales/includes/ui/sales_order_ui.inc:628
 msgid "Address:"
-msgstr ""
+msgstr "முகவரி:"
 
 #: admin/company_preferences.php:173
 msgid "Domicile:"
-msgstr ""
+msgstr "வழமையான வதிவிடம்:"
 
 #: admin/company_preferences.php:175 admin/shipping_companies.php:138
 #: purchasing/manage/suppliers.php:135 sales/manage/customer_branches.php:253
 msgid "Phone Number:"
-msgstr ""
+msgstr "தொலைபேசி எண்:"
 
 #: admin/company_preferences.php:176 includes/ui/contacts_view.inc:101
 #: purchasing/manage/suppliers.php:138 sales/manage/customer_branches.php:255
 #: sales/manage/customers.php:258
 msgid "Fax Number:"
-msgstr ""
+msgstr "தொலைநகல் எண்:"
 
 #: admin/company_preferences.php:177 admin/users.php:211
 msgid "Email Address:"
-msgstr ""
+msgstr "மின்னஞ்சல் முகவரி:"
 
 #: admin/company_preferences.php:179
 msgid "BCC Address for all outgoing mails:"
-msgstr ""
+msgstr "அனைத்து வெளிச்செல்லும் மின்னஞ்சல்களுக்கு BCC முகவரி:"
 
 #: admin/company_preferences.php:181
 msgid "Official Company Number:"
-msgstr ""
+msgstr "நிறுவனத்தின் உத்தியோகபூர்வ எண்:"
 
 #: admin/company_preferences.php:182 purchasing/manage/suppliers.php:95
 #: sales/manage/customers.php:236
 msgid "GSTNo:"
-msgstr ""
+msgstr "GST எண்."
 
 #: admin/company_preferences.php:183
 msgid "Home Currency:"
-msgstr ""
+msgstr "உள்ளூர் நாணயம்"
 
 #: admin/company_preferences.php:185
 msgid "Company Logo:"
-msgstr ""
+msgstr "நிறுவனத்தின் சின்னம்:"
 
 #: admin/company_preferences.php:186
 msgid "New Company Logo (.jpg)"
-msgstr ""
+msgstr "புதிய நிறுவனத்தின் சின்னம் (.jpg)"
 
 #: admin/company_preferences.php:187
 msgid "Delete Company Logo:"
-msgstr ""
+msgstr "நிறுவனத்தின் சின்னம் நீக்க:"
 
 #: admin/company_preferences.php:189
 msgid "Automatic Revaluation Currency Accounts"
-msgstr ""
+msgstr "தானியங்கி மறுமதிப்பீடு நாணய கணக்குகள்"
 
 #: admin/company_preferences.php:190
 msgid "Time Zone on Reports"
-msgstr ""
+msgstr "அறிக்கைகளில் நேர மண்டலம்"
 
 #: admin/company_preferences.php:191
 msgid "Database Scheme Version"
@@ -621,23 +630,23 @@ msgstr ""
 
 #: admin/company_preferences.php:196 gl/gl_budget.php:62
 msgid "Fiscal Year:"
-msgstr ""
+msgstr "நிதியாண்டு:"
 
 #: admin/company_preferences.php:197
 msgid "Tax Periods:"
-msgstr ""
+msgstr "வரி காலகட்டங்கள்:"
 
 #: admin/company_preferences.php:197
 msgid "Months."
-msgstr ""
+msgstr "மாதங்கள்."
 
 #: admin/company_preferences.php:198
 msgid "Tax Last Period:"
-msgstr ""
+msgstr "வரி கடைசி காலகட்டத்தில்"
 
 #: admin/company_preferences.php:198
 msgid "Months back."
-msgstr ""
+msgstr "மாதங்கள் முன்பு."
 
 #: admin/company_preferences.php:199
 msgid "Put alternative Tax Include on Docs"
@@ -653,15 +662,15 @@ msgstr ""
 
 #: admin/company_preferences.php:203
 msgid "Base for auto price calculations:"
-msgstr ""
+msgstr "தன்னியங்கி விலை கணக்கீடுகள் அடிப்படை:"
 
 #: admin/company_preferences.php:204
 msgid "No base price list"
-msgstr ""
+msgstr "அடிப்படை விலை பட்டியல் இல்லை"
 
 #: admin/company_preferences.php:206
 msgid "Add Price from Std Cost:"
-msgstr ""
+msgstr "சராசரி செலவினங்களில் இருந்து விலை சேர்க்கவும்:"
 
 #: admin/company_preferences.php:208
 msgid "Round calculated prices to nearest:"
@@ -683,7 +692,7 @@ msgstr ""
 
 #: admin/company_preferences.php:215
 msgid "Use Dimensions:"
-msgstr ""
+msgstr "பயன்பாட்டு பரிமாணங்கள்:"
 
 #: admin/company_preferences.php:217
 msgid "User Interface Options"
@@ -691,23 +700,23 @@ msgstr ""
 
 #: admin/company_preferences.php:219
 msgid "Search Item List"
-msgstr ""
+msgstr "தேடல் பொருள் பட்டியல்"
 
 #: admin/company_preferences.php:220
 msgid "Search Customer List"
-msgstr ""
+msgstr "தேடல் வாடிக்கையாளர் பட்டியல்"
 
 #: admin/company_preferences.php:221
 msgid "Search Supplier List"
-msgstr ""
+msgstr "தேடல் வழங்குநர் பட்டியல்"
 
 #: admin/company_preferences.php:222
 msgid "Login Timeout:"
-msgstr ""
+msgstr "உள்நுழைவு காலம் கடந்தது:"
 
 #: admin/company_preferences.php:222
 msgid "seconds"
-msgstr ""
+msgstr "விநாடிகள்"
 
 #: admin/company_preferences.php:227 admin/display_prefs.php:160
 #: admin/gl_setup.php:274 admin/inst_chart.php:77 admin/inst_lang.php:103
@@ -732,15 +741,15 @@ msgstr ""
 #: sales/includes/ui/sales_order_ui.inc:231
 #: sales/includes/ui/sales_order_ui.inc:547
 msgid "Update"
-msgstr ""
+msgstr "மேம்படுத்தல்"
 
 #: admin/create_coy.php:21
 msgid "Create/Update Company"
-msgstr ""
+msgstr "நிறுவனத்தின் உருவாக்கவும்/புதுப்பிக்கப்பட்டது"
 
 #: admin/create_coy.php:37 admin/create_coy.php:43
 msgid "Database settings are not specified."
-msgstr ""
+msgstr "டேட்டாபேஸ் அமைப்புகள் குறிப்பிடப்படவில்லை."
 
 #: admin/create_coy.php:48
 msgid "Database port has to be numeric or empty."
@@ -749,50 +758,57 @@ msgstr ""
 #: admin/create_coy.php:59
 msgid "This database settings are already used by another company."
 msgstr ""
+"இந்த டேட்டாபேஸ் அமைப்புகள் ஏற்கனவே மற்றொரு நிறுவனத்தினாலும் "
+"பயன்படுத்தப்பட்டது."
 
 #: admin/create_coy.php:64
 msgid ""
 "You cannot have table set without prefix together with prefixed sets in the "
 "same database."
 msgstr ""
+"ஒரு முன்னொட்டாக டேபிள் மற்றும் வேறு ஒரு டேபிள் முற்சேர்க்கையாக இல்லாமல் "
+"அமைக்கஅதே டேட்டாபேஸ் உள்ளே முடியாது"
 
 #: admin/create_coy.php:124
 msgid "Error creating Database: "
-msgstr ""
+msgstr "டேட்டாபேஸ் உருவாக்குவதில் பிழை: "
 
 #: admin/create_coy.php:124
 msgid ", Please create it manually"
-msgstr ""
+msgstr ", தயவு செய்து கைமுறையாக உருவாக்கவும்"
 
 #: admin/create_coy.php:130
 msgid "Cannot create new company due to bugs in sql file."
-msgstr ""
+msgstr "SQL கோப்பு பிழைகள் காரணமாக புதிய நிறுவனம் உருவாக்க முடியவில்லை."
 
 #: admin/create_coy.php:148 admin/create_coy.php:216
 msgid "Cannot open the configuration file - "
-msgstr ""
+msgstr "கட்டமைப்பு கோப்பு திறக்க முடியவில்லை - "
 
 #: admin/create_coy.php:150 admin/create_coy.php:218
 msgid "Cannot write to the configuration file - "
-msgstr ""
+msgstr "கட்டமைப்பு கோப்பில் எழுத முடியவில்லை - "
 
 #: admin/create_coy.php:152 admin/create_coy.php:188 admin/create_coy.php:220
 msgid "The configuration file "
-msgstr ""
+msgstr "கட்டமைப்பு கோப்பு "
 
 #: admin/create_coy.php:152 admin/create_coy.php:188 admin/create_coy.php:220
 #: admin/db/maintenance_db.inc:253
 msgid ""
-" is not writable. Change its permissions so it is, then re-run the operation."
+" is not writable. Change its permissions so it is, then re-run the "
+"operation."
 msgstr ""
+" எழுதப்பட முடியவில்லை. அதை எழுத அதன் அனுமதிகளை மாற்ற, பின்னர் மீண்டும் "
+"முயற்சிக்கவும்."
 
 #: admin/create_coy.php:164
 msgid "New company has been created."
-msgstr ""
+msgstr "புதிய நிறுவனம் உருவாக்கப்பட்டது."
 
 #: admin/create_coy.php:164
 msgid "Company has been updated."
-msgstr ""
+msgstr "நிறுவனத்தின் மேம்படுத்தப்பட்டது."
 
 #: admin/create_coy.php:181
 msgid ""
@@ -802,31 +818,31 @@ msgstr ""
 
 #: admin/create_coy.php:197
 msgid "Cannot rename subdirectory to temporary name."
-msgstr ""
+msgstr "தற்காலிக பெயர் உப அடைவு மறுபெயரிட முடியாது."
 
 #: admin/create_coy.php:203
 msgid "Cannot rename company subdirectory"
-msgstr ""
+msgstr "நிறுவனத்தின் உப அடைவு மறுபெயரிடமுடியாது"
 
 #: admin/create_coy.php:209
 msgid "Error removing Database: "
-msgstr ""
+msgstr "டேட்டாபேஸ் நநீக்குவதில் பிழை:"
 
 #: admin/create_coy.php:209
 msgid ", please remove it manually"
-msgstr ""
+msgstr ", கைமுறையாக நீக்கவும்"
 
 #: admin/create_coy.php:229
 msgid "Cannot remove temporary renamed company data directory "
-msgstr ""
+msgstr "தற்காலிக என மறுபெயரிடப்பட்ட நிறுவனத்தின் தரவு அடைவை நீக்க முடியாது"
 
 #: admin/create_coy.php:232
 msgid "Selected company has been deleted"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட நிறுவனம் நீக்கப்பட்டுவிட்டது"
 
 #: admin/create_coy.php:247
 msgid "Database Host"
-msgstr ""
+msgstr "டேட்டாபேஸ் ஹோஸ்ட்"
 
 #: admin/create_coy.php:247
 msgid "Database Port"
@@ -834,15 +850,15 @@ msgstr ""
 
 #: admin/create_coy.php:247 admin/create_coy.php:333 admin/create_coy.php:344
 msgid "Database User"
-msgstr ""
+msgstr "டேட்டாபேஸ் பயனர்"
 
 #: admin/create_coy.php:248 admin/create_coy.php:335 admin/create_coy.php:345
 msgid "Database Name"
-msgstr ""
+msgstr "டேட்டாபேஸ் பெயர்"
 
 #: admin/create_coy.php:248 admin/create_coy.php:337 admin/create_coy.php:347
 msgid "Table Pref"
-msgstr ""
+msgstr "டேபிள் முன்னொட்டு"
 
 #: admin/create_coy.php:248
 msgid "Charset"
@@ -854,7 +870,7 @@ msgstr ""
 #: purchasing/includes/ui/invoice_ui.inc:143
 #: purchasing/includes/ui/po_ui.inc:172 purchasing/includes/ui/po_ui.inc:174
 msgid "Default"
-msgstr ""
+msgstr "இயல்புநிலை"
 
 #: admin/create_coy.php:268 admin/create_coy.php:351 admin/fiscalyears.php:159
 #: admin/inst_lang.php:85 admin/inst_lang.php:97
@@ -873,7 +889,7 @@ msgstr ""
 #: sales/manage/sales_points.php:94 sales/manage/sales_points.php:95
 #: sales/manage/sales_types.php:119 taxes/item_tax_types.php:133
 msgid "Yes"
-msgstr ""
+msgstr "ஆம்"
 
 #: admin/create_coy.php:274
 #, php-format
@@ -884,13 +900,15 @@ msgstr ""
 
 #: admin/create_coy.php:282
 msgid "The marked company is the current company which cannot be deleted."
-msgstr ""
+msgstr "குறிப்பிட்ட நிறுவனம் நீக்க முடியாது, தற்போதைய நிறுவனம் ஆகும்."
 
 #: admin/create_coy.php:283
 msgid ""
 "If no Admin Password is entered, the new Admin Password will be "
 "'<b>password</b>' by default "
 msgstr ""
+"நிர்வாகம் கடவுச்சொல் காலியாக இருந்தால், புதிய நிர்வாகியின் கடவுச்சொல்லை "
+"இயல்பாக '<b>password</b>' இருக்கும் "
 
 #: admin/create_coy.php:284
 msgid "Set Only Port value if you cannot use the default port 3306."
@@ -898,7 +916,7 @@ msgstr ""
 
 #: admin/create_coy.php:331 admin/create_coy.php:342 admin/printers.php:84
 msgid "Host"
-msgstr ""
+msgstr "ஹோஸ்ட்"
 
 #: admin/create_coy.php:332 admin/create_coy.php:343 admin/printers.php:135
 msgid "Port"
@@ -906,7 +924,7 @@ msgstr ""
 
 #: admin/create_coy.php:334
 msgid "Database Password"
-msgstr ""
+msgstr "டேட்டாபேஸ் கடவுச்சொல்"
 
 #: admin/create_coy.php:336 admin/create_coy.php:346
 msgid "Database Collation:"
@@ -918,7 +936,7 @@ msgstr ""
 #: gl/manage/gl_account_types.php:189 includes/db/audit_trail_db.inc:127
 #: includes/ui/allocation_cart.inc:316 inventory/manage/items.php:446
 msgid "None"
-msgstr ""
+msgstr "எதுவும் இல்லை"
 
 #: admin/create_coy.php:338 admin/create_coy.php:349 admin/create_coy.php:351
 msgid "Default Company"
@@ -926,64 +944,64 @@ msgstr ""
 
 #: admin/create_coy.php:339
 msgid "Database Script"
-msgstr ""
+msgstr "டேட்டாபேஸ் ஸ்கிரிப்ட்"
 
 #: admin/create_coy.php:340
 msgid "New script Admin Password"
-msgstr ""
+msgstr "புதிய ஸ்கிரிப்ட் நிர்வாகியின் கடவுச்சொல்"
 
 #: admin/crm_categories.php:17
 msgid "Contact Categories"
-msgstr ""
+msgstr "தொடர்பு பிரிவுகள்"
 
 #: admin/crm_categories.php:31
 msgid "Category description cannot be empty."
-msgstr ""
+msgstr "பிரிவு விரித்துரைத்தல் காலியாக இருக்க முடியாது."
 
 #: admin/crm_categories.php:41
 msgid "Selected contact category has been updated"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட தொடர்பு பிரிவை மேம்படுத்தப்பட்டது"
 
 #: admin/crm_categories.php:47
 msgid "New contact category has been added"
-msgstr ""
+msgstr "புதிய தொடர்பு பிரிவில் சேர்க்க"
 
 #: admin/crm_categories.php:62
 msgid "Cannot delete this category because there are contacts related to it."
-msgstr ""
+msgstr "அது தொடர்பான தொடர்புகள் உள்ளன, ஏனெனில் இந்த பிரிவை நீக்க முடியாது."
 
 #: admin/crm_categories.php:68
 msgid "Category has been deleted"
-msgstr ""
+msgstr "பிரிவு நீக்கப்பட்டுவிட்டது"
 
 #: admin/crm_categories.php:88
 msgid "Category Type"
-msgstr ""
+msgstr "பிரிவு வகை"
 
 #: admin/crm_categories.php:88
 msgid "Category Subtype"
-msgstr ""
+msgstr "பிரிவு துணைவகை"
 
 #: admin/crm_categories.php:88 purchasing/inquiry/suppliers_list.php:53
 #: sales/manage/customer_branches.php:283 sales/inquiry/customers_list.php:54
 msgid "Short Name"
-msgstr ""
+msgstr "குறுகிய பெயர்"
 
 #: admin/crm_categories.php:135 admin/crm_categories.php:139
 msgid "Contact Category Type:"
-msgstr ""
+msgstr "தொடர்பு பிரிவு வகை:"
 
 #: admin/crm_categories.php:136 admin/crm_categories.php:140
 msgid "Contact Category Subtype:"
-msgstr ""
+msgstr "தொடர்பு பிரிவு துணைவகை:"
 
 #: admin/crm_categories.php:143
 msgid "Category Short Name:"
-msgstr ""
+msgstr "பிரிவு குறுகிய பெயர்:"
 
 #: admin/crm_categories.php:144
 msgid "Category Description:"
-msgstr ""
+msgstr "பிரிவு விரித்துரைத்தல்"
 
 #: admin/dashboard.php:27 themes/default/renderer.php:70
 #: themes/default/renderer.php:78
@@ -992,41 +1010,43 @@ msgstr ""
 
 #: admin/display_prefs.php:16
 msgid "Display Setup"
-msgstr ""
+msgstr "காட்சி அமைப்பு"
 
 #: admin/display_prefs.php:30
 msgid "Query size must be integer and greater than zero."
-msgstr ""
+msgstr "கேள்வி அளவு முழு மற்றும் பூஜ்யம் விட அதிகமாக இருக்க வேண்டும்."
 
 #: admin/display_prefs.php:61
 msgid ""
 "Display settings have been updated. Keep in mind that changed settings are "
 "restored on every login in demo mode."
 msgstr ""
+"காட்சி அமைப்புகள் மேம்படுத்தப்பட்டது. அமைப்புகள் காட்டு முறையில் ஒவ்வொரு "
+"உள்நுழைவு மீண்டும் மாற்றம் என்பதை நினைவில் கொள்ளுங்கள்."
 
 #: admin/display_prefs.php:63
 msgid "Display settings have been updated."
-msgstr ""
+msgstr "காட்சி அமைப்புகள் மேம்படுத்தப்பட்டது."
 
 #: admin/display_prefs.php:72
 msgid "Decimal Places"
-msgstr ""
+msgstr "தசமம் இடங்கள்"
 
 #: admin/display_prefs.php:74
 msgid "Prices/Amounts:"
-msgstr ""
+msgstr "விலைகள்/தொகைகள்:"
 
 #: admin/display_prefs.php:75
 msgid "Quantities:"
-msgstr ""
+msgstr "அளவுகள்"
 
 #: admin/display_prefs.php:76
 msgid "Exchange Rates:"
-msgstr ""
+msgstr "நாணயமாற்று விகிதங்கள்:"
 
 #: admin/display_prefs.php:77
 msgid "Percentages:"
-msgstr ""
+msgstr "சதவீதங்கள்:"
 
 #: admin/display_prefs.php:79
 msgid "Date Format and Separators"
@@ -1038,15 +1058,15 @@ msgstr ""
 
 #: admin/display_prefs.php:83
 msgid "Date Separator:"
-msgstr ""
+msgstr "தேதி பிரிப்பான்கள்"
 
 #: admin/display_prefs.php:88
 msgid "Thousand Separator:"
-msgstr ""
+msgstr "ஆயிரம் பிரிப்பான்:"
 
 #: admin/display_prefs.php:93
 msgid "Decimal Separator:"
-msgstr ""
+msgstr "தசாம்சப்பிரிப்பான்:"
 
 #: admin/display_prefs.php:98
 msgid "Use Date Picker"
@@ -1087,65 +1107,71 @@ msgstr ""
 #: admin/display_prefs.php:115 applications/setup.php:42
 #: includes/sysnames.inc:99
 msgid "Miscellaneous"
-msgstr ""
+msgstr "இதர"
 
 #: admin/display_prefs.php:117
 msgid "Show hints for new users:"
-msgstr ""
+msgstr "புதிய பயனர்களுக்கு குறிப்புகளை காட்டு:"
 
 #: admin/display_prefs.php:119
 msgid "Show GL Information:"
-msgstr ""
+msgstr "பேரேட்டு தகவல் காட்டு"
 
 #: admin/display_prefs.php:121
 msgid "Show Item Codes:"
-msgstr ""
+msgstr "பொருள் குறியீடுகள் காட்டு:"
 
 #: admin/display_prefs.php:128
 msgid "Page Size:"
-msgstr ""
+msgstr "பக்க அளவு:"
 
 #: admin/display_prefs.php:130
 msgid "Start-up Tab"
-msgstr ""
+msgstr "தொடக்க தட்டு"
 
 #: admin/display_prefs.php:138 admin/users.php:219
 msgid "Printing profile"
-msgstr ""
+msgstr "அச்சிடுதல் சுயவிவரம்"
 
 #: admin/display_prefs.php:139 admin/users.php:220
 msgid "Browser printing support"
-msgstr ""
+msgstr "உலாவியின் அச்சிடும் ஆதரவு"
 
 #: admin/display_prefs.php:141
 msgid "Use popup window to display reports:"
-msgstr ""
+msgstr "அறிக்கைகள் காட்ட பாப் அப் விண்டோ பயன்படுத்தவும்:"
 
 #: admin/display_prefs.php:142 admin/users.php:223
 msgid "Set this option to on if your browser directly supports pdf files"
 msgstr ""
+"உங்கள் உலாவியில் நேரடியாக pdf கோப்புகளை ஆதரிக்கிறது என்றால் இந்த "
+"விருப்பத்தை அமைக்கவும்"
 
 #: admin/display_prefs.php:144
 msgid "Use icons instead of text links:"
-msgstr ""
+msgstr "உரை இணைப்புகளுக்கு பதிலாக சின்னங்கள் பயன்படுத்த:"
 
 #: admin/display_prefs.php:145
 msgid "Set this option to on for using icons instead of text links"
 msgstr ""
+"உரை இணைப்புகளுக்கு பதிலாக சின்னங்கள் பயன்படுத்தி கொள்ள இந்த விருப்பத்தை "
+"அமைக்கவும்"
 
 #: admin/display_prefs.php:147
 msgid "Remember last document date:"
-msgstr ""
+msgstr "கடைசி ஆவணத்தின் தேதியை ஞாபகம் வைத்துக்கொள்:"
 
 #: admin/display_prefs.php:148
 msgid ""
 "If set document date is remembered on subsequent documents, otherwise "
 "default is current date"
 msgstr ""
+"அமைத்தால், பின்னர் ஆவணங்களை நினைவில் கொள்ளப்படுகிறது, இல்லையெனில், "
+"இயல்புநிலை தற்போதைய தேதி ஆகும்"
 
 #: admin/display_prefs.php:150
 msgid "Query page size:"
-msgstr ""
+msgstr "கேள்வி பக்க அளவு:"
 
 #: admin/display_prefs.php:152
 msgid "Transaction days:"
@@ -1153,70 +1179,74 @@ msgstr ""
 
 #: admin/display_prefs.php:154 admin/inst_lang.php:35
 msgid "Language"
-msgstr ""
+msgstr "மொழி"
 
 #: admin/display_prefs.php:156 admin/users.php:215
 msgid "Language:"
-msgstr ""
+msgstr "மொழி:"
 
 #: admin/fiscalyears.php:25
 msgid "Fiscal Years"
-msgstr ""
+msgstr "நிதி ஆண்டுகள்"
 
 #: admin/fiscalyears.php:34
 msgid "Invalid BEGIN date in fiscal year."
-msgstr ""
+msgstr "நிதி ஆண்டில் தவறான தொடங்கும் தேதி."
 
 #: admin/fiscalyears.php:40
 msgid "Invalid END date in fiscal year."
-msgstr ""
+msgstr "நிதி ஆண்டில் தவறான முடிவும் தேதி."
 
 #: admin/fiscalyears.php:46
 msgid "Invalid BEGIN or END date in fiscal year."
-msgstr ""
+msgstr "நிதி ஆண்டில் தவறான தொடங்கும் அல்லது முடிவும் தேதி"
 
 #: admin/fiscalyears.php:52
 msgid "BEGIN date bigger than END date."
-msgstr ""
+msgstr "தொடங்கும் தேதி முடிவும் தேதி விட பின்னர்."
 
 #: admin/fiscalyears.php:70
 msgid "Cannot CLOSE this year because there are open fiscal years before"
 msgstr ""
+"முந்தைய நிதி ஆண்டுகளில் திறந்திருக்கும் என்பதால் இந்த நிதி ஆண்டு மூட "
+"முடியாது."
 
 #: admin/fiscalyears.php:81
 msgid "Selected fiscal year has been updated"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட நிதி ஆண்டு மேம்படுத்தப்பட்டது"
 
 #: admin/fiscalyears.php:89
 msgid "New fiscal year has been added"
-msgstr ""
+msgstr "புதிய நிதி ஆண்டு சேர்க்கப்பட்டது"
 
 #: admin/fiscalyears.php:102
 msgid "Cannot delete this fiscal year because there are fiscal years before."
-msgstr ""
+msgstr "நிதி ஆண்டுகளுக்கு முன் உள்ளன, ஏனெனில் இந்த நிதி ஆண்டு நீக்க முடியாது."
 
 #: admin/fiscalyears.php:107
 msgid "Cannot delete this fiscal year because the fiscal year is not closed."
 msgstr ""
+"இந்த நிதி ஆண்டு மூடப்பட்டு இல்லை ஏனெனில் இந்த நிதி ஆண்டு நீக்க முடியாது."
 
 #: admin/fiscalyears.php:120
 msgid "Selected fiscal year has been deleted"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட நிதி ஆண்டு நீக்கப்பட்டுவிட்டது"
 
 #: admin/fiscalyears.php:133
 msgid ""
 "Warning: Deleting a fiscal year all transactions \n"
-"\t\tare removed and converted into relevant balances. This process is "
-"irreversible!"
+"\t\tare removed and converted into relevant balances. This process is irreversible!"
 msgstr ""
+"ஒரு நிதி ஆண்டு நீக்குதல் எல்லா பரிமாற்றங்களையும் நீக்கப்படும் \n"
+"\t\tமற்றும் சம்பந்தப்பட்ட இருப்புகளாக மாற்றப்படுகிறது. இந்த செயல்முறை மாற்றமுடியாத ஆகிறது!"
 
 #: admin/fiscalyears.php:138
 msgid "Fiscal Year Begin"
-msgstr ""
+msgstr "நிதியாண்டு துவங்கும்"
 
 #: admin/fiscalyears.php:138
 msgid "Fiscal Year End"
-msgstr ""
+msgstr "நிதியாண்டு முடிவு"
 
 #: admin/fiscalyears.php:138 dimensions/inquiry/search_dimensions.php:130
 #: dimensions/inquiry/search_dimensions.php:136 includes/ui/ui_lists.inc:743
@@ -1225,7 +1255,7 @@ msgstr ""
 #: reporting/includes/excel_report.inc:231
 #: reporting/includes/pdf_report.inc:267
 msgid "Closed"
-msgstr ""
+msgstr "மூடியது"
 
 #: admin/fiscalyears.php:168
 #, php-format
@@ -1233,23 +1263,28 @@ msgid ""
 "Are you sure you want to delete fiscal year %s - %s? All transactions are "
 "deleted and converted into relevant balances. Do you want to continue ?"
 msgstr ""
+"நீங்கள் %s - %s நிதி ஆண்டு நீக்க வேண்டுமா? எல்லா பரிமாற்றங்களையும் "
+"நீக்கப்படும் மற்றும் சம்பந்தப்பட்ட இருப்புகளாக மாற்றப்படுகிறது. நீங்கள் "
+"தொடர விரும்புகிறீர்களா?"
 
 #: admin/fiscalyears.php:176
 msgid ""
 "The marked fiscal year is the current fiscal year which cannot be deleted."
 msgstr ""
+"குறிக்கப்பட்ட நிதி ஆண்டு நீக்க முடியாது, ஏனெனில், இது, நடப்பு நிதி ஆண்டில் "
+"ஆகிறது."
 
 #: admin/fiscalyears.php:200 admin/fiscalyears.php:211
 msgid "Fiscal Year Begin:"
-msgstr ""
+msgstr "நிதியாண்டு துவங்கும்:"
 
 #: admin/fiscalyears.php:201 admin/fiscalyears.php:212
 msgid "Fiscal Year End:"
-msgstr ""
+msgstr "நிதியாண்டு முடிவு:"
 
 #: admin/fiscalyears.php:216
 msgid "Is Closed:"
-msgstr ""
+msgstr "மூடப்பட்டுள்ளது"
 
 #: admin/forms_setup.php:20
 msgid "Transaction References"
@@ -1257,23 +1292,31 @@ msgstr ""
 
 #: admin/gl_setup.php:20
 msgid "System and General GL Setup"
-msgstr ""
+msgstr "அமைப்பு மற்றும் பொது பேரேட்டு அமைப்பு"
 
 #: admin/gl_setup.php:34
 msgid "The delivery over-receive allowance must be between 0 and 100."
 msgstr ""
+"அதிகமாக விநியோக சகிப்புத்தன்மை 0 மற்றும் 100 இடையில் இருக்க வேண்டும்."
 
 #: admin/gl_setup.php:41
 msgid "The invoice over-charge allowance must be between 0 and 100."
 msgstr ""
+"அதிகப்படியான விலைப்பட்டியல் சகிப்புத்தன்மை 0 மற்றும் 100 இடையில் இருக்க "
+"வேண்டும்."
 
 #: admin/gl_setup.php:48
 msgid "The past due days interval allowance must be between 0 and 100."
 msgstr ""
+"அதிகப்படியான தாமத நாட்கள் இடைவெளியில் சகிப்புத்தன்மை 0 மற்றும் 100 இடையில் "
+"இருக்க வேண்டும்."
 
 #: admin/gl_setup.php:59
-msgid "Before GRN Clearing Account can be changed all GRNs have to be invoiced"
+msgid ""
+"Before GRN Clearing Account can be changed all GRNs have to be invoiced"
 msgstr ""
+"GRN தீர்வு கணக்கு மாற்ற முடியும் முன் அனைத்து GRNகள் விலைப்பட்டியல் வேண்டும்"
+" "
 
 #: admin/gl_setup.php:66 admin/db/fiscalyears_db.inc:142
 msgid ""
@@ -1281,24 +1324,26 @@ msgid ""
 "Loss Year Account should be an Expense Account (preferred the last one in "
 "the Expense Class)"
 msgstr ""
+"தக்கவைத்து வருவாய் கணக்கு இருப்பு கணக்கு அல்லது இலாப நட்ட ஆண்டு கணக்கில் ஒரு"
+" செலவு கணக்கு இருக்க வேண்டும் (செலவு வகுப்பு கடந்த விருப்பமான)"
 
 #: admin/gl_setup.php:89
 msgid "The general GL setup has been updated."
-msgstr ""
+msgstr "பொது பேரேட்டு அமைப்பு மேம்படுத்தப்பட்டது. "
 
 #: admin/gl_setup.php:154
 msgid "General GL"
-msgstr ""
+msgstr "பொது பேரேட்டு"
 
 #: admin/gl_setup.php:156
 msgid "Past Due Days Interval:"
-msgstr ""
+msgstr "கடந்த தாமத நாட்கள் இடைவெளியில்:"
 
 #: admin/gl_setup.php:156 admin/gl_setup.php:174 admin/gl_setup.php:208
 #: admin/gl_setup.php:210 admin/gl_setup.php:230 admin/gl_setup.php:268
 #: admin/payment_terms.php:140
 msgid "days"
-msgstr ""
+msgstr "நாட்கள்"
 
 #: admin/gl_setup.php:158
 msgid "Accounts Type:"
@@ -1306,19 +1351,19 @@ msgstr ""
 
 #: admin/gl_setup.php:160
 msgid "Retained Earnings:"
-msgstr ""
+msgstr "தக்கவைத்து வருவாய்:"
 
 #: admin/gl_setup.php:162
 msgid "Profit/Loss Year:"
-msgstr ""
+msgstr "லாபம்/நட்ட ஆண்டு: "
 
 #: admin/gl_setup.php:164
 msgid "Exchange Variances Account:"
-msgstr ""
+msgstr "செலாவணி மாறுபாடுகள் கணக்கு:"
 
 #: admin/gl_setup.php:166 gl/manage/bank_accounts.php:194
 msgid "Bank Charges Account:"
-msgstr ""
+msgstr "வங்கி கட்டணங்கள் கணக்கு:"
 
 #: admin/gl_setup.php:168
 msgid "Tax Algorithm:"
@@ -1326,19 +1371,19 @@ msgstr ""
 
 #: admin/gl_setup.php:172
 msgid "Dimension Defaults"
-msgstr ""
+msgstr "பரிமாண இயல்பான நிலை"
 
 #: admin/gl_setup.php:174
 msgid "Dimension Required By After:"
-msgstr ""
+msgstr "பரிமாண தேவைப்படும் தேதி பின்னர்:"
 
 #: admin/gl_setup.php:178
 msgid "Customers and Sales"
-msgstr ""
+msgstr "வாடிக்கையாளர்கள் மற்றும் விற்பனை"
 
 #: admin/gl_setup.php:180
 msgid "Default Credit Limit:"
-msgstr ""
+msgstr "இயல்புநிலை கடன் எல்லை:"
 
 #: admin/gl_setup.php:182
 msgid "Invoice Identification:"
@@ -1394,7 +1439,7 @@ msgstr ""
 
 #: admin/gl_setup.php:184
 msgid "Accumulate batch shipping:"
-msgstr ""
+msgstr "தொகுதி போக்குவரத்து குவிக்க:"
 
 #: admin/gl_setup.php:186
 msgid "Print Item Image on Quote:"
@@ -1402,11 +1447,11 @@ msgstr ""
 
 #: admin/gl_setup.php:188
 msgid "Legal Text on Invoice:"
-msgstr ""
+msgstr "விலைப்பட்டியல் சட்ட உரை:"
 
 #: admin/gl_setup.php:190
 msgid "Shipping Charged Account:"
-msgstr ""
+msgstr "போக்குவரத்து கட்டணம் வசூலிக்கப்படும் கணக்கு:"
 
 #: admin/gl_setup.php:192
 msgid "Deferred Income Account:"
@@ -1418,37 +1463,37 @@ msgstr ""
 
 #: admin/gl_setup.php:197
 msgid "Customers and Sales Defaults"
-msgstr ""
+msgstr "வாடிக்கையாளர்கள் மற்றும் விற்பனை இயல்புநிலை"
 
 #: admin/gl_setup.php:199
 msgid "Receivable Account:"
-msgstr ""
+msgstr "பெறத்தக்க கணக்கு:"
 
 #: admin/gl_setup.php:201 admin/gl_setup.php:246
 #: inventory/manage/item_categories.php:228 inventory/manage/items.php:468
 #: sales/manage/customer_branches.php:242
 msgid "Sales Account:"
-msgstr ""
+msgstr "விற்பனை கணக்கு:"
 
 #: admin/gl_setup.php:204 sales/manage/customer_branches.php:243
 msgid "Sales Discount Account:"
-msgstr ""
+msgstr "விற்பனை தள்ளுபடி கணக்கு:"
 
 #: admin/gl_setup.php:206 sales/manage/customer_branches.php:245
 msgid "Prompt Payment Discount Account:"
-msgstr ""
+msgstr "கூறியபடி செலுத்துமாறு தள்ளுபடி கணக்கு:"
 
 #: admin/gl_setup.php:208
 msgid "Quote Valid Days:"
-msgstr ""
+msgstr "மேற்கோள் ஏற்றுக்கொள்ளக்கூடிய நாட்கள்"
 
 #: admin/gl_setup.php:210
 msgid "Delivery Required By:"
-msgstr ""
+msgstr "ஒப்படைத்தல் தேவைப்படும் தேதி: "
 
 #: admin/gl_setup.php:216
 msgid "Suppliers and Purchasing"
-msgstr ""
+msgstr "விநியோகஸ்தர்கள் மற்றும் கொள்முதல்"
 
 #: admin/gl_setup.php:218
 msgid "Delivery Over-Receive Allowance:"
@@ -1464,11 +1509,11 @@ msgstr ""
 
 #: admin/gl_setup.php:224
 msgid "Payable Account:"
-msgstr ""
+msgstr "செலுத்த வேண்டிய கணக்கு:"
 
 #: admin/gl_setup.php:226 purchasing/manage/suppliers.php:131
 msgid "Purchase Discount Account:"
-msgstr ""
+msgstr "விற்பனை தள்ளுபடி கணக்கு:"
 
 #: admin/gl_setup.php:228
 msgid "GRN Clearing Account:"
@@ -1488,11 +1533,11 @@ msgstr ""
 
 #: admin/gl_setup.php:234 reporting/reports_main.php:208
 msgid "Inventory"
-msgstr ""
+msgstr "சரக்குகளின் விவரப்பட்டியல்"
 
 #: admin/gl_setup.php:236
 msgid "Allow Negative Inventory:"
-msgstr ""
+msgstr "எதிர்மறை சரக்கு அனுமதி:"
 
 #: admin/gl_setup.php:237
 msgid "Warning:  This may cause a delay in GL postings"
@@ -1512,12 +1557,12 @@ msgstr ""
 
 #: admin/gl_setup.php:245
 msgid "Items Defaults"
-msgstr ""
+msgstr "பொருட்களின் இயல்புநிலைகள்"
 
 #: admin/gl_setup.php:248 inventory/manage/item_categories.php:244
 #: inventory/manage/items.php:477
 msgid "Inventory Account:"
-msgstr ""
+msgstr "சரக்குகளின் கணக்கு:"
 
 #: admin/gl_setup.php:250 inventory/manage/item_categories.php:232
 #: inventory/manage/item_categories.php:246 inventory/manage/items.php:478
@@ -1551,16 +1596,16 @@ msgstr ""
 #: sales/create_recurrent_invoices.php:203
 #: sales/manage/recurrent_invoices.php:128
 msgid "Monthly"
-msgstr ""
+msgstr "மாதாந்திர"
 
 #: admin/gl_setup.php:262 gl/manage/gl_quick_entries.php:247
 #: gl/includes/ui/gl_journal_ui.inc:69
 msgid "Yearly"
-msgstr ""
+msgstr "வருடாந்திரம்"
 
 #: admin/gl_setup.php:266
 msgid "Manufacturing Defaults"
-msgstr ""
+msgstr "தயாரிப்பு இயல்புநிலைகள்"
 
 #: admin/gl_setup.php:268
 msgid "Work Order Required By After:"
@@ -1580,33 +1625,33 @@ msgstr ""
 
 #: admin/inst_chart.php:55
 msgid "Chart"
-msgstr ""
+msgstr "கணக்குகளின் அட்டவணை"
 
 #: admin/inst_chart.php:55 admin/inst_lang.php:36 admin/inst_module.php:105
 #: admin/inst_theme.php:55
 msgid "Installed"
-msgstr ""
+msgstr "நிறுவப்பட்ட"
 
 #: admin/inst_chart.php:55 admin/inst_lang.php:36 admin/inst_module.php:105
 #: admin/inst_theme.php:55 inventory/inquiry/stock_status.php:75
 #: reporting/rep303.php:113
 msgid "Available"
-msgstr ""
+msgstr "கையிருப்பில்"
 
 #: admin/inst_chart.php:55 admin/inst_lang.php:35 admin/inst_lang.php:220
 msgid "Encoding"
-msgstr ""
+msgstr "என்கோடிங்"
 
 #: admin/inst_chart.php:72 admin/inst_chart.php:74 admin/inst_lang.php:88
 #: admin/inst_module.php:126 admin/inst_module.php:127 admin/inst_theme.php:77
 #: includes/sysnames.inc:207
 msgid "Unknown"
-msgstr ""
+msgstr "தெரியாத"
 
 #: admin/inst_chart.php:77 admin/inst_lang.php:103 admin/inst_module.php:131
 #: admin/inst_module.php:136 admin/inst_theme.php:81
 msgid "Install"
-msgstr ""
+msgstr "நிறுவுக"
 
 #: admin/inst_chart.php:78 admin/inst_module.php:137 admin/inst_theme.php:82
 msgid "Upload and install latest extension package"
@@ -1637,15 +1682,15 @@ msgstr ""
 #: sales/manage/customer_branches.php:284 sales/manage/sales_people.php:99
 #: taxes/item_tax_types.php:117
 msgid "Name"
-msgstr ""
+msgstr "பெயர்"
 
 #: admin/inst_lang.php:35 admin/inst_lang.php:222
 msgid "Right To Left"
-msgstr ""
+msgstr "வலமிருந்து இடம்"
 
 #: admin/inst_lang.php:47
 msgid "Supported"
-msgstr ""
+msgstr "ஆதரவுள்ளது"
 
 #: admin/inst_lang.php:49
 msgid "Display also languages not supported by server locales"
@@ -1672,7 +1717,7 @@ msgstr ""
 
 #: admin/inst_lang.php:120
 msgid "Update default"
-msgstr ""
+msgstr "இயல்புநிலை மேம்படுத்தல்"
 
 #: admin/inst_lang.php:122
 msgid "Add new language manually"
@@ -1694,7 +1739,7 @@ msgstr ""
 
 #: admin/inst_lang.php:219
 msgid "Language Name"
-msgstr ""
+msgstr "மொழி பெயர்"
 
 #: admin/inst_lang.php:223
 msgid "Default Language"
@@ -1776,7 +1821,7 @@ msgstr ""
 
 #: admin/inst_theme.php:55
 msgid "Theme"
-msgstr ""
+msgstr "வடிவமைப்பு"
 
 #: admin/inst_theme.php:61
 msgid "No optional theme is currently available."
@@ -1866,14 +1911,14 @@ msgstr ""
 
 #: admin/payment_terms.php:95
 msgid ""
-"Cannot delete this payment term, because customer accounts have been created "
-"referring to this term."
+"Cannot delete this payment term, because customer accounts have been created"
+" referring to this term."
 msgstr ""
 
 #: admin/payment_terms.php:101
 msgid ""
-"Cannot delete this payment term, because supplier accounts have been created "
-"referring to this term"
+"Cannot delete this payment term, because supplier accounts have been created"
+" referring to this term"
 msgstr ""
 
 #: admin/payment_terms.php:107
@@ -1907,7 +1952,7 @@ msgstr ""
 #: sales/inquiry/customer_allocation_inquiry.php:146
 #: sales/inquiry/customer_inquiry.php:192
 msgid "Type"
-msgstr ""
+msgstr "வகை:"
 
 #: admin/payment_terms.php:127
 msgid "Due After/Days"
@@ -1981,11 +2026,11 @@ msgstr ""
 
 #: admin/printers.php:137
 msgid "Timeout"
-msgstr ""
+msgstr "நேர முடிவின் கால அளவு"
 
 #: admin/print_profiles.php:18
 msgid "Printing Profiles"
-msgstr ""
+msgstr "அச்சிடுதல் சுயவிவரங்கள்"
 
 #: admin/print_profiles.php:33
 msgid "Default printing destination"
@@ -2017,7 +2062,7 @@ msgstr ""
 
 #: admin/print_profiles.php:135 admin/print_profiles.php:137
 msgid "Printing Profile Name"
-msgstr ""
+msgstr "அச்சிடுதல் சுயவிவர பெயர்"
 
 #: admin/print_profiles.php:147
 msgid "Report Id"
@@ -2029,7 +2074,7 @@ msgstr ""
 
 #: admin/print_profiles.php:161
 msgid "Browser support"
-msgstr ""
+msgstr "உலாவியின் ஆதரவு"
 
 #: admin/print_profiles.php:168
 msgid "no title was found in this report definition file."
@@ -2182,8 +2227,8 @@ msgstr ""
 
 #: admin/shipping_companies.php:67
 msgid ""
-"Cannot delete this shipping company because invoices have been created using "
-"this shipping company."
+"Cannot delete this shipping company because invoices have been created using"
+" this shipping company."
 msgstr ""
 
 #: admin/shipping_companies.php:72
@@ -2196,7 +2241,7 @@ msgstr ""
 
 #: admin/shipping_companies.php:91
 msgid "Phone Number"
-msgstr ""
+msgstr "தொலைபேசி எண்"
 
 #: admin/shipping_companies.php:91 inventory/manage/locations.php:155
 msgid "Secondary Phone"
@@ -2206,13 +2251,13 @@ msgstr ""
 #: purchasing/inquiry/suppliers_list.php:53
 #: sales/inquiry/customers_list.php:54
 msgid "Address"
-msgstr ""
+msgstr "முகவரி"
 
 #: admin/shipping_companies.php:134 gl/manage/gl_account_types.php:187
 #: gl/includes/ui/gl_bank_ui.inc:57 inventory/manage/items.php:366
 #: manufacturing/manage/work_centres.php:137
 msgid "Name:"
-msgstr ""
+msgstr "பெயர்"
 
 #: admin/shipping_companies.php:136 purchasing/manage/suppliers.php:134
 #: sales/manage/customer_branches.php:252
@@ -2308,7 +2353,7 @@ msgstr ""
 
 #: admin/users.php:123
 msgid "User login"
-msgstr ""
+msgstr "பயனர் உள்நுழைவு"
 
 #: admin/users.php:123 admin/users.php:207 includes/ui/contacts_view.inc:40
 msgid "Full Name"
@@ -2319,12 +2364,12 @@ msgstr ""
 #: reporting/includes/header2.inc:100 sales/manage/sales_people.php:99
 #: sales/inquiry/customer_branches_list.php:49
 msgid "Phone"
-msgstr ""
+msgstr "தொலைபேசி"
 
 #: admin/users.php:124 sales/manage/customer_branches.php:290
 #: sales/view/view_sales_order.php:96
 msgid "E-mail"
-msgstr ""
+msgstr "மின்னஞ்சல்"
 
 #: admin/users.php:124
 msgid "Last Visit"
@@ -2336,11 +2381,12 @@ msgstr ""
 
 #: admin/users.php:193
 msgid "User Login:"
-msgstr ""
+msgstr "பயனர் உள்நுழைவு:"
 
 #: admin/users.php:204
 msgid "Enter a new password to change, leave empty to keep current."
 msgstr ""
+"மாற்ற புதிய கடவுச்சொல்லை உள்ளிடவும், நடப்பில் வைத்திருக்க காலியாக விட்டு."
 
 #: admin/users.php:209
 msgid "Telephone No.:"
@@ -2558,7 +2604,8 @@ msgid ""
 msgstr ""
 
 #: admin/void_transaction.php:260
-msgid "The transaction number is expected to be numeric and greater than zero."
+msgid ""
+"The transaction number is expected to be numeric and greater than zero."
 msgstr ""
 
 #: admin/void_transaction.php:277
@@ -2571,7 +2618,7 @@ msgstr ""
 
 #: admin/db/attachments_db.inc:67
 msgid "Attached File:"
-msgstr ""
+msgstr "இணைக்கப்பட்டுள்ள கோப்பு:"
 
 #: admin/db/fiscalyears_db.inc:137
 msgid ""
@@ -2947,11 +2994,11 @@ msgstr ""
 
 #: applications/generalledger.php:46
 msgid "Balance &Sheet Drilldown"
-msgstr ""
+msgstr "ஐந்தொகை  குறிப்பிட்ட விவரம்"
 
 #: applications/generalledger.php:48
 msgid "&Profit and Loss Drilldown"
-msgstr ""
+msgstr "லாபம்/நட்ட குறிப்பிட்ட விவரம்"
 
 #: applications/generalledger.php:50
 msgid "Banking &Reports"
@@ -3320,7 +3367,8 @@ msgid "The required by date entered is in an invalid format."
 msgstr ""
 
 #: dimensions/dimension_entry.php:180
-msgid "This dimension cannot be deleted because it has already been processed."
+msgid ""
+"This dimension cannot be deleted because it has already been processed."
 msgstr ""
 
 #: dimensions/dimension_entry.php:224
@@ -3462,7 +3510,7 @@ msgstr ""
 #: reporting/rep704.php:86 reporting/rep704.php:89 reporting/rep708.php:185
 #: sales/inquiry/customer_allocation_inquiry.php:157
 msgid "Balance"
-msgstr ""
+msgstr "இருப்பு"
 
 #: dimensions/inquiry/search_dimensions.php:29
 msgid "Search Outstanding Dimensions"
@@ -3714,7 +3762,7 @@ msgstr ""
 
 #: gl/accruals.php:199
 msgid "Quarterly"
-msgstr ""
+msgstr "காலாண்டு"
 
 #: gl/accruals.php:211
 msgid "First date of Accruals"
@@ -3769,7 +3817,7 @@ msgstr ""
 
 #: gl/accruals.php:228
 msgid "Periods"
-msgstr ""
+msgstr "காலங்கள்"
 
 #: gl/accruals.php:232
 msgid "Show GL Rows"
@@ -3812,7 +3860,7 @@ msgstr ""
 
 #: gl/bank_account_reconcile.php:166 includes/ui/class.crud_view.inc:300
 msgid "New"
-msgstr ""
+msgstr "புதிய"
 
 #: gl/bank_account_reconcile.php:195
 msgid "Reconcile Date"
@@ -4136,7 +4184,7 @@ msgstr ""
 #: reporting/rep708.php:200 reporting/rep708.php:209 reporting/rep708.php:216
 #: reporting/rep709.php:111 reporting/rep710.php:85
 msgid "Period"
-msgstr ""
+msgstr "காலம்"
 
 #: gl/gl_budget.php:90
 msgid "Dim. incl."
@@ -4189,7 +4237,7 @@ msgstr ""
 
 #: gl/gl_budget.php:135
 msgid "Save"
-msgstr ""
+msgstr "காப்பாற்ற"
 
 #: gl/gl_journal.php:32
 #, php-format
@@ -4365,11 +4413,11 @@ msgstr ""
 #: reporting/rep306.php:149 reporting/rep307.php:114 reporting/rep307.php:120
 #: reporting/rep308.php:223 reporting/rep308.php:230 reporting/rep309.php:105
 msgid "Category"
-msgstr ""
+msgstr "பிரிவு"
 
 #: gl/inquiry/balance_sheet.php:27
 msgid "Balance Sheet Drilldown"
-msgstr ""
+msgstr "ஐந்தொகை  குறிப்பிட்ட விவரம்"
 
 #: gl/inquiry/balance_sheet.php:125
 msgid "As at:"
@@ -4480,8 +4528,8 @@ msgstr ""
 
 #: gl/inquiry/gl_trial_balance.php:238 reporting/rep708.php:283
 msgid ""
-"The Opening Balance is not in balance, probably due to a non closed Previous "
-"Fiscalyear."
+"The Opening Balance is not in balance, probably due to a non closed Previous"
+" Fiscalyear."
 msgstr ""
 
 #: gl/inquiry/journal_inquiry.php:27
@@ -4532,16 +4580,16 @@ msgstr ""
 #: gl/inquiry/journal_inquiry.php:115 reporting/rep710.php:77
 #: reporting/rep710.php:87 reporting/reports_main.php:517
 msgid "User"
-msgstr ""
+msgstr "பயனர்"
 
 #: gl/inquiry/profit_loss.php:27
 msgid "Profit & Loss Drilldown"
-msgstr ""
+msgstr "லாபம்/நட்ட குறிப்பிட்ட விவரம்"
 
 #: gl/inquiry/profit_loss.php:30 reporting/rep707.php:210
 #: reporting/includes/reports_classes.inc:249
 msgid "Accumulated"
-msgstr ""
+msgstr "குவிக்கப்பட்ட"
 
 #: gl/inquiry/profit_loss.php:31 reporting/rep707.php:255
 #: reporting/includes/reports_classes.inc:249
@@ -4619,8 +4667,8 @@ msgstr ""
 
 #: gl/manage/bank_accounts.php:76
 msgid ""
-"Cannot delete this bank account because transactions have been created using "
-"this account."
+"Cannot delete this bank account because transactions have been created using"
+" this account."
 msgstr ""
 
 #: gl/manage/bank_accounts.php:82
@@ -4727,7 +4775,8 @@ msgid "Selected date is not in fiscal year or the year is closed."
 msgstr ""
 
 #: gl/manage/close_period.php:47
-msgid "The entered date is earlier than date already selected as closing date."
+msgid ""
+"The entered date is earlier than date already selected as closing date."
 msgstr ""
 
 #: gl/manage/close_period.php:51
@@ -4744,10 +4793,8 @@ msgstr ""
 #: gl/manage/close_period.php:88
 msgid ""
 "Using this feature you can prevent entering new transactions <br>\n"
-"\tand disable edition of already entered transactions up to specified date."
-"<br>\n"
-"\tOnly transactions which can generate GL postings are subject to the "
-"constraint."
+"\tand disable edition of already entered transactions up to specified date.<br>\n"
+"\tOnly transactions which can generate GL postings are subject to the constraint."
 msgstr ""
 
 #: gl/manage/close_period.php:101
@@ -4836,7 +4883,7 @@ msgstr ""
 
 #: gl/manage/currencies.php:140
 msgid "Auto update"
-msgstr ""
+msgstr "தானாக மேம்படுத்தல்"
 
 #: gl/manage/currencies.php:175
 msgid "The marked currency is the home currency which cannot be deleted."
@@ -4868,7 +4915,7 @@ msgstr ""
 
 #: gl/manage/exchange_rates.php:24
 msgid "Exchange Rates"
-msgstr ""
+msgstr "நாணயமாற்று விகிதங்கள்"
 
 #: gl/manage/exchange_rates.php:45
 msgid "The exchange rate for the date is already there."
@@ -4880,7 +4927,7 @@ msgstr ""
 
 #: gl/manage/exchange_rates.php:142 includes/ui/ui_view.inc:325
 msgid "Exchange Rate:"
-msgstr ""
+msgstr "நாணயமாற்று விகிதம்:"
 
 #: gl/manage/exchange_rates.php:143
 msgid "Get current rate from"
@@ -4900,7 +4947,7 @@ msgstr ""
 
 #: gl/manage/exchange_rates.php:197
 msgid "Exchange Rate"
-msgstr ""
+msgstr "நாணயமாற்று விகிதம்"
 
 #: gl/manage/exchange_rates.php:206
 msgid "The selected currency is the company currency."
@@ -4957,7 +5004,7 @@ msgstr ""
 #: gl/manage/gl_account_classes.php:112 gl/manage/gl_account_classes.php:168
 #: reporting/rep706.php:215
 msgid "Balance Sheet"
-msgstr ""
+msgstr "ஐந்தொகை"
 
 #: gl/manage/gl_account_classes.php:156 gl/manage/gl_account_classes.php:162
 msgid "Class ID:"
@@ -5005,8 +5052,8 @@ msgstr ""
 
 #: gl/manage/gl_accounts.php:121
 msgid ""
-"Cannot delete this account because transactions have been created using this "
-"account."
+"Cannot delete this account because transactions have been created using this"
+" account."
 msgstr ""
 
 #: gl/manage/gl_accounts.php:127
@@ -5021,7 +5068,8 @@ msgstr ""
 
 #: gl/manage/gl_accounts.php:139
 msgid ""
-"Cannot delete this account because it is used by one or more Item Categories."
+"Cannot delete this account because it is used by one or more Item "
+"Categories."
 msgstr ""
 
 #: gl/manage/gl_accounts.php:145
@@ -5039,7 +5087,8 @@ msgid ""
 msgstr ""
 
 #: gl/manage/gl_accounts.php:162
-msgid "Cannot delete this account because it is used by one or more suppliers."
+msgid ""
+"Cannot delete this account because it is used by one or more suppliers."
 msgstr ""
 
 #: gl/manage/gl_accounts.php:168
@@ -5124,8 +5173,8 @@ msgstr ""
 
 #: gl/manage/gl_account_types.php:94
 msgid ""
-"Cannot delete this account group because GL account groups have been created "
-"referring to it."
+"Cannot delete this account group because GL account groups have been created"
+" referring to it."
 msgstr ""
 
 #: gl/manage/gl_account_types.php:110
@@ -5813,7 +5862,7 @@ msgstr ""
 
 #: includes/access_levels.inc:119
 msgid "Forms setup"
-msgstr ""
+msgstr "படிவங்கள் அமைப்பு"
 
 #: includes/access_levels.inc:120
 msgid "Contact categories"
@@ -5833,7 +5882,7 @@ msgstr ""
 
 #: includes/access_levels.inc:127
 msgid "Attaching documents"
-msgstr ""
+msgstr "ஆவணங்கள் இணைக்கிறது"
 
 #: includes/access_levels.inc:128
 msgid "Display preferences"
@@ -5841,7 +5890,7 @@ msgstr ""
 
 #: includes/access_levels.inc:129
 msgid "Password changes"
-msgstr ""
+msgstr "கடவுச்சொல்லை மாற்றுகிறது"
 
 #: includes/access_levels.inc:130
 msgid "Edit other users transactions"
@@ -6271,7 +6320,7 @@ msgstr ""
 
 #: includes/current_user.inc:162
 msgid "New password for"
-msgstr ""
+msgstr "புதிய கடவுச்சொல்"
 
 #: includes/current_user.inc:616
 msgid "Requesting data..."
@@ -6422,7 +6471,7 @@ msgstr ""
 #: sales/includes/ui/sales_credit_ui.inc:162
 #: sales/includes/ui/sales_order_ui.inc:146
 msgid "Quantity"
-msgstr ""
+msgstr "அளவு"
 
 #: includes/dashboard.inc:334
 #, php-format
@@ -6549,7 +6598,7 @@ msgstr ""
 #: includes/packages.inc:189
 #, php-format
 msgid "No key field '%s' in file '%s'"
-msgstr ""
+msgstr "முக்கிய புலம் '%s' '%s' கோப்பில் இல்லை "
 
 #: includes/packages.inc:294
 msgid "Cannot download repo index file."
@@ -6558,7 +6607,7 @@ msgstr ""
 #: includes/packages.inc:306 includes/packages.inc:343
 #, php-format
 msgid "Cannot delete outdated '%s' file."
-msgstr ""
+msgstr "காலாவதியான '%s' கோப்பு நீக்க முடியாது"
 
 #: includes/packages.inc:310
 msgid "Release file in repository is invalid, or public key is outdated."
@@ -6590,7 +6639,7 @@ msgstr ""
 #: includes/packages.inc:641 includes/packages.inc:696
 #, php-format
 msgid "Package '%s' not found."
-msgstr ""
+msgstr "'%s' தொகுப்பு காணப்படவில்லை."
 
 #: includes/references.inc:103
 msgid "Invalid refline template."
@@ -6607,11 +6656,11 @@ msgstr ""
 
 #: includes/session.inc:136
 msgid "Incorrect Password"
-msgstr ""
+msgstr "தவறான கடவுச்சொல்"
 
 #: includes/session.inc:137
 msgid "The user and password combination is not valid for the system."
-msgstr ""
+msgstr "பயனர் மற்றும் கடவுச்சொல்லை இணைந்து அமைப்பு சரியானது அல்ல."
 
 #: includes/session.inc:139
 msgid ""
@@ -6640,15 +6689,16 @@ msgstr ""
 
 #: includes/session.inc:166
 msgid "New password sent"
-msgstr ""
+msgstr "புதிய கடவுச்சொல் அனுப்பப்பட்டுள்ளது"
 
 #: includes/session.inc:167
 msgid "A new password has been sent to your mailbox."
 msgstr ""
+"ஒரு புதிய கடவுச்சொல் உங்கள் மின்னஞ்சல் பெட்டிக்கு அனுப்பப்பட்டுள்ளது."
 
 #: includes/session.inc:169
 msgid "Login here"
-msgstr ""
+msgstr "இங்கே உள்நுழைய"
 
 #: includes/session.inc:219
 #, php-format
@@ -6663,12 +6713,12 @@ msgstr ""
 
 #: includes/session.inc:252
 msgid "Please contact your system administrator."
-msgstr ""
+msgstr "உங்களுடைய கணினி நிர்வாகியை தொடர்பு கொள்ளவும்."
 
 #: includes/session.inc:253
 msgid ""
-"Please remove $security_groups and $security_headings arrays from config.php "
-"file!"
+"Please remove $security_groups and $security_headings arrays from config.php"
+" file!"
 msgstr ""
 
 #: includes/session.inc:256
@@ -6685,8 +6735,8 @@ msgstr ""
 
 #: includes/session.inc:279
 msgid ""
-"System is blocked after source upgrade until database is updated on System/"
-"Software Upgrade page"
+"System is blocked after source upgrade until database is updated on "
+"System/Software Upgrade page"
 msgstr ""
 
 #: includes/sysnames.inc:23 includes/sysnames.inc:154
@@ -6873,7 +6923,7 @@ msgid "Savings Account"
 msgstr ""
 
 #: includes/sysnames.inc:82
-msgid "Checking Account"
+msgid "Chequing Account"
 msgstr ""
 
 #: includes/sysnames.inc:83 manufacturing/work_order_costs.php:146
@@ -7176,7 +7226,7 @@ msgstr ""
 #: includes/system_tests.inc:15 includes/ui/ui_view.inc:210
 #: reporting/rep705.php:251 reporting/rep705.php:262 reporting/rep705.php:271
 msgid "Info"
-msgstr ""
+msgstr "தகவல்"
 
 #: includes/system_tests.inc:16
 msgid "Optional"
@@ -7228,7 +7278,7 @@ msgstr ""
 
 #: includes/system_tests.inc:82
 msgid "Not removed"
-msgstr ""
+msgstr "அகற்றப்படவில்லை"
 
 #: includes/system_tests.inc:83
 msgid "Remove or rename install wizard folder for security reasons."
@@ -7330,7 +7380,7 @@ msgstr ""
 
 #: includes/system_tests.inc:289
 msgid "Main config file"
-msgstr ""
+msgstr "பிரதான கட்டமைப்பு கோப்பு"
 
 #: includes/system_tests.inc:296 includes/system_tests.inc:318
 #, php-format
@@ -7340,16 +7390,16 @@ msgstr ""
 #: includes/system_tests.inc:297 includes/system_tests.inc:319
 #, php-format
 msgid "'%s' file exists."
-msgstr ""
+msgstr "'%s' கோப்பு ஏற்கனவே உள்ளது"
 
 #: includes/system_tests.inc:301
 #, php-format
 msgid "'%s' file should be read-only"
-msgstr ""
+msgstr "'%s' கோப்பினை வாசிக்க-மட்டுமே இருக்க வேண்டும்"
 
 #: includes/system_tests.inc:310
 msgid "Database auth file"
-msgstr ""
+msgstr "டேட்டாபேஸ் அங்கீகாரம் கோப்பு"
 
 #: includes/system_tests.inc:323
 #, php-format
@@ -7383,16 +7433,16 @@ msgstr ""
 
 #: includes/system_tests.inc:421
 msgid "Test"
-msgstr ""
+msgstr "சோதனை"
 
 #: includes/system_tests.inc:421
 msgid "Test type"
-msgstr ""
+msgstr "சோதனை வகை"
 
 #: includes/system_tests.inc:421 reporting/rep204.php:85
 #: reporting/rep301.php:164 reporting/rep308.php:224
 msgid "Value"
-msgstr ""
+msgstr "மதிப்பு"
 
 #: includes/system_tests.inc:421 reporting/reports_main.php:42
 #: reporting/reports_main.php:53 reporting/reports_main.php:62
@@ -7427,11 +7477,11 @@ msgstr ""
 #: reporting/includes/pdf_report.inc:347 reporting/includes/pdf_report.inc:608
 #: sales/view/view_sales_order.php:98
 msgid "Comments"
-msgstr ""
+msgstr "கருத்துரைகள்"
 
 #: includes/system_tests.inc:445
 msgid "Ok"
-msgstr ""
+msgstr "சரி"
 
 #: includes/db/audit_trail_db.inc:102
 msgid ""
@@ -7700,7 +7750,7 @@ msgstr ""
 #: purchasing/manage/suppliers.php:139 sales/manage/customer_branches.php:256
 #: sales/manage/customers.php:259 sales/manage/sales_people.php:158
 msgid "E-mail:"
-msgstr ""
+msgstr "மின்னஞ்சல்:"
 
 #: includes/ui/contacts_view.inc:107 purchasing/manage/suppliers.php:140
 #: sales/manage/customer_branches.php:257
@@ -7741,7 +7791,7 @@ msgstr ""
 
 #: includes/ui/db_pager_view.inc:183
 msgid "Next"
-msgstr ""
+msgstr "அடுத்த"
 
 #: includes/ui/db_pager_view.inc:184
 msgid "Last"
@@ -7937,7 +7987,7 @@ msgstr ""
 #: includes/ui/ui_lists.inc:2152 includes/ui/ui_view.inc:609
 #: includes/ui/ui_view.inc:613
 msgid "Payments"
-msgstr ""
+msgstr "செலுத்துதல்கள்"
 
 #: includes/ui/ui_lists.inc:2120 includes/ui/ui_lists.inc:2136
 #: includes/ui/ui_lists.inc:2153 sales/view/view_sales_order.php:176
@@ -8085,7 +8135,7 @@ msgstr ""
 
 #: includes/ui/ui_view.inc:875 purchasing/includes/ui/invoice_ui.inc:482
 msgid "and"
-msgstr ""
+msgstr "மற்றும்"
 
 #: includes/ui/ui_view.inc:982
 msgid "January"
@@ -8141,7 +8191,7 @@ msgstr ""
 
 #: includes/ui/ui_view.inc:983
 msgid "Tu"
-msgstr ""
+msgstr "செ"
 
 #: includes/ui/ui_view.inc:983
 msgid "We"
@@ -8210,8 +8260,8 @@ msgstr ""
 
 #: inventory/adjustments.php:133
 msgid ""
-"The adjustment cannot be processed because it would cause negative inventory "
-"balance for marked items as of document date or later."
+"The adjustment cannot be processed because it would cause negative inventory"
+" balance for marked items as of document date or later."
 msgstr ""
 
 #: inventory/adjustments.php:166
@@ -8666,8 +8716,8 @@ msgstr ""
 
 #: inventory/includes/db/items_db.inc:139
 msgid ""
-"Cannot delete this item because there are stock movements that refer to this "
-"item."
+"Cannot delete this item because there are stock movements that refer to this"
+" item."
 msgstr ""
 
 #: inventory/includes/db/items_db.inc:142
@@ -8833,7 +8883,7 @@ msgstr ""
 
 #: inventory/manage/item_categories.php:208
 msgid "Category Name:"
-msgstr ""
+msgstr "பிரிவு பெயர்:"
 
 #: inventory/manage/item_categories.php:210
 msgid "Default values for new items"
@@ -8921,7 +8971,7 @@ msgstr ""
 #: manufacturing/work_order_entry.php:404
 #: manufacturing/manage/bom_edit.php:204
 msgid "Quantity:"
-msgstr ""
+msgstr "அளவு:"
 
 #: inventory/manage/item_codes.php:182 inventory/manage/items.php:368
 #: inventory/manage/sales_kits.php:206 inventory/manage/sales_kits.php:230
@@ -8930,12 +8980,12 @@ msgstr ""
 #: sales/manage/recurrent_invoices.php:191 taxes/item_tax_types.php:173
 #: taxes/tax_groups.php:165 taxes/tax_types.php:158
 msgid "Description:"
-msgstr ""
+msgstr "விரித்துரைத்தல்:"
 
 #: inventory/manage/item_codes.php:183 inventory/manage/items.php:370
 #: inventory/manage/sales_kits.php:207 inventory/manage/sales_kits.php:231
 msgid "Category:"
-msgstr ""
+msgstr "பிரிவு:"
 
 #: inventory/manage/items.php:87
 msgid "Error uploading file."
@@ -9184,7 +9234,7 @@ msgstr ""
 
 #: inventory/manage/item_units.php:142
 msgid "Decimal Places:"
-msgstr ""
+msgstr "தசமம் இடங்கள்:"
 
 #: inventory/manage/locations.php:46
 msgid ""
@@ -9217,8 +9267,8 @@ msgstr ""
 
 #: inventory/manage/locations.php:95
 msgid ""
-"Cannot delete this location because it is used by some branch records as the "
-"default location to deliver from."
+"Cannot delete this location because it is used by some branch records as the"
+" default location to deliver from."
 msgstr ""
 
 #: inventory/manage/locations.php:101 inventory/manage/locations.php:107
@@ -9283,8 +9333,8 @@ msgstr ""
 
 #: inventory/manage/sales_kits.php:97
 msgid ""
-"The selected component contains directly or on any lower level the kit under "
-"edition. Recursive kits are not allowed."
+"The selected component contains directly or on any lower level the kit under"
+" edition. Recursive kits are not allowed."
 msgstr ""
 
 #: inventory/manage/sales_kits.php:104
@@ -9385,7 +9435,7 @@ msgstr ""
 #: sales/inquiry/sales_deliveries_view.php:101
 #: sales/inquiry/sales_orders_view.php:213
 msgid "#:"
-msgstr ""
+msgstr "எண்:"
 
 #: manufacturing/search_work_orders.php:70
 msgid "at Location:"
@@ -9529,7 +9579,8 @@ msgstr ""
 
 #: manufacturing/work_order_costs.php:92
 msgid ""
-"The additional cost date cannot be before the release date of the work order."
+"The additional cost date cannot be before the release date of the work "
+"order."
 msgstr ""
 
 #: manufacturing/work_order_costs.php:145
@@ -9599,8 +9650,8 @@ msgstr ""
 
 #: manufacturing/work_order_entry.php:199
 msgid ""
-"The work order cannot be processed because there is an insufficient quantity "
-"for component:"
+"The work order cannot be processed because there is an insufficient quantity"
+" for component:"
 msgstr ""
 
 #: manufacturing/work_order_entry.php:212
@@ -9914,7 +9965,7 @@ msgstr ""
 
 #: manufacturing/manage/bom_edit.php:83
 msgid "Selected component has been updated"
-msgstr ""
+msgstr "தேர்ந்தெடுக்கப்பட்ட பகுதி நீக்கப்பட்டுவிட்டது"
 
 #: manufacturing/manage/bom_edit.php:103
 msgid ""
@@ -10442,7 +10493,7 @@ msgstr ""
 #: sales/customer_invoice.php:439 sales/includes/ui/sales_order_ui.inc:396
 #: sales/includes/ui/sales_order_ui.inc:398
 msgid "Payment:"
-msgstr ""
+msgstr "செலுத்துதல்"
 
 #: purchasing/includes/ui/po_ui.inc:461 purchasing/po_entry_items.php:483
 msgid "Delayed"
@@ -10565,8 +10616,8 @@ msgstr ""
 #: purchasing/po_entry_items.php:194
 msgid ""
 "The line item quantities may be modified to quantities more than already "
-"received. prices cannot be altered for lines that have already been received "
-"and quantities cannot be reduced below the quantity already received."
+"received. prices cannot be altered for lines that have already been received"
+" and quantities cannot be reduced below the quantity already received."
 msgstr ""
 
 #: purchasing/po_entry_items.php:214
@@ -10608,8 +10659,8 @@ msgstr ""
 
 #: purchasing/po_entry_items.php:324
 msgid ""
-"The selected item does not exist or it is a kit part and therefore cannot be "
-"purchased."
+"The selected item does not exist or it is a kit part and therefore cannot be"
+" purchased."
 msgstr ""
 
 #: purchasing/po_entry_items.php:338 purchasing/supplier_invoice.php:382
@@ -10728,7 +10779,8 @@ msgstr ""
 
 #: purchasing/po_receive_items.php:168 purchasing/po_receive_items.php:214
 msgid ""
-"There is nothing to process. Please enter valid quantities greater than zero."
+"There is nothing to process. Please enter valid quantities greater than "
+"zero."
 msgstr ""
 
 #: purchasing/po_receive_items.php:219
@@ -10797,8 +10849,8 @@ msgstr ""
 
 #: purchasing/supplier_credit.php:167
 msgid ""
-"The credit note cannot be processed because the there are no items or values "
-"on the invoice.  Credit notes are expected to have a charge."
+"The credit note cannot be processed because the there are no items or values"
+" on the invoice.  Credit notes are expected to have a charge."
 msgstr ""
 
 #: purchasing/supplier_credit.php:180
@@ -10815,8 +10867,8 @@ msgstr ""
 
 #: purchasing/supplier_credit.php:218
 msgid ""
-"The return cannot be processed because there is an insufficient quantity for "
-"item:"
+"The return cannot be processed because there is an insufficient quantity for"
+" item:"
 msgstr ""
 
 #: purchasing/supplier_credit.php:262
@@ -10860,8 +10912,8 @@ msgstr ""
 
 #: purchasing/supplier_invoice.php:189
 msgid ""
-"The invoice as entered cannot be processed because the invoice date is in an "
-"incorrect format."
+"The invoice as entered cannot be processed because the invoice date is in an"
+" incorrect format."
 msgstr ""
 
 #: purchasing/supplier_invoice.php:253
@@ -11197,12 +11249,12 @@ msgstr ""
 
 #: purchasing/manage/suppliers.php:159 sales/manage/customer_branches.php:259
 msgid "Addresses"
-msgstr ""
+msgstr "முகவரிகள்"
 
 #: purchasing/manage/suppliers.php:160 reporting/rep205.php:93
 #: sales/manage/customer_branches.php:260
 msgid "Mailing Address:"
-msgstr ""
+msgstr "அஞ்சல் முகவரி:"
 
 #: purchasing/manage/suppliers.php:161
 msgid "Physical Address:"
@@ -11210,7 +11262,7 @@ msgstr ""
 
 #: purchasing/manage/suppliers.php:163
 msgid "General"
-msgstr ""
+msgstr "பொது"
 
 #: purchasing/manage/suppliers.php:164 reporting/rep205.php:170
 #: sales/manage/customer_branches.php:262 sales/manage/customers.php:292
@@ -11619,7 +11671,7 @@ msgstr ""
 
 #: reporting/rep103.php:243 reporting/rep205.php:155
 msgid "Ph"
-msgstr ""
+msgstr "தொபே"
 
 #: reporting/rep103.php:258
 msgid "Gereral Notes:"
@@ -11627,7 +11679,7 @@ msgstr ""
 
 #: reporting/rep103.php:267 reporting/rep205.php:93 reporting/rep205.php:179
 msgid "Turnover"
-msgstr ""
+msgstr "விற்றுமுதல்"
 
 #: reporting/rep104.php:109
 msgid "Category/Items"
@@ -11764,7 +11816,7 @@ msgstr ""
 
 #: reporting/rep108.php:169
 msgid "Statement"
-msgstr ""
+msgstr "அறிக்கை"
 
 #: reporting/rep108.php:169
 msgid "as of"
@@ -12160,7 +12212,7 @@ msgstr ""
 #: reporting/reports_main.php:372 reporting/reports_main.php:425
 #: reporting/reports_main.php:473
 msgid "Year"
-msgstr ""
+msgstr "ஆண்டு"
 
 #: reporting/rep705.php:250 reporting/rep705.php:261 reporting/rep705.php:270
 #: reporting/rep706.php:198 reporting/rep706.php:206 reporting/rep706.php:212
@@ -12182,7 +12234,7 @@ msgstr ""
 
 #: reporting/rep707.php:258
 msgid "Profit and Loss Statement"
-msgstr ""
+msgstr "லாபம்/நட்ட அறிக்கை"
 
 #: reporting/rep709.php:98
 msgid "Tax Report"
@@ -12198,7 +12250,7 @@ msgstr ""
 
 #: reporting/rep709.php:189
 msgid "Tax Rate"
-msgstr ""
+msgstr "வரி விகிதம்"
 
 #: reporting/rep709.php:189
 msgid "Net Tax"
@@ -12210,7 +12262,7 @@ msgstr ""
 
 #: reporting/rep710.php:77
 msgid "Time"
-msgstr ""
+msgstr "நேரம்"
 
 #: reporting/rep710.php:77
 msgid "Trans Date"
@@ -12568,7 +12620,7 @@ msgstr ""
 
 #: reporting/reports_main.php:345
 msgid "General Ledger"
-msgstr ""
+msgstr "பேரேட்டு"
 
 #: reporting/reports_main.php:346
 msgid "Chart of &Accounts"
@@ -12605,7 +12657,7 @@ msgstr ""
 #: reporting/reports_main.php:379 reporting/reports_main.php:431
 #: reporting/reports_main.php:478
 msgid "&Balance Sheet"
-msgstr ""
+msgstr "ஐந்தொகை"
 
 #: reporting/reports_main.php:385 reporting/reports_main.php:397
 #: reporting/reports_main.php:436 reporting/reports_main.php:447
@@ -12616,7 +12668,7 @@ msgstr ""
 #: reporting/reports_main.php:390 reporting/reports_main.php:441
 #: reporting/reports_main.php:487
 msgid "&Profit and Loss Statement"
-msgstr ""
+msgstr "லாபம்/நட்ட அறிக்கை"
 
 #: reporting/reports_main.php:506
 msgid "Ta&x Report"
@@ -12787,7 +12839,7 @@ msgstr ""
 #: reporting/includes/excel_report.inc:265
 #: reporting/includes/pdf_report.inc:326
 msgid "Fiscal Year"
-msgstr ""
+msgstr "நிதியாண்டு"
 
 #: reporting/includes/excel_report.inc:393
 msgid "Report Date"
@@ -12809,12 +12861,12 @@ msgstr ""
 
 #: reporting/includes/header2.inc:130
 msgid "Domicile"
-msgstr ""
+msgstr "வழமையான வதிவிடம்"
 
 #: reporting/includes/header2.inc:146 reporting/includes/pdf_report.inc:353
 #: reporting/includes/pdf_report.inc:491 reporting/includes/pdf_report.inc:618
 msgid "Page"
-msgstr ""
+msgstr "பக்கம்"
 
 #: reporting/includes/pdf_report.inc:573
 msgid "Report Period"
@@ -12832,7 +12884,7 @@ msgstr ""
 
 #: reporting/includes/pdf_report.inc:993
 msgid "Attached you will find "
-msgstr ""
+msgstr "நீங்கள் காண்பீர்கள் இணைக்கப்பட்டுள்ளது"
 
 #: reporting/includes/pdf_report.inc:1009
 msgid "Kindest regards"
@@ -12893,7 +12945,7 @@ msgstr ""
 
 #: reporting/includes/reports_classes.inc:102
 msgid "Display: "
-msgstr ""
+msgstr "காட்சி: "
 
 #: reporting/includes/reports_classes.inc:153
 msgid "Unknown report parameter type:"
@@ -12917,7 +12969,7 @@ msgstr ""
 
 #: reporting/includes/reports_classes.inc:254
 msgid "Dots"
-msgstr ""
+msgstr "புள்ளிகள்"
 
 #: reporting/includes/reports_classes.inc:254
 msgid "Lines"
@@ -12929,7 +12981,7 @@ msgstr ""
 
 #: reporting/includes/reports_classes.inc:254
 msgid "Donut"
-msgstr ""
+msgstr "டோனட்ஸ்"
 
 #: reporting/includes/reports_classes.inc:258
 #: reporting/includes/reports_classes.inc:261
@@ -13008,8 +13060,8 @@ msgstr ""
 
 #: sales/create_recurrent_invoices.php:172
 msgid ""
-"Recurrent invoices cannot be generated because selected sales order template "
-"uses prepayment sales terms. Change payment terms and try again."
+"Recurrent invoices cannot be generated because selected sales order template"
+" uses prepayment sales terms. Change payment terms and try again."
 msgstr ""
 
 #: sales/create_recurrent_invoices.php:180
@@ -13125,8 +13177,8 @@ msgstr ""
 
 #: sales/credit_note_entry.php:170
 msgid ""
-"For credit notes created to write off the stock, a general ledger account is "
-"required to be selected."
+"For credit notes created to write off the stock, a general ledger account is"
+" required to be selected."
 msgstr ""
 
 #: sales/credit_note_entry.php:171
@@ -13335,8 +13387,8 @@ msgstr ""
 
 #: sales/customer_delivery.php:132
 msgid ""
-"This page can only be opened if an order or delivery note has been selected. "
-"Please select it first."
+"This page can only be opened if an order or delivery note has been selected."
+" Please select it first."
 msgstr ""
 
 #: sales/customer_delivery.php:134
@@ -13371,8 +13423,8 @@ msgstr ""
 
 #: sales/customer_delivery.php:205 sales/sales_order_entry.php:389
 msgid ""
-"This document cannot be processed because there is insufficient quantity for "
-"items marked."
+"This document cannot be processed because there is insufficient quantity for"
+" items marked."
 msgstr ""
 
 #: sales/customer_delivery.php:341
@@ -13509,8 +13561,8 @@ msgstr ""
 
 #: sales/customer_invoice.php:142
 msgid ""
-"All quantities on this invoice has been credited. There is nothing to modify "
-"on this invoice"
+"All quantities on this invoice has been credited. There is nothing to modify"
+" on this invoice"
 msgstr ""
 
 #: sales/customer_invoice.php:156
@@ -13548,8 +13600,8 @@ msgstr ""
 
 #: sales/customer_invoice.php:345
 msgid ""
-"There is no non-invoiced payments for this order. If you want to issue final "
-"invoice, select delayed or cash payment terms."
+"There is no non-invoiced payments for this order. If you want to issue final"
+" invoice, select delayed or cash payment terms."
 msgstr ""
 
 #: sales/customer_invoice.php:436
@@ -13645,7 +13697,8 @@ msgid "This customer has no branch defined."
 msgstr ""
 
 #: sales/customer_payments.php:153
-msgid "The entered date is invalid. Please enter a valid date for the payment."
+msgid ""
+"The entered date is invalid. Please enter a valid date for the payment."
 msgstr ""
 
 #: sales/customer_payments.php:168 sales/customer_payments.php:174
@@ -13882,8 +13935,8 @@ msgstr ""
 
 #: sales/sales_order_entry.php:524
 msgid ""
-"The item could not be updated because you are attempting to set the quantity "
-"ordered to less than 0, or the discount percent to more than 100."
+"The item could not be updated because you are attempting to set the quantity"
+" ordered to less than 0, or the discount percent to more than 100."
 msgstr ""
 
 #: sales/sales_order_entry.php:528
@@ -13892,8 +13945,8 @@ msgstr ""
 
 #: sales/sales_order_entry.php:535
 msgid ""
-"You attempting to make the quantity ordered a quantity less than has already "
-"been delivered. The quantity delivered cannot be modified retrospectively."
+"You attempting to make the quantity ordered a quantity less than has already"
+" been delivered. The quantity delivered cannot be modified retrospectively."
 msgstr ""
 
 #: sales/sales_order_entry.php:553
@@ -14065,8 +14118,8 @@ msgstr ""
 
 #: sales/manage/credit_status.php:63
 msgid ""
-"Cannot delete this credit status because customer accounts have been created "
-"referring to it."
+"Cannot delete this credit status because customer accounts have been created"
+" referring to it."
 msgstr ""
 
 #: sales/manage/credit_status.php:79
@@ -14114,8 +14167,8 @@ msgstr ""
 
 #: sales/manage/customer_branches.php:35
 msgid ""
-"There are no shipping companies defined in the system. At least one shipping "
-"company is required before proceeding."
+"There are no shipping companies defined in the system. At least one shipping"
+" company is required before proceeding."
 msgstr ""
 
 #: sales/manage/customer_branches.php:67
@@ -14136,14 +14189,14 @@ msgstr ""
 
 #: sales/manage/customer_branches.php:124
 msgid ""
-"Cannot delete this branch because customer transactions have been created to "
-"this branch."
+"Cannot delete this branch because customer transactions have been created to"
+" this branch."
 msgstr ""
 
 #: sales/manage/customer_branches.php:131
 msgid ""
-"Cannot delete this branch because sales orders exist for it. Purge old sales "
-"orders first."
+"Cannot delete this branch because sales orders exist for it. Purge old sales"
+" orders first."
 msgstr ""
 
 #: sales/manage/customer_branches.php:136
@@ -14156,7 +14209,7 @@ msgstr ""
 
 #: sales/manage/customer_branches.php:228
 msgid "Name and Contact"
-msgstr ""
+msgstr "பெயர் மற்றும் தொடர்பு"
 
 #: sales/manage/customer_branches.php:229
 msgid "Branch Name:"
@@ -14211,7 +14264,7 @@ msgstr ""
 
 #: sales/manage/customer_branches.php:288
 msgid "Phone No"
-msgstr ""
+msgstr "தொலைபேசி எண்"
 
 #: sales/manage/customer_branches.php:289
 msgid "Fax No"
@@ -14224,8 +14277,8 @@ msgstr ""
 #: sales/manage/customer_branches.php:307
 #: sales/includes/ui/sales_order_ui.inc:288
 msgid ""
-"The selected customer does not have any branches. Please create at least one "
-"branch."
+"The selected customer does not have any branches. Please create at least one"
+" branch."
 msgstr ""
 
 #: sales/manage/customers.php:42
@@ -14248,8 +14301,8 @@ msgstr ""
 
 #: sales/manage/customers.php:70
 msgid ""
-"The discount percentage must be numeric and is expected to be less than 100% "
-"and greater than or equal to 0."
+"The discount percentage must be numeric and is expected to be less than 100%"
+" and greater than or equal to 0."
 msgstr ""
 
 #: sales/manage/customers.php:98
@@ -14262,14 +14315,14 @@ msgstr ""
 
 #: sales/manage/customers.php:133
 msgid ""
-"A default Branch has been automatically created, please check default Branch "
-"values by using link below."
+"A default Branch has been automatically created, please check default Branch"
+" values by using link below."
 msgstr ""
 
 #: sales/manage/customers.php:156
 msgid ""
-"This customer cannot be deleted because there are transactions that refer to "
-"it."
+"This customer cannot be deleted because there are transactions that refer to"
+" it."
 msgstr ""
 
 #: sales/manage/customers.php:163
@@ -14290,7 +14343,7 @@ msgstr ""
 
 #: sales/manage/customers.php:230
 msgid "Name and Address"
-msgstr ""
+msgstr "பெயர் மற்றும் முகவரி"
 
 #: sales/manage/customers.php:232
 msgid "Customer Name:"
@@ -14318,7 +14371,7 @@ msgstr ""
 
 #: sales/manage/customers.php:268
 msgid "Prompt Payment Discount Percent:"
-msgstr ""
+msgstr "கூறியபடி செலுத்துமாறு தள்ளுபடி சதவீதம்:"
 
 #: sales/manage/customers.php:272
 msgid "Credit Status:"
@@ -14381,8 +14434,7 @@ msgstr ""
 #: sales/manage/recurrent_invoices.php:26
 msgid ""
 "There is no template order in database.\n"
-"\tYou have to create at least one sales order marked as template to be able "
-"to define recurrent invoices."
+"\tYou have to create at least one sales order marked as template to be able to define recurrent invoices."
 msgstr ""
 
 #: sales/manage/recurrent_invoices.php:40
@@ -14426,7 +14478,7 @@ msgstr ""
 
 #: sales/manage/recurrent_invoices.php:204
 msgid "Monthly:"
-msgstr ""
+msgstr "மாதாந்திர:"
 
 #: sales/manage/recurrent_invoices.php:206
 msgid "Begin:"
@@ -14632,8 +14684,8 @@ msgstr ""
 
 #: sales/manage/sales_types.php:71
 msgid ""
-"Cannot delete this sale type because customer transactions have been created "
-"using this sales type."
+"Cannot delete this sale type because customer transactions have been created"
+" using this sales type."
 msgstr ""
 
 #: sales/manage/sales_types.php:78
@@ -14838,7 +14890,7 @@ msgstr ""
 
 #: sales/view/view_sales_order.php:220
 msgid "Quantity Delivered"
-msgstr ""
+msgstr "வழங்கின அளவு"
 
 #: sales/inquiry/customer_allocation_inquiry.php:25
 msgid "Customer Allocation Inquiry"
@@ -14990,10 +15042,8 @@ msgstr ""
 
 #: sales/includes/db/custalloc_db.inc:381
 msgid ""
-"Unsuspected overallocation happened due to sparse credit notes exists for "
-"this invoice.\n"
-" Check all credit notes allocated to this invoice for summarized freight "
-"charges."
+"Unsuspected overallocation happened due to sparse credit notes exists for this invoice.\n"
+" Check all credit notes allocated to this invoice for summarized freight charges."
 msgstr ""
 
 #: sales/includes/db/recurrent_invoices_db.inc:158
@@ -15187,7 +15237,7 @@ msgstr ""
 
 #: taxes/item_tax_types.php:185
 msgid "Tax Name"
-msgstr ""
+msgstr "வரி பெயர்"
 
 #: taxes/item_tax_types.php:185
 msgid "Is exempt"
@@ -15272,8 +15322,8 @@ msgstr ""
 
 #: taxes/tax_types.php:112
 msgid ""
-"To avoid problems with manual journal entry all tax types should have unique "
-"Sales/Purchasing GL accounts."
+"To avoid problems with manual journal entry all tax types should have unique"
+" Sales/Purchasing GL accounts."
 msgstr ""
 
 #: taxes/tax_types.php:115
@@ -15358,8 +15408,8 @@ msgstr ""
 
 #: sql/alter2.2.php:221
 msgid ""
-"Cannot upgrade extensions system: file /modules/installed_modules.php is not "
-"writeable"
+"Cannot upgrade extensions system: file /modules/installed_modules.php is not"
+" writeable"
 msgstr ""
 
 #: sql/alter2.3.php:21
