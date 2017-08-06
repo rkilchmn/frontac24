@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `0_bank_accounts` (
 -- Dumping data for table `0_bank_accounts`
 --
 
-INSERT INTO `0_bank_accounts` VALUES ('1060', 1, 'Current account', 'N/A', 'N/A', '', 'USD', 1, 1, '5690', '0000-00-00 00:00:00', 0, 0);
+INSERT INTO `0_bank_accounts` VALUES ('1060', 3, 'Current account', 'N/A', 'N/A', '', 'USD', 1, 1, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1065', 3, 'Petty Cash account', 'N/A', 'N/A', '', 'USD', 0, 2, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1080', 0, 'Undeposited Funds', 'N/A', 'N/A', '', 'USD', 0, 3, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1061', 0, 'Wells Fargo Savings (1277)', 'N/A', 'N/A', '', 'USD', 0, 4, '5690', '0000-00-00 00:00:00', 0, 0);
@@ -265,7 +265,8 @@ INSERT INTO `0_chart_master` VALUES ('2110', '', 'Accrued Income Tax - Federal',
 INSERT INTO `0_chart_master` VALUES ('2120', '', 'Accrued Income Tax - State','4','0');
 INSERT INTO `0_chart_master` VALUES ('2130', '', 'Accrued Franchise Tax','4','0');
 INSERT INTO `0_chart_master` VALUES ('2140', '', 'Accrued Real &amp; Personal Prop Tax','4','0');
-INSERT INTO `0_chart_master` VALUES ('2150', '', 'Sales Tax','4','0');
+INSERT INTO `0_chart_master` VALUES ('2150', '', 'Colorado Sales Tax','4','0');
+INSERT INTO `0_chart_master` VALUES ('2160', '', 'Mesa County Sales Tax','4','0');
 INSERT INTO `0_chart_master` VALUES ('2200', '', 'United Bus Card(0672,7697,3541)','4','0');
 INSERT INTO `0_chart_master` VALUES ('2295', '', 'QB Current Liabilities','4','0');
 INSERT INTO `0_chart_master` VALUES ('1800', '', 'Accumulated Depreciation','3','0');
@@ -2021,7 +2022,8 @@ CREATE TABLE IF NOT EXISTS `0_tax_types` (
 -- Dumping data for table `0_tax_types`
 --
 
-INSERT INTO `0_tax_types` VALUES (1, 5, '2150', '2150', 'Tax', 0);
+INSERT INTO `0_tax_types` VALUES (1, 5, '2150', '2150', 'Colorado Sales Tax', 2.9);
+INSERT INTO `0_tax_types` VALUES (1, 5, '2160', '2160', 'Mesa County Sales Tax', 2.0);
 
 -- --------------------------------------------------------
 
