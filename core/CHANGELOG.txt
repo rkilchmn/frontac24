@@ -1,4 +1,20 @@
-2017-08-04 Janusz Dobrowolski
+2017-08-29 Joe Hunt
+Select button visibility in F4 Items Popup. Removed extra parameter in submit_return() usage.
+M	inventory/manage/items.php
+
+2017-08-29 Joe Hunt
+Extended width of F2 Popup Customer Window to 600px
+M	includes/ui/ui_controls.inc
+
+2017-08-29 Joe Hunt
+Fix in date2sql function.
+M	includes/date_functions.inc
+
+2017-08-28 Janusz Dobrowolski
+Fixed invalid reference number update in document edition. 
+M	includes/ui/ui_input.inc
+
+2017-08-04 +0200 Janusz Dobrowolski
 [0003964] Fixed bug in voiding GRN.
 M	admin/void_transaction.php
 

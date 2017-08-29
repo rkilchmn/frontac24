@@ -303,34 +303,6 @@ if (isset($_POST['delete']) && strlen($_POST['delete']) > 1)
 	}
 }
 
-
-function numeric_offset($text) {
-    preg_match('/\d/', $text, $m, PREG_OFFSET_CAPTURE);
-    if (sizeof($m))
-        return $m[0][1];
-
-    // the case when there's no numbers in the string
-    return strlen($text);
-}
-
-
-/*
-	This function returns the next unused stock_id in stock_master.
-	To work correctly, stock_ids should be numeric or end in a numeric.
-*/
-function next_stock_id() {
-    $sql = "SELECT max(stock_id) as max FROM ".TB_PREF."stock_master";
-    $result = db_query($sql, "Can not find max stock_id");
-    $row = db_fetch_row($result);
-    if (!$row[0]) return null;
-    $offset= numeric_offset($row[0]);
-    $num=substr($row[0], $offset);
-    if (!is_numeric($num))
-	return null;
-    $num += 1;
-    return substr($row[0], 0, $offset) . $num;
-}
-
 function item_settings(&$stock_id, $new_item) 
 {
 	global $SysPrefs, $path_to_root, $page_nested, $depreciation_methods;
@@ -344,8 +316,14 @@ function item_settings(&$stock_id, $new_item)
 	//------------------------------------------------------------------------------------
 	if ($new_item) 
 	{
-		text_row(_("Item Code:"), 'NewStockID', next_stock_id(), 21, 20);
-
+		$tmpBarcodeID="";
+		if ( $_POST['generateBarcode'] )
+		{
+			$tmpBarcodeID=generateBarcode();
+			$_POST['NewStockID'] = $tmpBarcodeID;
+		}
+		text_row(_("Item Code:"), 'NewStockID', $tmpBarcodeID, 21, 20);
+		echo '<tr><td> </td><td><button class="ajaxsubmit" type="submit"aspect=\'default\'  name="generateBarcode"  id="generateBarcode" value="Generate Barcode EAN8"> Generate EAN-8 Barcode </button></td></tr>';
 		$_POST['inactive'] = 0;
 	} 
 	else 
@@ -679,3 +657,41 @@ end_form();
 //------------------------------------------------------------------------------------
 
 end_page();
+
+function generateBarcode() {
+	$tmpBarcodeID = "";
+	$tmpCountTrys = 0;
+	while ($tmpBarcodeID == "")	{
+		srand ((double) microtime( )*1000000);
+		$random_1  = rand(1,9);
+		$random_2  = rand(0,9);
+		$random_3  = rand(0,9);
+		$random_4  = rand(0,9);
+		$random_5  = rand(0,9);
+		$random_6  = rand(0,9);
+		$random_7  = rand(0,9);
+		//$random_8  = rand(0,9);
+
+			// http://stackoverflow.com/questions/1136642/ean-8-how-to-calculate-checksum-digit
+		$sum1 = $random_2 + $random_4 + $random_6; 
+		$sum2 = 3 * ($random_1  + $random_3  + $random_5  + $random_7 );
+		$checksum_value = $sum1 + $sum2;
+
+		$checksum_digit = 10 - ($checksum_value % 10);
+		if ($checksum_digit == 10) 
+			$checksum_digit = 0;
+
+		$random_8  = $checksum_digit;
+
+		$tmpBarcodeID = $random_1 . $random_2 . $random_3 . $random_4 . $random_5 . $random_6 . $random_7 . $random_8;
+
+		// LETS CHECK TO SEE IF THIS NUMBER HAS EVER BEEN USED
+		$query = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='" . $tmpBarcodeID . "'";
+		$arr_stock = db_fetch(db_query($query));
+  
+		if (  !$arr_stock['stock_id'] ) {
+			return $tmpBarcodeID;
+		}
+		$tmpBarcodeID = "";	 
+	}
+}
