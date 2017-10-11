@@ -1840,6 +1840,7 @@ INSERT INTO `0_sys_prefs` VALUES ('auto_curr_reval', 'setup.company', 'smallint'
 INSERT INTO `0_sys_prefs` VALUES ('bank_charge_act', 'glsetup.general', 'varchar', 15, '5690');
 INSERT INTO `0_sys_prefs` VALUES ('base_sales', 'setup.company', 'int', 11, '1');
 INSERT INTO `0_sys_prefs` VALUES ('bcc_email', 'setup.company', 'varchar', 100, '');
+INSERT INTO `0_sys_prefs` VALUES ('company_logo_report', 'setup.company', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('coy_logo', 'setup.company', 'varchar', 100, '');
 INSERT INTO `0_sys_prefs` VALUES ('coy_name', 'setup.company', 'varchar', 60, 'Company name');
 INSERT INTO `0_sys_prefs` VALUES ('coy_no', 'setup.company', 'varchar', 25, '');
@@ -1890,6 +1891,7 @@ INSERT INTO `0_sys_prefs` VALUES ('profit_loss_year_act', 'glsetup.general', 'va
 INSERT INTO `0_sys_prefs` VALUES ('pyt_discount_act', 'glsetup.purchase', 'varchar', 15, '5060');
 INSERT INTO `0_sys_prefs` VALUES ('retained_earnings_act', 'glsetup.general', 'varchar', 15, '3590');
 INSERT INTO `0_sys_prefs` VALUES ('round_to', 'setup.company', 'int', 5, '1');
+INSERT INTO `0_sys_prefs` VALUES ('shortname_name_in_list','setup.company', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('show_po_item_codes','glsetup.purchase', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('suppress_tax_rates','setup.company', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('tax_algorithm', 'glsetup.customer', 'tinyint', 1, '1');

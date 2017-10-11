@@ -393,7 +393,7 @@ function add_supp_invoice(&$supp_trans)
 		}
 	}
 
-	// $net_total is undefined, was $invoice_items_total intended?
+	reallocate_payments($invoice_id, ST_SUPPINVOICE, $date_, $to_allocate, $allocs, $supp_trans->supplier_id);
 	// reallocate_payments($invoice_id, ST_SUPPINVOICE, $date_, $net_total+$tax_total, $allocs, $supp_trans->supplier_id);
 	reallocate_payments($invoice_id, ST_SUPPINVOICE, $date_, $invoice_items_total+$tax_total, $allocs, $supp_trans->supplier_id);
 	$supp_trans->trans_no = $invoice_id;

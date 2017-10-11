@@ -1,3 +1,125 @@
+2017-10-03 Joe Hunt
+Fixed After successful Backup, loader.gif still present
+M	admin/backups.php
+
+2017-10-02 PaulShipley
+Fixed Bug in ui_controls.inc
+M	includes/ui/ui_controls.inc
+
+2017-10-02 Joe Hunt
+Optimised get_company_pref()
+M	admin/db/company_db.inc
+
+2017-10-01 Joe Hunt
+Fixed user config values unavailable error generated before user login
+M	includes/current_user.inc
+
+2017-09-29 Joe Hunt
+Test for open_ssl in extensions.
+M	includes/packages.inc
+
+2017-09-28 Joe Hunt
+Cleanup in gl_db_trans.inc consequent to previous commit
+M	gl/includes/db/gl_db_trans.inc
+
+2017-09-28 Joe Hunt
+Removed unused variable $show_voided_gl_trans from 2.4 config file.
+M	config.default.php
+
+2017-09-28 Joe Hunt
+Better wrapping on comments in documents.
+M	reporting/rep107.php
+M	reporting/rep109.php
+M	reporting/rep110.php
+M	reporting/rep111.php
+M	reporting/rep113.php
+M	reporting/rep209.php
+M	sales/includes/sales_ui.inc
+
+2017-09-22 Joe Hunt
+Bug presenting ST_JOURNAL in AR/AP Reports fixed.
+M	reporting/rep108.php
+M	sales/includes/db/customers_db.inc
+
+2017-09-20 Joe Hunt
+Right align numbers in inquiries and lists.
+M	includes/ui/allocation_cart.inc
+M	inventory/inquiry/stock_movements.php
+M	purchasing/allocations/supplier_allocation_main.php
+M	purchasing/includes/ui/invoice_ui.inc
+M	purchasing/inquiry/po_search_completed.php
+M	purchasing/inquiry/supplier_allocation_inquiry.php
+M	purchasing/inquiry/supplier_inquiry.php
+M	sales/allocations/customer_allocation_main.php
+M	sales/create_recurrent_invoices.php
+M	sales/inquiry/customer_allocation_inquiry.php
+M	sales/inquiry/sales_deliveries_view.php
+M	sales/inquiry/sales_orders_view.php
+M	sales/manage/recurrent_invoices.php
+M	sales/manage/sales_groups.php
+
+2017-09-20 Janusz Dobrowolski
+Fixed bug in reallocation payments during purchase invoice edition.
+M	purchasing/includes/db/invoice_db.inc
+
+2017-09-20 Joe Hunt
+Right align numbers in customer inquiry.
+M	sales/inquiry/customer_inquiry.php
+
+2017-09-19 Joe Hunt
+Bug in rep108 (and 101) when using Journal Entry for making entries in AR account.
+M	includes/ui/items_cart.inc
+
+2017-09-17 Joe Hunt
+New Company Option for showing both Short Names and Names in Customer/Supplier lists.
+M	admin/company_preferences.php
+M	includes/ui/ui_lists.inc
+M	sql/alter2.4.php
+M	sql/en_US-demo.sql
+M	sql/en_US-new.sql
+
+2017-09-09 Joe Hunt
+Profit and Loss Statement. Compensate for to-date = leap-year in period compare.
+M	reporting/rep707.php
+
+2017-09-08 Joe Hunt
+Added the new Company Logo on Reports in default charts.
+M	sql/alter2.4.php
+M	sql/en_US-demo.sql
+M	sql/en_US-new.sql
+
+2017-09-07 Janusz Dobrowolski
+Sales Invoice: fixed tax included amount position.
+M	reporting/rep107.php
+
+2017-09-05 Joe Hunt
+Per company based Report Logo Option
+M	admin/company_preferences.php
+M	config.default.php
+M	reporting/includes/pdf_report.inc
+
+2017-09-04 Joe Hunt
+Config option for Logo on Reports.
+M	config.default.php
+M	reporting/includes/pdf_report.inc
+
+2017-09-02 Janusz Dobrowolski
+Fixed bug in product average cost calculations.
+M	manufacturing/includes/db/work_order_produce_items_db.inc
+
+2017-08-31 Joe Hunt
+Group Total in Trial Balance on Screen.
+M	gl/inquiry/gl_trial_balance.php
+
+2017-08-30 Joe Hunt
+Old Sales Quote Reference Fix
+M	sales/includes/cart_class.inc
+M	sales/view/view_sales_order.php
+
+2017-08-29 Joe Hunt
+Fixed Logical Bug in Customer Balances Report.
+M	reporting/rep101.php
+
 2017-08-29 Joe Hunt
 Select button visibility in F4 Items Popup. Removed extra parameter in submit_return() usage.
 M	inventory/manage/items.php
