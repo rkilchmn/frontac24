@@ -304,7 +304,7 @@ function button($name, $value, $title=false, $icon=false,  $aspect='')
 		if ($value == _("Delete")) // Helper during implementation
 			$icon = ICON_DELETE;
 		return "<button type='submit' class='editbutton' name='"
-			.htmlentities(strtr($name, array('.'=>'=2E', '='=>'=3D',// ' '=>'=20','['=>'=5B'
+			.html_specials_encode(strtr($name, array('.'=>'=2E', '='=>'=3D',// ' '=>'=20','['=>'=5B'
 			)))
 			."' value='1'" . ($title ? " title='$title'":" title='$value'")
 			. ($aspect ? " aspect='$aspect'" : '')
@@ -347,9 +347,7 @@ function select_button_cell($name, $value, $title=false)
 
 function check_value($name)
 {
-    if (!isset($_POST[$name]) || ($_POST[$name]+0) === 0)
-		return 0;
-	return 1;
+    return (empty($_POST[$name]) ? 0 : 1);
 }
 
 function checkbox($label, $name, $value=null, $submit_on_change=false, $title=false)

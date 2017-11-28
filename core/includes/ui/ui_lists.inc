@@ -1244,25 +1244,28 @@ function tax_groups_list_row($label, $name, $selected_id=null, $none_option=fals
 
 //------------------------------------------------------------------------------------
 
-function item_tax_types_list($name, $selected_id=null)
+function item_tax_types_list($name, $selected_id=null, $show_inactive = false)
 {
 	$sql ="SELECT id, name FROM ".TB_PREF."item_tax_types";
+	if (!$show_inactive)
+		$sql .= " WHERE !inactive";
+
 	return combo_input($name, $selected_id, $sql, 'id', 'name', array('order' => 'id') );
 }
 
-function item_tax_types_list_cells($label, $name, $selected_id=null)
+function item_tax_types_list_cells($label, $name, $selected_id=null, $show_inactive = false)
 {
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo "<td>";
-	echo item_tax_types_list($name, $selected_id);
+	echo item_tax_types_list($name, $selected_id, $show_inactive);
 	echo "</td>\n";
 }
 
-function item_tax_types_list_row($label, $name, $selected_id=null)
+function item_tax_types_list_row($label, $name, $selected_id=null, $show_inactive = false)
 {
 	echo "<tr><td class='label'>$label</td>";
-	item_tax_types_list_cells(null, $name, $selected_id);
+	item_tax_types_list_cells(null, $name, $selected_id, $show_inactive);
 	echo "</tr>\n";
 }
 
@@ -1820,7 +1823,7 @@ function gl_account_types_list_row($label, $name, $selected_id=null, $all_option
 
 //-----------------------------------------------------------------------------------------------
 function gl_all_accounts_list($name, $selected_id=null, $skip_bank_accounts=false,
-	$cells=false, $all_option=false, $submit_on_change=false, $all=false)
+	$cells=false, $all_option=false, $submit_on_change=false, $all=false, $type_id=false)
 {
 	if ($skip_bank_accounts)
 		$sql = "SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id
@@ -1833,6 +1836,7 @@ function gl_all_accounts_list($name, $selected_id=null, $skip_bank_accounts=fals
 		$sql = "SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id
 			FROM ".TB_PREF."chart_master chart,".TB_PREF."chart_types type
 			WHERE chart.account_type=type.id";
+	if ($type_id ) $sql .= " AND chart.account_type=".db_escape($type_id);
 
 	return combo_input($name, $selected_id, $sql, 'chart.account_code', 'chart.account_name',
 		array(
@@ -1860,22 +1864,22 @@ function _format_account($row)
 
 function gl_all_accounts_list_cells($label, $name, $selected_id=null, 
 	$skip_bank_accounts=false, $cells=false, $all_option=false, 
-	$submit_on_change=false, $all=false)
+	$submit_on_change=false, $all=false, $type_id=false)
 {
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo "<td>";
 	echo gl_all_accounts_list($name, $selected_id, 
-		$skip_bank_accounts, $cells, $all_option, $submit_on_change, $all);
+		$skip_bank_accounts, $cells, $all_option, $submit_on_change, $all, $type_id);
 	echo "</td>\n";
 }
 
 function gl_all_accounts_list_row($label, $name, $selected_id=null, 
-	$skip_bank_accounts=false, $cells=false, $all_option=false)
+	$skip_bank_accounts=false, $cells=false, $all_option=false, $type_id=false)
 {
 	echo "<tr><td class='label'>$label</td>";
 	gl_all_accounts_list_cells(null, $name, $selected_id, 
-		$skip_bank_accounts, $cells, $all_option);
+		$skip_bank_accounts, $cells, $all_option, $type_id);
 	echo "</tr>\n";
 }
 
@@ -2139,7 +2143,7 @@ function journal_types_list_cells($label, $name, $value=null, $submit_on_change=
 	echo "</td>\n";
 }
 
-function cust_allocations_list_cells($label, $name, $selected=null)
+function cust_allocations_list_cells($label, $name, $selected=null, $submit_on_change=false)
 {
 
 	if ($label != null)
@@ -2148,12 +2152,12 @@ function cust_allocations_list_cells($label, $name, $selected=null)
 	$allocs = array( 
 		ALL_TEXT=>_("All Types"),
 		'1'=> _("Sales Invoices"),
-		'2'=> _("Overdue Invoices"),
+		'2'=> _("Unsettled transactions"),
 		'3' => _("Payments"),
 		'4' => _("Credit Notes"),
 		'5' => _("Delivery Notes")
 	);
-	echo array_selector($name, $selected, $allocs);
+	echo array_selector($name, $selected, $allocs, array('select_submit'=> $submit_on_change));
 	echo "</td>\n";
 }
 
@@ -2173,7 +2177,7 @@ function supp_allocations_list_cell($name, $selected=null)
 	echo "</td>\n";
 }
 
-function supp_transactions_list_cell($name, $selected=null)
+function supp_transactions_list_cell($name, $selected=null, $submit_on_change=false)
 {
 
 	echo "<td>\n";
@@ -2181,13 +2185,13 @@ function supp_transactions_list_cell($name, $selected=null)
 		ALL_TEXT=>_("All Types"),
 		'6'=>_("GRNs"),
 		'1'=> _("Invoices"),
-		'2'=> _("Overdue Invoices"),
+		'2'=> _("Unsettled transactions"),
 		'3' => _("Payments"),
 		'4' => _("Credit Notes"),
 		'5' => _("Overdue Credit Notes")
 	);
 
-	echo array_selector($name, $selected, $allocs);
+	echo array_selector($name, $selected, $allocs, array('select_submit'=> $submit_on_change));
 	echo "</td>\n";
 }
 

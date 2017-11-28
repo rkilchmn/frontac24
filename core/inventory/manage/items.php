@@ -344,8 +344,18 @@ function item_settings(&$stock_id, $new_item)
 	//------------------------------------------------------------------------------------
 	if ($new_item) 
 	{
-		text_row(_("Item Code:"), 'NewStockID', next_stock_id(), 21, 20);
-
+		$tmpCodeID=next_stock_id();
+		$post_label = null;
+		if (!empty($SysPrefs->prefs['barcodes_on_stock']))
+		{
+			$post_label = '<button class="ajaxsubmit" type="submit" aspect=\'default\'  name="generateBarcode"  id="generateBarcode" value="Generate Barcode EAN8"> '._("Generate EAN-8 Barcode").' </button>';
+			if (isset($_POST['generateBarcode']))
+			{
+				$tmpCodeID=generateBarcode();
+				$_POST['NewStockID'] = $tmpCodeID;
+			}
+		}	
+		text_row(_("Item Code:"), 'NewStockID', $tmpCodeID, 21, 20, null, "", $post_label);
 		$_POST['inactive'] = 0;
 	} 
 	else 
@@ -419,7 +429,8 @@ function item_settings(&$stock_id, $new_item)
 	$fresh_item = !isset($_POST['NewStockID']) || $new_item 
 		|| check_usage($_POST['stock_id'],false);
 
-	item_tax_types_list_row(_("Item Tax Type:"), 'tax_type_id', null);
+	// show inactive item tax type in selector only if already set.
+  item_tax_types_list_row(_("Item Tax Type:"), 'tax_type_id', null, !$new_item && item_type_inactive(get_post('tax_type_id')));
 
 	if (!get_post('fixed_asset'))
 		stock_item_types_list_row(_("Item Type:"), 'mb_flag', null, $fresh_item);
@@ -558,13 +569,13 @@ function item_settings(&$stock_id, $new_item)
 	end_outer_table(1);
 
 	div_start('controls');
+	if (@$_REQUEST['popup']) hidden('popup', 1);
 	if (!isset($_POST['NewStockID']) || $new_item) 
 	{
 		submit_center('addupdate', _("Insert New Item"), true, '', 'default');
 	} 
 	else 
 	{
-		if (@$_REQUEST['popup']) hidden('popup', 1);
 		submit_center_first('addupdate', _("Update Item"), '', 
 			$page_nested ? true : 'default');
 		submit_return('select', get_post('stock_id'), 
@@ -679,3 +690,41 @@ end_form();
 //------------------------------------------------------------------------------------
 
 end_page();
+
+function generateBarcode() {
+	$tmpBarcodeID = "";
+	$tmpCountTrys = 0;
+	while ($tmpBarcodeID == "")	{
+		srand ((double) microtime( )*1000000);
+		$random_1  = rand(1,9);
+		$random_2  = rand(0,9);
+		$random_3  = rand(0,9);
+		$random_4  = rand(0,9);
+		$random_5  = rand(0,9);
+		$random_6  = rand(0,9);
+		$random_7  = rand(0,9);
+		//$random_8  = rand(0,9);
+
+			// http://stackoverflow.com/questions/1136642/ean-8-how-to-calculate-checksum-digit
+		$sum1 = $random_2 + $random_4 + $random_6; 
+		$sum2 = 3 * ($random_1  + $random_3  + $random_5  + $random_7 );
+		$checksum_value = $sum1 + $sum2;
+
+		$checksum_digit = 10 - ($checksum_value % 10);
+		if ($checksum_digit == 10) 
+			$checksum_digit = 0;
+
+		$random_8  = $checksum_digit;
+
+		$tmpBarcodeID = $random_1 . $random_2 . $random_3 . $random_4 . $random_5 . $random_6 . $random_7 . $random_8;
+
+		// LETS CHECK TO SEE IF THIS NUMBER HAS EVER BEEN USED
+		$query = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='" . $tmpBarcodeID . "'";
+		$arr_stock = db_fetch(db_query($query));
+  
+		if (  !$arr_stock['stock_id'] ) {
+			return $tmpBarcodeID;
+		}
+		$tmpBarcodeID = "";	 
+	}
+}
