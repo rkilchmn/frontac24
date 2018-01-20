@@ -798,7 +798,7 @@ function dimensions_list($name, $selected_id=null, $no_option=false, $showname='
 	if($showtype)
 		$options['where'][] = "type_=".db_escape($showtype);
 
-	return combo_input($name, $selected_id, $sql, 'id', 'ref', $options);
+        return combo_input($name, $selected_id, $sql, 'id', 'ref', $options);
 }
 
 function dimensions_list_cells($label, $name, $selected_id=null, $no_option=false, $showname=null,
@@ -939,7 +939,7 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
 			'size'=>15,
 			'select_submit'=> $submit_on_change,
 			'category' => 2,
-			'order' => array('c.description','i.item_code'),
+			'order' => array('c.description','i.description','i.item_code'),
 			'editable' => 30,
 			'max' => 255
 		  ), $opts), $type == 'kits' ? $type : "stock_sales" );
@@ -1590,6 +1590,7 @@ function bank_accounts_list($name, $selected_id=null, $submit_on_change=false, $
 			'select_submit'=> $submit_on_change,
 			'spec_option' => $spec_option,
 			'spec_id' => '',
+			'default' => last_bank_trans('bank_act'),
 			'async' => false
 		) );
 }
@@ -1977,6 +1978,9 @@ function payment_person_types_list($name, $selected_id=null, $submit_on_change=f
 		if ($key != PT_WORKORDER)
 			$items[$key] = $type;
 	}		
+        if ($selected_id == null)
+            $selected_id=last_bank_trans('person_type_id');
+
 	return array_selector($name, $selected_id, $items, 
 		array( 'select_submit'=> $submit_on_change ) );
 }

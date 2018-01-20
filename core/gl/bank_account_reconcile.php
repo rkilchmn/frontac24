@@ -90,6 +90,12 @@ function fmt_person($trans)
 	return get_counterparty_name($trans["type"], $trans["trans_no"]);
 }
 
+function fmt_memo($row)
+{
+	$value = $row["memo_"];
+	return $value;
+}
+
 function update_data()
 {
 	global $Ajax;
@@ -265,6 +271,7 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 		_("Debit") => array('align'=>'right', 'fun'=>'fmt_debit'), 
 		_("Credit") => array('align'=>'right','insert'=>true, 'fun'=>'fmt_credit'), 
 	    _("Person/Item") => array('fun'=>'fmt_person'), 
+		_("Memo") => array('fun'=>'fmt_memo'),
 		array('insert'=>true, 'fun'=>'gl_view'),
 		"X"=>array('insert'=>true, 'fun'=>'rec_checkbox')
 	   );

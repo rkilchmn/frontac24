@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `0_bank_accounts` (
 -- Dumping data for table `0_bank_accounts`
 --
 
-INSERT INTO `0_bank_accounts` VALUES ('1060', 3, 'Current account', 'N/A', 'N/A', '', 'USD', 1, 1, '5690', '0000-00-00 00:00:00', 0, 0);
+INSERT INTO `0_bank_accounts` VALUES ('1060', 1, 'Wells F Ck(7305,4704,9500,1240)', '102000076/1828101240', 'Wells Fargo', '', 'USD', 1, 1, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1065', 3, 'Petty Cash account', 'N/A', 'N/A', '', 'USD', 0, 2, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1080', 0, 'Undeposited Funds', 'N/A', 'N/A', '', 'USD', 0, 3, '5690', '0000-00-00 00:00:00', 0, 0);
 INSERT INTO `0_bank_accounts` VALUES ('1061', 0, 'Wells Fargo Savings (1277)', 'N/A', 'N/A', '', 'USD', 0, 4, '5690', '0000-00-00 00:00:00', 0, 0);
@@ -265,8 +265,9 @@ INSERT INTO `0_chart_master` VALUES ('2110', '', 'Accrued Income Tax - Federal',
 INSERT INTO `0_chart_master` VALUES ('2120', '', 'Accrued Income Tax - State','4','0');
 INSERT INTO `0_chart_master` VALUES ('2130', '', 'Accrued Franchise Tax','4','0');
 INSERT INTO `0_chart_master` VALUES ('2140', '', 'Accrued Real &amp; Personal Prop Tax','4','0');
-INSERT INTO `0_chart_master` VALUES ('2150', '', 'Colorado Sales Tax','4','0');
-INSERT INTO `0_chart_master` VALUES ('2160', '', 'Mesa County Sales Tax','4','0');
+INSERT INTO `0_chart_master` VALUES ('2150', '', 'Colorado MC Sales Tax','4','0');
+INSERT INTO `0_chart_master` VALUES ('2160', '', 'Colorado State Sales Tax','4','0');
+INSERT INTO `0_chart_master` VALUES ('2180', '', 'California Sales Tax','4','0');
 INSERT INTO `0_chart_master` VALUES ('2200', '', 'United Bus Card(0672,7697,3541)','4','0');
 INSERT INTO `0_chart_master` VALUES ('2295', '', 'QB Current Liabilities','4','0');
 INSERT INTO `0_chart_master` VALUES ('1800', '', 'Accumulated Depreciation','3','0');
@@ -728,6 +729,10 @@ CREATE TABLE IF NOT EXISTS `0_dimensions` (
 -- Dumping data for table `0_dimensions`
 --
 
+INSERT INTO `0_dimensions` VALUES ('1', '1', 'Vineyard', '1', '0', '2016-12-31', '2016-12-31');
+INSERT INTO `0_dimensions` VALUES ('2', '2', 'Winery', '1', '0', '2016-12-31', '2016-12-31');
+INSERT INTO `0_dimensions` VALUES ('3', '3', 'Tasting Room', '1', '0', '2016-12-31', '2016-12-31');
+
 -- --------------------------------------------------------
 
 --
@@ -919,6 +924,10 @@ CREATE TABLE IF NOT EXISTS `0_item_tax_types` (
 --
 
 INSERT INTO `0_item_tax_types` VALUES (1, 'Regular', 0, 0);
+INSERT INTO `0_item_tax_types` VALUES (2, 'Taxable Goods (except wine)', 0, 0);
+INSERT INTO `0_item_tax_types` VALUES (3, 'Wine', 0, 0);
+INSERT INTO `0_item_tax_types` VALUES (4, '--none--', 1, 0);
+INSERT INTO `0_item_tax_types` VALUES (5, 'Taxable goods (sweets)', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -959,6 +968,7 @@ CREATE TABLE IF NOT EXISTS `0_item_units` (
 
 INSERT INTO `0_item_units` VALUES ('each', 'Each', 0, 0);
 INSERT INTO `0_item_units` VALUES ('hr', 'Hours', 0, 0);
+INSERT INTO `0_item_units` VALUES ('lb', 'Pounds', 4, 0);
 
 -- --------------------------------------------------------
 
@@ -1102,9 +1112,6 @@ CREATE TABLE IF NOT EXISTS `0_printers` (
 -- Dumping data for table `0_printers`
 --
 
-INSERT INTO `0_printers` VALUES (1, 'QL500', 'Label printer', 'QL500', 'server', 127, 20);
-INSERT INTO `0_printers` VALUES (2, 'Samsung', 'Main network printer', 'scx4521F', 'server', 515, 5);
-INSERT INTO `0_printers` VALUES (3, 'Local', 'Local print server at user IP', 'lp', '', 515, 10);
 
 -- --------------------------------------------------------
 
@@ -1126,15 +1133,6 @@ CREATE TABLE IF NOT EXISTS `0_print_profiles` (
 -- Dumping data for table `0_print_profiles`
 --
 
-INSERT INTO `0_print_profiles` VALUES (1, 'Out of office', '', 0);
-INSERT INTO `0_print_profiles` VALUES (2, 'Sales Department', '', 0);
-INSERT INTO `0_print_profiles` VALUES (3, 'Central', '', 2);
-INSERT INTO `0_print_profiles` VALUES (4, 'Sales Department', '104', 2);
-INSERT INTO `0_print_profiles` VALUES (5, 'Sales Department', '105', 2);
-INSERT INTO `0_print_profiles` VALUES (6, 'Sales Department', '107', 2);
-INSERT INTO `0_print_profiles` VALUES (7, 'Sales Department', '109', 2);
-INSERT INTO `0_print_profiles` VALUES (8, 'Sales Department', '110', 2);
-INSERT INTO `0_print_profiles` VALUES (9, 'Sales Department', '201', 2);
 
 -- --------------------------------------------------------
 
@@ -1323,7 +1321,7 @@ CREATE TABLE `0_reflines` (
 
 INSERT INTO `0_reflines` VALUES
 ('1', '0', '', '{001}/{YYYY}', '', '1', '0'),
-('2', '1', '', '{001}/{YYYY}', '', '1', '0'),
+('2', '1', '', '{000001}/{UU}', '4-digit check number', '1', '0'),
 ('3', '2', '', '{001}/{YYYY}', '', '1', '0'),
 ('4', '4', '', '{001}/{YYYY}', '', '1', '0'),
 ('5', '10', '', '{001}/{YYYY}', '', '1', '0'),
@@ -1343,7 +1341,7 @@ INSERT INTO `0_reflines` VALUES
 ('19', '30', '', '{001}/{YYYY}', '', '1', '0'),
 ('20', '32', '', '{001}/{YYYY}', '', '1', '0'),
 ('21', '35', '', '{001}/{YYYY}', '', '1', '0'),
-('22', '40', '', '{001}/{YYYY}', '', '1', '0');
+('22', '40', '', '{1}', '', '1', '0');
 
 -- --------------------------------------------------------
 
@@ -1479,7 +1477,12 @@ CREATE TABLE IF NOT EXISTS `0_sales_pos` (
 -- Dumping data for table `0_sales_pos`
 --
 
-INSERT INTO `0_sales_pos` VALUES (1, 'Default', 1, 1, 'DEF', 2, 0);
+INSERT INTO `0_sales_pos` VALUES (2, 'iTerminal', 1, 1, 'DEF', 1, 0);
+INSERT INTO `0_sales_pos` VALUES (3, 'Cash', 1, 1, 'DEF', 2, 0);
+INSERT INTO `0_sales_pos` VALUES (4, 'Square', 1, 1, 'DEF', 1, 0);
+INSERT INTO `0_sales_pos` VALUES (5, 'Online POS Terminal', 1, 1, 'DEF', 1, 0);
+INSERT INTO `0_sales_pos` VALUES (6, 'CC Terminal', 1, 1, 'DEF', 1, 0);
+INSERT INTO `0_sales_pos` VALUES (7, 'Check', 1, 1, 'DEF', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -1502,7 +1505,7 @@ CREATE TABLE IF NOT EXISTS `0_sales_types` (
 -- Dumping data for table `0_sales_types`
 --
 
-INSERT INTO `0_sales_types` VALUES (1, 'Retail', 1, 1, 0);
+INSERT INTO `0_sales_types` VALUES (1, 'Retail', 0, 1, 0);
 INSERT INTO `0_sales_types` VALUES (2, 'Wholesale', 0, 0.7, 0);
 
 -- --------------------------------------------------------
@@ -1850,15 +1853,15 @@ CREATE TABLE IF NOT EXISTS `0_sys_prefs` (
 -- Dumping data for table `0_sys_prefs`
 --
 
-INSERT INTO `0_sys_prefs` VALUES ('coy_name', 'setup.company', 'varchar', 60, 'Company name');
+INSERT INTO `0_sys_prefs` VALUES ('coy_name', 'setup.company', 'varchar', 60, 'Whitewater Hill Vineayrds');
 INSERT INTO `0_sys_prefs` VALUES ('gst_no', 'setup.company', 'varchar', 25, '');
 INSERT INTO `0_sys_prefs` VALUES ('coy_no', 'setup.company', 'varchar', 25, '');
 INSERT INTO `0_sys_prefs` VALUES ('tax_prd', 'setup.company', 'int', 11, '1');
 INSERT INTO `0_sys_prefs` VALUES ('tax_last', 'setup.company', 'int', 11, '1');
-INSERT INTO `0_sys_prefs` VALUES ('postal_address', 'setup.company', 'tinytext', 0, 'N/A');
-INSERT INTO `0_sys_prefs` VALUES ('phone', 'setup.company', 'varchar', 30, '');
+INSERT INTO `0_sys_prefs` VALUES ('postal_address', 'setup.company', 'tinytext', 0, '130 31 RD\nGrand Junction, CO 81503');
+INSERT INTO `0_sys_prefs` VALUES ('phone', 'setup.company', 'varchar', 30, '970-434-6868');
 INSERT INTO `0_sys_prefs` VALUES ('fax', 'setup.company', 'varchar', 30, '');
-INSERT INTO `0_sys_prefs` VALUES ('email', 'setup.company', 'varchar', 100, '');
+INSERT INTO `0_sys_prefs` VALUES ('email', 'setup.company', 'varchar', 100, 'info@whitewaterhill.com');
 INSERT INTO `0_sys_prefs` VALUES ('coy_logo', 'setup.company', 'varchar', 100, '');
 INSERT INTO `0_sys_prefs` VALUES ('domicile', 'setup.company', 'varchar', 55, '');
 INSERT INTO `0_sys_prefs` VALUES ('curr_default', 'setup.company', 'char', 3, 'USD');
@@ -1871,7 +1874,7 @@ INSERT INTO `0_sys_prefs` VALUES ('base_sales', 'setup.company', 'int', 11, '1')
 INSERT INTO `0_sys_prefs` VALUES ('time_zone', 'setup.company', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('add_pct', 'setup.company', 'int', 5, '-1');
 INSERT INTO `0_sys_prefs` VALUES ('round_to', 'setup.company', 'int', 5, '1');
-INSERT INTO `0_sys_prefs` VALUES ('login_tout', 'setup.company', 'smallint', 6, '600');
+INSERT INTO `0_sys_prefs` VALUES ('login_tout', 'setup.company', 'smallint', 6, '60000');
 INSERT INTO `0_sys_prefs` VALUES ('past_due_days', 'glsetup.general', 'int', 11, '30');
 INSERT INTO `0_sys_prefs` VALUES ('profit_loss_year_act', 'glsetup.general', 'varchar', 15, '9990');
 INSERT INTO `0_sys_prefs` VALUES ('retained_earnings_act', 'glsetup.general', 'varchar', 15, '3590');
@@ -2022,8 +2025,9 @@ CREATE TABLE IF NOT EXISTS `0_tax_types` (
 -- Dumping data for table `0_tax_types`
 --
 
-INSERT INTO `0_tax_types` VALUES (1, 5, '2150', '2150', 'Colorado Sales Tax', 2.9);
-INSERT INTO `0_tax_types` VALUES (1, 5, '2160', '2160', 'Mesa County Sales Tax', 2.0);
+INSERT INTO `0_tax_types` VALUES (1, 5.37, '2150', '2150', 'Colorado MC Sales Tax', 0);
+INSERT INTO `0_tax_types` VALUES (2, 2.9, '2160', '2160', 'Colorado State Sales Tax', 0);
+INSERT INTO `0_tax_types` VALUES (3, 9, '2180', '2180', 'California Sales Tax', 0);
 
 -- --------------------------------------------------------
 
@@ -2126,7 +2130,12 @@ CREATE TABLE IF NOT EXISTS `0_users` (
 -- Dumping data for table `0_users`
 --
 
-INSERT INTO `0_users` VALUES (1, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'Administrator', 2, '', 'adm@example.com', 'en_US', 0, 0, 0, 0, 'default', 'Letter', 2, 2, 4, 1, 1, 0, 0, '2008-04-04 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
+INSERT INTO `0_users` VALUES (1, 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'Administrator', 2, '', 'braathwaate@whitewaterhill.com', 'en_US', 0, 0, 0, 0, 'Cash', 'Letter', 2, 2, 4, 2, 1, 0, 0, '2008-04-04 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
+INSERT INTO `0_users` VALUES (2, 'heather', '', 'Heather', 10, '', '', 'en_US', 0, 0, 0, 0, 'Cash', 'Letter', 2, 2, 4, 2, 1, 0, 0, '2008-04-04 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
+INSERT INTO `0_users` VALUES (3, 'michael', '', 'Michael', 10, '', '', 'en_US', 0, 0, 0, 0, 'Cash', 'Letter', 2, 2, 4, 2, 1, 0, 0, '2008-04-04 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
+INSERT INTO `0_users` VALUES (4, 'nancy', '', 'Nancy', 10, '', '', 'en_US', 0, 0, 0, 0, 'Cash', 'Letter', 2, 2, 4, 2, 1, 0, 0, '2008-04-04 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
+INSERT INTO `0_users` VALUES (5, 'bailey', '', 'Bailey', 10, '', '', 'en_US', 0, 0, 0, 0, 'Cash', 'Letter', 2, 2, 4, 2, 1, 0, 0, '2008-04-04 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
+INSERT INTO `0_users` VALUES (6, 'john', '', 'John', 2, '', '', 'en_US', 0, 0, 0, 0, 'Cash', 'Letter', 2, 2, 4, 2, 1, 0, 0, '2008-04-04 12:34:29', 10, 1, 1, '1', 1, 0, 'orders', 30, 0, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 

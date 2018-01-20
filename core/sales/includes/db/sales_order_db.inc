@@ -270,8 +270,10 @@ function get_sales_order_header($order_no, $trans_type)
 	{
 		return db_fetch($result);
 	}
-	else
+	else {
+                display_warning($sql);
 		display_warning("You have missing or invalid sales document in database (type:$trans_type, number:$order_no).");
+        }
 
 }
 
@@ -362,9 +364,11 @@ function sales_order_has_deliveries($order_no)
 
 	if ($row[0] > 0)
 		return true;  // 2010-04-21 added check for eventually voided deliveries, Joe Hunt
-	$sql = "SELECT order_ FROM ".TB_PREF."debtor_trans WHERE type=".ST_CUSTDELIVERY." AND order_=".db_escape($order_no);
+	$sql = "SELECT SUM(quantity) FROM ".TB_PREF."debtor_trans d LEFT JOIN ".TB_PREF."debtor_trans_details dd on dd.debtor_trans_no=d.trans_no AND d.type=dd.debtor_trans_type WHERE type=".ST_CUSTDELIVERY." AND order_=".db_escape($order_no);
 	$result = db_query($sql,"The related delivery notes could not be retreived");
-	return (db_num_rows($result) > 0);	
+	$row = db_fetch_row($result);
+
+	return ($row[0] > 0);
 }
 
 //----------------------------------------------------------------------------------------
@@ -625,4 +629,17 @@ function is_prepaid_order_open($order_no)
 	$result = db_fetch(db_query($sql, "cannot check prepaid order open"));
 
 	return $result[0];
+}
+
+function last_sales_order_detail($order, $field)
+{
+	$sql = "SELECT $field
+			FROM ".TB_PREF."sales_order_details d"
+                        ." LEFT JOIN " .TB_PREF."sales_orders o on d.order_no=o.order_no
+			WHERE debtor_no=" . db_escape($order->customer_id)
+                        . " ORDER BY d.id DESC LIMIT 1";
+
+	$last_query=db_query($sql, "Retreive last order detail");
+        $row = db_fetch_row($last_query);
+        return $row[0];
 }
