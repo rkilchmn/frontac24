@@ -108,7 +108,7 @@ $opts = array(		// default options
 			: _('Enter description fragment to search or * for all')) :'';
 
 	if ($selected_id == null) {
-	 	$selected_id = get_post($name, (string)$opts['default']);
+		$selected_id = get_post($name, (string)$opts['default']);
 	}
 
 	if(!is_array($selected_id))
