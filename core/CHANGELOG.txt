@@ -1,3 +1,132 @@
+2018-01-20 Joe Hunt
+Fixed $sign bug in various reports
+M	reporting/rep109.php
+M	reporting/rep110.php
+M	reporting/rep111.php
+M	reporting/rep209.php
+
+2018-01-16 Janusz Dobrowolski
+Added deferred income account and prepayment terms in init sql files.
+M	sql/en_US-demo.sql
+M	sql/en_US-new.sql
+
+2018-01-15 Janusz Dobrowolski
+Refreshed year bump in standard Chart SQLs
+M	sql/en_US-demo.sql
+M	sql/en_US-new.sql
+
+2018-01-13 Janusz Dobrowolski
+Fixed bank account auto-selection in Customer Payments (continued).
+M	sales/customer_payments.php
+
+2018-01-13 Joe Hunt
+Fixed printing sequences of Sales Invoices.
+M	reporting/rep107.php
+
+2018-01-13 Janusz Dobrowolski
+Fixed account auto-selection on Customer Payments page.
+M	sales/customer_payments.php
+
+2018-01-05 Joe Hunt
+Fixed a multipart form in backups.
+M	admin/backups.php
+
+2017-12-24 Joe Hunt
+Extra default parameter added to meta_forward function.
+M	includes/ui/ui_controls.inc
+
+2017-12-24 Joe Hunt
+tax group can be null as argument
+M	taxes/db/tax_groups_db.inc
+
+2017-12-23 Joe Hunt
+Sales Area list, added 'No Area Filter'.
+M	includes/ui/ui_lists.inc
+M	reporting/includes/reports_classes.inc
+
+2017-12-23 Joe Hunt
+Card Session Error and Fix.
+M	sales/includes/sales_ui.inc
+
+2017-12-22 Joe Hunt
+Better Company Logo alignment on Reports.
+M	reporting/includes/pdf_report.inc
+
+2017-12-21 Joe Hunt
+subledger_list shows inactive records in Journal Entry. Fixed.
+M	includes/ui/ui_lists.inc
+
+2017-12-19 Janusz Dobrowolski
+Password field in installer changed to hide text.
+M	install/index.php
+
+2017-12-19 Janusz Dobrowolski
+Added VARLIB_PATH and VARLOG_PATH defines to simplify packaging.
+M	admin/includes/fa_patch.class.inc
+M	admin/inst_upgrade.php
+M	admin/view/view_upgrade_log.php
+M	config.default.php
+M	gl/includes/db/gl_db_rates.inc
+M	includes/packages.inc
+M	includes/session.inc
+M	includes/system_tests.inc
+M	install/isession.inc
+
+2017-12-19 Janusz Dobrowolski
+Produce Finished Items: document reference input order fixed.
+M	manufacturing/work_order_add_finished.php
+
+2017-12-19 Janusz Dobrowolski
+Work Order - Entry, Additional Costs: fixed input data checks.
+M	manufacturing/work_order_costs.php
+M	manufacturing/work_order_entry.php
+
+2017-12-19 Janusz Dobrowolski
+Stock Status display, Manufacturing Reports: fixed products on WO count.
+M	includes/db/manufacturing_db.inc
+M	reporting/rep303.php
+
+2017-12-19 Joe Hunt
+Installed Third Party extension version display
+M	admin/inst_module.php
+
+2017-12-18 Joe Hunt
+Inventory purchasing transaction based report - space fix
+M	reporting/rep310.php
+
+2017-12-15 Joe Hunt
+New Report 310.php: Inventory Purchasing - Transaction based report
+M	reporting/rep310.php
+M	reporting/reports_main.php
+
+2017-12-15 Joe Hunt
+Installing third party extensions fixed
+M	includes/packages.inc
+
+2017-12-14 Janusz Dobrowolski
+System Diagnostics: fixed set of standard theme directories.
+M	includes/system_tests.inc
+
+2017-12-13 Joe Hunt
+Google and Bloomberg Exchange Rate consolidated fixes
+M	gl/includes/db/gl_db_rates.inc
+
+2017-12-09 Joe Hunt
+Inventory Valuation Report showing 0 (zero) on Unit Cost and decimal precision fix.
+M	includes/current_user.inc
+M	reporting/rep301.php
+M	reporting/rep308.php
+
+2017-12-06 Joe Hunt
+Rerun of System Checks for backwards PHP compatibility.
+M	includes/system_tests.inc
+
+2017-12-02 Janusz Dobrowolski
+Backups/Restore: fixed compressed backup view, fixed obsolete ajax indicator during download.
+M	admin/backups.php
+M	includes/ui/ui_input.inc
+M	js/inserts.js
+
 2017-11-27 Joe Hunt
 Account Class/Group drill down added
 M	gl/manage/gl_account_classes.php
