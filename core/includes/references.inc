@@ -173,6 +173,7 @@ class references
 				." WHERE ISNULL(v.id)"
 				.($type_fld ? " AND tbl.`$type_fld`=$type" : '')
 				." AND `$ref_fld` REGEXP ".db_escape('^'.preg_quote($prefix).'[0-9]*'.preg_quote($postfix).'$');
+// display_notification($sql);
 		$result = db_query($sql, 'cannot retrieve last reference');
 		$result = db_fetch_row($result);
 
@@ -209,6 +210,7 @@ class references
 		} else {
 			$sql .= " AND tbl.`$tno_fld`=".db_escape($trans_no);
 		}
+// display_notification($sql);
 
 		$result = db_query($sql, "could not test for unique reference");
 		if (!$result)
