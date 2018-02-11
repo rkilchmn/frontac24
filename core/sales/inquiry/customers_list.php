@@ -38,7 +38,8 @@ start_table(TABLESTYLE_NOBORDER);
 
 start_row();
 
-text_cells(_("Customer"), "customer");
+text_cells(_("Customer"), "customer", '','','','','','',"onblur='document.getElementById(\"search\").click();'");
+
 submit_cells("search", _("Search"), "", _("Search customers"), "default");
 
 end_row();

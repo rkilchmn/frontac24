@@ -78,9 +78,9 @@ if (isset($_GET['AddedID']))
 
 	display_note(get_gl_view_str($trans_type, $trans_no, _("&View the GL Postings for this Payment")));
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another &Payment"), "NewPayment=yes");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another &Payment"), "NewPayment=yes&date_=".$_GET['date_']);
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A &Deposit"), "NewDeposit=yes");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A &Deposit"), "NewDeposit=yes&date_=".$_GET['date_']);
 
 	hyperlink_params("$path_to_root/admin/attachments.php", _("Add an Attachment"), "filterType=$trans_type&trans_no=$trans_no");
 
@@ -112,9 +112,9 @@ if (isset($_GET['AddedDep']))
 
 	display_note(get_gl_view_str($trans_type, $trans_no, _("View the GL Postings for this Deposit")));
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another Deposit"), "NewDeposit=yes");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another Deposit"), "NewDeposit=yes&date_=".$_GET['date_']);
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A Payment"), "NewPayment=yes");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A Payment"), "NewPayment=yes&date_=".$_GET['date_']);
 
 	display_footer_exit();
 }
@@ -197,7 +197,10 @@ function create_cart($type, $trans_no)
 
 	} else {
 		$cart->reference = $Refs->get_next($cart->trans_type, null, $cart->tran_date);
-		$cart->tran_date = new_doc_date();
+	        if (isset($_GET['date_']))
+                    $cart->tran_date  = $_GET['date_'];
+                else
+                    $cart->tran_date = new_doc_date();
 		if (!is_date_in_fiscalyear($cart->tran_date))
 			$cart->tran_date = end_fiscalyear();
 	}
@@ -319,7 +322,7 @@ if (isset($_POST['Process']) && !check_trans())
 
 	if ($new)
 		meta_forward($_SERVER['PHP_SELF'], $trans_type==ST_BANKPAYMENT ?
-			"AddedID=$trans_no" : "AddedDep=$trans_no");
+			"AddedID=$trans_no&date_=".$_POST['date_'] : "AddedDep=$trans_no&date_=".$_POST['date_']);
 	else
 		meta_forward($_SERVER['PHP_SELF'], $trans_type==ST_BANKPAYMENT ?
 			"UpdatedID=$trans_no" : "UpdatedDep=$trans_no");

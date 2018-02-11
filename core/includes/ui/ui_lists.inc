@@ -247,16 +247,47 @@ $opts = array(		// default options
 	
 	$_POST[$name] = $multi ? $selected_id : $selected_id[0];
 
-	if ($SysPrefs->use_popup_search)
+        $autocomplete = "";
+	if ($class=='combo4')
+            $autocomplete = "
+<style>
+    .combo4_div {
+        position: absolute;
+        background-color: #f6f6f6;
+        min-width: 230px;
+        overflow: auto;
+        border: 1px solid #ddd;
+        z-index: 1;
+    }
+    .combo4_div a {
+        color: black;
+        padding: 6px 6px;
+        text-decoration: none;
+        display: none;
+    }
+    .combo4_div div {
+        width: 200px;
+        word-wrap: break-word;
+    }
+    .combo4_div a:hover {background-color: #ddd}
+    .show {display:block;}
+</style>
+<div class='$class"."_div' id='$name"."_div' title='". $opts['sel_hint']."' $rel>"
+.str_replace("value=", "data-value=", str_replace("<option", "<a class='$class' data-rel='$name' href=''", str_replace("option>", "a>", str_replace("optgroup", "div", $selector))))."</div>\n";
+
+        if ($SysPrefs->use_popup_search)
 		$selector = "<select id='$name' autocomplete='off' ".($multi ? "multiple" : '')
 		. ($opts['height']!==false ? ' size="'.$opts['height'].'"' : '')
 		. "$disabled name='$name".($multi ? '[]':'')."' class='$class' title='"
 		. $opts['sel_hint']."' $rel>".$selector."</select>\n";
-	else
+        else
 		$selector = "<select autocomplete='off' ".($multi ? "multiple" : '')
 		. ($opts['height']!==false ? ' size="'.$opts['height'].'"' : '')
 		. "$disabled name='$name".($multi ? '[]':'')."' class='$class' title='"
 		. $opts['sel_hint']."' $rel>".$selector."</select>\n";
+
+        $selector .= $autocomplete;     // combo4
+
 	if ($by_id && ($search_box != false || $opts['editable']) ) {
 		// on first display show selector list
 		if (isset($_POST[$search_box]) && $opts['editable'] && $edit) {

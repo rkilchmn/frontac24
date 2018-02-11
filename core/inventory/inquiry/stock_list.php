@@ -38,7 +38,7 @@ start_table(TABLESTYLE_NOBORDER);
 
 start_row();
 
-text_cells(_("Description"), "description");
+text_cells(_("Description"), "description",'','','','','','',"onblur='document.getElementById(\"search\").click();'");
 submit_cells("search", _("Search"), "", _("Search items"), "default");
 
 end_row();

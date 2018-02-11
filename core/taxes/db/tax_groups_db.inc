@@ -105,7 +105,6 @@ function get_tax_group_rates($group_id=null, $tax_shipping=false)
 	. " WHERE !t.inactive";
 	if ($tax_shipping)
 		$sql .= " AND g.tax_shipping=1";
-
 	return db_query($sql, "cannot get tax types as array");
 }
 

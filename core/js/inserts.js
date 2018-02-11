@@ -144,14 +144,14 @@ function _set_combo_select(e) {
 		e.onblur = function() {
 		    var box = document.getElementsByName(this.getAttribute('rel'))[0];
 			if ((this.selectedIndex != this.getAttribute('_last'))
-				||((string_contains(this.className, 'combo') || string_contains(this.className, 'combo4') || string_contains(this.className, 'combo3')) && _update_box(this))
+				||((string_contains(this.className, 'combo') || string_contains(this.className, 'combo3')) && _update_box(this))
 				)
 					this.onchange();
 		}
 		e.onchange = function() {
 			var s = this;
 			this.setAttribute('_last', this.selectedIndex);
-			if(string_contains(s.className, 'combo') || string_contains(s.className, 'combo4') || string_contains(this.className, 'combo3'))
+			if(string_contains(s.className, 'combo') || string_contains(this.className, 'combo3'))
 			    _update_box(s);
 			if(s.selectedIndex>=0) {
 				 var sname = '_'+s.name+'_update';
@@ -170,7 +170,7 @@ function _set_combo_select(e) {
 				event.returnValue = false;
   			  	return false;
   			}
-		    if (box && (key == 32) && (string_contains(this.className, 'combo2'))) {
+		    if (box && (key == 32) && (string_contains(this.className, 'combo2') || string_contains(this.className, 'combo4') )) {
 			    this.style.display = 'none';
 			    box.style.display = 'inline';
 				box.value='';
@@ -280,15 +280,32 @@ function fix_date(date, last)
  Behaviour definitions
 */
 var inserts = {
+        'input.combo4' : function(e) {
+                e.onkeyup = function(ev) {
+                    var div = document.getElementById(this.getAttribute('rel')+"_div");
+                    var ac = this.value.toUpperCase();
+                    b = div.getElementsByTagName("a");
+                    count=0;
+                    for (i = 0; i < b.length; i++) {
+                        if (b[i].innerHTML.toUpperCase().indexOf(ac) > -1 && count < 12) {
+                            b[i].style.display = "block";
+                            count++;
+                        } else {
+                            b[i].style.display = "none";
+                        }
+                    }
+                }
+        },
+
 	'input': function(e) {
 		if(e.onfocus==undefined) {
 			e.onfocus = function() {
 				save_focus(this);
-				if (string_contains(this.className, 'combo') || string_contains(this.className, 'combo4') || string_contains(this.className, 'combo3'))
+				if (string_contains(this.className, 'combo') || string_contains(this.className, 'combo3'))
 					this.select();
 			};
 		}
-		if (string_contains(e.className, 'combo') || string_contains(e.className, 'combo4') || string_contains(e.className, 'combo2') || string_contains(e.className, 'combo3')) {
+		if (string_contains(e.className, 'combo') || string_contains(e.className, 'combo2') || string_contains(e.className, 'combo3')) {
 				_set_combo_input(e);
 		}
 		else
@@ -315,7 +332,7 @@ var inserts = {
 	    e.style.display = 'block';
 	},
 	'button': function(e) {
-		e.onclick = function(){
+            e.onclick = function(){
 			if (validate(e)) {
 				setTimeout(function() {	var asp = e.getAttribute('aspect');
 					if (asp && asp.indexOf('download') === -1)
@@ -411,7 +428,7 @@ var inserts = {
 			};
 		}
   		var c = e.className;
-		if (string_contains(c, 'combo') || string_contains(c, 'combo4') || string_contains(c, 'combo2') || string_contains(c, 'combo3'))
+		if (string_contains(c, 'combo') || string_contains(c, 'combo2') || string_contains(c, 'combo3') || string_contains(c, 'combo4') )
 			_set_combo_select(e);
 		else {
 			e.onkeydown = function(ev) {	// block unintentional page escape with 'history back' key pressed on buttons
@@ -431,6 +448,18 @@ var inserts = {
 			return false;
 		}
 	},
+        'a.combo4' : function(l) {
+		l.onclick = function() {
+                     var sname = '_'+l.dataset.rel+'_update';
+                     var target = document.getElementsByName(l.dataset.rel)[0];
+                    target.value=l.dataset.value;
+                     var update = document.getElementsByName(sname)[0];
+                     if(update) {
+                        JsHttpRequest.request(update);
+                    }
+		     return false;
+                }
+        },
 	'a.repopts_link': 	function(l) {
 		l.onclick = function() {
 		    save_focus(this);
