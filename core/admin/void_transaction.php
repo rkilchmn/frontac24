@@ -290,9 +290,6 @@ function handle_void_transaction()
 			display_notification_centered(_("Selected transaction has been voided."));
 			unset($_POST['trans_no']);
 			unset($_POST['memo_']);
-            // no reason to unset the user's chosen date
-            // which can be used for subsequent voids
-			// unset($_POST['date_']);
 		}
 		else {
 			display_error($msg);

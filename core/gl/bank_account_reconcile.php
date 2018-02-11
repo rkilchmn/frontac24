@@ -174,7 +174,7 @@ $id = find_submit('_rec_');
 if ($id != -1) 
 	change_tpl_flag($id);
 
-/*
+
 if (isset($_POST['Reconcile'])) {
 	set_focus('bank_date');
 	foreach($_POST['last'] as $id => $value)
@@ -183,12 +183,12 @@ if (isset($_POST['Reconcile'])) {
 
     $Ajax->activate('_page_body');
 }
-*/
 
 if (isset($_POST['ReconcileAll'])) {
 	set_focus('bank_date');
 	foreach($_POST['last'] as $id => $value)
 		set_tpl_flag($id);
+
 
     $Ajax->activate('_page_body');
 }
@@ -281,9 +281,10 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 	display_db_pager($table);
 
 br(1);
-//submit_center('Reconcile', _("Reconcile"), true, '', null);
-submit_center('ReconcileAll', _("Reconcile All"), true, '');
-
+echo '<center>';
+submit('Reconcile', _("Reconcile"), true, '', null);
+submit('ReconcileAll', _("Reconcile All"), true, '');
+echo '</center>';
 end_form();
 
 //------------------------------------------------------------------------------------------------

@@ -72,7 +72,7 @@ function gl_inquiry_controls()
 		dimensions_list_cells(_("Dimension")." 2:", 'Dimension2', null, true, " ", false, 2);
         }
 
-        ref_cells(_("Memo:"), 'Memo', '',null, _('Enter memo fragment or leave empty'));
+	ref_cells(_("Memo:"), 'Memo', '',null, _('Enter memo fragment or leave empty'));
 	small_amount_cells(_("Amount min:"), 'amount_min', null, " ");
 	small_amount_cells(_("Amount max:"), 'amount_max', null, " ");
 	submit_cells('Show',_("Show"),'','', 'default');
@@ -144,9 +144,9 @@ function show_results()
 		$dim_cols = array();
 	
 	if ($show_balances)
-	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Balance"), _("Memo"));
+	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Balance"), _("Memo"), "");
 	else
-	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Memo"));
+	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Memo"), "");
 	    
 	$th = array_merge($first_cols, $account_col, $dim_cols, $remaining_cols, array(""));
 			
