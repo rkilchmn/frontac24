@@ -79,14 +79,14 @@ $type_shortcuts = array(
 //
 $bank_account_types = array (
 	BT_TRANSFER => _("Savings Account"),
-		_("Checking Account"),
+		_("Chequing Account"),
 		_("Credit Account"),
 		_("Cash Account")
 	);
 
 $bank_transfer_types = array(
 	BT_TRANSFER => _("Transfer"),
-			_("Check"),
+			_("Cheque"),
 			_("Credit"),
 			_("Cash")
 	);
