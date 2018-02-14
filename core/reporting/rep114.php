@@ -28,12 +28,12 @@ include_once($path_to_root . "/gl/includes/gl_db.inc");
 
 print_sales_summary_report();
 
-function getTaxTransactions($from, $to, $tax_id)
+function getTaxTransactions($from, $to, $tax_id, $daily)
 {
 	$fromdate = date2sql($from);
 	$todate = date2sql($to);
 
-	$sql = "SELECT d.debtor_no, d.name AS cust_name, d.tax_id, st.sales_type, dt.type, dt.trans_no,  
+	$sql = "SELECT d.debtor_no, d.name AS cust_name, d.tax_id, st.sales_type, dt.type, dt.trans_no,  dt.tran_date,
 			CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ov_amount+ov_freight+ov_discount)*-1 
 			ELSE (ov_amount+ov_freight+ov_discount) END *dt.rate AS total
 		FROM ".TB_PREF."debtor_trans dt
@@ -42,8 +42,21 @@ function getTaxTransactions($from, $to, $tax_id)
 		WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.") ";
 	if ($tax_id)
 		$sql .= "AND tax_id<>'' ";
-	$sql .= "AND dt.tran_date >=".db_escape($fromdate)." AND dt.tran_date<=".db_escape($todate)."
-		ORDER BY d.sales_type, d.debtor_no"; 
+	$sql .= "AND dt.tran_date >=".db_escape($fromdate)." AND dt.tran_date<=".db_escape($todate);
+
+        // Add in any journaled gl sales transactions
+        // from default sales account without customers
+
+        $sales_account = db_escape(get_company_pref('default_sales_act'));
+        $sql .= " UNION SELECT '-1' AS debtor_no, $sales_account AS cust_name, '' as tax_id, '{Default Sales Account Journaled Transactions}' AS sales_type, '0' AS type, '0' AS trans_no, tran_date, -amount AS total
+            FROM ".TB_PREF."gl_trans gl
+            WHERE account = $sales_account
+	    AND tran_date >=".db_escape($fromdate)." AND tran_date<=".db_escape($todate)
+            ." AND !(type =".ST_SALESINVOICE." OR type=".ST_CUSTCREDIT.") ";
+        $sql .= " ORDER BY sales_type, debtor_no"; 
+        if ($daily)
+		$sql .= ", tran_date";
+
     return db_query($sql,"No transactions were returned");
 }
 
@@ -68,9 +81,10 @@ function print_sales_summary_report()
 	$from = $_POST['PARAM_0'];
 	$to = $_POST['PARAM_1'];
 	$tax_id = $_POST['PARAM_2'];
-	$comments = $_POST['PARAM_3'];
-	$orientation = $_POST['PARAM_4'];
-	$destination = $_POST['PARAM_5'];
+	$daily = $_POST['PARAM_3'];
+	$comments = $_POST['PARAM_4'];
+	$orientation = $_POST['PARAM_5'];
+	$destination = $_POST['PARAM_6'];
 	if ($tax_id == 0)
 		$tid = _('No');
 	else
@@ -106,7 +120,7 @@ function print_sales_summary_report()
 	$totaltax = 0.0;
 	$st_totalnet = 0.0;
 	$st_totaltax = 0.0;
-	$transactions = getTaxTransactions($from, $to, $tax_id);
+	$transactions = getTaxTransactions($from, $to, $tax_id, $daily);
 
 	$rep->TextCol(0, 4, _('Balances in Home Currency'));
 	$rep->NewLine(2);
@@ -115,8 +129,26 @@ function print_sales_summary_report()
 	$tax = $total = 0;
 	$custname = $tax_id = "";
         $sales_type = "";
+        $tran_date = "";
+        $prior_total = 0;
+        $prior_tax = 0;
 	while ($trans=db_fetch($transactions))
 	{
+                if ($daily
+                    && $tran_date != $trans['tran_date'])
+                {
+                    if ($tran_date != "") {
+                        if ($prior_total != $total) {
+				$rep->TextCol(1, 2,	$tran_date);
+				$rep->AmountCol(2, 3, $total-$prior_total, $dec);
+				$rep->AmountCol(3, 4, $tax-$prior_tax, $dec);
+				$rep->NewLine();
+                                $prior_total = $total;
+                                $prior_tax = $tax;
+                        }
+                    }
+                    $tran_date = $trans['tran_date'];
+                }
 		if ($custno != $trans['debtor_no'])
 		{
 
@@ -130,7 +162,7 @@ function print_sales_summary_report()
 				$totaltax += $tax;
                                 $st_totalnet += $total;
                                 $st_totaltax += $tax;
-				$total = $tax = 0;
+				$prior_total = $prior_tax = $total = $tax = 0;
 				$rep->NewLine();
 
 				if ($rep->row < $rep->bottomMargin + $rep->lineHeight)

@@ -310,6 +310,7 @@ function update_reconciled_values($reconcile_id, $reconcile_value, $reconcile_da
 function get_default_bank_account($curr=null)
 {
 	/* default bank account is selected as first found account from:
+                . last bank trans if bank account uses $curr
 		. default account in $curr if any
 		. first defined account in $curr if any
 		. default account in home currency
@@ -319,8 +320,16 @@ function get_default_bank_account($curr=null)
 	if (!isset($curr))
 		$curr = $home_curr;
 
+        $last_bank_id = last_bank_trans("bank_act");
+
 	$sql = "SELECT b.*, b.bank_curr_code='$home_curr' as fall_back FROM "
-		.TB_PREF."bank_accounts b"
+		.TB_PREF."bank_accounts b WHERE b.id = "
+                . db_escape($last_bank_id)
+                    ." AND (b.bank_curr_code=".db_escape($curr)
+                        ." OR b.bank_curr_code='$home_curr')
+                UNION ALL
+                SELECT b.*, b.bank_curr_code='$home_curr' as fall_back FROM "
+		.TB_PREF."bank_accounts b" 
 		." WHERE b.bank_curr_code=".db_escape($curr)
 		." OR b.bank_curr_code='$home_curr'
 		ORDER BY fall_back, dflt_curr_act desc";

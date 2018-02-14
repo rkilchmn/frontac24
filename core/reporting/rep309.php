@@ -38,9 +38,12 @@ function getTransactions($category, $from, $to)
 			item.stock_id,
 			item.description,
 			line.unit_price * trans.rate AS unit_price,
+                        st.sales_type,
 			SUM(IF(line.debtor_trans_type = ".ST_CUSTCREDIT.", -line.quantity, line.quantity)) AS quantity
 		FROM ".TB_PREF."stock_master item,
 			".TB_PREF."stock_category category,
+			".TB_PREF."debtors_master d,
+                        ".TB_PREF."sales_types st,
 			".TB_PREF."debtor_trans trans,
 			".TB_PREF."debtor_trans_details line
 		WHERE line.stock_id = item.stock_id
@@ -51,6 +54,8 @@ function getTransactions($category, $from, $to)
 		AND trans.tran_date<='$to'
 		AND line.quantity<>0
 		AND item.mb_flag <>'F'
+                AND d.debtor_no=trans.debtor_no
+                AND d.sales_type=st.id
 		AND (line.debtor_trans_type = ".ST_SALESINVOICE." OR line.debtor_trans_type = ".ST_CUSTCREDIT.")";
 		if ($category != 0)
 			$sql .= " AND item.category_id = ".db_escape($category);
@@ -59,7 +64,7 @@ function getTransactions($category, $from, $to)
 			item.stock_id,
 			item.description,
 			line.unit_price
-		ORDER BY item.category_id, item.stock_id, line.unit_price";
+		ORDER BY d.sales_type, item.category_id, item.stock_id, line.unit_price";
 			
 	//display_notification($sql);
 	
@@ -115,9 +120,36 @@ function print_inventory_sales()
 	$res = getTransactions($category, $from, $to);
 	$total = $grandtotal = 0.0;
 	$catt = '';
+	$sales_type = '';
 	while ($trans=db_fetch($res))
 	{
-		if ($catt != $trans['cat_description'])
+		if ($sales_type != $trans['sales_type'])
+		{
+			if ($sales_type != '')
+			{
+				$rep->NewLine(2, 3);
+                                $rep->Font('bold');
+                                $rep->Line($rep->row + $rep->lineHeight);
+
+				$rep->TextCol(0, 4, _('Total'));
+				$rep->AmountCol(4, 5, $total, $dec);
+				$rep->Line($rep->row - 2);
+				$total = 0.0;
+				$rep->NewPage();
+                                $rep->Font();
+			}
+
+//			$rep->TextCol(0, 1, $trans['sales_type']);
+			$rep->TextCol(1, 7, $trans['sales_type']);
+                        $rep->NewLine();
+                        $rep->NewLine();
+			$rep->TextCol(0, 1, $trans['category_id']);
+			$rep->TextCol(1, 7, $trans['cat_description']);
+			$sales_type = $trans['sales_type'];
+			$catt = $trans['cat_description'];
+                        $rep->NewLine();
+		}
+                else if ($catt != $trans['cat_description'])
 		{
 			if ($catt != '')
 			{

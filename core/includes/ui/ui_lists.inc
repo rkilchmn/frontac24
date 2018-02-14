@@ -1753,6 +1753,7 @@ function class_list_row($label, $name, $selected_id=null, $submit_on_change=fals
 //-----------------------------------------------------------------------------------------------
 function stock_categories_list($name, $selected_id=null, $spec_opt=false, $submit_on_change=false, $fixed_asset=false)
 {
+        global $SysPrefs ;
 	$where_opts = array();
 	if ($fixed_asset)
 		$where_opts[0] = "dflt_mb_flag='F'";
@@ -1760,11 +1761,10 @@ function stock_categories_list($name, $selected_id=null, $spec_opt=false, $submi
 		$where_opts[0] = "dflt_mb_flag!='F'";
 
 	$sql = "SELECT category_id, description, inactive FROM ".TB_PREF."stock_category";
-	global $sort_item_list_desc;
 
 	$sort_opts = array('category_id');
-	if ($sort_item_list_desc == true)
-		array('description', 'category_id');
+	if (@$SysPrefs->sort_item_list_desc)
+		$sort_opts = array('description', 'category_id');
 
 	return combo_input($name, $selected_id, $sql, 'category_id', 'description',
  		array('order' => $sort_opts,

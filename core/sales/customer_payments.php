@@ -43,6 +43,11 @@ if (isset($_GET['customer_id']))
 	$_POST['customer_id'] = $_GET['customer_id'];
 }
 
+if (isset($_GET['DateBanked']))
+{
+	$_POST['DateBanked'] = $_GET['DateBanked'];
+}
+
 if (!isset($_POST['bank_account'])) { // first page call
 	$_SESSION['alloc'] = new allocation(ST_CUSTPAYMENT, 0, get_post('customer_id'));
 
@@ -105,7 +110,7 @@ if (isset($_GET['AddedID'])) {
 
 	submenu_view(_("&View this Customer Payment"), ST_CUSTPAYMENT, $payment_no);
 
-	submenu_option(_("Enter Another &Customer Payment"), "/sales/customer_payments.php");
+	submenu_option(_("Enter Another &Customer Payment"), "/sales/customer_payments.php?DateBanked=" . $_GET['DateBanked']);
 	submenu_option(_("Enter Other &Deposit"), "/gl/gl_bank.php?NewDeposit=Yes");
 	submenu_option(_("Enter Payment to &Supplier"), "/purchasing/supplier_payment.php");
 	submenu_option(_("Enter Other &Payment"), "/gl/gl_bank.php?NewPayment=Yes");
@@ -246,7 +251,7 @@ if (get_post('AddPaymentItem') && can_process()) {
 	$_SESSION['alloc']->write();
 
 	unset($_SESSION['alloc']);
-	meta_forward($_SERVER['PHP_SELF'], $new_pmt ? "AddedID=$payment_no" : "UpdatedID=$payment_no");
+	meta_forward($_SERVER['PHP_SELF'], $new_pmt ? "AddedID=$payment_no&DateBanked=" . $_POST['DateBanked'] : "UpdatedID=$payment_no");
 }
 
 //----------------------------------------------------------------------------------------------
