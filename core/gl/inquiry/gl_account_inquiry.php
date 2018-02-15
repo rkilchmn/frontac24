@@ -96,6 +96,11 @@ function edit_link($row)
         return $ok ? trans_editor_link( $row["type"], $row["type_no"]) : '';
 }
 
+function delete_link($row)
+{
+        return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['type_no'] . "&filterType=". $row['type'], ICON_DELETE);
+}
+
 //----------------------------------------------------------------------------------------------------
 
 function show_results()
@@ -148,7 +153,7 @@ function show_results()
 	else
 	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Memo"), "");
 	    
-	$th = array_merge($first_cols, $account_col, $dim_cols, $remaining_cols, array(""));
+	$th = array_merge($first_cols, $account_col, $dim_cols, $remaining_cols, array(""), array(""));
 			
 	table_header($th);
 	if ($_POST["account"] != null && is_account_balancesheet($_POST["account"]))
@@ -204,6 +209,7 @@ function show_results()
 			$myrow['memo_'] = get_comments_string($myrow['type'], $myrow['type_no']);
     	label_cell($myrow['memo_']);
         echo "<td>" . edit_link($myrow) . "</td>";
+        echo "<td>" . delete_link($myrow) . "</td>";
     	end_row();
 
     	$j++;

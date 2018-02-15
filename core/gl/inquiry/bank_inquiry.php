@@ -69,7 +69,7 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 start_table(TABLESTYLE);
 
 $th = array(_("Type"), _("#"), _("Reference"), _("Date"),
-	_("Debit"), _("Credit"), _("Balance"), _("Person/Item"), _("Memo"), "", "");
+	_("Debit"), _("Credit"), _("Balance"), _("Person/Item"), _("Memo"), "", "", "");
 table_header($th);
 
 $bfw = get_balance_before_for_bank_account($_POST['bank_account'], $_POST['TransAfterDate']);
@@ -110,6 +110,7 @@ while ($myrow = db_fetch($result))
 	label_cell(get_gl_view_str($myrow["type"], $myrow["trans_no"]));
 
 	label_cell(trans_editor_link($myrow["type"], $myrow["trans_no"]));
+        label_cell(pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $myrow['trans_no'] . "&filterType=". $myrow['type'], ICON_DELETE));
 
 	end_row();
  	if ($myrow["amount"] > 0 ) 

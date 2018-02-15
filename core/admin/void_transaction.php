@@ -26,6 +26,13 @@ if (user_use_date_picker())
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 	
+if (isset($_GET['trans_no'])
+    && isset($_GET['filterType'])) {
+    $_POST['FromTransNo'] = $_POST['ToTransNo'] = $_POST['selected_id'] = $_POST['trans_no'] = $_GET['trans_no'];
+    $_POST['filterType'] = $_GET['filterType'];
+    $_POST['ProcessVoiding'] = true;
+}
+
 page(_($help_context = "Void a Transaction"), false, false, "", $js);
 
 simple_page_mode(true);

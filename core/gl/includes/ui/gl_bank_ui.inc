@@ -246,7 +246,6 @@ function gl_edit_item_controls(&$order, $dim, $Index=null)
 			{
 				$acc = get_branch_accounts($_POST['PersonDetailID']);
 				$_POST['code_id'] = $acc['receivables_account'];
-                        $dim1 = $dim2 = null;
 			}
 			elseif ($_POST['PayType'] == PT_SUPPLIER)
 			{
@@ -258,7 +257,6 @@ function gl_edit_item_controls(&$order, $dim, $Index=null)
 			else {
 				$_POST['code_id'] =
 					get_company_pref($payment ? 'default_cogs_act':'default_inv_sales_act');
-                        $dim1 = $dim2 = null;
 			}
 		$Ajax->activate('dimension_id');
 		$Ajax->activate('dimension2_id');

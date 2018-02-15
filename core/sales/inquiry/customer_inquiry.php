@@ -87,6 +87,16 @@ function edit_link($row)
 			trans_editor_link($row['type'], $row['trans_no']);
 }
 
+function delete_link($row)
+{
+	global $page_nested;
+
+	$str = '';
+	if ($page_nested)
+		return '';
+        return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_DELETE);
+}
+
 function prt_link($row)
 {
   	if ($row['type'] == ST_CUSTPAYMENT || $row['type'] == ST_BANKDEPOSIT) 
@@ -202,9 +212,10 @@ $cols = array(
 	_("Amount") => array('align'=>'right', 'fun'=>'fmt_amount'), 
 	_("Balance") => array('align'=>'right', 'type'=>'amount'),
 		array('insert'=>true, 'fun'=>'gl_view'),
+		array('insert'=>true, 'fun'=>'prt_link'),
 		array('insert'=>true, 'fun'=>'credit_link'),
 		array('insert'=>true, 'fun'=>'edit_link'),
-		array('insert'=>true, 'fun'=>'prt_link')
+		array('insert'=>true, 'fun'=>'delete_link')
 	);
 
 
