@@ -173,6 +173,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
                 $sql .= " AND gl.memo_ LIKE ". db_escape("%$memo%");
         }
 
+	$sql .= " GROUP BY counter";
 	$sql .= " ORDER BY tran_date, counter";
 
 	return db_query($sql, "The transactions for could not be retrieved");
