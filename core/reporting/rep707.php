@@ -27,7 +27,7 @@ include_once($path_to_root . "/admin/db/tags_db.inc");
 //----------------------------------------------------------------------------------------------------
 
 function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $convert, &$dec, &$pdec, &$rep, $dimension, $dimension2, 
-	$tags, &$pg, $graphics, $cashbasis)
+	$tags, &$pg, $graphics)
 {
 	$code_per_balance = 0;
 	$code_acc_balance = 0;
@@ -36,9 +36,6 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 	$totals_arr = array();
 
 	$printtitle = 0; //Flag for printing type name	
-
-        $debtors_act = get_company_pref('debtors_act');
-        $default_sales_act = get_company_pref('default_sales_act');
 	
 	//Get Accounts directly under this group/type
 	$result = get_gl_accounts(null, null, $type);	
@@ -50,11 +47,6 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 				continue;
 		}	
 		$per_balance = get_gl_trans_from_to($from, $to, $account["account_code"], $dimension, $dimension2);
-                if ($cashbasis == 1
-                    && $account["account_code"] == $default_sales_act) {
-                    $row = get_balance($debtors_act, $dimension, $dimension2, $from, $to, false, true);
-                    $per_balance += $row['balance'];
-                }
 
 		if ($compare == 2)
 			$acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
@@ -109,7 +101,7 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		}
 
 		$totals_arr = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, $dec, 
-			$pdec, $rep, $dimension, $dimension2, $tags, $pg, $graphics, $cashbasis);
+			$pdec, $rep, $dimension, $dimension2, $tags, $pg, $graphics);
 		$per_balance_total += $totals_arr[0];
 		$acc_balance_total += $totals_arr[1];
 	}
@@ -172,32 +164,29 @@ function print_profit_and_loss_statement()
 		$dimension2 = $_POST['PARAM_4'];
 		$tags = (isset($_POST['PARAM_5']) ? $_POST['PARAM_5'] : -1);
 		$decimals = $_POST['PARAM_6'];
-		$cashbasis = $_POST['PARAM_7'];
-		$graphics = $_POST['PARAM_8'];
-		$comments = $_POST['PARAM_9'];
-		$orientation = $_POST['PARAM_10'];
-		$destination = $_POST['PARAM_11'];
+		$graphics = $_POST['PARAM_7'];
+		$comments = $_POST['PARAM_8'];
+		$orientation = $_POST['PARAM_9'];
+		$destination = $_POST['PARAM_10'];
 	}
 	elseif ($dim == 1)
 	{
 		$dimension = $_POST['PARAM_3'];
 		$tags = (isset($_POST['PARAM_4']) ? $_POST['PARAM_4'] : -1);
 		$decimals = $_POST['PARAM_5'];
-		$cashbasis = $_POST['PARAM_6'];
-		$graphics = $_POST['PARAM_7'];
-		$comments = $_POST['PARAM_8'];
-		$orientation = $_POST['PARAM_9'];
-		$destination = $_POST['PARAM_10'];
+		$graphics = $_POST['PARAM_6'];
+		$comments = $_POST['PARAM_7'];
+		$orientation = $_POST['PARAM_8'];
+		$destination = $_POST['PARAM_9'];
 	}
 	else
 	{
 		$tags = (isset($_POST['PARAM_3']) ? $_POST['PARAM_3'] : -1);
 		$decimals = $_POST['PARAM_4'];
-		$cashbasis = $_POST['PARAM_5'];
-		$graphics = $_POST['PARAM_6'];
-		$comments = $_POST['PARAM_7'];
-		$orientation = $_POST['PARAM_8'];
-		$destination = $_POST['PARAM_9'];
+		$graphics = $_POST['PARAM_5'];
+		$comments = $_POST['PARAM_6'];
+		$orientation = $_POST['PARAM_7'];
+		$destination = $_POST['PARAM_8'];
 	}
 	if ($destination)
 		include_once($path_to_root . "/reporting/includes/excel_report.inc");
@@ -246,12 +235,6 @@ function print_profit_and_loss_statement()
     				    1 => array('text' => _('Period'),'from' => $from, 'to' => $to),
     				    2 => array('text' => _('Tags'), 'from' => get_tag_names($tags), 'to' => ''));
     }
-    if ($cashbasis == 1)
-        $params = array_merge($params, array ( 5 => array('text' => _('Accounting Basis'),
-            'from' => _('Cash'), 'to' => '')));
-    else
-        $params = array_merge($params, array ( 5 => array('text' => _('Accounting Basis'),
-            'from' => _('Accrual'), 'to' => '')));
 
 
 	if ($compare == 0 || $compare == 2)
@@ -303,7 +286,7 @@ function print_profit_and_loss_statement()
 		while ($accounttype=db_fetch($typeresult))
 		{
 			$classtotal = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, $dec, 
-				$pdec, $rep, $dimension, $dimension2, $tags, $pg, $graphics, $cashbasis);
+				$pdec, $rep, $dimension, $dimension2, $tags, $pg, $graphics);
 			$class_per_total += $classtotal[0];
 			$class_acc_total += $classtotal[1];			
 		}
