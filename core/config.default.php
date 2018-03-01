@@ -201,7 +201,7 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 /*
         Sort and item list by description rather than by item number
 */
-	$sort_item_list_desc = true;
+	$sort_item_list_desc = false;
 
 
 /*
@@ -210,3 +210,13 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 */
 	$use_popup_search = true;
 	$max_rows_in_search = 10;
+
+/*
+        Allow negative quantity in sales orders
+*/
+        $allow_negative_quantity = false;
+
+/*
+        Allow negative invoice amount in sales orders
+*/
+        $allow_negative_invoice = false;
