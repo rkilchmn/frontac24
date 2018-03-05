@@ -310,8 +310,8 @@ function update_reconciled_values($reconcile_id, $reconcile_value, $reconcile_da
 function get_default_bank_account($curr=null)
 {
 	/* default bank account is selected as first found account from:
-                . last bank trans if bank account uses $curr
 		. default account in $curr if any
+                . last bank trans if bank account uses $curr
 		. first defined account in $curr if any
 		. default account in home currency
 		. first defined account in home currency

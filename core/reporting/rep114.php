@@ -48,14 +48,16 @@ function getTaxTransactions($from, $to, $tax_id, $daily)
         // from default sales account without customers
 
         $sales_account = db_escape(get_company_pref('default_sales_act'));
-        $sql .= " UNION SELECT '-1' AS debtor_no, $sales_account AS cust_name, '' as tax_id, '{Default Sales Account Journaled Transactions}' AS sales_type, '0' AS type, '0' AS trans_no, tran_date, -amount AS total
+        $sql .= " UNION ALL SELECT '-1' AS debtor_no, CONCAT($sales_account, ' ', account_name) AS cust_name, '' as tax_id, '{Default Sales Account Journaled Transactions}' AS sales_type, '0' AS type, '0' AS trans_no, tran_date, -amount AS total
             FROM ".TB_PREF."gl_trans gl
+            LEFT JOIN ".TB_PREF."chart_master cm on account_code=$sales_account
             WHERE account = $sales_account
 	    AND tran_date >=".db_escape($fromdate)." AND tran_date<=".db_escape($todate)
             ." AND !(type =".ST_SALESINVOICE." OR type=".ST_CUSTCREDIT.") ";
         $sql .= " ORDER BY sales_type, debtor_no"; 
         if ($daily)
 		$sql .= ", tran_date";
+display_notification($sql);
 
     return db_query($sql,"No transactions were returned");
 }
