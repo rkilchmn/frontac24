@@ -171,9 +171,9 @@ function show_results()
 	    $bfw = get_gl_balance_from_to($begin, $_POST['TransFromDate'], $_POST["account"], $_POST['Dimension'], $_POST['Dimension2']);
     	start_row("class='inquirybg'");
     	label_cell("<b>"._("Opening Balance")." - ".$_POST['TransFromDate']."</b>", "colspan=$colspan");
-    	display_debit_or_credit_cells($bfw, true);
     	label_cell("");
     	label_cell("");
+    	amount_cell($bfw, true);
     	end_row();
 	}
 	
@@ -224,9 +224,8 @@ function show_results()
 	if ($show_balances) {
     	start_row("class='inquirybg'");
     	label_cell("<b>" . _("Ending Balance") ." - ".$_POST['TransToDate']. "</b>", "colspan=$colspan");
-    	display_debit_or_credit_cells($running_total, true);
-    	label_cell("");
-    	label_cell("");
+        display_debit_or_credit_cells($running_total-$bfw, true);
+    	amount_cell($running_total, true);
     	end_row();
 	}
 
