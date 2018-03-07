@@ -159,8 +159,15 @@ if (!isset($_POST['customer_id']))
 start_table(TABLESTYLE_NOBORDER);
 start_row();
 
-if (!$page_nested)
+if (!$page_nested) {
 	customer_list_cells(_("Select a customer: "), 'customer_id', null, true, true, false, true);
+        if (get_post('customer_id') != null) {
+            $cust = get_customer(get_post('customer_id'));
+            $sel_sales_type = $cust['sales_type'];
+        } else
+            $sel_sales_type = null;
+        sales_types_list_cells(null, 'sales_type', $sel_sales_type, false, true);
+}
 
 cust_allocations_list_cells(null, 'filterType', null, true, true);
 
@@ -193,7 +200,7 @@ if (get_post('RefreshInquiry') || list_updated('filterType'))
 }
 //------------------------------------------------------------------------------------------------
 $sql = get_sql_for_customer_inquiry(get_post('TransAfterDate'), get_post('TransToDate'),
-	get_post('customer_id'), get_post('filterType'));
+	get_post('customer_id'), get_post('sales_type'), get_post('filterType'));
 
 //------------------------------------------------------------------------------------------------
 //db_query("set @bal:=0");
