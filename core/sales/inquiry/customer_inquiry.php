@@ -23,7 +23,7 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history("customer_id", "TransAfterDate", "TransToDate", "filterType");
+$js .= get_js_history(array("customer_id", "sales_type", "TransAfterDate", "TransToDate", "filterType"));
 
 page(_($help_context = "Customer Transactions"), isset($_GET['customer_id']) && !isset($_GET['TransAfterDate']), false, "", $js);
 
@@ -147,7 +147,7 @@ function display_customer_summary($customer_record)
 	end_table();
 }
 
-set_posts("customer_id", "TransAfterDate", "TransToDate", "filterType");
+set_posts(array("customer_id", "sales_type", "TransAfterDate", "TransToDate", "filterType"));
 
 //------------------------------------------------------------------------------------------------
 
