@@ -338,7 +338,7 @@ if ($dim > 0)
 			_('Destination') => 'DESTINATION'));
 }
 $reports->addReportClass(_('Banking'), RC_BANKING);
-	$reports->addReport(RC_BANKING,  601, _('Bank &Statement'),
+	$reports->addReport(RC_BANKING,  601, _('Bank &Register'),
 	array(	_('Bank Accounts') => 'BANK_ACCOUNTS',
 			_('Start Date') => 'DATEBEGINM',
 			_('End Date') => 'DATEENDM',
@@ -346,7 +346,7 @@ $reports->addReportClass(_('Banking'), RC_BANKING);
 			_('Comments') => 'TEXTBOX',
 			_('Orientation') => 'ORIENTATION',
 			_('Destination') => 'DESTINATION'));
-	$reports->addReport(RC_BANKING,  602, _('Bank Statement w/ &Reconcile'),
+	$reports->addReport(RC_BANKING,  602, _('Bank Register w/ &Reconcile'),
 	array(	_('Bank Accounts') => 'BANK_ACCOUNTS',
 			_('Start Date') => 'DATEBEGINM',
 			_('End Date') => 'DATEENDM',

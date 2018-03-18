@@ -57,7 +57,6 @@ function getTaxTransactions($from, $to, $tax_id, $daily)
         $sql .= " ORDER BY sales_type, debtor_no"; 
         if ($daily)
 		$sql .= ", tran_date";
-display_notification($sql);
 
     return db_query($sql,"No transactions were returned");
 }

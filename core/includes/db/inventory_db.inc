@@ -79,7 +79,8 @@ function check_negative_stock($stock_id, $delta_qty, $location=null, $date=null)
 	if ($min_qos && ($min_qos['qty'] < $qos['qty']))
 		$qos = $min_qos;
 
-	return  -$delta_qty > $qos['qty'] ? $qos : null;
+        $row = get_item_edit_info($stock_id);
+	return  round($delta_qty + $qos['qty'], $row['decimals']) < 0 ? $qos : null;
 }
 
 //--------------------------------------------------------------------------------------

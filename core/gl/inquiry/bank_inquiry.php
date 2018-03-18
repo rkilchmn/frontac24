@@ -27,7 +27,7 @@ if ($SysPrefs->use_popup_windows)
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
 $js .= get_js_history(array('bank_account', 'TransAfterDate', 'TransToDate'));
-page(_($help_context = "Bank Statement"), isset($_GET['bank_account']) && !isset($_GET['TransAfterDate']), false, "", $js);
+page(_($help_context = "Bank Account Inquiry"), isset($_GET['bank_account']) && !isset($_GET['TransAfterDate']), false, "", $js);
 
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
 
