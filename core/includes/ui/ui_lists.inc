@@ -1893,7 +1893,8 @@ function gl_all_accounts_list($name, $selected_id=null, $skip_bank_accounts=fals
 
 function _format_account($row)
 {
-	return $row[0] .  "&nbsp;&nbsp;&nbsp;&nbsp;" . $row[1];
+	// return $row[0] .  "&nbsp;&nbsp;&nbsp;&nbsp;" . $row[1];
+	return $row[1] .  " (" . $row[0] . ")";
 }
 
 function gl_all_accounts_list_cells($label, $name, $selected_id=null, 
