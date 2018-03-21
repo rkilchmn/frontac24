@@ -267,6 +267,7 @@ function display_po_header(&$order)
 
 function display_po_items(&$order, $editable=true)
 {
+    global $Ajax;
     display_heading(_("Order Items"));
 
     div_start('items_table');
@@ -338,11 +339,10 @@ function display_po_items(&$order, $editable=true)
 
 	$display_total = price_format(($total + input_num('freight_cost') + $tax_total));
 
+    $Ajax->activate('amount_total');
 	start_row();
-	label_cells(_("Amount Total"), $display_total, "colspan=$colspan align='right'","align='right'");
-	$order->trans_type == ST_SUPPINVOICE
-	 ? submit_cells('update', _("Update"), "colspan=2 align='center'", _("Refresh"), true)
-		: label_cell('', "colspan=2");
+	label_cells(_("Amount Total"), $display_total, "colspan=$colspan align='right'","align='right'", 'amount_total');
+	label_cell('', "colspan=2");
 	end_row();
 
 	end_table(1);
@@ -452,29 +452,32 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
 		else
 			stock_items_list_cells(null, 'stock_id', null, false, true, false, true, array('editable' => 30, 'where'=>array("NOT no_purchase")));
 
-		if (list_updated('stock_id')) {
-			    $Ajax->activate('price');
-			    $Ajax->activate('units');
-			    $Ajax->activate('qty');
-			    $Ajax->activate('req_del_date');
-			    $Ajax->activate('line_total');
-		}
-    	$item_info = get_item_edit_info($_POST['stock_id']);
-		$_POST['units'] = $item_info["units"];
+        $Ajax->activate('price');
+        $Ajax->activate('units');
+        $Ajax->activate('qty');
+        $Ajax->activate('req_del_date');
+        $Ajax->activate('line_total');
 
+        $item_info = get_item_edit_info($_POST['stock_id']);
+		$_POST['units'] = $item_info["units"];
    		$dec = $item_info["decimals"];
-   		$_POST['qty'] =	number_format2(get_purchase_conversion_factor ($order->supplier_id, $_POST['stock_id']), $dec);
-		$_POST['price'] = price_decimal_format(get_purchase_price ($order->supplier_id, $_POST['stock_id']), $dec2);
-		if ($order->trans_type == ST_PURCHORDER)
-			$_POST['req_del_date'] = add_days(Today(), $SysPrefs->default_receival_required_by());
-		$qty_rcvd = '';
+        $qty_rcvd = '';
+
+		if (list_updated('stock_id')) {
+            $_POST['qty'] =	number_format2(get_purchase_conversion_factor ($order->supplier_id, $_POST['stock_id']), $dec);
+            $_POST['price'] = price_decimal_format(get_purchase_price ($order->supplier_id, $_POST['stock_id']), $dec2);
+            if ($order->trans_type == ST_PURCHORDER)
+                    $_POST['req_del_date'] = add_days(Today(), $SysPrefs->default_receival_required_by());
+		}
+
 	}
 
+	$line_total = round(input_num('qty') * input_num('price'),  user_price_dec());
 	if ($order->fixed_asset) {
 		label_cell(1, '', 'qty');
 		hidden('qty', 1);
 	} else
-		qty_cells(null, 'qty', null, null, null, $dec);
+		qty_cells(null, 'qty', null, null, null, $dec, true);
 
 	qty_cell($qty_rcvd, false, $dec);
 
@@ -487,9 +490,8 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
    		hidden('price', $_POST['price']);
    	}	
    	else	
-		amount_cells(null, 'price', null, null, null, $dec2);
+		amount_cells(null, 'price', null, null, null, $dec2, true);
 
-	$line_total = round(input_num('qty') * input_num('price'),  user_price_dec());
 	amount_cell($line_total, false, '','line_total');
 
 	if ($id!=-1)

@@ -476,6 +476,7 @@ function display_supp_trans_tax_details($tax_items, $columns)
 
 function display_edit_tax_items($taxes, $columns, $tax_included, $rightspan=0, $editable=false)
 {
+    global $Ajax;
 	$total = 0;
 
     foreach ($taxes as $taxitem)
@@ -483,19 +484,23 @@ function display_edit_tax_items($taxes, $columns, $tax_included, $rightspan=0, $
 		$amount = isset($taxitem['Override']) ? $taxitem['Override'] : $taxitem['Value'];
 		if ($taxitem['Value'] != 0){
 			if ($editable) {
-				if (!isset($_POST['mantax['.$taxitem['tax_type_id'].']']))
-					$_POST['mantax['.$taxitem['tax_type_id'].']'] = price_format($amount);
+				if (isset($_POST['mantax_'.$taxitem['tax_type_id']])) {
+                    $Ajax->activate('mantax_'.$taxitem['tax_type_id']);
+                    if (!empty($_POST['mantax_'.$taxitem['tax_type_id']]))
+                        $amount = $_POST['mantax_'.$taxitem['tax_type_id']];
+                }
+                $_POST['mantax_'.$taxitem['tax_type_id']] = price_format($amount);
 				start_row();
 				if ($tax_included) {
 					$colspan = $columns-1;
 					label_cell(_("Included") . " " . $taxitem['tax_type_name'].":",
 						"colspan={$colspan} align='right'");
-					amount_cells(null, 'mantax['.$taxitem['tax_type_id'].']',
-						null, "colspan=$columns align=right", '<td></td>', user_price_dec());
+					amount_cells(null, 'mantax_'.$taxitem['tax_type_id'],
+						null, "colspan=$columns align=right", '<td></td>', user_price_dec(), true);
 				} else {
 					label_cell($taxitem['tax_type_name'], "colspan=$columns align='right'");
-					amount_cells(null, 'mantax['.$taxitem['tax_type_id'].']',
-						null, "colspan=$columns align=right", null, user_price_dec());
+					amount_cells(null, 'mantax_'.$taxitem['tax_type_id'],
+						null, "colspan=$columns align=right", null, user_price_dec(), true);
 					$total +=  round2($amount, user_price_dec());
 				}
 				if ($rightspan)
