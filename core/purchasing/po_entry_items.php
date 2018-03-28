@@ -248,6 +248,7 @@ function check_data()
         && !($_POST['reprice'] != 0 && $_SESSION['PO']->is_service_item($_POST['stock_id'])))
     {
 	   	display_error(_("The price entered must be numeric and not less than zero."));
+	   	display_error(_("HINT: If you change the 'Service Costs In Item Prices?' option from 'No', a negative price will discount the other items on the order"));
 		set_focus('price');
 	   	return false;	   
     }

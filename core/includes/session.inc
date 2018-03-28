@@ -429,7 +429,7 @@ if ($SysPrefs->error_logfile != '') {
 */
 // ini_set('session.save_path', VARLIB_PATH.'/');
 
-ini_set('session.gc_maxlifetime', 36000); // 10hrs
+ini_set('session.gc_maxlifetime', 360000); // 100hrs
 
 hook_session_start(@$_POST["company_login_name"]);
 

@@ -96,6 +96,16 @@ function fmt_memo($row)
 	return $value;
 }
 
+function edit_link($row)
+{
+    return trans_editor_link($row['type'], $row['trans_no']);
+}
+
+function delete_link($row)
+{
+    return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_DELETE);
+}
+
 function update_data()
 {
 	global $Ajax;
@@ -272,8 +282,10 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 		_("Credit") => array('align'=>'right','insert'=>true, 'fun'=>'fmt_credit'), 
 	    _("Person/Item") => array('fun'=>'fmt_person'), 
 		_("Memo") => array('fun'=>'fmt_memo'),
+		"X"=>array('insert'=>true, 'fun'=>'rec_checkbox'),
 		array('insert'=>true, 'fun'=>'gl_view'),
-		"X"=>array('insert'=>true, 'fun'=>'rec_checkbox')
+        array('insert'=>true, 'fun'=>'edit_link'),
+        array('insert'=>true, 'fun'=>'delete_link')
 	   );
 	$table =& new_db_pager('trans_tbl', $sql, $cols);
 
