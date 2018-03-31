@@ -342,7 +342,10 @@ function display_po_items(&$order, $editable=true)
     $Ajax->activate('amount_total');
 	start_row();
 	label_cells(_("Amount Total"), $display_total, "colspan=$colspan align='right'","align='right'", 'amount_total');
-	label_cell('', "colspan=2");
+    $order->trans_type == ST_SUPPINVOICE
+        ? submit_cells('update', _("Update"), "colspan=2 align='center'", _("Refresh"), true)
+               : label_cell('', "colspan=2");
+
 	end_row();
 
 	end_table(1);
