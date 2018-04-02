@@ -57,8 +57,14 @@ function gl_inquiry_controls()
     start_table(TABLESTYLE_NOBORDER);
 	start_row();
     gl_all_accounts_list_cells(_("Account:"), 'account', null, false, false, _("All Accounts"));
-	date_cells(_("from:"), 'TransFromDate', '', null, -user_transaction_days());
-	date_cells(_("to:"), 'TransToDate');
+    $days = user_transaction_days();
+    if ($days >= 0) {
+        date_cells(_("from:"), 'TransFromDate', '', null, -$days);
+        date_cells(_("to:"), 'TransToDate');
+    } else {
+        date_cells(_("from:"), 'TransFromDate');
+        date_cells(_("to:"), 'TransToDate', '', null, -$days);
+    }
     end_row();
 	end_table();
 

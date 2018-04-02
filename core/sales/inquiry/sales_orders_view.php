@@ -218,8 +218,14 @@ ref_cells(_("#:"), 'OrderNumber', '',null, '', true);
 ref_cells(_("Ref"), 'OrderReference', '',null, '', true);
 if ($show_dates)
 {
-  	date_cells(_("from:"), 'OrdersAfterDate', '', null, -user_transaction_days());
-  	date_cells(_("to:"), 'OrdersToDate', '', null, 1);
+    $days = user_transaction_days();
+    if ($days >= 0) {
+        date_cells(_("from:"), 'OrdersAfterDate', '', null, -$days);
+        date_cells(_("to:"), 'OrdersToDate');
+    } else {
+        date_cells(_("from:"), 'OrdersAfterDate');
+        date_cells(_("to:"), 'OrdersToDate', '', null, -$days);
+    }
 }
 locations_list_cells(_("Location:"), 'StockLocation', null, true, true);
 

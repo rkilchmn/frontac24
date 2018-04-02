@@ -79,8 +79,14 @@ start_table(TABLESTYLE_NOBORDER);
 start_row();
 ref_cells(_("#:"), 'order_number', '',null, '', true);
 
-date_cells(_("from:"), 'OrdersAfterDate', '', null, -user_transaction_days());
-date_cells(_("to:"), 'OrdersToDate');
+$days = user_transaction_days();
+if ($days >= 0) {
+    date_cells(_("from:"), 'OrdersAfterDate', '', null, -$days);
+    date_cells(_("to:"), 'OrdersToDate');
+} else {
+    date_cells(_("from:"), 'OrdersAfterDate');
+    date_cells(_("to:"), 'OrdersToDate', '', null, -$days);
+}
 
 locations_list_cells(_("into location:"), 'StockLocation', null, true);
 end_row();

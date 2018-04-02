@@ -173,8 +173,14 @@ cust_allocations_list_cells(null, 'filterType', null, true, true);
 
 if ($_POST['filterType'] != '2')
 {
-	date_cells(_("From:"), 'TransAfterDate', '', null, -user_transaction_days());
-	date_cells(_("To:"), 'TransToDate', '', null);
+    $days = user_transaction_days();
+    if ($days >= 0) {
+        date_cells(_("From:"), 'TransAfterDate', '', null, -$days);
+        date_cells(_("To:"), 'TransToDate');
+    } else {
+        date_cells(_("From:"), 'TransAfterDate');
+        date_cells(_("To:"), 'TransToDate', '', null, -$days);
+    }
 }
 
 submit_cells('RefreshInquiry', _("Search"),'',_('Refresh Inquiry'), 'default');

@@ -142,8 +142,14 @@ supp_transactions_list_cell("filterType", null, true);
 
 if ($_POST['filterType'] != '2')
 {
-	date_cells(_("From:"), 'TransAfterDate', '', null, -user_transaction_days());
-	date_cells(_("To:"), 'TransToDate');
+    $days = user_transaction_days();
+    if ($days >= 0) {
+        date_cells(_("From:"), 'TransAfterDate', '', null, -$days);
+        date_cells(_("To:"), 'TransToDate');
+    } else {
+        date_cells(_("From:"), 'TransAfterDate');
+        date_cells(_("To:"), 'TransToDate', '', null, -$days);
+    }
 }
 
 submit_cells('RefreshInquiry', _("Search"),'',_('Refresh Inquiry'), 'default');

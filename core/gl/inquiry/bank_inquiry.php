@@ -47,8 +47,14 @@ start_table(TABLESTYLE_NOBORDER);
 start_row();
 bank_accounts_list_cells(_("Account:"), 'bank_account', null);
 
-date_cells(_("From:"), 'TransAfterDate', '', null, -user_transaction_days());
-date_cells(_("To:"), 'TransToDate');
+$days = user_transaction_days();
+if ($days >= 0) {
+    date_cells(_("From:"), 'TransAfterDate', '', null, -$days);
+    date_cells(_("To:"), 'TransToDate');
+} else {
+    date_cells(_("From:"), 'TransAfterDate');
+    date_cells(_("To:"), 'TransToDate', '', null, -$days);
+}
 
 submit_cells('Show',_("Show"),'','', 'default');
 end_row();

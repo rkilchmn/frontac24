@@ -26,11 +26,13 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history(array('bank_account', 'bank_date'));
 
 add_js_file('reconcile.js');
 
 page(_($help_context = "Reconcile Bank Account"), false, false, "", $js);
 
+set_posts(array('bank_account', 'bank_date'));
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
 
 function check_date() {
@@ -160,10 +162,12 @@ function set_tpl_flag($reconcile_id)
 	$Ajax->activate('difference');
 }
 
-if (!isset($_POST['reconcile_date'])) { // init page
+if (!isset($_POST['bank_date'])
+    || get_post('bank_date')=='') { // init page
 	$_POST['reconcile_date'] = new_doc_date();
-//	$_POST['bank_date'] = date2sql(Today());
-}
+	$_POST['bank_date'] = date2sql(Today());
+} else
+    $_POST['reconcile_date'] = sql2date($_POST['bank_date']);
 
 if (list_updated('bank_account')) {
     $Ajax->activate('bank_date');

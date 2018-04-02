@@ -47,8 +47,14 @@ start_row();
 ref_cells(_("Reference:"), 'Ref', '',null, _('Enter reference fragment or leave empty'));
 
 journal_types_list_cells(_("Type:"), "filterType");
-date_cells(_("From:"), 'FromDate', '', null, 0, -1, 0);
-date_cells(_("To:"), 'ToDate');
+$days=user_transaction_days();
+if ($days >= 0) {
+    date_cells(_("From:"), 'FromDate', '', null, -$days);
+    date_cells(_("To:"), 'ToDate');
+} else {
+    date_cells(_("From:"), 'FromDate');
+    date_cells(_("To:"), 'ToDate', '', null, -$days);
+}
 
 end_row();
 start_row();

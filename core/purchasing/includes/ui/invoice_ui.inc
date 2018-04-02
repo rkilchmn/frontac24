@@ -478,7 +478,7 @@ function display_grn_items(&$supp_trans, $mode=0)
 		{
 			echo "</td>";
 			date_cells(_("Received between"), 'receive_begin', "", null, 
-				-user_transaction_days(), 0, 0, "valign=middle");
+				-abs(user_transaction_days()), 0, 0, "valign=middle");
 			date_cells(_("and"), 'receive_end', '', null, 1, 0, 0, "valign=middle");
 			submit_cells('RefreshInquiry', _("Search"),'',_('Refresh Inquiry'), true);
 			echo "<td>";
