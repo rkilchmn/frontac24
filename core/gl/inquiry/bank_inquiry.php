@@ -110,7 +110,7 @@ while ($myrow = db_fetch($result))
 	display_debit_or_credit_cells($myrow["amount"]);
 	amount_cell($running_total);
 
-	label_cell(payment_person_name($myrow["person_type_id"],$myrow["person_id"]));
+	label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, get_post("TransAfterDate"),get_post("TransToDate")));
 
 	label_cell(get_comments_string($myrow["type"], $myrow["trans_no"]));
 	label_cell(get_gl_view_str($myrow["type"], $myrow["trans_no"]));

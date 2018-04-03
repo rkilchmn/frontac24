@@ -89,7 +89,7 @@ function fmt_credit($row)
 
 function fmt_person($trans)
 {
-    return payment_person_name($trans["person_type_id"],$trans["person_id"]);
+    return payment_person_name_link($trans["person_type_id"],$trans["person_id"],true,sql2date($trans["trans_date"]));
 }
 
 function fmt_memo($row)

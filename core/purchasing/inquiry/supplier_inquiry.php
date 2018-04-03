@@ -104,7 +104,7 @@ function prt_link($row)
 function check_overdue($row)
 {
 	return $row['OverDue'] == 1
-		&& (abs($row["TotalAmount"]) - $row["Allocated"] != 0);
+		&& round(abs($row["TotalAmount"]) - $row["Allocated"], user_price_dec()) != 0;
 }
 
 function edit_link($row)

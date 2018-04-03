@@ -140,6 +140,32 @@ function payment_person_name($type, $person_id, $full=true) {
 	}
 }
 
+function payment_person_name_link($type, $person_id, $full=true, $from_date="", $to_date="") {
+	global $payment_person_types;
+
+	switch ($type)
+	{
+		case PT_CUSTOMER :
+			$link = "/sales/inquiry/customer_inquiry.php?customer_id=$person_id";
+            break;
+		case PT_SUPPLIER :
+			$link = "/purchasing/inquiry/supplier_inquiry.php?supplier_id=$person_id";
+            break;
+		default :
+			return payment_person_name($type, $person_id, $full);
+	}
+
+    if ($from_date != "") {
+        $link .= "&TransAfterDate=$from_date";
+        if ($to_date == "")
+            $to_date = Today();
+        $link .= "&TransToDate=$to_date";
+    }
+
+    return pager_link(payment_person_name($type, $person_id, $full), $link);
+}
+
+
 function payment_person_has_items($type) {
 	switch ($type)
 	{
