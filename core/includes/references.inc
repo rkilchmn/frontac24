@@ -298,7 +298,10 @@ class references
 		$branch = @$context['branch'] ? $context['branch'] : '\d+';
 		$location = @$context['location'] ? $context['location'] : '[a-z0-9]+';
  		$pos = @$context['pos'] ? $context['pos'] : '\d+';
-		$user = sprintf("%02d", $_SESSION['wa_current_user']->user);
+
+        // allow any user to edit another user transaction
+		// $user = sprintf("%02d", $_SESSION['wa_current_user']->user);
+        $user = '\d{2,}';
 
 		$regex = preg_replace(
 			array(
