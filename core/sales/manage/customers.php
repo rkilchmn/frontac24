@@ -19,6 +19,7 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history(array("customer_id"));
 	
 page(_($help_context = "Customers"), false, false, "", $js); 
 
@@ -26,6 +27,8 @@ include_once($path_to_root . "/includes/date_functions.inc");
 include_once($path_to_root . "/includes/banking.inc");
 include_once($path_to_root . "/includes/ui.inc");
 include_once($path_to_root . "/includes/ui/contacts_view.inc");
+
+set_posts(array("customer_id"));
 
 if (isset($_GET['debtor_no'])) 
 {

@@ -26,7 +26,7 @@ $js .= get_js_history(array("customer_id", "TransAfterDate", "TransToDate", "fil
 
 page(_($help_context = "Customer Allocation Inquiry"), false, false, "", $js);
 
-set_posts(array('customer_id'));
+set_posts(array("customer_id", "TransAfterDate", "TransToDate", "filterType"));
 
 //------------------------------------------------------------------------------------------------
 
