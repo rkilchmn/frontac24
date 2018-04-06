@@ -487,21 +487,7 @@ echo "<br>";
 
 display_po_items($_SESSION['PO']);
 
-start_table(TABLESTYLE2);
-
-
-if ($_SESSION['PO']->trans_type == ST_SUPPINVOICE) {
-	// Do not restrict immediate supplier payment to cash accounts.
-	// The user could have paid with a check or a credit card,
-	// so there is no reason to create allocations for delayed
-	// payment.
-	// cash_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
-	bank_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
-}
-
-textarea_row(_("Memo:"), 'Comments', null, 70, 4);
-
-end_table(1);
+display_po_footer($_SESSION['PO'], false);
 
 div_start('controls', 'items_table');
 $process_txt = _("Place Order");

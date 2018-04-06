@@ -188,7 +188,6 @@ function display_po_header(&$order)
 					*get_purchase_conversion_factor ($order->supplier_id, $line->stock_id);
 		}
 	    $Ajax->activate('items_table');
-	    $Ajax->activate('due_date');
 	}
 	set_global_supplier($_POST['supplier_id']);
 
@@ -200,7 +199,6 @@ function display_po_header(&$order)
 		$order->orig_order_date = $_POST['OrderDate'];
 	    get_duedate_from_terms($order);
 	    $_POST['due_date'] = $order->due_date;
-		$Ajax->activate('due_date');
 	}
 	supplier_credit_row($order->supplier_id, $order->credit);
 
@@ -222,9 +220,6 @@ function display_po_header(&$order)
     }
 
 	table_section(2);
-
-	if ($order->trans_type==ST_SUPPINVOICE)
-		date_row(_("Due Date:"), 'due_date', '', false, 0, 0, 0, null, true);
 
   	text_row(_("Supplier's Reference:"), 'supp_ref', next_ref($order->supplier_id), 16, 15);
 
@@ -515,15 +510,34 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
 
 //---------------------------------------------------------------------------------------------------
 
-function display_po_footer(&$trans)
+function display_po_footer(&$trans, $prep = true)
 {
 	global $Ajax;
 
 start_table(TABLESTYLE2);
 
 if ($trans->trans_type == ST_SUPPINVOICE) {
-	cash_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
-} elseif ($trans->trans_type == ST_PURCHORDER)
+    // Do not restrict immediate supplier payment to cash accounts.
+    // The user could have paid with a check or a credit card,
+    // so there is no reason to create allocations for delayed
+    // payment.
+    // cash_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
+    bank_accounts_list_row(_("Payment:"), 'cash_account', null, true, _('Delayed'));
+
+	if (!isset($_POST['due_date'])) {
+	    get_duedate_from_terms($trans);
+	    $_POST['due_date'] = $trans->due_date;
+	}
+
+    $Ajax->activate('due_date');
+
+    if (get_post('cash_account') == "")
+        date_row(_("Due Date:"), 'due_date', '', false, 0, 0, 0, null, true);
+    else {
+        hidden('due_date', get_post('due_date'));
+    }
+
+} elseif ($trans->trans_type == ST_PURCHORDER && $prep)
 	amount_row(_("Pre-Payment Required:"), 'prep_amount');
 
 textarea_row(_("Memo:"), 'Comments', null, 70, 4);
