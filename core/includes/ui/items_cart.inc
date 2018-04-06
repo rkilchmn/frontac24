@@ -405,12 +405,12 @@ class items_cart
 		{
 			// update AR
 			foreach($cust_trans as $branch_id => $amount)
-				if (floatcmp($amount, 0))
+				// if (floatcmp($amount, 0))
 					write_cust_journal($this->trans_type, $this->order_id, $branch_id, $this->tran_date,
 						$this->reference, $amount, $this->rate);
 			// update AP
 			foreach($supp_trans as $supp_id => $amount)
-				if (floatcmp($amount, 0))
+				// if (floatcmp($amount, 0))
 					write_supp_journal($this->trans_type, $this->order_id, $supp_id, $this->tran_date,
 						$this->reference, -$amount, $this->rate, $this->source_ref);
 		}

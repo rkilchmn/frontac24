@@ -2683,7 +2683,6 @@ function refline_list_row($label, $name, $type, $selected_id=null, $spec_option=
 
 function subledger_list($name, $account, $selected_id=null)
 {
-
 	$type = is_subledger_account($account);
 	if (!$type)
 		return '';
@@ -2693,12 +2692,14 @@ function subledger_list($name, $account, $selected_id=null)
 		FROM "
 		.TB_PREF."debtors_master d,"
 		.TB_PREF."cust_branch c
-		WHERE d.debtor_no=c.debtor_no AND NOT d.inactive AND c.receivables_account=".db_escape($account);
+		WHERE d.debtor_no=c.debtor_no AND NOT d.inactive
+        AND " . is_AR_or_Sales_account_sql($account);
 	else
 		$sql = "SELECT supplier_id as id, supp_ref as name 
 		FROM "
 		.TB_PREF."suppliers s
-		WHERE NOT s.inactive AND s.payable_account=".db_escape($account);
+		WHERE NOT s.inactive
+        AND " . is_AP_or_Purchases_account_sql($account);
 
 	$mode = get_company_pref('no_customer_list');
 
