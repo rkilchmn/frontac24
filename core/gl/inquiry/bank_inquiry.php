@@ -45,7 +45,7 @@ set_posts(array('bank_account', 'TransAfterDate', 'TransToDate'));
 start_form();
 start_table(TABLESTYLE_NOBORDER);
 start_row();
-bank_accounts_list_cells(_("Account:"), 'bank_account', null);
+bank_accounts_list_cells(_("Account:"), 'bank_account', null, true);
 
 $days = user_transaction_days();
 date_cells(_("From:"), 'TransAfterDate', '', null, -abs($days));
@@ -140,7 +140,8 @@ amount_cell(-$credit);
 amount_cell($debit+$credit);
 label_cell("", "colspan=4");
 end_row();
-end_table(2);
+end_table();
+display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 div_end();
 //------------------------------------------------------------------------------------------------
 

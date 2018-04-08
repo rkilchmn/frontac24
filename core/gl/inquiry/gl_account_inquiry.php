@@ -56,7 +56,7 @@ function gl_inquiry_controls()
 
     start_table(TABLESTYLE_NOBORDER);
 	start_row();
-    gl_all_accounts_list_cells(_("Account:"), 'account', null, false, false, _("All Accounts"));
+    gl_all_accounts_list_cells(_("Account:"), 'account', null, false, false, _("All Accounts"), true);
     $days = user_transaction_days();
     date_cells(_("from:"), 'TransFromDate', '', null, -abs($days));
     if ($days >= 0) {
