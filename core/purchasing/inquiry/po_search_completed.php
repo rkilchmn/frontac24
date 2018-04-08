@@ -80,12 +80,11 @@ start_row();
 ref_cells(_("#:"), 'order_number', '',null, '', true);
 
 $days = user_transaction_days();
+date_cells(_("from:"), 'OrdersAfterDate', '', null, -abs($days));
 if ($days >= 0) {
-    date_cells(_("from:"), 'OrdersAfterDate', '', null, -$days);
     date_cells(_("to:"), 'OrdersToDate');
 } else {
-    date_cells(_("from:"), 'OrdersAfterDate');
-    date_cells(_("to:"), 'OrdersToDate', '', null, -$days);
+    date_cells(_("to:"), 'OrdersToDate', '', null, 0, 0, 1);
 }
 
 locations_list_cells(_("into location:"), 'StockLocation', null, true);

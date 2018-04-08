@@ -174,12 +174,11 @@ cust_allocations_list_cells(null, 'filterType', null, true, true);
 if ($_POST['filterType'] != '2')
 {
     $days = user_transaction_days();
+    date_cells(_("From:"), 'TransAfterDate', '', null, -abs($days));
     if ($days >= 0) {
-        date_cells(_("From:"), 'TransAfterDate', '', null, -$days);
         date_cells(_("To:"), 'TransToDate');
     } else {
-        date_cells(_("From:"), 'TransAfterDate');
-        date_cells(_("To:"), 'TransToDate', '', null, -$days);
+        date_cells(_("To:"), 'TransToDate', '', null, 0, 0, 1);
     }
 }
 

@@ -48,12 +48,11 @@ start_row();
 bank_accounts_list_cells(_("Account:"), 'bank_account', null);
 
 $days = user_transaction_days();
+date_cells(_("From:"), 'TransAfterDate', '', null, -abs($days));
 if ($days >= 0) {
-    date_cells(_("From:"), 'TransAfterDate', '', null, -$days);
     date_cells(_("To:"), 'TransToDate');
 } else {
-    date_cells(_("From:"), 'TransAfterDate');
-    date_cells(_("To:"), 'TransToDate', '', null, -$days);
+    date_cells(_("To:"), 'TransToDate', '', null, 0, 0, 1);
 }
 
 submit_cells('Show',_("Show"),'','', 'default');
