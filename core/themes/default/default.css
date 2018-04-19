@@ -644,3 +644,19 @@ div.note_msg {
 	margin-bottom: 10px;
 	width: 100%;
 }
+
+/*
+    scroll inside div
+
+    Note: this isn't a great solution, because the table header
+    scrolls as well, and it would be better for the table header
+    to remain on the screen.   However, most browsers make this
+    nearly impossible (without a javascript solution).  See:
+    https://www.sitepoint.com/community/t/adding-a-scrollbar-to-a-table/212466/2
+    https://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
+*/
+div.trans_tbl, div._trans_tbl_span {
+    height: calc(100vh - 300px);
+    overflow-y: auto;
+}
+

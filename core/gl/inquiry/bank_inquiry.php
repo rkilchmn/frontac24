@@ -67,10 +67,10 @@ if (!isset($_POST['bank_account']))
 
 $result = get_bank_trans_for_bank_account($_POST['bank_account'], $_POST['TransAfterDate'], $_POST['TransToDate']);	
 
-div_start('trans_tbl');
 $act = get_bank_account($_POST["bank_account"]);
 display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 
+div_start('trans_tbl');
 start_table(TABLESTYLE);
 
 $th = array(_("Type"), _("#"), _("Reference"), _("Date"),
@@ -122,7 +122,6 @@ while ($myrow = db_fetch($result))
  		$debit += $myrow["amount"];
  	else 
  		$credit += $myrow["amount"];
-
 	if ($j == 12)
 	{
 		$j = 1;
@@ -138,11 +137,12 @@ amount_cell($debit);
 amount_cell(-$credit);
 //display_debit_or_credit_cells($running_total);
 amount_cell($debit+$credit);
-label_cell("", "colspan=4");
+hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter Another &Payment"), "NewPayment=yes");
+label_cell("", "colspan=3");
 end_row();
 end_table();
-display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 div_end();
+scroll_down("trans_tbl");
 //------------------------------------------------------------------------------------------------
 
 end_page();

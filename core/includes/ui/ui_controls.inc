@@ -396,7 +396,7 @@ function div_start($id='', $trigger=null, $non_ajax=false)
    		echo "<div style='display:none' class='js_only' ".($id !='' ? "id='$id'" : '').">";
 	} else { // ajax ready div
    		array_push($ajax_divs, array($id, $trigger===null ? $id : $trigger));
-   		echo "<div ". ($id !='' ? "id='$id'" : '').">";
+   		echo "<div ". ($id !='' ? "id='$id'" : '')." class=".$id.">";
    		ob_start();
 	}
 }
@@ -691,3 +691,18 @@ function page_modified($status = true)
 	} else
 		add_js_source($js);
 }
+
+function scroll_down($div)
+{
+	global $Ajax;
+
+    $js = "
+        var objDiv = document.getElementById('" . $div . "');
+        objDiv.scrollTop = objDiv.scrollHeight;
+    ";
+	if (in_ajax()) {
+		$Ajax->addScript(true, $js);
+	} else
+		add_js_source($js);
+}
+
