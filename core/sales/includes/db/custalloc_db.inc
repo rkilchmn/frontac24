@@ -119,7 +119,7 @@ function get_allocatable_from_cust_sql($customer_id=null, $settled)
 	 	.TB_PREF."debtor_trans as trans, "
 		.TB_PREF."debtors_master as debtor"
 	." WHERE trans.debtor_no=debtor.debtor_no
-		AND (((type=".ST_CUSTPAYMENT." OR type=".ST_BANKDEPOSIT.") AND (trans.ov_amount > 0))
+		AND (((type=".ST_CUSTPAYMENT." OR type=".ST_BANKDEPOSIT.") AND (trans.ov_amount != 0))
 		 OR (type=".ST_CUSTCREDIT. " AND (ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount)>0)
 		 OR (type=".ST_JOURNAL. " AND (trans.ov_amount < 0)))";
 
@@ -340,9 +340,9 @@ function get_sql_for_customer_allocation_inquiry($from, $to, $customer, $filterT
 
    	if (!$settled)
    	{
-   		$sql .= " AND (round(IF(trans.prep_amount,trans.prep_amount, abs(trans.ov_amount + trans.ov_gst + "
+   		$sql .= " AND (round(IF(trans.prep_amount,trans.prep_amount, trans.ov_amount + trans.ov_gst + "
 		."trans.ov_freight + trans.ov_freight_tax + "
-		."trans.ov_discount)) - trans.alloc,6) != 0) ";
+		."trans.ov_discount) - trans.alloc,6) != 0) ";
    	}
    	return $sql;
 }
