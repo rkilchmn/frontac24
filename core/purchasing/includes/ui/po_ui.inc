@@ -330,14 +330,16 @@ function display_po_items(&$order, $editable=true)
 
 	$taxes = $order->get_taxes(input_num('freight_cost'));
 	
-	$tax_total = display_edit_tax_items($taxes, $colspan, $order->tax_included, 2, $order->trans_type==ST_SUPPINVOICE);
+	$tax_total = display_edit_tax_items($taxes, $colspan, $order->tax_included, 2, $order->trans_type == ST_SUPPINVOICE);
 
 	$display_total = price_format(($total + input_num('freight_cost') + $tax_total));
 
     $Ajax->activate('amount_total');
 	start_row();
 	label_cells(_("Amount Total"), $display_total, "colspan=$colspan align='right'","align='right'", 'amount_total');
-    label_cell('', "colspan=2");
+       $order->trans_type == ST_SUPPINVOICE
+        ? submit_cells('update', _("Update"), "colspan=2 align='center'", _("Refresh"), true)
+               : label_cell('', "colspan=2");
 
 	end_row();
 

@@ -316,8 +316,10 @@ var inserts = {
   					ev = ev||window.event;
   					key = ev.keyCode||ev.which;
  	  				if(key == 13) {
-						if(e.className == 'searchbox') e.onblur();
-						return false;
+						if(e.className == 'searchbox') {
+                            e.onblur();
+    						return false;
+                        }
 					}
 					return true;
 	  			}
