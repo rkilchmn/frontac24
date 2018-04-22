@@ -39,7 +39,6 @@ start_table(TABLESTYLE_NOBORDER);
 start_row();
 
 text_cells(_("Customer"), "customer");
-
 submit_cells("search", _("Search"), "", _("Search customers"), "default");
 
 end_row();
