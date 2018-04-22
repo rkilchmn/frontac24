@@ -137,7 +137,7 @@ amount_cell($debit);
 amount_cell(-$credit);
 //display_debit_or_credit_cells($running_total);
 amount_cell($debit+$credit);
-hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter Another &Payment"), "NewPayment=yes");
+hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter Another &Payment"), "NewPayment=yes&bank_account=".$_POST['bank_account']);
 label_cell("", "colspan=3");
 end_row();
 end_table();
