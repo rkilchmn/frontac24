@@ -87,7 +87,7 @@ function send_scripts()
     echo $js;
 }
 
-function page_header($title, $no_menu=false, $is_index=false, $onload="", $js="", $css='')
+function page_header($title, $no_menu=false, $is_index=false, $onload="", $js="", $css='', $no_cache)
 {
 	// titles and screen header
 	global $path_to_root, $SysPrefs, $db_connections;
@@ -135,6 +135,11 @@ function page_header($title, $no_menu=false, $is_index=false, $onload="", $js=""
 
 	if (!headers_sent()){
 		header("Content-type: text/html; charset=$encoding");
+        if ($no_cache) {
+            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");
+        }
 	}
 	echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
 	echo "<html dir='" . $_SESSION['language']->dir . "' >\n";

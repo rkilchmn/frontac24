@@ -30,7 +30,7 @@ if (user_use_date_picker())
 	$js .= get_js_date_picker();
 $js .= get_js_history(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max"));
 
-page(_($help_context = "General Ledger Inquiry"), false, false, '', $js);
+page(_($help_context = "General Ledger Inquiry"), false, false, '', $js, false, '', true);
 
 //----------------------------------------------------------------------------------------------------
 // Ajax updates
@@ -154,11 +154,11 @@ function show_results()
 		$dim_cols = array();
 	
 	if ($show_balances)
-	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Balance"), _("Memo"), "");
+	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Balance"), _("Memo"), "", "");
 	else
-	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Memo"), "");
+	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Memo"), "", "");
 	    
-	$th = array_merge($first_cols, $account_col, $dim_cols, $remaining_cols, array(""), array(""));
+	$th = array_merge($first_cols, $account_col, $dim_cols, $remaining_cols);
 			
 	table_header($th);
 	if ($_POST["account"] != null && is_account_balancesheet($_POST["account"]))
@@ -251,6 +251,7 @@ if (get_post('Show') || get_post('account'))
     show_results();
 
 div_end();
+scroll_down('trans_tbl');
 
 //----------------------------------------------------------------------------------------------------
 

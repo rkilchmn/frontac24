@@ -30,7 +30,7 @@ $js_static = array('JsHttpRequest.js', 'behaviour.js', 'utils.js', 'inserts.js')
 // additional js source included in header
 $js_lib = $js_userlib = array();
 
-function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $script_only=false, $css='')
+function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $script_only=false, $css='', $no_cache=false)
 {
 
    	global $path_to_root, $page_security, $page_nested;
@@ -41,7 +41,7 @@ function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $scri
 
    	include_once($path_to_root . "/includes/page/header.inc");
 
-   	page_header($title, $no_menu, $is_index, $onload, $js, $css);
+   	page_header($title, $no_menu, $is_index, $onload, $js, $css, $no_cache);
 	check_page_security($page_security);
 //	error_box();
 	if($script_only) {

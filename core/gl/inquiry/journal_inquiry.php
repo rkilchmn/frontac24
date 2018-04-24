@@ -25,7 +25,7 @@ if (user_use_date_picker())
 	$js .= get_js_date_picker();
 $js .= get_js_history(array("Ref", "filterType", "FromDate", "ToDate", "Memo", "userid", "AlsoClosed"));
 
-page(_($help_context = "Journal Inquiry"), false, false, "", $js);
+page(_($help_context = "Journal Inquiry"), false, false, "", $js, false, "", true);
 
 //-----------------------------------------------------------------------------------
 // Ajax updates

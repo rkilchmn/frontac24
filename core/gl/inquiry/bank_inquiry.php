@@ -27,7 +27,7 @@ if ($SysPrefs->use_popup_windows)
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
 $js .= get_js_history(array('bank_account', 'TransAfterDate', 'TransToDate'));
-page(_($help_context = "Bank Account Inquiry"), isset($_GET['bank_account']) && !isset($_GET['TransAfterDate']), false, "", $js);
+page(_($help_context = "Bank Account Inquiry"), isset($_GET['bank_account']) && !isset($_GET['TransAfterDate']), false, "", $js, false, "", true);
 
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
 
@@ -138,6 +138,8 @@ amount_cell(-$credit);
 //display_debit_or_credit_cells($running_total);
 amount_cell($debit+$credit);
 hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter Another &Payment"), "NewPayment=yes&bank_account=".$_POST['bank_account']);
+hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter A &Deposit"), "NewDeposit=yes&bank_account=".$_POST['bank_account']);
+
 label_cell("", "colspan=3");
 end_row();
 end_table();

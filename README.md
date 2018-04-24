@@ -221,3 +221,35 @@ to enter another payment.
 Often a user will keep the bank inquiry page open
 and continually add payments from there, rather than navigating
 around through FA's pages of links.
+
+## add total equities line to balance sheet report
+
+The balance sheet report is missing a subtotal. It displays a Total Liabilities and Equities line at the bottom, which is a grand total of the Liabilities, Total Equity and Calculated Return.
+
+This mod adds a Total Equities line to the report, which is equal to Total Equity and Calculated Return, which is the actual shareholder equity during the period.
+
+With this mod, the Total Liabilities and Equities line then makes obvious sense.
+
+## add missing spaces to rep102.php sql
+
+report sql was broken because of missing spaces. Report works much better now.
+
+## Update inst_lang.php
+
+Fix for:
+Illegal offset type in file: inst_lang.php at line 139
+
+If you have error reporting enabled, you get this error when installing a language, at least manually. While the error can be ignored because the language successfully installs, it is disconcerting.
+
+## Add frequently used dates to date picker
+
+This mod updates the date picker to add frequently picked dates at the bottom of the date picker. Frequently, a person wants to review activity for the entire year or prior year. The current date picker does not offer these options, and requires so many clicks to to get these dates, that it is easier not to use the date picker and just enter the dates using the text interface.
+
+This mod places these dates at the bottom of the date picker. It also removes the Back button, which is replaced by clicking on the date picker again, to hide or show it (i.e. toggle). Toggling is an expected behaviour by web users, as they have become accustomed to toggling the display of select menus.
+
+## Sort the sales summary report by sales type
+
+BA segregates the customers by sales type to make it easy to analyze
+sales by sales channel.
+For example, if customers are retail and wholesale, the report
+will subtotal retail and wholesale sales separately.

@@ -185,7 +185,6 @@ function display_db_pager(&$pager) {
 		end_row(); 
 		end_table();
 		echo "</div>";
-        scroll_down("_{$pager->name}_span");
 		$from = ($pager->curr_page-1)*$pager->page_len+1;
 		$to = $from + $pager->page_len - 1;
 		if ($to > $pager->rec_count)
@@ -206,6 +205,7 @@ function display_db_pager(&$pager) {
    		display_note($pager->marker_txt, 0, 1, "class='$pager->notice_class'");
 
   div_end();
+  scroll_down("_{$pager->name}_span");
   return true;
 }
 
