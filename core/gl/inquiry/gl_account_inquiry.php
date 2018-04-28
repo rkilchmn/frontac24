@@ -235,7 +235,7 @@ function show_results()
     	end_row();
 	}
 
-	end_table(2);
+	end_table();
 	if (db_num_rows($result) == 0)
 		display_note(_("No general ledger transactions have been created for the specified criteria."), 0, 1);
 
@@ -255,5 +255,5 @@ scroll_down('trans_tbl');
 
 //----------------------------------------------------------------------------------------------------
 
-end_page();
+end_page(true);
 

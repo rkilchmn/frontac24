@@ -249,7 +249,7 @@ This mod places these dates at the bottom of the date picker. It also removes th
 
 ## Sort the sales summary report by sales type
 
-BA segregates the customers by sales type to make it easy to analyze
+BF segregates the customers by sales type to make it easy to analyze
 sales by sales channel.
 For example, if customers are retail and wholesale, the report
 will subtotal retail and wholesale sales separately.

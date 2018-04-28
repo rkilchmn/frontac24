@@ -142,27 +142,37 @@ function payment_person_name($type, $person_id, $full=true) {
 
 function payment_person_name_link($type, $person_id, $full=true, $from_date="", $to_date="") {
 	global $payment_person_types;
+    global $path_to_root;
 
 	switch ($type)
 	{
 		case PT_CUSTOMER :
-			$link = "/sales/inquiry/customer_inquiry.php?customer_id=$person_id";
+			$search_link = "/sales/inquiry/customer_inquiry.php?customer_id=$person_id";
+			$link = "/sales/manage/customers.php?customer_id=$person_id";
+            $img_title = "Customer Search";
             break;
 		case PT_SUPPLIER :
-			$link = "/purchasing/inquiry/supplier_inquiry.php?supplier_id=$person_id";
+			$search_link = "/purchasing/inquiry/supplier_inquiry.php?supplier_id=$person_id";
+			$link = "/purchasing/manage/suppliers.php?supplier_id=$person_id";
+            $img_title = "Supplier Search";
             break;
 		default :
 			return payment_person_name($type, $person_id, $full);
 	}
 
     if ($from_date != "") {
-        $link .= "&TransAfterDate=$from_date";
+        $search_link .= "&TransAfterDate=$from_date";
         if ($to_date == "")
             $to_date = Today();
-        $link .= "&TransToDate=$to_date";
+        $search_link .= "&TransToDate=$to_date";
     }
 
-    return pager_link(payment_person_name($type, $person_id, $full), $link);
+    $theme = user_theme();
+    $img = '<img src="'.$path_to_root.'/themes/'.$theme.'/images/'.ICON_VIEW.
+        '" style="vertical-align:middle;width:12px;height:12px;border:0;" onclick="javascript:lookupWindow(&quot;'.
+        $path_to_root.$search_link.'&quot;, &quot;&quot;);" title="' . $img_title . '" style="cursor:pointer;" />';
+
+    return pager_link(payment_person_name($type, $person_id, $full), $link) . " " . $img;
 }
 
 

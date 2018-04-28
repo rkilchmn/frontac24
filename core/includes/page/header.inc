@@ -87,7 +87,7 @@ function send_scripts()
     echo $js;
 }
 
-function page_header($title, $no_menu=false, $is_index=false, $onload="", $js="", $css='', $no_cache)
+function page_header($title, $no_menu=false, $is_index=false, $onload="", $js="", $css='', $no_cache = false)
 {
 	// titles and screen header
 	global $path_to_root, $SysPrefs, $db_connections;

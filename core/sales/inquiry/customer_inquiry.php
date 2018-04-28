@@ -245,4 +245,4 @@ $table->width = "85%";
 display_db_pager($table);
 
 end_form();
-end_page();
+end_page(true);
