@@ -190,23 +190,18 @@ function get_supplier_currency($supplier_id)
 	return $myrow[0];
 }
 
-function get_suppliers_search($supplier)
+function get_suppliers_search_sql($supplier)
 {
 	global $SysPrefs;
-
-	if (isset($SysPrefs->max_rows_in_search))
-		$limit = $SysPrefs->max_rows_in_search;
-	else
-		$limit = 10;
 
 	$sql = "SELECT supplier_id, supp_name, supp_ref, address, gst_no
 		FROM ".TB_PREF."suppliers
 		WHERE (supp_name LIKE " . db_escape("%" . $supplier. "%") . " OR 
-			supp_ref LIKE " . db_escape("%" . $supplier. "%") . " OR 
+            supp_ref LIKE " . db_escape("%" . $supplier. "%") . " OR
 			address LIKE " . db_escape("%" . $supplier. "%") . " OR 
 			gst_no LIKE " . db_escape("%" . $supplier. "%") . ")
-		ORDER BY supp_name LIMIT 0,".(int)($limit);
+		ORDER BY supp_name ";
 
-	return db_query($sql, "Failed in retreiving supplier list.");
+	return $sql;
 }
 

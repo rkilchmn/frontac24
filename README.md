@@ -22,6 +22,14 @@ Following is a list of modifications
 between the braathwaate fork (BF) and FA.
 
 ## wwh customizations
+
+## Quick entry inactive support
+
+In FA, the list of Quick entries accumulate ad infinitum.
+
+BF supports marking the Quick entry inactive so it does not
+show up in the payment list.
+
 ## Allow bank account payments on supplier direct invoice
 FA restricts payment on a supplier direct invoice
 to cash accounts.
@@ -153,10 +161,15 @@ are calculated as the user enters data in fields.
 BF allows a negative user_transaction_days in Setup so that
 pages will display out into the future.
 
-## make supplier name a html link on inquiry pages
+## supplier and customer name links on inquiry pages
 
-BF makes supplier names a html link to their respective inquiry pages,
-making it easy for a user to go back and forth from banking pages.
+BF makes supplier and customer names a html link
+to their respective information pages
+on the banking inquiry pages.
+This allows one to quickly check or modify supplier/customer
+information from the inquiry pages.
+BF also adds the magnifying glass search icon next to these names
+and this links to the supplier/customer inquiry pages.
 
 ## allow any user to edit another user transaction (disable user reference check)
 BF allows a user to edit other user's transactions.
@@ -253,3 +266,16 @@ BF segregates the customers by sales type to make it easy to analyze
 sales by sales channel.
 For example, if customers are retail and wholesale, the report
 will subtotal retail and wholesale sales separately.
+
+## Add paging and scrolling to select pop-up
+
+In FA, the select pop-up shows a (configurable) limited amount of items.
+This can confuse the user into thinking that the search item does
+no exist when in reality the search was limited.
+
+BF adds scrolling and paging to the select pop-up
+and no items are eliminated.
+Internally,
+the custom select display code was replaced with the built-in db_pager function.
+This eliminates many lines of code and makes the user interface consistent
+with other FA search functions.

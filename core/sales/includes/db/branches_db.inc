@@ -267,15 +267,8 @@ function get_default_branch($customer_id, $ar_account=null)
 	return db_fetch($result);
 }
 
-function  get_branches_search($customer, $branch)
+function get_branches_search_sql($customer, $branch)
 {
-	global $SysPrefs;
-
-	if (isset($SysPrefs->max_rows_in_search))
-		$limit = $SysPrefs->max_rows_in_search;
-	else
-		$limit = 10;
-
 	$sql = "SELECT 
 		    b.branch_code,
 	    	b.branch_ref,
@@ -288,8 +281,8 @@ function  get_branches_search($customer, $branch)
 		LEFT JOIN ".TB_PREF."crm_persons p ON c.person_id=p.id
 		WHERE b.debtor_no = ".db_escape($customer)."
 			AND b.br_name LIKE " . db_escape("%" . $branch. "%") . "
-		ORDER BY b.br_name LIMIT 0,".(int)($limit);
+		ORDER BY b.br_name ";
 
-	return db_query($sql, "Failed in retreiving branches list.");
+	return $sql;
 }
 

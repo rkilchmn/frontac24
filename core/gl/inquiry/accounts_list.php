@@ -16,6 +16,7 @@
 ***********************************************************************/
 $page_security = "SA_GLACCOUNT";
 $path_to_root = "../..";
+include_once($path_to_root . "/includes/db_pager.inc");
 include_once($path_to_root . "/includes/session.inc");
 include_once($path_to_root . "/includes/ui.inc");
 include_once($path_to_root . "/gl/includes/db/gl_db_accounts.inc");
@@ -23,6 +24,21 @@ include_once($path_to_root . "/gl/includes/db/gl_db_accounts.inc");
 $js = get_js_select_combo_item();
 
 page(_($help_context = "GL Accounts"), true, false, "", $js);
+
+function select_account($myrow)
+{
+    global $mode;
+    $name = $_GET["client_id"];
+	$value = $myrow['account_code'];
+    if ($mode != 0) {
+        $text = $myrow['description'];
+        return ahref_str(_("Select"), 'javascript:void(0)', '', 'setComboItem(window.opener.document, "'.$name.'",  "'.$value.'", "'.$text.'")');
+    }
+    else {
+        return ahref_str(_("Select"), 'javascript:void(0)', '', 'selectComboItem(window.opener.document, "'.$name.'", "'.$value.'")');
+    }
+}
+
 
 if(get_post("search")) {
   	$Ajax->activate("account_tbl");
@@ -43,31 +59,12 @@ end_row();
 
 end_table();
 
+$th = array("" => array('fun' => 'select_account'), _("Account Code"), _("Description"), _("Category"));
+$sql = get_chart_accounts_search_sql(get_post("description"));
+$table =& new_db_pager('account_tbl', $sql, $th);
+$table->width = "85%";
+display_db_pager($table);
+
 end_form();
 
-div_start("account_tbl");
-
-start_table(TABLESTYLE);
-
-$th = array("", _("Account Code"), _("Description"), _("Category"));
-
-table_header($th);
-
-$k = 0;
-$name = $_GET["client_id"];
-
-$result = get_chart_accounts_search(get_post("description"));
-while ($myrow = db_fetch_assoc($result)) {
-	alt_table_row_color($k);
-	$value = $myrow['account_code'];
-	ahref_cell(_("Select"), 'javascript:void(0)', '', 'selectComboItem(window.opener.document, "'.$name.'", "'.$value.'")');
-  	label_cell($myrow["account_code"]);
-	label_cell($myrow["account_name"]);
-  	label_cell($myrow["name"]);
-	end_row();
-}
-
-end_table(1);
-
-div_end();
 end_page(true);

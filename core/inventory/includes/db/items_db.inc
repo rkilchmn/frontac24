@@ -179,7 +179,7 @@ function item_in_foreign_codes($stock_id)
 	return $msg;
 }
 
-function get_items_search($description, $type)
+function get_items_search_sql($description, $type)
 {
 	global $SysPrefs;
 
@@ -217,13 +217,7 @@ function get_items_search($description, $type)
 			break;
 	}
 
-	if (isset($SysPrefs->max_rows_in_search))
-		$limit = $SysPrefs->max_rows_in_search;
-	else
-		$limit = 10;
+	$sql .= " GROUP BY i.item_code ORDER BY i.description ";
 
-	$sql .= " GROUP BY i.item_code ORDER BY i.description LIMIT 0,".(int)($limit);
-
-	return db_query($sql, "Failed in retreiving item list.");
+	return $sql;
 }
-

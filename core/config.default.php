@@ -206,10 +206,8 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 
 /*
 	Optional popup search enabled if this is true.
-	$max_rows_in_search = 10 is used for maximum rows in search
 */
 	$use_popup_search = true;
-	$max_rows_in_search = 10;
 
 /*
         Allow negative quantity in sales orders
