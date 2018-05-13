@@ -757,6 +757,11 @@ class FrontReport extends Cpdf
 		return $this->TextWrap($this->cols[$c], $this->row - $r, $this->cols[$n] - $this->cols[$c] + $corr, $txt, $this->aligns[$c], $border, $fill, $link, $stretch);
 	}
 	
+	function RectangleCol($c, $n, $w, $h)
+	{
+		return $this->rectangle($this->cols[$c], $this->row +$h , $w, $h);
+	}
+	
 	function AmountCol($c, $n, $txt, $dec=0, $corr=0, $r=0, $border=0, $fill=0, $link=NULL, $stretch=1, $color_red=false)
 	{
 		if ($color_red && $txt < 0)
