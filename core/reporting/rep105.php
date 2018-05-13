@@ -127,6 +127,7 @@ function print_order_status_list()
 
 	$result = GetSalesOrders($from, $to, $category, $location, $backorder);
 
+	$grand_total = 0;
 	while ($myrow=db_fetch($result))
 	{
                 if (!isset($rep)) {
@@ -139,7 +140,6 @@ function print_order_status_list()
 
                     $rep->NewPage();
                 }
-	$grand_total = 0;
 		$rep->NewLine(0, 2, false, $orderno);
 		if ($orderno != $myrow['order_no'])
 		{
