@@ -144,6 +144,7 @@ label_cell("", "colspan=3");
 end_row();
 end_table();
 div_end();
+set_browser_title("bank_account");
 scroll_down("trans_tbl");
 //------------------------------------------------------------------------------------------------
 

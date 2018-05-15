@@ -279,3 +279,16 @@ Internally,
 the custom select display code was replaced with the built-in db_pager function.
 This eliminates many lines of code and makes the user interface consistent
 with other FA search functions.
+
+## Name browser tab titles more specifically
+
+Renaming tabs with differing content makes it easier for
+the user to keep track of multiple open tabs.
+Set the browser tab title to the value of a search element on the page
+Thus when the element changes value, the browser tab title changes as well.
+For example, when the user does a bank account inquiry on a certain bank
+account, the bank account name shows in the tab title rather than just
+"Bank Account Inquiry".   Then if the user opens another tab and does
+a bank account inquiry on a different bank account, the tabs have the
+bank account names rather than the duplicate title "Bank Account Inquiry".
+

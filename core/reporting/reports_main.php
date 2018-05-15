@@ -534,4 +534,6 @@ add_custom_reports($reports);
 
 echo $reports->getDisplay();
 
+set_browser_title($_POST['_focus']);
+
 end_page();

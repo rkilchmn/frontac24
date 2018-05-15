@@ -706,3 +706,33 @@ function scroll_down($div)
 		add_js_source($js);
 }
 
+// Name browser tab titles more specifically
+
+// Renaming tabs with differing content makes it easier for
+// the user to keep track of multiple open tabs.
+// Set the browser tab title to the value of a search element on the page
+// Thus when the element changes value, the browser tab title changes as well.
+
+// For example, when the user does a bank account inquiry on a certain bank
+// account, the bank account name shows in the tab title rather than just
+// "Bank Account Inquiry".   Then if the user opens another tab and does
+// a bank account inquiry on a different bank account, the tabs have the
+// bank account names rather than the duplicate title "Bank Account Inquiry".
+function set_browser_title($name)
+{
+	global $Ajax;
+
+    $js = "
+    var e = document.getElementsByName('" . $name ."');
+    if (e[0]) {
+        if (e[0].nodeName == 'SELECT')
+            document.title = e[0].options[e[0].selectedIndex].text;
+        else if (e[0].nodeName == 'BUTTON')
+            document.title = e[0].value;
+    }
+    ";
+	if (in_ajax()) {
+		$Ajax->addScript(true, $js);
+	} else
+		add_js_source($js);
+}
