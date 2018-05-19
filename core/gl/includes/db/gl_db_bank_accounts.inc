@@ -192,16 +192,6 @@ function has_quick_entries($type=null)
 	return db_num_rows($result) > 0;
 }
 
-function get_quick_entries($type = null)
-{
-	$sql = "SELECT * FROM ".TB_PREF."quick_entries";
-	if ($type != null)
-		$sql .= " WHERE type=".db_escape($type);
-	$sql .= " ORDER BY description";
-
-	return db_query($sql, "could not retreive quick entries");
-}
-
 function get_quick_entry($selected_id)
 {
 	$sql = "SELECT * FROM ".TB_PREF."quick_entries WHERE id=".db_escape($selected_id);

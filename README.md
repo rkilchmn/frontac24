@@ -292,3 +292,16 @@ account, the bank account name shows in the tab title rather than just
 a bank account inquiry on a different bank account, the tabs have the
 bank account names rather than the duplicate title "Bank Account Inquiry".
 
+## Change Quick Entries maintenance to use drop down menu instead of table
+
+FA uses a table to select and modify quick entries.
+If many quick entries are used,
+this table quickly grows to an unmanageble size,
+and it becomes time-consuming to scroll down the page to edit
+the quick entry data.
+
+BF replaces the table with a drop down menu.  Advantages are easy search,
+eliminates scrolling down the page to edit the data,
+presents an identical interface to other FA pages (like GL Accounts, etc),
+and reduces and reuses existing code.
+

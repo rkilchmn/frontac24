@@ -2343,16 +2343,17 @@ function printers_list($name, $selected_id=null, $spec_opt=false, $submit_on_cha
 
 //------------------------------------------------------------------------------------------------
 
-function quick_entries_list($name, $selected_id=null, $type=null, $submit_on_change=false)
+function quick_entries_list($name, $selected_id=null, $type=null, $submit_on_change=false, $all_option=false)
 {
 	$where = false;
 	$sql = "SELECT id, description FROM ".TB_PREF."quick_entries";
 	if ($type != null)
-		$sql .= " WHERE type=$type";
+		$sql .= " WHERE $type=type";
 
 	return combo_input($name, $selected_id, $sql, 'id', 'description',
 		array(
 			'spec_id' => '',
+            'spec_option' => $all_option,
 			'order' => 'description',
 			'select_submit'=> $submit_on_change,
 			'async' => false
@@ -2360,19 +2361,19 @@ function quick_entries_list($name, $selected_id=null, $type=null, $submit_on_cha
 
 }
 
-function quick_entries_list_cells($label, $name, $selected_id=null, $type, $submit_on_change=false)
+function quick_entries_list_cells($label, $name, $selected_id=null, $type, $submit_on_change=false, $all_option=false)
 {
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo "<td>";	
-	echo quick_entries_list($name, $selected_id, $type, $submit_on_change);
+	echo quick_entries_list($name, $selected_id, $type, $submit_on_change, $all_option);
 	echo "</td>";
 }
 
-function quick_entries_list_row($label, $name, $selected_id=null, $type, $submit_on_change=false)
+function quick_entries_list_row($label, $name, $selected_id=null, $type, $submit_on_change=false, $all_option=false)
 {
 	echo "<tr><td class='label'>$label</td>";
-	quick_entries_list_cells(null, $name, $selected_id, $type, $submit_on_change);
+	quick_entries_list_cells(null, $name, $selected_id, $type, $submit_on_change, $all_option);
 	echo "</tr>\n";
 }
 
