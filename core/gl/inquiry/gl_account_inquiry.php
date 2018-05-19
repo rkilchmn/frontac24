@@ -40,7 +40,7 @@ if (get_post('Show'))
 	$Ajax->activate('trans_tbl');
 }
 
-set_posts(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max"));
+set_posts(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max", "person_id"));
 
 if (!isset($_POST["amount_min"]))
 	$_POST["amount_min"] = price_format(0);
@@ -80,6 +80,7 @@ function gl_inquiry_controls()
 	ref_cells(_("Memo:"), 'Memo', '',null, _('Enter memo fragment or leave empty'));
 	small_amount_cells(_("Amount min:"), 'amount_min', null, " ");
 	small_amount_cells(_("Amount max:"), 'amount_max', null, " ");
+    hidden("person_id");
 	submit_cells('Show',_("Show"),'','', 'default');
 	end_row();
 	end_table();
@@ -125,7 +126,7 @@ function show_results()
     	$_POST['Dimension2'] = 0;
 	$result = get_gl_transactions($_POST['TransFromDate'], $_POST['TransToDate'], -1,
     	$_POST["account"], $_POST['Dimension'], $_POST['Dimension2'], null,
-    	input_num('amount_min'), input_num('amount_max'), null, $_POST['Memo']);
+    	input_num('amount_min'), input_num('amount_max'), get_post('person_id'), $_POST['Memo']);
 
 	$colspan = ($dim == 2 ? "7" : ($dim == 1 ? "6" : "5"));
 
@@ -247,7 +248,9 @@ gl_inquiry_controls();
 
 div_start('trans_tbl');
 
-if (get_post('Show') || get_post('account'))
+if (get_post('Show')
+    || get_post('account')
+    || get_post('person_id'))
     show_results();
 
 div_end();

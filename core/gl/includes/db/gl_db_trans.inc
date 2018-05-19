@@ -146,9 +146,6 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 		AND gl.tran_date <= '$to'
 		AND gl.amount <> 0"; 
 
-	if ($person_id)
-		$sql .= " AND gl.person_id=".db_escape($person_id); 
-
 	if ($trans_no > 0)
 		$sql .= " AND gl.type_no LIKE ".db_escape('%'.$trans_no);;
 
@@ -170,12 +167,16 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 	if ($amount_max != null)
 		$sql .= " AND ABS(gl.amount) <= ABS(".db_escape($amount_max).")";
 
-        if ($memo) {
-                $sql .= " AND gl.memo_ LIKE ". db_escape("%$memo%");
-        }
+    if ($memo)
+        $sql .= " AND gl.memo_ LIKE ". db_escape("%$memo%");
+
 	$sql .= " GROUP BY counter";
-	$sql .= " GROUP BY counter";
+
+	if ($person_id)
+		$sql .= " HAVING person_id=".db_escape($person_id); 
+
 	$sql .= " ORDER BY tran_date, counter";
+//display_notification($sql);
 
 	return db_query($sql, "The transactions for could not be retrieved");
 }

@@ -305,3 +305,9 @@ eliminates scrolling down the page to edit the data,
 presents an identical interface to other FA pages (like GL Accounts, etc),
 and reduces and reuses existing code.
 
+## G/L search on Quick Entries
+
+FA does not offer a way to search for transactions for quick entries.
+
+BF allows G/L search on Quick Entries.
+

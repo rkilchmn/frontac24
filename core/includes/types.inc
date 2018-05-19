@@ -148,12 +148,19 @@ function payment_person_name_link($type, $person_id, $full=true, $from_date="", 
 	{
 		case PT_CUSTOMER :
 			$search_link = "/sales/inquiry/customer_inquiry.php?customer_id=$person_id";
-			$link = "/sales/manage/customers.php?customer_id=$person_id";
+            $link = pager_link(payment_person_name($type, $person_id, $full), 
+			    "/sales/manage/customers.php?customer_id=$person_id");
             $img_title = "Customer Search";
             break;
 		case PT_SUPPLIER :
 			$search_link = "/purchasing/inquiry/supplier_inquiry.php?supplier_id=$person_id";
-			$link = "/purchasing/manage/suppliers.php?supplier_id=$person_id";
+            $link = pager_link(payment_person_name($type, $person_id, $full), 
+			    "/purchasing/manage/suppliers.php?supplier_id=$person_id");
+            $img_title = "Supplier Search";
+            break;
+		case PT_QUICKENTRY :
+			$search_link = "/gl/inquiry/gl_account_inquiry.php?person_id=$person_id";
+			$link = payment_person_name($type, $person_id, $full);
             $img_title = "Supplier Search";
             break;
 		default :
@@ -172,7 +179,7 @@ function payment_person_name_link($type, $person_id, $full=true, $from_date="", 
         '" style="vertical-align:middle;width:12px;height:12px;border:0;" onclick="javascript:lookupWindow(&quot;'.
         $path_to_root.$search_link.'&quot;, &quot;&quot;);" title="' . $img_title . '" style="cursor:pointer;" />';
 
-    return pager_link(payment_person_name($type, $person_id, $full), $link) . " " . $img;
+    return $link . " " . $img;
 }
 
 
