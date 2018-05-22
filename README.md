@@ -260,13 +260,6 @@ This mod updates the date picker to add frequently picked dates at the bottom of
 
 This mod places these dates at the bottom of the date picker. It also removes the Back button, which is replaced by clicking on the date picker again, to hide or show it (i.e. toggle). Toggling is an expected behaviour by web users, as they have become accustomed to toggling the display of select menus.
 
-## Sort the sales summary report by sales type
-
-BF segregates the customers by sales type to make it easy to analyze
-sales by sales channel.
-For example, if customers are retail and wholesale, the report
-will subtotal retail and wholesale sales separately.
-
 ## Add paging and scrolling to select pop-up
 
 In FA, the select pop-up shows a (configurable) limited amount of items.
