@@ -52,7 +52,7 @@ date_cells(_("From:"), 'TransAfterDate', '', null, -abs($days));
 if ($days >= 0) {
     date_cells(_("To:"), 'TransToDate');
 } else {
-    date_cells(_("To:"), 'TransToDate', '', null, 0, 0, 1);
+    date_cells(_("To:"), 'TransToDate', '', null, 0, 2);
 }
 
 submit_cells('Show',_("Show"),'','', 'default');

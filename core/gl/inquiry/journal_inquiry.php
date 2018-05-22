@@ -52,7 +52,7 @@ date_cells(_("From:"), 'FromDate', '', null, -abs($days));
 if ($days >= 0) {
     date_cells(_("To:"), 'ToDate');
 } else {
-    date_cells(_("To:"), 'ToDate', '', null, 0, 0, 1);
+    date_cells(_("To:"), 'ToDate', '', null, 0, 2);
 }
 
 end_row();

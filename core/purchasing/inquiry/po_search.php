@@ -66,7 +66,7 @@ date_cells(_("from:"), 'OrdersAfterDate', '', null, -abs($days));
 if ($days >= 0) {
     date_cells(_("to:"), 'OrdersToDate');
 } else {
-    date_cells(_("to:"), 'OrdersToDate', '', null, 0, 0, 1);
+    date_cells(_("to:"), 'OrdersToDate', '', null, 0, 2);
 }
 
 locations_list_cells(_("Location:"), 'StockLocation', null, true);

@@ -62,7 +62,7 @@ function gl_inquiry_controls()
     if ($days >= 0) {
         date_cells(_("to:"), 'TransToDate');
     } else {
-        date_cells(_("to:"), 'TransToDate', '', null, 0, 0, 1);
+        date_cells(_("to:"), 'TransToDate', '', null, 0, 2);
     }
     end_row();
 	end_table();

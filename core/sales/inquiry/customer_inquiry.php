@@ -178,7 +178,7 @@ if ($_POST['filterType'] != '2')
     if ($days >= 0) {
         date_cells(_("To:"), 'TransToDate');
     } else {
-        date_cells(_("To:"), 'TransToDate', '', null, 0, 0, 1);
+        date_cells(_("To:"), 'TransToDate', '', null, 0, 2);
     }
 }
 
