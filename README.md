@@ -304,3 +304,8 @@ FA does not offer a way to search for transactions for quick entries.
 
 BF allows G/L search on Quick Entries.
 
+## BUGFIX: 0004468: Cannot modify a funds transfer twice
+Editing a funds transfer twice results in the message:
+
+    The entered reference is already in use.
+
