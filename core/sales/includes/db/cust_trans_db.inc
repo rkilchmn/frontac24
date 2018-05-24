@@ -347,8 +347,16 @@ function get_sql_for_customer_inquiry($from, $to, $cust_id = ALL_TEXT, $sales_ty
                         LEFT JOIN ".TB_PREF."users as user ON (audit.user=user.id)
 			LEFT JOIN ".TB_PREF."cust_branch as branch ON trans.branch_code=branch.branch_code,"
 			.TB_PREF."debtors_master as debtor
-		WHERE debtor.debtor_no = trans.debtor_no" // exclude voided transactions :
-    		." AND ISNULL(v.date_)";
+		WHERE debtor.debtor_no = trans.debtor_no"
+
+        // exclude voided transactions :
+
+    		." AND ISNULL(v.date_)"
+
+        // exclude self-balancing (journal) transactions:
+
+            ." AND (trans.type = " . ST_SALESINVOICE . "
+            OR (trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount) != 0)";
 
 	if ($filter == '2')
 		$sql .= " AND ABS(IF(prep_amount, prep_amount, trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount)-trans.alloc)>"
