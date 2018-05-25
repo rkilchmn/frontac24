@@ -165,7 +165,7 @@ function set_tpl_flag($reconcile_id)
 if (!isset($_POST['bank_date'])
     || get_post('bank_date')=='') { // init page
 	$_POST['reconcile_date'] = new_doc_date();
-	$_POST['bank_date'] = date2sql(Today());
+//	$_POST['bank_date'] = date2sql(Today());
 } else
     $_POST['reconcile_date'] = sql2date($_POST['bank_date']);
 

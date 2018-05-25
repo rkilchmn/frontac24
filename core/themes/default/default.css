@@ -656,7 +656,7 @@ div.note_msg {
     https://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
 */
 div.trans_tbl, div._trans_tbl_span {
-    height: calc(100vh - 230px);
+    height: calc(100vh - 330px);
     overflow-y: auto;
 }
 
