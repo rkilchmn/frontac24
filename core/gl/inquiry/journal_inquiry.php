@@ -101,6 +101,12 @@ function edit_link($row)
 	return $ok ? trans_editor_link( $row["trans_type"], $row["trans_no"]) : '';
 }
 
+function delete_link($row)
+{
+        return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['trans_type'], ICON_DELETE);
+}
+
+
 function invoice_supp_reference($row)
 {
 	return $row['supp_reference'];
@@ -121,7 +127,8 @@ $cols = array(
 	_("Memo"),
 	_("User"),
 	_("View") => array('insert'=>true, 'fun'=>'gl_link'),
-	array('insert'=>true, 'fun'=>'edit_link')
+	array('insert'=>true, 'fun'=>'edit_link'),
+	array('insert'=>true, 'fun'=>'delete_link')
 );
 
 if (!check_value('AlsoClosed')) {
