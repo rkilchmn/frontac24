@@ -309,3 +309,5 @@ Editing a funds transfer twice results in the message:
 
     The entered reference is already in use.
 
+## BUGFIX: 0004475: Editing GJ transaction with no counterparty displays incorrect edit table
+
