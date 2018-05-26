@@ -170,7 +170,7 @@ function print_receipts()
 			$rep->NewLine();
 			$rep->TextCol(6, 7, _("Received / Sign"), - 2);
 			$rep->NewLine();
-			$rep->TextCol(0, 2, _("By Cash / Cheque* / Draft No."), - 2);
+			$rep->TextCol(0, 2, _("By Cash / " . _("Cheque") . "."), - 2);
 			$rep->TextCol(2, 4, "______________________________", - 2);
 			$rep->TextCol(4, 5, _("Dated"), - 2);
 			$rep->TextCol(5, 6, "__________________", - 2);
