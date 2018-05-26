@@ -162,12 +162,10 @@ function set_tpl_flag($reconcile_id)
 	$Ajax->activate('difference');
 }
 
-if (!isset($_POST['bank_date'])
-    || get_post('bank_date')=='') { // init page
+if (!isset($_POST['reconcile_date'])) {
 	$_POST['reconcile_date'] = new_doc_date();
 //	$_POST['bank_date'] = date2sql(Today());
-} else
-    $_POST['reconcile_date'] = sql2date($_POST['bank_date']);
+}
 
 if (list_updated('bank_account')) {
     $Ajax->activate('bank_date');
