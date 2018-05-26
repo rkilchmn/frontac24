@@ -1055,6 +1055,7 @@ CREATE TABLE IF NOT EXISTS `0_payment_terms` (
   `days_before_due` smallint(6) NOT NULL default '0',
   `day_in_following_month` smallint(6) NOT NULL default '0',
   `inactive` tinyint(1) NOT NULL default '0',
+  `legal_text` varchar(4096) NOT NULL default '',
   PRIMARY KEY (`terms_indicator`),
   UNIQUE KEY `terms` (`terms`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 ;
@@ -1063,10 +1064,10 @@ CREATE TABLE IF NOT EXISTS `0_payment_terms` (
 -- Dumping data for table `0_payment_terms`
 --
 
-INSERT INTO `0_payment_terms` VALUES (1, 'Due 15th Of the Following Month', 0, 17, 0);
-INSERT INTO `0_payment_terms` VALUES (2, 'Due By End Of The Following Month', 0, 30, 0);
-INSERT INTO `0_payment_terms` VALUES (3, 'Payment due within 10 days', 10, 0, 0);
-INSERT INTO `0_payment_terms` VALUES (4, 'Cash Only', 0, 0, 0);
+INSERT INTO `0_payment_terms` VALUES (1, 'Due 15th Of the Following Month', 0, 17, 0, '');
+INSERT INTO `0_payment_terms` VALUES (2, 'Due By End Of The Following Month',  0, 30, 0, '');
+INSERT INTO `0_payment_terms` VALUES (3, 'Payment due within 10 days', 10, 0, 0, '');
+INSERT INTO `0_payment_terms` VALUES (4, 'Cash Only',  0, 0, 0, '');
 
 -- --------------------------------------------------------
 

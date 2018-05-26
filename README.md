@@ -311,3 +311,25 @@ Editing a funds transfer twice results in the message:
 
 ## BUGFIX: 0004475: Editing GJ transaction with no counterparty displays incorrect edit table
 
+## FEATURE: Add legal terms to payment terms
+
+FA provides a simple mechanism to add a small amount of legal text to the footer of all invoices in Setup->System and General GL Setup.
+
+BF retains this mechanism, but also adds legal terms to payment terms, which appear on invoices using those terms. 
+Payment terms often determine the content of the legal text
+at the footer of the invoice.
+For example, a cash invoice does not require language about
+payment defaults.
+In addition, it allows the legal text
+to be tailored by customer or order, which is useful for different
+customer types or customers located in other jurisdictions, where
+differing legal text is required specific to those districts.
+
+BF removes all the hardcoded
+boiler plate footer info (e.g. Bank name, currency), relying instead
+entirely on the legal text fields in setup or payment terms.
+BF also checks the size of the legal text, wraps it automatically on space boundaries and reduces the font size accordingly if necessary to fit into the allocated footer space.
+These changes accomodate longer legal text than is possible in FA.
+
+This feature required a database change by adding a legal terms field to the payment_terms table.
+
