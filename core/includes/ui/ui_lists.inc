@@ -1859,6 +1859,7 @@ function gl_account_types_list_row($label, $name, $selected_id=null, $all_option
 function gl_all_accounts_list($name, $selected_id=null, $skip_bank_accounts=false,
 	$cells=false, $all_option=false, $submit_on_change=false, $all=false, $type_id=false)
 {
+    global $SysPrefs;
 	if ($skip_bank_accounts)
 		$sql = "SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id
 			FROM (".TB_PREF."chart_master chart,".TB_PREF."chart_types type) "
@@ -1878,7 +1879,7 @@ function gl_all_accounts_list($name, $selected_id=null, $skip_bank_accounts=fals
 			'spec_option' => $all_option===true ?  _("Use Item Sales Accounts") : $all_option,
 			'spec_id' => '',
 			'type' => 2,
-			'order' => array('type.class_id','type.id','account_code'),
+			'order' => array('type.class_id','type.id', ($SysPrefs->sort_gl_account_desc) ? 'account_name' : 'account_code'),
 			'search_box' => $cells,
 			'search_submit' => false,
 			'size' => 12,

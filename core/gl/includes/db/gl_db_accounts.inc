@@ -47,7 +47,7 @@ function get_gl_accounts($from=null, $to=null, $type=null)
 		$sql .= " AND coa.account_code <= ".db_escape($to);
 	if ($type != null)
 		$sql .= " AND account_type=".db_escape($type);
-	$sql .= " ORDER BY account_code";
+    $sql .= " ORDER BY account_code";
 
 	return db_query($sql, "could not get gl accounts");
 }

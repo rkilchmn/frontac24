@@ -199,10 +199,9 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 	$clear_trial_balance_opening = false;
 
 /*
-        Sort and item list by description rather than by item number
+    Sort item list by description rather than by item number
 */
 	$sort_item_list_desc = false;
-
 
 /*
 	Optional popup search enabled if this is true.
@@ -210,11 +209,16 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 	$use_popup_search = true;
 
 /*
-        Allow negative quantity in sales orders
+    Allow negative quantity in sales orders
 */
-        $allow_negative_quantity = false;
+    $allow_negative_quantity = false;
 
 /*
-        Allow negative invoice amount in sales orders
+    Allow negative invoice amount in sales orders
 */
-        $allow_negative_invoice = false;
+    $allow_negative_invoice = false;
+
+/*
+    Sort G/L accounts by description rather than by account number
+*/
+    $sort_gl_account_desc = false;

@@ -333,3 +333,5 @@ These changes accomodate longer legal text than is possible in FA.
 
 This feature required a database change by adding a legal terms field to the payment_terms table.
 
+## FEATURE: Add system preference option to sort g/l accounts by name rather than account code
+
