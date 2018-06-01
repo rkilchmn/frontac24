@@ -198,12 +198,14 @@ function write_sales_invoice(&$invoice)
 			// extend invoice entry page with final amount after discount 
 			// and change line below.
 			$discount = 0; // $invoice->cash_discount*$amount;
+            $payment_info = $invoice->pos['pos_name'].' #'.$invoice_no;
+            if (!empty($invoice->payment_info))
+                $payment_info .= ' ' . $invoice->payment_info;
 			$pmtno = write_customer_payment(0, $invoice->customer_id, 
 				$invoice->Branch, $invoice->pos['pos_account'], $date_,
 				$Refs->get_next(ST_CUSTPAYMENT, null, array('customer' => $invoice->customer_id,
 					'branch' => $invoice->Branch, 'date' => $date_)),
-				$amount-$discount, $discount,
-				$invoice->pos['pos_name'].' #'.$invoice_no,
+				$amount-$discount, $discount, $payment_info,
                                 0,0,0,$invoice->dimension_id, $invoice->dimension2_id);
 			add_cust_allocation($amount, ST_CUSTPAYMENT, $pmtno, ST_SALESINVOICE, $invoice_no, $invoice->customer_id, $date_);
 

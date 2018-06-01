@@ -82,6 +82,7 @@ class Cart
 	var $ex_rate;
 
 	var $fixed_asset = false;
+	var $payment_info; // optional additional payment information
 
 	//-------------------------------------------------------------------------
 	//

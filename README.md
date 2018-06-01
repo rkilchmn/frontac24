@@ -335,3 +335,13 @@ This feature required a database change by adding a legal terms field to the pay
 
 ## FEATURE: Add system preference option to sort g/l accounts by name rather than account code
 
+## FEATURE: Add ability to enter payment memo on direct invoice
+
+The FA direct invoice feature can create a payment as well as an invoice.
+However, FA does not offer a way to directly enter the payment memo,
+which is set to "<pos name> # <invoice number>".
+(Although one can edit the memo afterwards).
+
+BA adds another field to the cart, payment_info.  This field is tacked
+onto the end of the FA generated memo.
+
