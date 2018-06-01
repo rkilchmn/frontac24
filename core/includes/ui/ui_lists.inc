@@ -2348,8 +2348,12 @@ function quick_entries_list($name, $selected_id=null, $type=null, $submit_on_cha
 {
 	$where = false;
 	$sql = "SELECT id, description FROM ".TB_PREF."quick_entries";
-	if ($type != null)
+	if ($type != null) {
 		$sql .= " WHERE $type=type";
+        // allow modify of payment/deposit even if qe type is changed
+        if (get_post($name) != "")
+            $sql .= " OR " . db_escape(get_post($name)) . "=id";
+    }
 
 	return combo_input($name, $selected_id, $sql, 'id', 'description',
 		array(

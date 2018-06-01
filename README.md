@@ -345,3 +345,5 @@ which is set to "<pos name> # <invoice number>".
 BA adds another field to the cart, payment_info.  This field is tacked
 onto the end of the FA generated memo.
 
+## BUGFIX: 0004490: Cannot edit a quick entry transaction properly if the quick entry type changes
+
