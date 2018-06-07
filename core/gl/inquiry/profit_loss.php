@@ -23,6 +23,7 @@ include_once($path_to_root . "/gl/includes/gl_db.inc");
 $js = "";
 if (user_use_date_picker())
 	$js = get_js_date_picker();
+$js .= get_js_history(array('TransFromDate', 'TransToDate', 'Dimension', 'Dimension2', 'Compare', 'AccGrp'));
 
 page(_($help_context = "Profit & Loss Drilldown"), false, false, "", $js);
 
@@ -39,18 +40,7 @@ if (get_post('Show'))
 	$Ajax->activate('pl_tbl');
 }
 
-if (isset($_GET["TransFromDate"]))
-	$_POST["TransFromDate"] = $_GET["TransFromDate"];	
-if (isset($_GET["TransToDate"]))
-	$_POST["TransToDate"] = $_GET["TransToDate"];
-if (isset($_GET["Compare"]))
-	$_POST["Compare"] = $_GET["Compare"];
-if (isset($_GET["Dimension"]))
-	$_POST["Dimension"] = $_GET["Dimension"];
-if (isset($_GET["Dimension2"]))
-	$_POST["Dimension2"] = $_GET["Dimension2"];
-if (isset($_GET["AccGrp"]))
-	$_POST["AccGrp"] = $_GET["AccGrp"];
+set_posts(array('TransFromDate', 'TransToDate', 'Dimension', 'Dimension2', 'Compare', 'AccGrp'));
 
 //----------------------------------------------------------------------------------------------------
 
