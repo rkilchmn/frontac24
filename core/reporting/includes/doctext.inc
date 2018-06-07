@@ -39,7 +39,8 @@
 		$Legal_Text = $row["legal_text"];
 		if ($this->formData['doctype'] == ST_SALESINVOICE && $this->formData['prepaid'])
 			$this->formData['prepaid'] = ($row['days_before_due'] >= 0) ? 'final' : 'partial';
-	}
+	} else
+        $Legal_Text = "";
 
 
 	switch ($this->formData['doctype'])
