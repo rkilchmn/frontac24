@@ -325,6 +325,8 @@ function show_allocatable($show_totals) {
 	    		"colspan=8 align=right", "align=right id='total_allocated'", 3);
 
 			$amount = $cart->amount;
+            if ($supp_ref)
+                $amount = abs($amount);
 
 			if (floatcmp($amount, $total_allocated) < 0)
 	        {
@@ -332,7 +334,7 @@ function show_allocatable($show_totals) {
     	    }
 	        else
         		$font = "";
-
+display_notification($amount);
 			$left_to_allocate = price_format($amount - $total_allocated);
 	        label_row(_("Left to Allocate"), $left_to_allocate, 
 				"colspan=8 align=right", $font . "nowrap align=right id='left_to_allocate'",
