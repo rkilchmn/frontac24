@@ -854,7 +854,7 @@ function dimensions_list_row($label, $name, $selected_id=null, $no_option=false,
 //---------------------------------------------------------------------------------------------------
 
 function stock_items_list($name, $selected_id=null, $all_option=false, 
-	$submit_on_change=false, $opts=array(), $editkey = false, $type = "stock")
+	$submit_on_change=false, $opts=array(), $editkey = false, $type = "stock", $filter_cat = null)
 {
 global $SysPrefs ;
 
@@ -865,6 +865,9 @@ global $SysPrefs ;
 		$sql .= " AND mb_flag='F'";
 	else
 		$sql .= " AND mb_flag!='F'";
+
+	if (isset($filter_cat) && $filter_cat)
+		$sql .= " AND s.category_id='" . $filter_cat . "'";
 
 	if ($editkey)
 		set_editor('item', $name, $editkey);
@@ -900,7 +903,7 @@ function _format_stock_items($row)
 }
 
 function stock_items_list_cells($label, $name, $selected_id=null, $all_option=false, 
-	$submit_on_change=false, $all=false, $editkey = false, $opts= array())
+	$submit_on_change=false, $all=false, $editkey = false, $opts= array(), $filter_cat=null)
 {
 	if (isset($opts['fixed_asset']) && $opts['fixed_asset'])
 		$editor_item = 'fa_item';
@@ -919,7 +922,7 @@ function stock_items_list_cells($label, $name, $selected_id=null, $all_option=fa
 //	echo stock_items_list($name, $selected_id, $all_option, $submit_on_change, $opts);
 
 	echo stock_items_list($name, $selected_id, $all_option, $submit_on_change,
-		array_merge(array('cells'=>true, 'show_inactive'=>$all), $opts), $editkey);
+		array_merge(array('cells'=>true, 'show_inactive'=>$all), $opts), $editkey, "stock", $filter_cat);
 
 }
 /*
