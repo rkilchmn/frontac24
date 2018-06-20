@@ -347,3 +347,7 @@ onto the end of the FA generated memo.
 
 ## BUGFIX: 0004490: Cannot edit a quick entry transaction properly if the quick entry type changes
 
+## FEATURE: Add core support for category filtering on stock items list
+
+This adds core support to display a stock items list for a given category.
+
