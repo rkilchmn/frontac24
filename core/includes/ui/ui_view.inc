@@ -1592,7 +1592,7 @@ function get_js_history($vars)
         if ($first) {
             $first = false;
             $js .= '
-            state += "' . basename($_SERVER['SCRIPT_NAME']) . "?";
+            state += "?';
         } else
             $js .= '
             state += "&';
@@ -1600,7 +1600,7 @@ function get_js_history($vars)
     }
 
     $js .= '
-        history.replaceState(stateObj, "page 2", state);
+        history.replaceState(stateObj, "page 2", window.location.href + state);
     }';
     return $js;
 }
