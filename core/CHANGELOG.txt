@@ -1,3 +1,63 @@
+2018-06-18
+AP Surf Set in demo data rerun
+M	sql/en_US-demo.sql
+
+2018-06-16
+Report 102 Aged Customer Analysis SQL fix
+M	purchasing/includes/db/suppliers_db.inc
+ 
+2018-06-12 Joe Hunt
+Wrong standard cost for AP Surf Set with rerun for wrong type
+M	sql/en_US-demo.sql
+
+2018-06-04 Joe Hunt
+Work Order Report rep402 option for GL rows and re-run
+M	reporting/rep402.php
+M	reporting/reports_main.php
+
+2018-06-01 Janusz Dobrowolski
+Synched all install languages with upstream
+M	install/lang/ar_EG/LC_MESSAGES/ar_EG.po	ar_EG.po
+M	install/lang/da_DK/LC_MESSAGES/da_DK.po	da_DK.po
+M	install/lang/de_DE/LC_MESSAGES/de_DE.po	de_DE.po
+M	install/lang/el_GR/LC_MESSAGES/el_GR.po	el_GR.po
+M	install/lang/es_MX/LC_MESSAGES/es_MX.po	es_MX.po
+M	install/lang/fr_FR/LC_MESSAGES/fr_FR.po	fr_FR.po
+M	install/lang/hi_IN/LC_MESSAGES/hi_IN.po	hi_IN.po
+M	install/lang/id_ID/LC_MESSAGES/id_ID.po	id_ID.po
+M	install/lang/it_IT/LC_MESSAGES/it_IT.po	it_IT.po
+M	install/lang/ka_GE/LC_MESSAGES/ka_GE.po	ka_GE.po
+M	install/lang/nl_BE/LC_MESSAGES/nl_BE.po	nl_BE.po
+M	install/lang/pl_PL/LC_MESSAGES/pl_PL.mo	pl_PL.mo
+M	install/lang/pl_PL/LC_MESSAGES/pl_PL.po	pl_PL.po
+M	install/lang/pt_BR/LC_MESSAGES/pt_BR.po	pt_BR.po
+M	install/lang/pt_PT/LC_MESSAGES/pt_PT.po	pt_PT.po
+M	install/lang/sv_SE/LC_MESSAGES/sv_SE.po	sv_SE.po
+M	install/lang/ta_IN/LC_MESSAGES/ta_IN.po	ta_IN.po
+M	install/lang/vi_VN/LC_MESSAGES/vi_VN.po	vi_VN.po
+M	install/lang/zh_CN/LC_MESSAGES/zh_CN.po	zh_CN.po
+
+2018-06-01 Janusz Dobrowolski
+0004461 Installer: added info about needed user database permissions. (update install langs separately)
+M	install/index.php
+M	install/lang/new_language_template/LC_MESSAGES/empty.po
+
+2018-05-31 Joe Hunt
+0004468: @braathwaate: Cannot modify a funds transfer twice.
+M	gl/includes/db/gl_db_banking.inc
+
+2018-05-31 Joe Hunt
+0004476: Our Order No is always 0 on customer payment receipt. Fixed by empty column.
+M	reporting/includes/doctext.inc
+
+2018-05-31 Joe Hunt
+0003317: "Forty" is misspelled on remittances, receipts. Fixed.
+M	includes/ui/ui_view.inc
+
+2018-05-25 Joe Hunt
+Currency Convertor Google URL update
+M	gl/includes/db/gl_db_rates.inc
+
 2018-05-09 Joe Hunt
 Adding Attachments to Dimension
 M	dimensions/dimension_entry.php
