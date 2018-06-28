@@ -33,10 +33,28 @@ if (isset($_GET['trans_no'])
     $_POST['ProcessVoiding'] = true;
 }
 
+$referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
+if (basename($referer) == "index.php")
+    unset($_SESSION['HTTP_REFERER']);
+else if ($referer != $_SERVER['PHP_SELF'])
+    $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
+
 page(_($help_context = "Void a Transaction"), false, false, "", $js);
 
 simple_page_mode(true);
 //----------------------------------------------------------------------------------------
+function returnToReferer($message)
+{
+    $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
+    $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+    $params = preg_replace('/&message.*/', '', $params);
+    if (!empty($params))
+        $params .= "&";
+    $params .= "message=$message";
+
+    meta_forward($referer, $params);
+}
+
 function exist_transaction($type, $type_no)
 {
 	$void_entry = get_voided_entry($type, $type_no);
@@ -294,6 +312,9 @@ function handle_void_transaction()
 
 		if (!$msg) 
 		{
+            if (isset($_SESSION['HTTP_REFERER']))
+                returnToReferer("Void Completed");
+
 			display_notification_centered(_("Selected transaction has been voided."));
 			unset($_POST['trans_no']);
 			unset($_POST['memo_']);
@@ -331,6 +352,8 @@ if (isset($_POST['ConfirmVoiding']))
 
 if (isset($_POST['CancelVoiding']))
 {
+    if (isset($_SESSION['HTTP_REFERER']))
+        returnToReferer("Void Canceled");
 	$selected_id = -1;
 	$Ajax->activate('_page_body');
 }

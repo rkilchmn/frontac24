@@ -342,7 +342,7 @@ However, FA does not offer a way to directly enter the payment memo,
 which is set to "<pos name> # <invoice number>".
 (Although one can edit the memo afterwards).
 
-BA adds another field to the cart, payment_info.  This field is tacked
+BF adds another field to the cart, payment_info.  This field is tacked
 onto the end of the FA generated memo.
 
 ## BUGFIX: 0004490: Cannot edit a quick entry transaction properly if the quick entry type changes
@@ -350,4 +350,21 @@ onto the end of the FA generated memo.
 ## FEATURE: Add core support for category filtering on stock items list
 
 This adds core support to display a stock items list for a given category.
+
+## FEATURE: Return to referer
+
+The FA pencil on several inquiry forms is used to modify a transaction.
+After the transaction is modified, the user has to use the back button
+to get back to the inquiry form.
+
+BF has expanded inquiry forms to have a delete link which calls the
+void transaction and links to enter another payment and deposit.
+
+This new feature returns control back to the inquiry form that calls
+the modify, enter or delete links.
+
+The result is that one can keep a bank account open to visually monitor
+transactions while entering, modifying and deleting transactions.
+This presents a user interface similar to the Quickbooks register,
+where one can initiate all kinds of transactions from a single page.
 

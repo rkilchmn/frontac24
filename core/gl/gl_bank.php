@@ -45,6 +45,13 @@ if (isset($_GET['NewPayment'])) {
 	$_SESSION['page_title'] = _($help_context = "Modify Bank Deposit Entry")." #".$_GET['trans_no'];
 	create_cart(ST_BANKDEPOSIT, $_GET['trans_no']);
 }
+
+$referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
+if (basename($referer) == "index.php")
+    unset($_SESSION['HTTP_REFERER']);
+else if ($referer != $_SERVER['PHP_SELF'])
+    $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
+
 page($_SESSION['page_title'], false, false, '', $js);
 
 //-----------------------------------------------------------------------------------------------
@@ -322,12 +329,27 @@ if (isset($_POST['Process']) && !check_trans())
 
 	commit_transaction();
 
-	if ($new)
-		meta_forward($_SERVER['PHP_SELF'], $trans_type==ST_BANKPAYMENT ?
-			"AddedID=$trans_no&date_=".$_POST['date_'] : "AddedDep=$trans_no&date_=".$_POST['date_']);
-	else
-		meta_forward($_SERVER['PHP_SELF'], $trans_type==ST_BANKPAYMENT ?
-			"UpdatedID=$trans_no" : "UpdatedDep=$trans_no");
+    $params = "";
+    $referer = "";
+    if (!isset($_SESSION['HTTP_REFERER'])) {
+        $referer=$_SERVER['PHP_SELF'];
+        if ($new)
+            $params .= ($trans_type==ST_BANKPAYMENT ?
+                "AddedID=$trans_no&date_=".$_POST['date_'] : "AddedDep=$trans_no&date_=".$_POST['date_']);
+        else
+            $params .= ($trans_type==ST_BANKPAYMENT ?
+                "UpdatedID=$trans_no" : "UpdatedDep=$trans_no");
+    } else {
+        $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
+        $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+        $params = preg_replace('/&message.*/', '', $params);
+        if (!empty($params))
+            $params .= "&";
+        $params .= "message=";
+        $params .= ($trans_type==ST_BANKPAYMENT ? "Payment" : "Deposit");
+        $params .= " Completed";
+    }
+    meta_forward($referer, $params);
 
 }
 

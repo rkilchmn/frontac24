@@ -1600,7 +1600,7 @@ function get_js_history($vars)
     }
 
     $js .= '
-        history.replaceState(stateObj, "page 2", window.location.href + state);
+        history.replaceState(stateObj, "page 2", location.protocol + "//" + location.host + location.pathname + state);
     }';
     return $js;
 }

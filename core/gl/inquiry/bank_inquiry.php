@@ -42,6 +42,11 @@ if (get_post('Show'))
 set_posts(array('bank_account', 'TransAfterDate', 'TransToDate'));
 //------------------------------------------------------------------------------------------------
 
+if (isset($_GET['message']))
+{
+    display_notification_centered($_GET['message']);
+}
+
 start_form();
 start_table(TABLESTYLE_NOBORDER);
 start_row();
