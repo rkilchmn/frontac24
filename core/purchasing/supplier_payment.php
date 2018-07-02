@@ -112,17 +112,6 @@ if (isset($_GET['AddedID'])) {
 
 //----------------------------------------------------------------------------------------
 
-function get_default_supplier_payment_bank_account($supplier_id, $date)
-{
-	$previous_payment = get_supp_payment_before($supplier_id, date2sql($date));
-	if ($previous_payment)
-	{
-		return $previous_payment['bank_id'];
-	}
-	return get_default_supplier_bank_account($supplier_id);
-}
-//----------------------------------------------------------------------------------------
-
 function check_inputs()
 {
 	global $Refs;
@@ -285,7 +274,7 @@ start_form();
 
 	if (!list_updated('bank_account') && !get_post('__ex_rate_changed'))
 	{
-		$_POST['bank_account'] = get_default_supplier_payment_bank_account($_POST['supplier_id'], $_POST['DatePaid']);
+		set_post_last_used_bank_account(PT_SUPPLIER, $_POST['supplier_id']);
 	} else
 	{
 		$_POST['amount'] = price_format(0);

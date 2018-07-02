@@ -368,3 +368,20 @@ transactions while entering, modifying and deleting transactions.
 This presents a user interface similar to the Quickbooks register,
 where one can initiate all kinds of transactions from a single page.
 
+## FEATURE: Make default account same as earlier transaction (expanded)
+
+On Feb 2016, cambell-prince added the original feature to FA
+with this pull request:
+https://github.com/FrontAccountingERP/FA/pull/10.
+The feature applied only to payments to suppliers made with
+the Payments to Suppliers form and recalls the last bank account
+used for the supplier made with this form.
+
+BA generalizes this feature such that it applies to payments and deposits
+made with Banking and General Ledger
+and Customer Payments
+for any person type (customer, supplier, miscellaneous, or quick entry).
+It also replaces the code for Payments to Suppliers.
+Thus, if a payment to a supplier is made with either interface,
+the bank account from that payment will be recalled.
+

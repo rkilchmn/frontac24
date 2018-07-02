@@ -331,10 +331,8 @@ if (list_updated('customer_id') || ($new && list_updated('bank_account'))) {
 	$_SESSION['alloc']->set_person($_POST['customer_id'], PT_CUSTOMER);
 	$_SESSION['alloc']->read();
 	$_POST['memo_'] = $_POST['amount'] = $_POST['discount'] = '';
-	if (list_updated('customer_id')) {
-		$dflt_act = get_default_bank_account($_SESSION['alloc']->person_curr);
-		$_POST['bank_account'] = $dflt_act['id'];
-	}
+	if (list_updated('customer_id'))
+		set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
 	$Ajax->activate('_page_body');
 }
 

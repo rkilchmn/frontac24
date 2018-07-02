@@ -46,11 +46,13 @@ if (isset($_GET['NewPayment'])) {
 	create_cart(ST_BANKDEPOSIT, $_GET['trans_no']);
 }
 
-$referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
-if (basename($referer) == "index.php")
-    unset($_SESSION['HTTP_REFERER']);
-else if ($referer != $_SERVER['PHP_SELF'])
-    $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
+    if (basename($referer) == "index.php")
+        unset($_SESSION['HTTP_REFERER']);
+    else if ($referer != $_SERVER['PHP_SELF'])
+        $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
+}
 
 page($_SESSION['page_title'], false, false, '', $js);
 

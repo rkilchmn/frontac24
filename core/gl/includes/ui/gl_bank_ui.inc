@@ -102,16 +102,9 @@ function display_bank_header(&$order)
 
 	table_section(3, "33%");
 
-	if (!$order->order_id && !get_post('bank_account'))
-	{
-		if ($_POST['PayType'] == PT_CUSTOMER)
-			$_POST['bank_account'] = get_default_customer_bank_account($_POST['person_id']);
-		elseif ($_POST['PayType'] == PT_SUPPLIER)	
-			$_POST['bank_account'] = get_default_supplier_bank_account($_POST['person_id']);
-		else
-			unset($_POST['bank_account']);
-	}		
-    
+	if (!$order->order_id && !list_updated('bank_account'))
+        set_post_last_used_bank_account($_POST['PayType'], $_POST['person_id']);
+
     bank_accounts_list_row( $payment ? _("From:") : _("Into:"), 'bank_account', null, true);
     if ($payment)
 		bank_balance_row($_POST['bank_account']);
@@ -317,7 +310,6 @@ function gl_options_controls($order)
   	echo "</table>";
   	div_end();
 }
-
 
 //---------------------------------------------------------------------------------
 

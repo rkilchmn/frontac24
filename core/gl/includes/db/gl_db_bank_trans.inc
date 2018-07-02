@@ -49,14 +49,19 @@ function add_bank_trans($type, $trans_no, $bank_act, $ref, $date_,
 
 //----------------------------------------------------------------------------------------
 
-function last_bank_trans($field)
+function last_bank_trans($field, $person_type=null, $person_id=null)
 {
 	$sql = "SELECT " . $field . 
-		" FROM ".TB_PREF."bank_trans
-                ORDER BY id DESC LIMIT 1";
+		" FROM ".TB_PREF."bank_trans";
+
+    if ($person_type != null && $person_id != null)
+        $sql .= " WHERE person_type_id = ".db_escape($person_type)
+            . " AND person_id = " . db_escape($person_id);
+    $sql .= " ORDER BY id DESC LIMIT 1";
+
 	$last_query = db_query($sql, "query for last bank transaction");
 	$row = db_fetch_row($last_query);
-        return $row[0];
+    return $row[0];
 }
 
 //----------------------------------------------------------------------------------------

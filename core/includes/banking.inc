@@ -147,3 +147,20 @@ function exchange_variation($pyt_type, $pyt_no, $type, $trans_no, $pyt_date, $am
 	}
 }
 
+//----------------------------------------------------------------------------------------
+function set_post_last_used_bank_account($person_type, $person_id)
+{
+    $bank_act = last_bank_trans('bank_act', $person_type, $person_id);
+    if ($bank_act != "") {
+        $_POST['bank_account'] = $bank_act;
+        return;
+    }
+
+    if ($person_type == PT_CUSTOMER)
+        $_POST['bank_account'] = get_default_customer_bank_account($person_id);
+    else if ($person_type == PT_SUPPLIER)
+       $_POST['bank_account'] = get_default_supplier_bank_account($person_id);
+    else
+        unset($_POST['bank_account']);
+}
+
