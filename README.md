@@ -347,10 +347,6 @@ onto the end of the FA generated memo.
 
 ## BUGFIX: 0004490: Cannot edit a quick entry transaction properly if the quick entry type changes
 
-## FEATURE: Add core support for category filtering on stock items list
-
-This adds core support to display a stock items list for a given category.
-
 ## FEATURE: Return to referer
 
 The FA pencil on several inquiry forms is used to modify a transaction.
@@ -377,11 +373,10 @@ The feature applied only to payments to suppliers made with
 the Payments to Suppliers form and recalls the last bank account
 used for the supplier made with this form.
 
-BA generalizes this feature such that it applies to payments and deposits
+BF generalizes this feature such that it applies to payments and deposits
 made with Banking and General Ledger
 and Customer Payments
 for any person type (customer, supplier, miscellaneous, or quick entry).
 It also replaces the code for Payments to Suppliers.
 Thus, if a payment to a supplier is made with either interface,
 the bank account from that payment will be recalled.
-
