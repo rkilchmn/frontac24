@@ -47,7 +47,7 @@ function returnToReferer($message)
 {
     $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
     $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
-    $params = preg_replace('/&message.*/', '', $params);
+    $params = preg_replace('/[&]*message.*/', '', $params);
     if (!empty($params))
         $params .= "&";
     $params .= "message=$message";
