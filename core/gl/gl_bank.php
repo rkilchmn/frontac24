@@ -89,9 +89,9 @@ if (isset($_GET['AddedID']))
 
 	display_note(get_gl_view_str($trans_type, $trans_no, _("&View the GL Postings for this Payment")));
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another &Payment"), "NewPayment=yes&date_=".$_GET['date_']);
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another &Payment"), "NewPayment=yes&date_=".$_GET['date_']."&bank_account=".$_POST['bank_account']);
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A &Deposit"), "NewDeposit=yes&date_=".$_GET['date_']);
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A &Deposit"), "NewDeposit=yes&date_=".$_GET['date_']."&bank_account=".$_POST['bank_account']);
 
 	hyperlink_params("$path_to_root/admin/attachments.php", _("Add an Attachment"), "filterType=$trans_type&trans_no=$trans_no");
 
@@ -123,9 +123,9 @@ if (isset($_GET['AddedDep']))
 
 	display_note(get_gl_view_str($trans_type, $trans_no, _("View the GL Postings for this Deposit")));
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another Deposit"), "NewDeposit=yes&date_=".$_GET['date_']);
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another Deposit"), "NewDeposit=yes&date_=".$_GET['date_']."&bank_account=".$_POST['bank_account']);
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A Payment"), "NewPayment=yes&date_=".$_GET['date_']);
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A Payment"), "NewPayment=yes&date_=".$_GET['date_']."&bank_account=".$_POST['bank_account']);
 
 	display_footer_exit();
 }
@@ -335,10 +335,10 @@ if (isset($_POST['Process']) && !check_trans())
     $referer = "";
     if (!isset($_SESSION['HTTP_REFERER'])) {
         $referer=$_SERVER['PHP_SELF'];
-        if ($new)
-            $params .= ($trans_type==ST_BANKPAYMENT ?
-                "AddedID=$trans_no&date_=".$_POST['date_'] : "AddedDep=$trans_no&date_=".$_POST['date_']);
-        else
+        if ($new) {
+            $params .= ($trans_type==ST_BANKPAYMENT ?  "AddedID=" : "AddedDep=");
+            $params .= "$trans_no&date_=".$_POST['date_']."&bank_account=".$_POST['bank_account'];
+        } else
             $params .= ($trans_type==ST_BANKPAYMENT ?
                 "UpdatedID=$trans_no" : "UpdatedDep=$trans_no");
     } else {
