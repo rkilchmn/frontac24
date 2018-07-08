@@ -102,10 +102,21 @@ function display_bank_header(&$order)
 
 	table_section(3, "33%");
 
-	if (!$order->order_id && !list_updated('bank_account'))
-        set_post_last_used_bank_account($_POST['PayType'], $_POST['person_id']);
+    // For new payments that are not called from another form that sets the bank account,
+    // get the bank account from the last used account for the person.
+    // However, once the user manually changes the list, disable this function.
+	if ($new
+        && get_post('override_bank_account') != 1
+        && !isset($_GET['bank_account'])) {
+        if (list_updated('bank_account'))
+            $_POST['override_bank_account'] = 1;
+        else
+            set_post_last_used_bank_account($_POST['PayType'], $_POST['person_id']);
+    }
+
 
     bank_accounts_list_row( $payment ? _("From:") : _("Into:"), 'bank_account', null, true);
+    hidden('override_bank_account', get_post('override_bank_account'));
     if ($payment)
 		bank_balance_row($_POST['bank_account']);
 
