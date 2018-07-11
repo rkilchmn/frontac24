@@ -294,6 +294,7 @@ function check_trans()
 		set_focus('person_id');
 		$input_error = 1;
 	}
+
 	return $input_error;
 }
 
@@ -445,10 +446,18 @@ echo "</td>";
 end_row();
 end_table(1);
 
-submit_center_first('Update', _("Update"), '', null);
-submit_center_last('Process', $_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ?
-	_("Process Payment"):_("Process Deposit"), '', 'default');
+// Remove the Process Button if the payment items are edited;
+// Often the user forgets to confirm and this prevents process until confirmed
 
+div_start("submit");
+global $Ajax;
+$Ajax->activate("submit");
+
+if (find_submit('Edit') == -1)
+    submit_center('Process', $_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ?
+        _("Process Payment"):_("Process Deposit"), true, '', 'default');
+
+div_end();
 end_form();
 
 //------------------------------------------------------------------------------------------------
