@@ -385,9 +385,7 @@ the bank account from that payment will be recalled.
 
 ## FEATURE: system preference option to sort item lists by description rather than by stock id
 
-## FEATURE: Hide Process Button until edit is confirmed/canceled
+## FEATURE: Hide Process Button until add/edit is confirmed/canceled
 
-Often the user forgets to confirm and selects Process, losing work.
-
-BF removes the Process Button if the payment items are edited;
-This prevents process until an edit is confirmed or canceled.
+BF removes the Process Button while payment items are being added or edited;
+Otherwise, if the user neglects to confirm, the work is lost unexpectantly.

@@ -230,17 +230,11 @@ function check_trans()
 
 	$input_error = 0;
 
-	if ($_SESSION['pay_items']->count_gl_items() < 1) {
-		display_error(_("You must enter at least one payment line."));
-		set_focus('code_id');
-		$input_error = 1;
-	}
-
-	if ($_SESSION['pay_items']->gl_items_total() == 0.0) {
-		display_error(_("The total bank amount cannot be 0."));
-		set_focus('code_id');
-		$input_error = 1;
-	}
+    if ($_SESSION['pay_items']->count_gl_items() < 1) {
+        display_error(_("You must enter at least one payment line."));
+        set_focus('code_id');
+        $input_error = 1;
+    }
 
 	$limit = get_bank_account_limit($_POST['bank_account'], $_POST['date_']);
 
@@ -446,14 +440,18 @@ echo "</td>";
 end_row();
 end_table(1);
 
-// Remove the Process Button if the payment items are edited;
-// Often the user forgets to confirm and this prevents process until confirmed
+// Remove the Process Button while payment items are being added or edited;
+// Otherwise, if the user neglects to confirm, the work is lost unexpectantly.
+// There are other conditions where a payment cannot
+// be processed in check_trans(), but those are less obvious and require
+// an error message to inform the user.
 
 div_start("submit");
 global $Ajax;
 $Ajax->activate("submit");
 
-if (find_submit('Edit') == -1)
+if (find_submit('Edit') == -1
+	&& $_SESSION['pay_items']->count_gl_items() >= 1)
     submit_center('Process', $_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ?
         _("Process Payment"):_("Process Deposit"), true, '', 'default');
 
