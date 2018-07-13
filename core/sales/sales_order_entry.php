@@ -99,6 +99,14 @@ if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 	create_cart(ST_SALESQUOTE, $_GET['NewQuoteToSalesOrder']);
 }
 
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
+    if (basename($referer) == "index.php")
+        unset($_SESSION['HTTP_REFERER']);
+    else if ($referer != $_SERVER['PHP_SELF'])
+        $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
+}
+
 page($_SESSION['page_title'], false, false, "", $js);
 
 if (isset($_GET['ModifyOrderNumber']) && is_prepaid_order_open($_GET['ModifyOrderNumber']))
@@ -491,21 +499,34 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 		$trans_type = $_SESSION['Items']->trans_type;
 		new_doc_date($_SESSION['Items']->document_date);
 		processing_end();
-		if ($modified) {
-			if ($trans_type == ST_SALESQUOTE)
-				meta_forward($_SERVER['PHP_SELF'], "UpdatedQU=$trans_no");
-			else	
-				meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$trans_no");
-		} elseif ($trans_type == ST_SALESORDER) {
-			meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no");
-		} elseif ($trans_type == ST_SALESQUOTE) {
-			meta_forward($_SERVER['PHP_SELF'], "AddedQU=$trans_no");
-		} elseif ($trans_type == ST_SALESINVOICE) {
-			meta_forward($_SERVER['PHP_SELF'], "AddedDI=$trans_no&Type=$so_type");
-		} else {
-			meta_forward($_SERVER['PHP_SELF'], "AddedDN=$trans_no&Type=$so_type");
-		}
-	}	
+        $params = "";
+        $referer = "";
+        if (!isset($_SESSION['HTTP_REFERER'])) {
+            $referer=$_SERVER['PHP_SELF'];
+            if ($modified) {
+                if ($trans_type == ST_SALESQUOTE)
+                    $params = "UpdatedQU=$trans_no";
+                else	
+                    $params="UpdatedID=$trans_no";
+            } elseif ($trans_type == ST_SALESORDER) {
+                $params="AddedID=$trans_no";
+            } elseif ($trans_type == ST_SALESQUOTE) {
+                $params="AddedQU=$trans_no";
+            } elseif ($trans_type == ST_SALESINVOICE) {
+                $params="AddedDI=$trans_no&Type=$so_type";
+            } else {
+                $params="AddedDN=$trans_no&Type=$so_type";
+            }
+        } else {
+            $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
+            $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+            $params = preg_replace('/[&]*message.*/', '', $params);
+            if (!empty($params))
+                $params .= "&";
+            $params .= "message=Completed";
+        }
+        meta_forward($referer, $params);
+    }
 }
 
 //--------------------------------------------------------------------------------
@@ -620,21 +641,28 @@ function  handle_cancel_order()
 	} else { // sales order
 		if ($_SESSION['Items']->trans_no != 0) {
 			$order_no = key($_SESSION['Items']->trans_no);
+            // Note: modified sales orders always have referer
+            $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
+            $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+            $params = preg_replace('/[&]*message.*/', '', $params);
+            if (!empty($params))
+                $params .= "&";
+            $params .= "message=";
 			if (sales_order_has_deliveries($order_no))
 			{
 				close_sales_order($order_no);
-				display_notification(_("Undelivered part of order has been cancelled as requested."), 1);
-				submenu_option(_("Select Another Sales Order for Edition"), "/sales/inquiry/sales_orders_view.php?type=".ST_SALESORDER);
+				$params .=_("Undelivered part of order has been cancelled");
 			} else {
 				delete_sales_order(key($_SESSION['Items']->trans_no), $_SESSION['Items']->trans_type);
 
-				display_notification(_("This sales order has been cancelled as requested."), 1);
-				submenu_option(_("Enter a New Sales Order"), "/sales/sales_order_entry.php?NewOrder=Yes");
-			}
+                $params .= _("Order canceled");
+            }
+            meta_forward($referer, $params);
 		} else {
 			processing_end();
-			meta_forward($path_to_root.'/index.php','application=orders');
-		}
+            // Note: new sales orders never have referer
+            meta_forward($path_to_root.'/index.php','application=orders');
+        }
 	}
 	processing_end();
 	display_footer_exit();
