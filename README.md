@@ -419,8 +419,20 @@ to recreate the invoice: sales order modification; delivery; and invoice.
 Thus the user can make any possible change, addition, deletion
 to the invoice and still retain the old invoice number.
 
-Although a FA user could accomplish the same thing by
+Although an FA user could accomplish the same thing by
 manually performing the voids and navigating to the same pages,
 the BF Reissue process requires only clicking on a single icon
 to initiate the process.
+
+Note that a void of an auto generated delivery in FA clears all quantities
+in the sales order whereas BF retains the order quantities,
+which is consistent with a void of a manually created delivery.
+
+I am also not keen on FA voiding an auto generated delivery
+from a void of direct invoice, because a void of a manual invoice
+does not void the deliveries, creating confusion for the user.
+However, I left BF unchanged on this point.
+Ideally there should be a popup on a void of an invoice asking
+if the deliveries and sales orders should be voided or left as is.
+
 

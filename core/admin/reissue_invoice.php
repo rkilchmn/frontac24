@@ -255,7 +255,6 @@ function handle_void_transaction()
 		}
 
         $order_no=get_customer_trans_order($_POST['filterType'], $_POST['trans_no']);
-        $delivery_trans=get_customer_delivery_trans($order_no);
 
 		$msg = void_transaction($_POST['filterType'], $_POST['trans_no'],
 			$_POST['date_'], "Reissue invoice");
@@ -265,12 +264,15 @@ function handle_void_transaction()
             return;
         }
 
-        // Void the delivery
-		$msg = void_transaction(ST_CUSTDELIVERY, $delivery_trans,
-			$_POST['date_'], "Reissue invoice");
-		if ($msg !== false) {
-			display_error($msg);
-            return;
+        // Void the deliveries (if any)
+        // Note: deliveries were voided if invoice was direct invoice
+        while ($delivery_trans=get_customer_delivery_trans($order_no)) {
+            $msg = void_transaction(ST_CUSTDELIVERY, $delivery_trans,
+                $_POST['date_'], "Reissue invoice");
+            if ($msg !== false) {
+                display_error($msg);
+                return;
+            }
         }
 
         $params="ModifyOrderNumber=".$order_no."&DirectInvoice=1";

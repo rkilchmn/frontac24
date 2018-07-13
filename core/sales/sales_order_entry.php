@@ -502,7 +502,7 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 		new_doc_date($_SESSION['Items']->document_date);
 		processing_end();
 
-        if (isset($_POST['DirectInvoice'])) {
+        if (get_post('DirectInvoice') == 1) {
             $params="OrderNumber=".$trans_no."&DirectInvoice=1";
             meta_forward($path_to_root . "/sales/customer_delivery.php", $params);
         }
