@@ -392,3 +392,16 @@ Otherwise, if the user neglects to confirm, the work is lost unexpectantly.
 
 ## 00457 BUGFIX: sales order cancel goes ahead even if user clicks cancel on confirmation
 
+## FEATURE: confirm price changes on invoice entry when changing suppliers
+
+During invoice entry, FA automatically changes prices (and the supplier reference)
+if the supplier is changed.
+This allows one to compare prices between suppliers,
+if the suppliers have up-to-date price information.
+
+However, often the user is doing simple purchase order entry and
+may have forgotten to set the correct supplier beforehand.
+Changing the supplier name afterwards results in lost work.
+
+BF provides a pop-up confirmation whether the user wants to reprice
+the order or simply change the supplier.

@@ -166,6 +166,9 @@ function display_po_header(&$order)
         	$_POST['supplier_id'] = get_global_supplier();
 
     	supplier_list_row(_("Supplier:"), 'supplier_id', null, false, true, false, true);
+        if (count($order->line_items) != 0)
+            submit_js_confirm('supplier_id', _("Do you want to reprice the order based on the new supplier?"));
+
 	}
 	else
 	{

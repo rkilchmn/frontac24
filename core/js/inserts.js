@@ -153,7 +153,7 @@ function _set_combo_select(e) {
 			this.setAttribute('_last', this.selectedIndex);
 			if(string_contains(s.className, 'combo') || string_contains(this.className, 'combo3'))
 			    _update_box(s);
-			if(s.selectedIndex>=0) {
+			if (validate(e) && s.selectedIndex>=0) {
 				 var sname = '_'+s.name+'_update';
 				 var update = document.getElementsByName(sname)[0];
 				 if(update) {
