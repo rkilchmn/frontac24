@@ -389,3 +389,6 @@ the bank account from that payment will be recalled.
 
 BF removes the Process Button while payment items are being added or edited;
 Otherwise, if the user neglects to confirm, the work is lost unexpectantly.
+
+## 00457 BUGFIX: sales order cancel goes ahead even if user clicks cancel on confirmation
+
