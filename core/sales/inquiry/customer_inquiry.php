@@ -109,6 +109,17 @@ function prt_link($row)
  		return print_document_link($row['trans_no']."-".$row['type'], _("Print"), true, $row['type'], ICON_PRINT);
 }
 
+function reissue_link($row)
+{
+	global $page_nested;
+
+	$str = '';
+	if ($page_nested
+        || $row['type'] != ST_SALESINVOICE)
+		return '';
+        return pager_link(_("Reissue"), "/admin/reissue_invoice.php?trans_no=" . $row['trans_no'], ICON_REISSUE);
+}
+
 function check_overdue($row)
 {
 	return $row['OverDue'] == 1
@@ -226,6 +237,7 @@ $cols = array(
 		array('insert'=>true, 'fun'=>'prt_link'),
 		array('insert'=>true, 'fun'=>'credit_link'),
 		array('insert'=>true, 'fun'=>'edit_link'),
+		array('insert'=>true, 'fun'=>'reissue_link'),
 		array('insert'=>true, 'fun'=>'delete_link')
 	);
 

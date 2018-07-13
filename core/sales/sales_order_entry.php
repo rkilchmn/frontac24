@@ -107,6 +107,8 @@ if (isset($_SERVER['HTTP_REFERER'])) {
         $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
 }
 
+set_posts(array('DirectInvoice'));
+
 page($_SESSION['page_title'], false, false, "", $js);
 
 if (isset($_GET['ModifyOrderNumber']) && is_prepaid_order_open($_GET['ModifyOrderNumber']))
@@ -499,31 +501,38 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 		$trans_type = $_SESSION['Items']->trans_type;
 		new_doc_date($_SESSION['Items']->document_date);
 		processing_end();
+
+        if (isset($_POST['DirectInvoice'])) {
+            $params="OrderNumber=".$trans_no."&DirectInvoice=1";
+            meta_forward($path_to_root . "/sales/customer_delivery.php", $params);
+        }
+
         $params = "";
         $referer = "";
-        if (!isset($_SESSION['HTTP_REFERER'])) {
-            $referer=$_SERVER['PHP_SELF'];
-            if ($modified) {
-                if ($trans_type == ST_SALESQUOTE)
-                    $params = "UpdatedQU=$trans_no";
-                else	
-                    $params="UpdatedID=$trans_no";
-            } elseif ($trans_type == ST_SALESORDER) {
-                $params="AddedID=$trans_no";
-            } elseif ($trans_type == ST_SALESQUOTE) {
-                $params="AddedQU=$trans_no";
-            } elseif ($trans_type == ST_SALESINVOICE) {
-                $params="AddedDI=$trans_no&Type=$so_type";
-            } else {
-                $params="AddedDN=$trans_no&Type=$so_type";
-            }
+        if ($modified) {
+            if ($trans_type == ST_SALESQUOTE)
+                $params = "UpdatedQU=$trans_no";
+            else	
+                $params="UpdatedID=$trans_no";
+        } elseif ($trans_type == ST_SALESORDER) {
+            $params="AddedID=$trans_no";
+        } elseif ($trans_type == ST_SALESQUOTE) {
+            $params="AddedQU=$trans_no";
+        } elseif ($trans_type == ST_SALESINVOICE) {
+            $params="AddedDI=$trans_no&Type=$so_type";
         } else {
+            $params="AddedDN=$trans_no&Type=$so_type";
+        }
+
+        if (!isset($_SESSION['HTTP_REFERER']))
+            $referer=$_SERVER['PHP_SELF'];
+        else {
             $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
-            $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
-            $params = preg_replace('/[&]*message.*/', '', $params);
-            if (!empty($params))
-                $params .= "&";
-            $params .= "message=Completed";
+            $ref_params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+            $ref_params = preg_replace('/[&]*message.*/', '', $ref_params);
+            if (!empty($ref_params))
+                $ref_params .= "&";
+            $params = $ref_params . $params . "&message=Order Updated";
         }
         meta_forward($referer, $params);
     }
@@ -765,6 +774,8 @@ if ($_SESSION['Items']->trans_type == ST_SALESINVOICE) {
 start_form();
 
 hidden('cart_id');
+hidden('DirectInvoice');
+
 $customer_error = display_order_header($_SESSION['Items'], !$_SESSION['Items']->is_started(), $idate);
 
 if ($customer_error == "") {

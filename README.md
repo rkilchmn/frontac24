@@ -405,3 +405,22 @@ Changing the supplier name afterwards results in lost work.
 
 BF provides a pop-up confirmation whether the user wants to reprice
 the order or simply change the supplier.
+
+## FEATURE: reissue customer invoice
+
+FA offers very limited editing of customer invoices, just the invoice date.
+
+BF retains the FA editor (in case the user just wants to change the date),
+but also adds a Reissue function icon to the
+customer transactions page.
+The reissue function
+voids the invoice and delivery and opens a series of editors
+to recreate the invoice: sales order modification; delivery; and invoice.
+Thus the user can make any possible change, addition, deletion
+to the invoice and still retain the old invoice number.
+
+Although a FA user could accomplish the same thing by
+manually performing the voids and navigating to the same pages,
+the BF Reissue process requires only clicking on a single icon
+to initiate the process.
+
