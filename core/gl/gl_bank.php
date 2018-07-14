@@ -326,17 +326,11 @@ if (isset($_POST['Process']) && !check_trans())
 
 	commit_transaction();
 
-    $params = "";
     $referer = "";
-    if (!isset($_SESSION['HTTP_REFERER'])) {
+    $params = "";
+    if (!isset($_SESSION['HTTP_REFERER']))
         $referer=$_SERVER['PHP_SELF'];
-        if ($new) {
-            $params .= ($trans_type==ST_BANKPAYMENT ?  "AddedID=" : "AddedDep=");
-            $params .= "$trans_no&date_=".$_POST['date_']."&bank_account=".$_POST['bank_account'];
-        } else
-            $params .= ($trans_type==ST_BANKPAYMENT ?
-                "UpdatedID=$trans_no" : "UpdatedDep=$trans_no");
-    } else {
+    else {
         $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
         $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
         $params = preg_replace('/[&]*message.*/', '', $params);
@@ -345,7 +339,14 @@ if (isset($_POST['Process']) && !check_trans())
         $params .= "message=";
         $params .= ($trans_type==ST_BANKPAYMENT ? "Payment" : "Deposit");
         $params .= " Completed";
+        $params .= "&";
     }
+    if ($new) {
+        $params .= ($trans_type==ST_BANKPAYMENT ?  "AddedID=" : "AddedDep=");
+        $params .= "$trans_no&date_=".$_POST['date_']."&bank_account=".$_POST['bank_account'];
+    } else
+        $params .= ($trans_type==ST_BANKPAYMENT ?
+            "UpdatedID=$trans_no" : "UpdatedDep=$trans_no");
     meta_forward($referer, $params);
 
 }
