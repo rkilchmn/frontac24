@@ -30,7 +30,7 @@ $js .= get_js_history(array('bank_account', 'bank_date'));
 
 add_js_file('reconcile.js');
 
-page(_($help_context = "Reconcile Bank Account"), false, false, "", $js);
+page(_($help_context = "Reconcile Bank Account"), false, false, "", $js, false, "", true);
 
 set_posts(array('bank_account', 'bank_date'));
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
@@ -289,7 +289,7 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
         array('insert'=>true, 'fun'=>'edit_link'),
         array('insert'=>true, 'fun'=>'delete_link')
 	   );
-	$table =& new_db_pager('trans_tbl', $sql, $cols);
+	$table =& new_db_pager('trans_tbl_short', $sql, $cols);
 
 	$table->width = "80%";
 	display_db_pager($table);
@@ -303,5 +303,5 @@ end_form();
 
 //------------------------------------------------------------------------------------------------
 
-end_page();
+end_page(true);
 
