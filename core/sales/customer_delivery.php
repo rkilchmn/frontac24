@@ -40,13 +40,6 @@ if (isset($_GET['ModifyDelivery'])) {
 	$_SESSION['page_title'] = _($help_context = "Deliver Items for a Sales Order");
 	processing_start();
 }
-if (isset($_SERVER['HTTP_REFERER'])) {
-    $referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
-    if (basename($referer) == "index.php")
-        unset($_SESSION['HTTP_REFERER']);
-    else if ($referer != $_SERVER['PHP_SELF'])
-        $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
-}
 
 set_posts(array('DirectInvoice'));
 

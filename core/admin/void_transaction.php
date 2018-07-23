@@ -33,12 +33,6 @@ if (isset($_GET['trans_no'])
     $_POST['ProcessVoiding'] = true;
 }
 
-$referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
-if (basename($referer) == "index.php")
-    unset($_SESSION['HTTP_REFERER']);
-else if ($referer != $_SERVER['PHP_SELF'])
-    $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
-
 page(_($help_context = "Void a Transaction"), false, false, "", $js);
 
 simple_page_mode(true);

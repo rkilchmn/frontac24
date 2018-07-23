@@ -37,6 +37,14 @@ function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $scri
 
 	if (++$page_nested) return;
 
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
+        if (basename($referer) == "index.php")
+            unset($_SESSION['HTTP_REFERER']);
+        else if ($referer != $_SERVER['PHP_SELF'])
+            $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
+    }
+
    	$hide_menu = $no_menu;
 
    	include_once($path_to_root . "/includes/page/header.inc");
@@ -52,6 +60,11 @@ function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $scri
 	} else {
 		div_start('_page_body'); // whole page content for ajax reloading
 	}
+
+    if (isset($_GET['message']))
+    {
+        display_notification_centered($_GET['message']);
+    }
 }
 
 function end_page($no_menu=false, $is_index=false, $final_screen=false, $type_no=0, $trans_no=0)

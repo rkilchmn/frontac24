@@ -132,6 +132,17 @@ function handle_submit(&$selected_id)
 
         set_global_customer($_POST['customer_id']);
 
+        if (isset($_SESSION['HTTP_REFERER'])) {
+            $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
+            $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+            $params = preg_replace('/[&]*message.*/', '', $params);
+            if (!empty($params))
+                $params .= "&";
+            $params .= "message=";
+            $params .= _("A new customer has been added.");
+            meta_forward($referer, $params);
+        }
+
 		display_notification(_("A new customer has been added."));
 
 		if (isset($SysPrefs->auto_create_branch) && $SysPrefs->auto_create_branch == 1)
