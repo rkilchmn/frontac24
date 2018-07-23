@@ -778,7 +778,9 @@ hidden('DirectInvoice');
 
 $customer_error = display_order_header($_SESSION['Items'], !$_SESSION['Items']->is_started(), $idate);
 
-if ($customer_error == "") {
+if ($customer_error != "")
+	display_error($customer_error);
+else if (get_post('customer_id') != 0) {
 	start_table(TABLESTYLE, "width='80%'", 10);
 	echo "<tr><td>";
 	display_order_summary($orderitems, $_SESSION['Items'], true);
@@ -806,8 +808,6 @@ if ($customer_error == "") {
 			submit_js_confirm('CancelOrder', _('You are about to void this Document.\nDo you want to continue?'), true);
 	}
 
-} else {
-	display_error($customer_error);
 }
 
 end_form();

@@ -264,15 +264,20 @@ function display_order_header(&$order, $editable, $date_text)
 	}
 	else
 	{
-		customer_list_row(_("Customer:"), 'customer_id', null, false, true, false, true);
+		customer_list_row(_("Customer:"), 'customer_id', null, _("New Customer"), true, false, true);
+
+        if (get_post('customer_id') == 0)
+            label_row("", menu_link('sales/manage/customers.php', 'Create New Customer'));
+
+        else {
 
 		if ($order->customer_id != get_post('customer_id', -1))
 		{
 			// customer has changed
 			$Ajax->activate('branch_id');
   		}
-		customer_branches_list_row(_("Branch:"),
-	  	  $_POST['customer_id'], 'branch_id', null, false, true, true, true);
+        customer_branches_list_row(_("Branch:"),
+          $_POST['customer_id'], 'branch_id', null, false, true, true, true);
 
 		if( ($order->customer_id != get_post('customer_id', -1)) ||
 			($order->Branch != get_post('branch_id', -1)) ||
@@ -356,6 +361,7 @@ function display_order_header(&$order, $editable, $date_text)
 			if ($row['dissallow_invoices'] == 1)
 				$customer_error = _("The selected customer account is currently on hold. Please contact the credit control personnel to discuss.");
 		}
+        }
 	}
 
     if (get_post('ref') == 'auto')

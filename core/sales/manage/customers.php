@@ -130,6 +130,8 @@ function handle_submit(&$selected_id)
 		}
 		commit_transaction();
 
+        set_global_customer($_POST['customer_id']);
+
 		display_notification(_("A new customer has been added."));
 
 		if (isset($SysPrefs->auto_create_branch) && $SysPrefs->auto_create_branch == 1)
