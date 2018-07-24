@@ -437,20 +437,18 @@ if the deliveries and sales orders should be voided or left as is.
 
 ## FEATURE: create new customer option during sales invoice entry
 
-It is convenient to be able to create a new customer during order entry
-rather than navigate back and forth to the Add and Manage Customers page.
-FA offers this ability only if the Setup->Company Setup->Search Customer List is checked.
-While this is a useful feature,
-operation isn't quite smooth,
-requiring a different search interface,
-a function key to activate a popup,
-selecting New Customer,
+It is convenient to be able to create a new customer during order entry.
+While FA offers this ability with the F2 function key,
+operation isn't quite optimal,
+requiring a function key to activate a popup,
+finding and selecting New Customer in the drop down menu,
 creating the customer,
 closing the popup,
-and selecting the new customer in the customer list.
+and selecting the newly created customer in the customer list.
 
-BA adds "New Customer" to the customer list.
-This requires only one click to create the customer
+BA retains this feature but also adds "New Customer" to the customer list
+and a "Create New Customer" link whenever "New Customer" is selected.
+This requires only one additional click to create the customer
 and after the customer is created, the order entry screen
 is set to the new customer.
 
