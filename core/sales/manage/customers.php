@@ -211,7 +211,9 @@ function customer_settings($selected_id)
 			$_POST['CustName'] = $_POST['cust_ref'] = $_POST['address'] = $_POST['tax_id']  = '';
 			$_POST['dimension_id'] = 0;
 			$_POST['dimension2_id'] = 0;
-			$_POST['sales_type'] = -1;
+			$_POST['sales_type'] = get_company_pref('default_sales_type');
+			$_POST['area'] = get_company_pref('default_sales_area');
+			$_POST['tax_group_id'] = get_company_pref('default_tax_group');
 			$_POST['curr_code']  = get_company_currency();
 			$_POST['credit_status']  = -1;
 			$_POST['payment_terms']  = $_POST['notes']  = '';

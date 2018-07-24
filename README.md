@@ -452,3 +452,4 @@ This requires only one additional click to create the customer
 and after the customer is created, the order entry screen
 is set to the new customer.
 
+## FEATURE: add new customer defaults for sales type, sales area, tax group
