@@ -89,8 +89,8 @@ function gl_payment_controls($trans_no)
 		} else {
 			$_POST['ref'] = $Refs->get_next(ST_BANKTRANSFER, null, get_post('DatePaid'));
 			$_POST['memo_'] = '';
-			$_POST['FromBankAccount'] = 0;
-			$_POST['ToBankAccount'] = 0;
+			$_POST['FromBankAccount'] = last_bank_transfer('bank_act');
+			$_POST['ToBankAccount'] = last_bank_transfer('bank_act', true);
 			$_POST['amount'] = 0;
 		}
 	}

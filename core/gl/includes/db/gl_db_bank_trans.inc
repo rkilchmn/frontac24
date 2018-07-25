@@ -66,6 +66,25 @@ function last_bank_trans($field, $person_type=null, $person_id=null)
 
 //----------------------------------------------------------------------------------------
 
+function last_bank_transfer($field, $to = false)
+{
+	$sql = "SELECT " . $field . 
+		" FROM ".TB_PREF."bank_trans
+         WHERE type = '" . ST_BANKTRANSFER . "'";
+    if ($to)
+        $sql .= " AND amount > 0";
+    else
+        $sql .= " AND amount < 0";
+
+    $sql .= " ORDER BY id DESC LIMIT 1";
+
+	$last_query = db_query($sql, "query for last bank transfer");
+	$row = db_fetch_row($last_query);
+    return $row[0];
+}
+
+//----------------------------------------------------------------------------------------
+
 function exists_bank_trans($type, $type_no)
 {
 	$sql = "SELECT trans_no
