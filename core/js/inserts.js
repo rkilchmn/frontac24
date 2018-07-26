@@ -77,7 +77,8 @@ function _set_combo_input(e) {
 
 		  if (button && (this.value != this.getAttribute('_last'))) {
 			JsHttpRequest.request(button);
-		  } else if(string_contains(this.className, 'combo2')) {
+		  } else if(string_contains(this.className, 'combo2')
+		    || string_contains(this.className, 'combo4')) {
 				this.style.display = 'none';
 				select.style.display = 'inline';
 				setFocus(select);
@@ -122,7 +123,7 @@ function _set_combo_input(e) {
 }
 
 function _update_box(s) {
-	var byid = string_contains(s.className, 'combo') || string_contains(s.className, 'combo4') || string_contains(s.className, 'combo3');
+	var byid = string_contains(s.className, 'combo') || string_contains(s.className, 'combo3');
 	var rel = s.getAttribute('rel');
 	var box = document.getElementsByName(rel)[0];
 		if(box && s.selectedIndex>=0) {
@@ -325,7 +326,7 @@ var inserts = {
 	  			}
 			}
 	},
-	'input.combo2,input[aspect="fallback"]':
+	'input.combo2,input.combo4,input[aspect="fallback"]':
 	function(e) {
   	    // this hides search button for js enabled browsers
 	    e.style.display = 'none';

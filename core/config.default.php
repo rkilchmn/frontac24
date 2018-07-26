@@ -222,3 +222,9 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
     Sort G/L accounts by description rather than by account number
 */
     $sort_gl_account_desc = false;
+
+/*
+    Optional autocompletion search
+*/
+	$search_autocomplete = false;
+

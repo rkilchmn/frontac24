@@ -66,8 +66,33 @@ When a bank transaction is modified, FA unreconciles it, even if
 just the memo or date was changed.
 
 BF retains the reconciled status.
+
 ## new combo4 autocomplete
-This is an experimental feature to allow finding items quickly.
+This feature allows finding items, customers and suppliers quickly.
+The configuration parameter "search_autocomplete" when set to true
+changes the behavior of the Search Item List, Customer List, and
+Supplier List checkboxes in the Company Setup.
+When this parameter is set to "true",
+an autocomplete list is updated after every character
+of the search text is entered into the search box.
+Thus, once the desired search item appears on the autocomplete list,
+the user can make just one click to select the search item.
+
+More keystrokes are required in in FA:
+After the user enters the search text,
+the user has to hit the enter key,
+use the pull-down list to find the item,
+and click on the item to select it.
+And if the search term did not find the desired item,
+the user would have to repeat the process, taking more time.
+
+BF also makes the dropdown list work exactly the same
+even when the checkbox is checked;
+the checkbox just adds the ability to use the space key
+to open a search box.
+Otherwise the drop lists work normally.
+So really there isn't any need for these checkboxes anymore.
+
 ## improve reports
 FA displays an empty PDF if there is no data to display.
 

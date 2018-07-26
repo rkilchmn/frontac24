@@ -49,7 +49,7 @@ $opts = array(		// default options
 		// 2 - with (optional) visible search box, search by fragment at the start of id
 		// 3 - TODO reverse: box with hidden selector available via enter; this
 		// would be convenient for optional ad hoc adding of new item
-		// 4 - with (optional) visible search box, search by fragment inside description
+		// 4 - with hidden search box, search by option text
 	'search_submit' => true, //search submit button: true/false
 	'size' => 8,	// size and max of box tag
 	'max' => 50,
@@ -88,7 +88,7 @@ $opts = array(		// default options
 		$by_id = true;
 		$class = 'combo3';
 	} else {
-		$by_id = true;
+		$by_id = false;
 		$class = 'combo4';
 	}
 
@@ -100,7 +100,7 @@ $opts = array(		// default options
 	}
 	if ($opts['sel_hint'] === null) 
 		$opts['sel_hint'] = $by_id || $search_box==false ?
-			'' : _('Press Space tab for search pattern entry');
+			'' : _('Press <space> for search pattern entry');
 
 	if ($opts['box_hint'] === null)
 		$opts['box_hint'] = $search_box && $search_submit != false ?
@@ -143,6 +143,7 @@ $opts = array(		// default options
 				else
 					$Ajax->activate($name);
 			}
+/*
 			if ($txt == '') {
 				if ($spec_option === false && $selected_id == array())
 					$limit = ' LIMIT 1';
@@ -150,8 +151,8 @@ $opts = array(		// default options
 					$opts['where'][] = $valfield . "=". db_escape(get_post($name, $spec_id));
 			}
 			else
+*/
 				if ($txt != '*') {
-
 					foreach($opts['search'] as $i=> $s)
 						$opts['search'][$i] = $s . " LIKE "
 							.db_escape(($class=='combo3' ? '' : '%').$txt.'%');
@@ -569,13 +570,13 @@ function supplier_list($name, $selected_id=null, $spec_option=false, $submit_on_
 		'format' => '_format_add_curr',
 	    'order' => array('supp_ref'),
 		'search_box' => $mode!=0,
-		'type' => 1,
+		'type' => (@$SysPrefs->search_autocomplete ? 4 : 1),
         'search' => array("supp_ref","supp_name","gst_no"),        
 		'spec_option' => $spec_option === true ? _("All Suppliers") : $spec_option,
 		'spec_id' => ALL_TEXT,
 		'select_submit'=> $submit_on_change,
 		'async' => false,
-		'sel_hint' => $mode ? _('Press Space tab to filter by name fragment') :
+		'sel_hint' => $mode ? _('Press <space> to filter by name fragment') :
 		_('Select supplier'),
 		'show_inactive'=>$all,
 		'editlink' => $editkey ? add_edit_combo('supplier') : false
@@ -622,14 +623,14 @@ function customer_list($name, $selected_id=null, $spec_option=false, $submit_on_
 	    'format' => '_format_add_curr',
 	    'order' => array('debtor_ref'),
 		'search_box' => $mode!=0,
-		'type' => 1,
+		'type' => (@$SysPrefs->search_autocomplete ? 4 : 1),
 		'size' => 20,
         'search' => array("debtor_ref","name","tax_id"),        
 		'spec_option' => $spec_option === true ? _("All Customers") : $spec_option,
 		'spec_id' => ALL_TEXT,
 		'select_submit'=> $submit_on_change,
 		'async' => false,
-		'sel_hint' => $mode ? _('Press Space tab to filter by name fragment; F2 - entry new customer') :
+		'sel_hint' => $mode ? _('Press <space> to filter by name fragment; F2 - entry new customer') :
 		_('Select customer'),
 		'show_inactive' => $show_inactive,
 		'editlink' => $editkey ? add_edit_combo('customer') : false
@@ -856,8 +857,7 @@ function dimensions_list_row($label, $name, $selected_id=null, $no_option=false,
 function stock_items_list($name, $selected_id=null, $all_option=false, 
 	$submit_on_change=false, $opts=array(), $editkey = false, $type = "stock")
 {
-global $SysPrefs ;
-
+    global $SysPrefs;
 	$sql = "SELECT stock_id, s.description, c.description, s.inactive, s.editable
 			FROM ".TB_PREF."stock_master s,".TB_PREF."stock_category c WHERE s.category_id=c.category_id";
 
@@ -869,12 +869,12 @@ global $SysPrefs ;
 	if ($editkey)
 		set_editor('item', $name, $editkey);
 
-	$sort_opts = array(
-		'order' => array('c.description','stock_id'));
-	if (@$SysPrefs->sort_item_list_desc)
 		$sort_opts = array(
-			'type' => 4,	// search by description
-			'order' => array('c.description','s.description', 'stock_id'));
+            'type' => (@$SysPrefs->search_autocomplete
+                && get_company_pref('no_item_list')!=0 ? 4 : 0),
+			'order' => (@$SysPrefs->sort_item_list_desc ?
+                array('c.description','s.description', 'stock_id') :
+                array('c.description','stock_id')));
 	$ret = combo_input($name, $selected_id, $sql, 'stock_id', 's.description',
 		array_merge(
 		  array(
@@ -1768,7 +1768,7 @@ function stock_categories_list($name, $selected_id=null, $spec_opt=false, $submi
 	$sql = "SELECT category_id, description, inactive FROM ".TB_PREF."stock_category";
 
 	$sort_opts = array('category_id');
-	if (@$SysPrefs->sort_item_list_desc)
+	if (@$SysPrefs->search_autocomplete)
 		$sort_opts = array('description', 'category_id');
 
 	return combo_input($name, $selected_id, $sql, 'category_id', 'description',
@@ -2694,6 +2694,7 @@ function refline_list_row($label, $name, $type, $selected_id=null, $spec_option=
 
 function subledger_list($name, $account, $selected_id=null)
 {
+	global $SysPrefs;
 	$type = is_subledger_account($account);
 	if (!$type)
 		return '';
@@ -2716,7 +2717,7 @@ function subledger_list($name, $account, $selected_id=null)
 
 	return combo_input($name, $selected_id, $sql, 'id', 'name',
 	array(
-		'type' => 1,
+		'type' => (@$SysPrefs->search_autocomplete ? 4 : 1),
 		'size' => 20,
 		'async' => false,
 	) );
