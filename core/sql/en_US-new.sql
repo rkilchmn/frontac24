@@ -1955,6 +1955,8 @@ CREATE TABLE IF NOT EXISTS `0_tax_groups` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(60) NOT NULL default '',
   `inactive` tinyint(1) NOT NULL default '0',
+  `no_sale` tinyint(1) NOT NULL default '0',
+  `no_purchase` tinyint(1) NOT NULL default '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 ;
@@ -1963,8 +1965,8 @@ CREATE TABLE IF NOT EXISTS `0_tax_groups` (
 -- Dumping data for table `0_tax_groups`
 --
 
-INSERT INTO `0_tax_groups` VALUES (1, 'Tax', 0);
-INSERT INTO `0_tax_groups` VALUES (2, 'Tax Exempt', 0);
+INSERT INTO `0_tax_groups` VALUES (1, 'Tax', 0, 0, 0);
+INSERT INTO `0_tax_groups` VALUES (2, 'Tax Exempt', 0, 0, 0);
 
 -- --------------------------------------------------------
 

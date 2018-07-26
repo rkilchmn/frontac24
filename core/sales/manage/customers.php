@@ -314,7 +314,7 @@ function customer_settings($selected_id)
 		locations_list_row(_("Default Inventory Location:"), 'location');
 		shippers_list_row(_("Default Shipping Company:"), 'ship_via');
 		sales_areas_list_row( _("Sales Area:"), 'area', null);
-		tax_groups_list_row(_("Tax Group:"), 'tax_group_id', null);
+		tax_groups_list_row(_("Tax Group:"), 'tax_group_id', null, false, false, true, false);
 	}
 	end_outer_table(1);
 

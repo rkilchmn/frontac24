@@ -23,11 +23,11 @@ function add_tax_group($name, $taxes, $tax_shippings)
 	commit_transaction();	
 }
 
-function update_tax_group($id, $name, $taxes, $tax_shippings)
+function update_tax_group($id, $name, $no_sale, $no_purchase, $taxes, $tax_shippings)
 {
 	begin_transaction();	
 
-    $sql = "UPDATE ".TB_PREF."tax_groups SET name=".db_escape($name)." WHERE id=".db_escape($id);
+    $sql = "UPDATE ".TB_PREF."tax_groups SET name=".db_escape($name).", no_sale=".db_escape($no_sale).", no_purchase=".db_escape($no_purchase)." WHERE id=".db_escape($id);
 	db_query($sql, "could not update tax group");
 	
 	delete_tax_group_items($id);

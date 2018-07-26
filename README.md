@@ -454,3 +454,5 @@ is set to the new customer.
 
 ## FEATURE: add new customer defaults for sales type, sales area, tax group
 ## FEATURE: remember last bank account transfer
+## BUGFIX:  0004594: Tax group still showing when inactive
+## FEATURE: tax groups can be sales or purchases only

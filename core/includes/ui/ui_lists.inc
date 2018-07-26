@@ -1243,9 +1243,14 @@ function tax_types_list_row($label, $name, $selected_id=null, $none_option=false
 //------------------------------------------------------------------------------------
 
 function tax_groups_list($name, $selected_id=null,
-	$none_option=false, $submit_on_change=false)
+	$none_option=false, $submit_on_change=false, $sales=false, $purchases=false)
 {
-	$sql = "SELECT id, name FROM ".TB_PREF."tax_groups";
+    $inactive = "inactive";
+    if ($sales)
+        $inactive = "no_sale OR " . $inactive;
+    if ($purchases)
+        $inactive = "no_purchase OR " . $inactive;
+	$sql = "SELECT id, name, (" . $inactive . ") as inactive FROM ".TB_PREF."tax_groups";
 
 	return combo_input($name, $selected_id, $sql, 'id', 'name',
 		array(
@@ -1257,19 +1262,19 @@ function tax_groups_list($name, $selected_id=null,
 		) );
 }
 
-function tax_groups_list_cells($label, $name, $selected_id=null, $none_option=false, $submit_on_change=false)
+function tax_groups_list_cells($label, $name, $selected_id=null, $none_option=false, $submit_on_change=false, $sales=false, $purchases=false)
 {
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo "<td>";
-	echo tax_groups_list($name, $selected_id, $none_option, $submit_on_change);
+	echo tax_groups_list($name, $selected_id, $none_option, $submit_on_change, $sales, $purchases);
 	echo "</td>\n";
 }
 
-function tax_groups_list_row($label, $name, $selected_id=null, $none_option=false, $submit_on_change=false)
+function tax_groups_list_row($label, $name, $selected_id=null, $none_option=false, $submit_on_change=false, $sales=false, $purchases=false)
 {
 	echo "<tr><td class='label'>$label</td>";
-	tax_groups_list_cells(null, $name, $selected_id, $none_option, $submit_on_change);
+	tax_groups_list_cells(null, $name, $selected_id, $none_option, $submit_on_change, $sales, $purchases);
 	echo "</tr>\n";
 }
 

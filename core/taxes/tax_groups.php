@@ -59,7 +59,7 @@ if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM')
 		}
     	if ($selected_id != -1) 
     	{
-	   		update_tax_group($selected_id, $_POST['name'], $taxes, $tax_shippings);
+	   		update_tax_group($selected_id, $_POST['name'], $_POST['no_sale'], $_POST['no_purchase'], $taxes, $tax_shippings);
 			display_notification(_('Selected tax group has been updated'));
     	} 
     	else 
@@ -123,7 +123,7 @@ $result = get_all_tax_groups(check_value('show_inactive'));
 start_form();
 
 start_table(TABLESTYLE);
-$th = array(_("Description"), "", "");
+$th = array(_("Description"), "Exclude From Sales", "Exclude From Purchases", "", "");
 inactive_control_column($th);
 
 table_header($th);
@@ -135,14 +135,16 @@ while ($myrow = db_fetch($result))
 	alt_table_row_color($k);
 
 	label_cell($myrow["name"]);
+	label_cell($myrow["no_sale"] ? _('Yes') : _('No'));
+	label_cell($myrow["no_purchase"] ? _('Yes') : _('No'));
 
-	inactive_control_cell($myrow["id"], $myrow["inactive"], 'tax_groups', 'id');
+    inactive_control_cell($myrow["id"], $myrow["inactive"], 'tax_groups', 'id');
  	edit_button_cell("Edit".$myrow["id"], _("Edit"));
  	delete_button_cell("Delete".$myrow["id"], _("Delete"));
-	end_row();;
+	end_row();
 }
-
 inactive_control_row($th);
+
 end_table(1);
 
 //-----------------------------------------------------------------------------------
@@ -163,6 +165,10 @@ if ($selected_id != -1)
 
 }
 text_row_ex(_("Description:"), 'name', 40);
+check_row("Exclude From Sales", 'no_sale',
+        $myrow['no_sale'], true, false, "align='center'");
+check_row("Exclude From Purchases", 'no_purchase',
+        $myrow['no_purchase'], true, false, "align='center'");
 
 end_table();
 
