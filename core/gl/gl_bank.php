@@ -320,11 +320,11 @@ if (isset($_POST['Process']) && !check_trans())
 
     $referer = "";
     $params = "";
-    if (!isset($_SESSION['HTTP_REFERER']))
+    if (!isset($_POST['referer']))
         $referer=$_SERVER['PHP_SELF'];
     else {
-        $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
-        $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+        $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+        $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
         $params = preg_replace('/[&]*message.*/', '', $params);
         if (!empty($params))
             $params .= "&";

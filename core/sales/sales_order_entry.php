@@ -516,11 +516,11 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
             $params="AddedDN=$trans_no&Type=$so_type";
         }
 
-        if (!isset($_SESSION['HTTP_REFERER']))
+        if (!isset($_POST['referer']))
             $referer=$_SERVER['PHP_SELF'];
         else {
-            $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
-            $ref_params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+            $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+            $ref_params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
             $ref_params = preg_replace('/[&]*message.*/', '', $ref_params);
             if (!empty($ref_params))
                 $ref_params .= "&";
@@ -643,8 +643,8 @@ function  handle_cancel_order()
 		if ($_SESSION['Items']->trans_no != 0) {
 			$order_no = key($_SESSION['Items']->trans_no);
             // Note: modified sales orders always have referer
-            $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
-            $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+            $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+            $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
             $params = preg_replace('/[&]*message.*/', '', $params);
             if (!empty($params))
                 $params .= "&";

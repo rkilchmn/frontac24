@@ -316,12 +316,12 @@ if (isset($_POST['process_delivery']) && check_data()) {
 		else
 			$params="UpdatedID=$delivery_no$is_prepaid";
 
-        if (!isset($_SESSION['HTTP_REFERER']))
+        if (!isset($_POST['referer']))
             $referer=$_SERVER['PHP_SELF'];
         else {
 
-            $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
-            $ref_params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+            $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+            $ref_params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
             $ref_params = preg_replace('/[&]*message.*/', '', $ref_params);
             if (!empty($ref_params))
                 $ref_params .= "&";

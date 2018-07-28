@@ -37,14 +37,6 @@ function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $scri
 
 	if (++$page_nested) return;
 
-    if (isset($_SERVER['HTTP_REFERER'])) {
-        $referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
-        if (basename($referer) == "index.php")
-            unset($_SESSION['HTTP_REFERER']);
-        else if ($referer != $_SERVER['PHP_SELF'])
-            $_SESSION['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'];
-    }
-
    	$hide_menu = $no_menu;
 
    	include_once($path_to_root . "/includes/page/header.inc");

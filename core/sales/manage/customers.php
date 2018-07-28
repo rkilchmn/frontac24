@@ -132,9 +132,9 @@ function handle_submit(&$selected_id)
 
         set_global_customer($_POST['customer_id']);
 
-        if (isset($_SESSION['HTTP_REFERER'])) {
-            $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
-            $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+        if (isset($_POST['referer'])) {
+            $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+            $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
             $params = preg_replace('/[&]*message.*/', '', $params);
             if (!empty($params))
                 $params .= "&";

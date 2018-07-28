@@ -38,8 +38,8 @@ simple_page_mode(true);
 //----------------------------------------------------------------------------------------
 function returnToReferer($message)
 {
-    $referer=parse_url($_SESSION['HTTP_REFERER'], PHP_URL_PATH);
-    $params = parse_url(htmlspecialchars_decode($_SESSION['HTTP_REFERER']), PHP_URL_QUERY);
+    $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+    $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
     $params = preg_replace('/[&]*message.*/', '', $params);
     if (!empty($params))
         $params .= "&";
@@ -311,7 +311,7 @@ if (isset($_POST['ConfirmVoiding']))
 
 if (isset($_POST['CancelVoiding']))
 {
-    if (isset($_SESSION['HTTP_REFERER']))
+    if (isset($_POST['referer']))
         returnToReferer("Reissue Canceled");
 	$selected_id = -1;
 	$Ajax->activate('_page_body');

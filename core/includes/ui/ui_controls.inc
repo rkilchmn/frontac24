@@ -51,6 +51,15 @@ function start_form($multi=false, $dummy=false, $action="", $name="")
 	else
 		echo "<form method='post' action='$action' $name>\n";
 
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
+        if (basename($referer) == "index.php")
+            hidden('referer');
+        else if ($referer != $_SERVER['PHP_SELF'])
+            hidden('referer', $_SERVER['HTTP_REFERER']);
+        else
+            hidden('referer', @$_POST['referer']);
+    }
 }
 
 /*
