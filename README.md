@@ -481,3 +481,4 @@ is set to the new customer.
 ## FEATURE: remember last bank account transfer
 ## BUGFIX:  0004594: Tax group still showing when inactive
 ## FEATURE: tax groups can be sales or purchases only
+## BUGFIX: 0004601: memo line not cleared after enter new payment item

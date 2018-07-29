@@ -65,6 +65,10 @@ if (list_updated('PersonDetailID')) {
 function line_start_focus() {
   global 	$Ajax;
 
+    unset($_POST['amount']);
+    unset($_POST['dimension_id']);
+    unset($_POST['dimension2_id']);
+    unset($_POST['LineMemo']);
   $Ajax->activate('items_table');
   $Ajax->activate('footer');
   set_focus('_code_id_edit');
@@ -407,7 +411,8 @@ if (isset($_POST['AddItem']))
 if (isset($_POST['UpdateItem']))
 	handle_update_item();
 
-if (isset($_POST['CancelItemChanges']))
+if (isset($_POST['CancelItemChanges'])
+    || isset($_POST['Index']))
 	line_start_focus();
 
 if (isset($_POST['go']))
