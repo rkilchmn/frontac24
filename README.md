@@ -482,3 +482,4 @@ is set to the new customer.
 ## BUGFIX:  0004594: Tax group still showing when inactive
 ## FEATURE: tax groups can be sales or purchases only
 ## BUGFIX: 0004601: memo line not cleared after enter new payment item
+## BUGFIX:  0004606: Cannot add a zero price to an item with a purchase price in inventory adjustment
