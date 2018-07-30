@@ -205,7 +205,8 @@ function display_db_pager(&$pager) {
    		display_note($pager->marker_txt, 0, 1, "class='$pager->notice_class'");
 
   div_end();
-  scroll_down("_{$pager->name}_span");
+//  breaks suppliers/customers->Transactions/Orders with objDiv is null
+//  scroll_down("_{$pager->name}_span");
   return true;
 }
 
