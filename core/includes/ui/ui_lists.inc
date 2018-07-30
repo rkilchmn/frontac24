@@ -137,7 +137,7 @@ $opts = array(		// default options
 		$rel = "rel='$search_box'"; // set relation to list
 		if ($opts['search_submit']) {
 			if (isset($_POST[$search_button])) {
-				$selected_id = array(); // ignore selected_id while search
+//				$selected_id = array(); // ignore selected_id while search
 				if (!$opts['async'])
 					$Ajax->activate('_page_body');
 				else
