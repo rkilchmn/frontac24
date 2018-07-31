@@ -937,6 +937,8 @@ function stock_items_list_row($label, $name, $selected_id=null, $all_option=fals
 function sales_items_list($name, $selected_id=null, $all_option=false, 
 	$submit_on_change=false, $type='', $opts=array())
 {
+    global $SysPrefs;
+
 	// all sales codes
 	$sql = "SELECT i.item_code, i.description, c.description, count(*)>1 as kit,
 			 i.inactive, if(count(*)>1, '0', s.editable) as editable
@@ -958,6 +960,13 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
 	$sql .= " AND !i.inactive AND !s.inactive AND !s.no_sale";
 	$sql .= " GROUP BY i.item_code";
 
+    $sort_opts = array(
+        'type' => (@$SysPrefs->search_autocomplete
+            && get_company_pref('no_item_list')!=0 ? 4 : 0),
+        'order' => (@$SysPrefs->sort_item_list_desc ?
+            array('c.description','i.description', 'i.item_code') :
+            array('c.description','i.item_code')));
+
 	return combo_input($name, $selected_id, $sql, 'i.item_code', 'c.description',
 		array_merge(
 		  array(
@@ -970,10 +979,9 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
 			'size'=>15,
 			'select_submit'=> $submit_on_change,
 			'category' => 2,
-			'order' => array('c.description','i.description','i.item_code'),
 			'editable' => 30,
 			'max' => 255
-		  ), $opts), $type == 'kits' ? $type : "stock_sales" );
+		  ), $sort_opts, $opts), $type == 'kits' ? $type : "stock_sales" );
 }
 
 function sales_items_list_cells($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false, $editkey=false)
