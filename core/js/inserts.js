@@ -321,8 +321,9 @@ var inserts = {
                             e.onblur();
     						return false;
                         }
+                        e.form.submit();
 					}
-					return true;
+                    return true;
 	  			}
 			}
 	},
