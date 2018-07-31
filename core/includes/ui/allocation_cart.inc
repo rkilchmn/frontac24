@@ -334,7 +334,7 @@ function show_allocatable($show_totals) {
     	    }
 	        else
         		$font = "";
-display_notification($amount);
+
 			$left_to_allocate = price_format($amount - $total_allocated);
 	        label_row(_("Left to Allocate"), $left_to_allocate, 
 				"colspan=8 align=right", $font . "nowrap align=right id='left_to_allocate'",
