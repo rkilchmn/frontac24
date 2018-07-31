@@ -120,11 +120,6 @@ function reissue_link($row)
         return pager_link(_("Reissue"), "/admin/reissue_invoice.php?trans_no=" . $row['trans_no'], ICON_REISSUE);
 }
 
-function check_overdue($row)
-{
-	return $row['OverDue'] == 1
-		&& floatcmp($row["TotalAmount"], $row["Allocated"]) != 0;
-}
 //------------------------------------------------------------------------------------------------
 
 function display_customer_summary($customer_record)

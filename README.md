@@ -483,3 +483,5 @@ is set to the new customer.
 ## FEATURE: tax groups can be sales or purchases only
 ## BUGFIX: 0004601: memo line not cleared after enter new payment item
 ## BUGFIX:  0004606: Cannot add a zero price to an item with a purchase price in inventory adjustment
+## BUGFIX:  0004614: Allocated journal entry payment shows in red (overdue) on customer transactions"
+

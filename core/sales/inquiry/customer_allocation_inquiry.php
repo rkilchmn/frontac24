@@ -54,11 +54,6 @@ set_global_customer($_POST['customer_id']);
 end_row();
 end_table();
 //------------------------------------------------------------------------------------------------
-function check_overdue($row)
-{
-	return ($row['OverDue'] == 1 
-		&& (abs($row["TotalAmount"]) - $row["Allocated"] != 0));
-}
 
 function order_link($row)
 {
