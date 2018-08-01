@@ -207,13 +207,6 @@ BF only displays the due date if the transaction is delayed.
 That is because it is meaningless if the transaction is being processed
 immediately.
 
-## allow counterparty on sales/purchases G/L, so a sales/AR journal entry balances to zero
-
-Journal entries between sales to AR in FA result in erroneous customer balances because FA
-only supports counterparty on AR and not on sales.
-
-BF fixes this problem by adding counterparty to sales.
-
 ## remove more zero entries from Customer Balance report
 
 The FA Customer Balance report still prints some zero entries

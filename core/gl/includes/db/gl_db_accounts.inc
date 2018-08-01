@@ -208,37 +208,19 @@ function gl_account_in_quick_entry_lines($acc)
 	$myrow = db_fetch_row($result);
 	return ($myrow[0] > 0); 
 }
-
-// AR and Sales accounts have counterparty
-function is_AR_or_Sales_account_sql($account)
-{
-    $sql = "(receivables_account=".db_escape($account)."
-            OR sales_account != '' AND sales_account=".db_escape($account)."
-            OR sales_account = '' AND EXISTS (SELECT * FROM ".TB_PREF."stock_master WHERE sales_account=".db_escape($account)."))";
-    return $sql;
-}
-
-function is_AP_or_Purchases_account_sql($account)
-{
-	$sql = "(payable_account=".db_escape($account)."
-		    OR purchase_account=".db_escape($account).")";
-    return $sql;
-}
-
 //
-//	Returns:
-//      n>0 when account is AR or Sales,
-//      n<0 when account is AP or Purchases
+//	Returns n>0 when account is AR, n<0 when account is AP
 //  (priority for AR accounts)
 //
 function is_subledger_account($account)
 {
 	$sql = "SELECT 1 
-		FROM ".TB_PREF."cust_branch WHERE " . is_AR_or_Sales_account_sql($account) . "
-	    UNION
+		FROM ".TB_PREF."cust_branch
+		WHERE receivables_account=".db_escape($account)
+	." UNION
 		SELECT -1 
 		FROM ".TB_PREF."suppliers 
-		WHERE " . is_AP_or_Purchases_account_sql($account);
+		WHERE payable_account=".db_escape($account);
 
 	$result = db_query($sql,"Couldn't test AR/AP account");
 	$myrow = db_fetch_row($result);
@@ -249,12 +231,13 @@ function get_subaccount_data($code_id, $person_id)
 {
 	$sql = "SELECT debtor_ref as name, branch_code as id 
 		FROM ".TB_PREF."cust_branch branch 
-			LEFT JOIN ".TB_PREF."debtors_master d ON branch.debtor_no = d.debtor_no WHERE " . is_AR_or_Sales_account_sql($code_id) . "
-            AND d.debtor_no=".db_escape($person_id). "
-		UNION SELECT supp_ref as name, '' as id 
+			LEFT JOIN ".TB_PREF."debtors_master d ON branch.debtor_no = d.debtor_no
+		WHERE branch.receivables_account=".db_escape($code_id)
+			." AND d.debtor_no=".db_escape($person_id)
+		." UNION SELECT supp_ref as name, '' as id 
 			FROM ".TB_PREF."suppliers supp
 			WHERE supplier_id=".db_escape($person_id)." 
-				AND " . is_AP_or_Purchases_account_sql($code_id);
+				AND payable_account=".db_escape($code_id);
 	$result = db_query($sql, 'cannot retrieve counterparty name');
 
 	return  db_fetch($result);
@@ -264,10 +247,12 @@ function get_subaccount_name($code_id, $person_id)
 {
 	$sql = "SELECT debtor_ref as ref
 		FROM ".TB_PREF."cust_branch branch
-			LEFT JOIN ".TB_PREF."debtors_master d ON branch.debtor_no = d.debtor_no WHERE " . is_AR_or_Sales_account_sql($code_id) . "
-			AND d.debtor_no=".db_escape($person_id)
+			LEFT JOIN ".TB_PREF."debtors_master d ON branch.debtor_no = d.debtor_no
+		WHERE branch.receivables_account=".db_escape($code_id)
+			." AND d.debtor_no=".db_escape($person_id)
 		." UNION SELECT supp_ref as ref
-			FROM ".TB_PREF."suppliers supp WHERE " . is_AP_or_Purchases_account_sql($code_id) . "
+			FROM ".TB_PREF."suppliers supp
+			WHERE payable_account=".db_escape($code_id)." 
 				AND supplier_id=".db_escape($person_id);
 	$result = db_query($sql, 'cannot retrieve counterparty name');
 	$row = db_fetch($result);
