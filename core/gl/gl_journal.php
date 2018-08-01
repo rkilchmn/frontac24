@@ -340,9 +340,9 @@ if (isset($_POST['Process']))
 	new_doc_date($_POST['date_']);
 	unset($_SESSION['journal_items']);
 	if($new)
-		meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no");
+		meta_forward_self("AddedID=$trans_no");
 	else
-		meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$trans_no");
+		meta_forward_self("UpdatedID=$trans_no");
 }
 
 //-----------------------------------------------------------------------------------------------

@@ -322,28 +322,14 @@ if (isset($_POST['Process']) && !check_trans())
 
 	commit_transaction();
 
-    $referer = "";
     $params = "";
-    if (!isset($_POST['referer']))
-        $referer=$_SERVER['PHP_SELF'];
-    else {
-        $referer=parse_url($_POST['referer'], PHP_URL_PATH);
-        $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
-        $params = preg_replace('/[&]*message.*/', '', $params);
-        if (!empty($params))
-            $params .= "&";
-        $params .= "message=";
-        $params .= ($trans_type==ST_BANKPAYMENT ? "Payment" : "Deposit");
-        $params .= " Completed";
-        $params .= "&";
-    }
     if ($new) {
         $params .= ($trans_type==ST_BANKPAYMENT ?  "AddedID=" : "AddedDep=");
         $params .= "$trans_no&date_=".$_POST['date_']."&bank_account=".$_POST['bank_account'];
     } else
         $params .= ($trans_type==ST_BANKPAYMENT ?
             "UpdatedID=$trans_no" : "UpdatedDep=$trans_no");
-    meta_forward($referer, $params);
+    meta_forward_self($params);
 
 }
 

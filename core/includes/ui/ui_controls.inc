@@ -55,9 +55,10 @@ function start_form($multi=false, $dummy=false, $action="", $name="")
         $referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
         if (basename($referer) == "index.php")
             hidden('referer');
-        else if ($referer != $_SERVER['PHP_SELF'])
+        else if ($referer != $_SERVER['PHP_SELF']) {
             hidden('referer', $_SERVER['HTTP_REFERER']);
-        else
+            $_POST['referer'] = $_SERVER['HTTP_REFERER'];
+        } else
             hidden('referer', @$_POST['referer']);
     }
 }
@@ -175,6 +176,25 @@ function meta_forward($forward_to, $params="", $timeout=0, $return=false)
 	if ($params !='') $params = '?'.$params;
 	$Ajax->redirect($forward_to.$params);
 	if (!$return) exit;
+}
+
+function meta_forward_self($params_in="", $timeout=0, $return=false)
+{
+    $referer = "";
+    $params = "";
+    if (!isset($_POST['referer']))
+        $referer=$_SERVER['PHP_SELF'];
+    else {
+        $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+        $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
+        $params = preg_replace('/[&]*message.*/', '', $params);
+        if (!empty($params))
+            $params .= "&";
+        $params .= "message=Completed";
+        if ($params_in != "")
+            $params .= "&";
+    }
+    meta_forward($referer, $params . $params_in, $timeout, $return);
 }
 
 //-----------------------------------------------------------------------------------
