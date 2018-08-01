@@ -245,7 +245,7 @@ if ($_POST['filterType'] != '2')
 	$cols[_("Balance")] = 'skip';
 
 $table =& new_db_pager('trans_tbl', $sql, $cols);
-$table->set_marker('check_overdue', _("Marked items are overdue."));
+$table->set_marker('check_overdue_allocation', _("Marked items are overdue."));
 
 $table->width = "85%";
 
