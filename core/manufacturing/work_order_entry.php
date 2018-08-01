@@ -20,13 +20,23 @@ include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/manufacturing/includes/manufacturing_db.inc");
 include_once($path_to_root . "/manufacturing/includes/manufacturing_ui.inc");
 
+$posts=array('stock_id', 'quantity', 'date_', 'Labour', 'Costs', 'cr_lab_acc', 'cr_acc');
 $js = "";
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history($posts);
+
 page(_($help_context = "Work Order Entry"), false, false, "", $js);
 
+set_posts($posts);
+if (isset($_GET['account'])) {
+    if ($_GET['account'] == $_POST['cr_lab_acc'])
+        $_POST['Labour'] += $_GET['amount'];
+    if ($_GET['account'] == $_POST['cr_acc'])
+        $_POST['Costs'] += $_GET['amount'];
+}
 
 check_db_has_manufacturable_items(_("There are no manufacturable items defined in the system."));
 
@@ -155,13 +165,6 @@ function can_process()
 	// only check bom and quantites if quick assembly
 	if (!($_POST['type'] == WO_ADVANCED))
 	{
-        if (!has_bom($_POST['stock_id']))
-        {
-        	display_error(_("The selected item to manufacture does not have a bom."));
-			set_focus('stock_id');
-        	return false;
-        }
-
 		if ($_POST['Labour'] == "")
 			$_POST['Labour'] = price_format(0);
     	if (!check_num('Labour', 0))
@@ -405,21 +408,33 @@ else
     date_row(_("Date") . ":", 'date_', '', true);
 	hidden('RequDate', '');
 
+    $bank_act = get_default_bank_account();
+    if (!isset($_POST['cr_acc']))
+        $_POST['cr_acc'] = $bank_act;
+    if (!isset($_POST['cr_lab_acc']))
+        $_POST['cr_lab_acc'] = $bank_act;
+
 	if (!isset($_POST['Labour']) || list_updated('stock_id') || list_updated('type'))
 	{
-		$bank_act = get_default_bank_account();
 		$item = get_item(get_post('stock_id'));
 		$_POST['Labour'] = price_format(get_post('type') == WO_ASSEMBLY ? $item['labour_cost'] : 0);
-		$_POST['cr_lab_acc'] = $bank_act['account_code'];
 		$_POST['Costs'] = price_format(get_post('type') == WO_ASSEMBLY ? $item['overhead_cost'] : 0);
-		$_POST['cr_acc'] = $bank_act['account_code'];
 		$Ajax->activate('_page_body');
 	}
 
-	amount_row($wo_cost_types[WO_LABOUR], 'Labour');
-	gl_all_accounts_list_row(_("Credit Labour Account"), 'cr_lab_acc', null);
-	amount_row($wo_cost_types[WO_OVERHEAD], 'Costs');
-	gl_all_accounts_list_row(_("Credit Overhead Account"), 'cr_acc', null);
+    start_row();
+	gl_all_accounts_list_cells($wo_cost_types[WO_LABOUR] . " " ._("Account"), 'cr_lab_acc', null, false, false, false, true);
+    end_row();
+	amount_row(
+        menu_link("gl/inquiry/gl_account_inquiry.php" . "?select=true&account=".$_POST['cr_lab_acc'], _("Add Cost")),
+        'Labour');
+
+    start_row();
+	gl_all_accounts_list_cells($wo_cost_types[WO_OVERHEAD] . " " ._("Account"), 'cr_acc', null, false, false, false, true);
+    end_row();
+	amount_row(
+        menu_link("gl/inquiry/gl_account_inquiry.php" . "?NewPayment=yes&account=".$_POST['cr_acc'], _("Add Cost")),
+        'Costs');
 
 }
 

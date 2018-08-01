@@ -486,3 +486,22 @@ is set to the new customer.
 ## BUGFIX:  0004614: Allocated journal entry payment shows in red (overdue) on customer transactions"
 ## BUGFIX: 0004617: memo undefined at line 206 core/manufacturing/includes/db/work_order_costing_db.inc"
 
+## FEATURE: manufacturing pick list costs from g/l accounts
+
+The FA basic manufacturing feature supports two g/l additional costs,
+named "Labour" and "Overhead".
+
+In BF, these are renamed "Cost 1" and "Cost 2",
+because these accounts can be used for any G/L account,
+so the FA names can be inappropriate.
+
+BF provides a link to open up the G/L account
+and pick list costs from the G/L account.
+This can assist in determining which costs are applicable
+to the manufacturing process.
+
+BF removes the restriction that a BOM is required,
+to support simple manufacturing without components in inventory.
+For example, a volume of a manufactured item
+could be expanded by adding water
+without any BOM needed.

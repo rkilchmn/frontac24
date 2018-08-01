@@ -107,6 +107,11 @@ function delete_link($row)
         return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['type_no'] . "&filterType=". $row['type'], ICON_DELETE);
 }
 
+function ok_link($row)
+{
+        return pager_link_absolute(_("OK"), preg_replace('/&account=.*/','',htmlspecialchars_decode($_POST['referer'])) . "&account=".$_POST['account'] . "&amount=". $row['amount'], ICON_OK);
+}
+
 //----------------------------------------------------------------------------------------------------
 
 function show_results()
@@ -215,8 +220,12 @@ function show_results()
 		if ($myrow['memo_'] == "")
 			$myrow['memo_'] = get_comments_string($myrow['type'], $myrow['type_no']);
     	label_cell($myrow['memo_']);
-        echo "<td>" . edit_link($myrow) . "</td>";
-        echo "<td>" . delete_link($myrow) . "</td>";
+        if (isset($_GET['select']))
+            echo "<td>" . ok_link($myrow) . "</td>";
+        else {
+            echo "<td>" . edit_link($myrow) . "</td>";
+            echo "<td>" . delete_link($myrow) . "</td>";
+        }
     	end_row();
 
     	$j++;
