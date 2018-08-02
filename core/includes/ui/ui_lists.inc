@@ -2727,6 +2727,7 @@ function subledger_list($name, $account, $selected_id=null)
 		'type' => (@$SysPrefs->search_autocomplete ? 4 : 1),
 		'size' => 20,
 		'async' => false,
+        'spec_option' => '<No Counterparty>'
 	) );
 }
 

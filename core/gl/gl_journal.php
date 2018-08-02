@@ -356,6 +356,7 @@ function check_item_data()
 		set_focus('code_id');
    		return false;
 	}
+/*
 	if (is_subledger_account(get_post('code_id'))) {
 		if(!get_post('person_id')) {
 	   		display_error(_("You must select subledger account."));
@@ -364,6 +365,7 @@ function check_item_data()
 	   		return false;
 	   	}
 	}
+*/
 	if (isset($_POST['dimension_id']) && $_POST['dimension_id'] != 0 && dimension_is_closed($_POST['dimension_id'])) 
 	{
 		display_error(_("Dimension is closed."));

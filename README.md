@@ -498,3 +498,15 @@ to support simple manufacturing without components in inventory.
 For example, a volume of a manufactured item
 could be expanded by adding water
 without any BOM needed.
+
+## FEATURE: add <No Counterparty> to Counterparty drop-down list
+
+In FA, General Journal forces the use of a counterparty if
+the G/L account is listed in a supplier as an accounts payable account
+or in a customer as an accounts receivable account.
+
+This is inconsistent with Payments/Deposits, which allow posting
+to these G/L accounts using Miscellaneous or Quick Entry.
+
+BF adds <No Counterparty> to the Counterparty drop-down list
+in General Journal.
