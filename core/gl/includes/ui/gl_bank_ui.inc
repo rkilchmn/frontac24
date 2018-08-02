@@ -33,23 +33,26 @@ function display_bank_header(&$order)
 		if (isset($_GET['PayType']))
 			$_POST['PayType'] = $_GET['PayType'];
 		else
-			$_POST['PayType'] = "";
+			$_POST['PayType'] = null;
 	}
 	if (!isset($_POST['person_id']))
 	{
 		if (isset($_GET['PayPerson']))
 			$_POST['person_id'] = $_GET['PayPerson'];
 		else
-			$_POST['person_id'] = "";
+            $_POST['person_id'] = null;
 	}
 	if (isset($_POST['_PayType_update'])) {
-		$_POST['person_id'] = '';
+		$_POST['person_id'] = null;
 		$Ajax->activate('pmt_header');
 		$Ajax->activate('code_id');
 		$Ajax->activate('pagehelp');
 		$Ajax->activate('editors');
 		$Ajax->activate('footer');
 	}
+
+    if ($_POST['person_id'] == null)
+        $_POST['person_id'] = last_bank_trans('person_id', $_POST['PayType']);
     payment_person_types_list_row( $payment ? _("Pay To:"):_("From:"),
 		 'PayType', $_POST['PayType'], true);
     switch ($_POST['PayType'])
@@ -59,10 +62,10 @@ function display_bank_header(&$order)
 				 'person_id', 40, 50);
     		break;
 		case PT_SUPPLIER :
-    		supplier_list_row(_("Supplier:"), 'person_id', last_bank_trans('person_id', PT_SUPPLIER), false, true, false, true);
+    		supplier_list_row(_("Supplier:"), 'person_id', null, false, true, false, true);
     		break;
 		case PT_CUSTOMER :
-    		customer_list_row(_("Customer:"), 'person_id', last_bank_trans('person_id', PT_CUSTOMER), false, true, false, true);
+    		customer_list_row(_("Customer:"), 'person_id', null, false, true, false, true);
 
         	if (db_customer_has_branches($_POST['person_id']))
         	{
