@@ -59,10 +59,10 @@ function display_bank_header(&$order)
 				 'person_id', 40, 50);
     		break;
 		case PT_SUPPLIER :
-    		supplier_list_row(_("Supplier:"), 'person_id', null, false, true, false, true);
+    		supplier_list_row(_("Supplier:"), 'person_id', last_bank_trans('person_id', PT_SUPPLIER), false, true, false, true);
     		break;
 		case PT_CUSTOMER :
-    		customer_list_row(_("Customer:"), 'person_id', null, false, true, false, true);
+    		customer_list_row(_("Customer:"), 'person_id', last_bank_trans('person_id', PT_CUSTOMER), false, true, false, true);
 
         	if (db_customer_has_branches($_POST['person_id']))
         	{
