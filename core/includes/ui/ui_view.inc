@@ -1264,9 +1264,9 @@ function CC() {
     var css_class = null; //CSS class for each day
     var table = \"<table cellspacing='0' cellpadding='0' border='0'>\";
     table += \"<tr class='header'>\";
-    table += \"  <td colspan='2' class='previous'><a href='javascript:changeCCMonth(-1);'>&lt;</a><br><a href='javascript:changeCCYear(-1);'>&laquo;</a></td>\";
+    table += \"  <td colspan='2' class='previous'><a href='javascript:changeCCMonth(-1);'>Prev</a><br><a href='javascript:changeCCYear(-1);'>\" + (currentYear - 1) + \"</a></td>\";
     table += \"  <td colspan='4' class='title'>\" + months[currentMonth-1] + \"<br>\" + currentYear + \"</td>\";
-    table += \"  <td colspan='2' class='next'><a href='javascript:changeCCMonth(1);'>&gt;</a><br><a href='javascript:changeCCYear(1);'>&raquo;</a></td>\";
+    table += \"  <td colspan='2' class='next'><a href='javascript:changeCCMonth(1);'>Next</a><br><a href='javascript:changeCCYear(1);'>\" + (currentYear + 1) + \"</a></td>\";
     table += \"</tr>\";
     table += \"<tr>\";
     table += \"<th class='weekno'>\"+wno+\"</th>\";

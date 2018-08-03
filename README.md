@@ -274,9 +274,14 @@ If you have error reporting enabled, you get this error when installing a langua
 
 ## Add frequently used dates to date picker
 
-This mod updates the date picker to add frequently picked dates at the bottom of the date picker. Frequently, a person wants to review activity for the entire year or prior year. The current date picker does not offer these options, and requires so many clicks to to get these dates, that it is easier not to use the date picker and just enter the dates using the text interface.
+This mod updates the date picker to add frequently picked dates at the bottom of the date picker. Frequently, a person wants to review activity for the entire year or prior year. The current date picker does not offer these options, and requires so many clicks to to get these dates, that it is easier not to use the date picker and just enter the dates using the text interface.  This mod places these dates at the bottom of the date picker.
 
-This mod places these dates at the bottom of the date picker. It also removes the Back button, which is replaced by clicking on the date picker again, to hide or show it (i.e. toggle). Toggling is an expected behaviour by web users, as they have become accustomed to toggling the display of select menus.
+The Back button is replaced by clicking on the date picker again, to hide or show it (i.e. toggle). Toggling is an expected behaviour by web users, as they have become accustomed to toggling the display of select menus.
+
+The tiny characters to go to the previous/next month/year
+are replaced by "Prev/Next" and the actual year,
+making it easier to click on them
+because of the larger footprint.
 
 ## Add paging and scrolling to select pop-up
 

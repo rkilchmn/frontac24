@@ -599,7 +599,7 @@ ul.ajaxtabs li button.current, ul.ajaxtabs li button.current:hover{
 	font-size: 1.4em;
 }
 #CC .previous a, #CC .next a {
-	color: #FFF;
+	color: #c0daf8;
 	text-decoration: none;
 	font-weight: bold;
 }
