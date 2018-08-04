@@ -42,10 +42,6 @@ input, select {
 	padding: 1px;
 }
 
-select {
-    max-width: 230px;
-}
-
 option.inactive {
 	text-decoration: line-through;
 	color: gray;

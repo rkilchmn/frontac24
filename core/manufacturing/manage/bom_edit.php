@@ -45,9 +45,10 @@ function display_bom_items($selected_parent)
 	table_header($th);
 
 	$k = 0;
+    $found = false;
 	while ($myrow = db_fetch($result))
 	{
-
+        $found = true;
 		alt_table_row_color($k);
 
 		label_cell($myrow["component"]);
@@ -62,8 +63,29 @@ function display_bom_items($selected_parent)
 
 	} //END WHILE LIST LOOP
 	end_table();
+
+    if ($found) {
+        start_table(TABLESTYLE, "width='60%'");
+        stock_manufactured_items_list_row(_("Copy BOM to another manufacturable item"), 'new_stock_id', $selected_parent, false, true);
+        end_table();
+    }
+
 	div_end();
 }
+
+function copy_bom_items($stock_id, $new_stock_id)
+{
+	$result = get_bom($stock_id);
+	while ($myrow = db_fetch($result))
+	{
+		$_POST['component'] = $myrow["component"];
+        $_POST['loc_code'] = $myrow["loc_code"];
+        $_POST['workcentre_added'] = $myrow["workcentre_added"];
+        $_POST['quantity'] = $myrow["quantity"];
+        on_submit($new_stock_id, -1);
+    }
+}
+
 
 //--------------------------------------------------------------------------------------------------
 
@@ -156,6 +178,12 @@ end_form();
 if (get_post('stock_id') != '')
 { //Parent Item selected so display bom or edit component
 	$selected_parent = $_POST['stock_id'];
+    if (list_updated('new_stock_id')) {
+        copy_bom_items($selected_parent, $_POST['new_stock_id']);
+        $item = get_item($_POST['new_stock_id']);
+        display_notification("BOM copied to " . $item['description']);
+    }
+
 	if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM')
 		on_submit($selected_parent, $selected_id);
 	//--------------------------------------------------------------------------------------
