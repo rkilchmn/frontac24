@@ -247,7 +247,7 @@ function gl_edit_item_controls(&$order, $dim, $Index=null)
 		if(isset($_POST['_code_id_update'])) {
 			    $Ajax->activate('code_id');
 		}
-		if (list_updated('PayType') || list_updated('person_id'))
+		if (!isset($_POST['code_id']))
 		{
 			if ($_POST['PayType'] == PT_CUSTOMER)
 			{

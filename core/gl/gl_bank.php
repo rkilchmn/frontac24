@@ -66,8 +66,6 @@ function line_start_focus() {
   global 	$Ajax;
 
     unset($_POST['amount']);
-    unset($_POST['dimension_id']);
-    unset($_POST['dimension2_id']);
     unset($_POST['LineMemo']);
   $Ajax->activate('items_table');
   $Ajax->activate('footer');
