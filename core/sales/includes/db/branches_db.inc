@@ -272,7 +272,7 @@ function get_branches_search_sql($customer, $branch)
 	$sql = "SELECT 
 		    b.branch_code,
 	    	b.branch_ref,
-	    	b.br_name,
+	    	IF(inactive=0,b.br_name,CONCAT('(INACTIVE) ', b.br_name)) as br_name,
     		p.name as contact_name,
 		    p.phone
 		FROM ".TB_PREF."cust_branch b
@@ -281,7 +281,7 @@ function get_branches_search_sql($customer, $branch)
 		LEFT JOIN ".TB_PREF."crm_persons p ON c.person_id=p.id
 		WHERE b.debtor_no = ".db_escape($customer)."
 			AND b.br_name LIKE " . db_escape("%" . $branch. "%") . "
-		ORDER BY b.br_name ";
+		ORDER BY inactive, b.br_name ";
 
 	return $sql;
 }

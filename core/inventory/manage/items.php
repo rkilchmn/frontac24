@@ -252,10 +252,8 @@ if (isset($_POST['addupdate']))
 				get_post('fa_class_id'));
 
 			display_notification(_("A new item has been added."));
-			$_POST['stock_id'] = $_POST['NewStockID'] = 
-			$_POST['description'] = $_POST['long_description'] = '';
-			$_POST['no_sale'] = $_POST['editable'] = $_POST['no_purchase'] =0;
-			set_focus('NewStockID');
+			$_POST['stock_id'] = $_POST['NewStockID'];
+			set_focus('stock_id');
 		}
 		$Ajax->activate('_page_body');
 	}
@@ -397,7 +395,7 @@ function item_settings(&$stock_id, $new_item)
 		}
 		label_row(_("Item Code:"),$_POST['NewStockID']);
 		hidden('NewStockID', $_POST['NewStockID']);
-		set_focus('description');
+		set_focus('stock_id');
 	}
 	$fixed_asset = get_post('fixed_asset');
 

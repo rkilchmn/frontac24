@@ -13,9 +13,8 @@ The "proposed" branches are obsolete pull requests,
 but are retained because
 these pull requests were not integrated into the FA core.
 
-The braathwaate modifications are mostly user interface enhancements
+The braathwaate modifications are mostly usability enhancements
 designed to reduce the amount of clicking and scrolling
-when performing accounting tasks,
 although there are also bug fixes and feature enhancements.
 
 Following is a list of modifications
@@ -517,3 +516,30 @@ BF adds "No Counterparty" to the Counterparty drop-down list
 in General Journal.
 
 ## FEATURE: add ability to copy BOM to another parent
+
+## FEATURE: find and mark inactive items during popup search
+
+In FA, all of the popup searches (magnifying glass)
+return inactive items
+(except for the item search which does not ever show inactive items).
+There is no checkbox option to configure this;
+the checkbox option on the main page applies only to the dropdown list
+on that page.
+
+We have found that this is extremely confusing to our users.
+Users who rely on the popup search
+are unable to find inactive items
+and the customer and supplier lists are bloated with inactive entries.
+
+BF displays inactive entries, but marked with (INACTIVE)
+in the name or description and sorted to the bottom of the list.
+All lists function identically in this manner.
+
+As a design note, the idea of yet another inactive checkbox was discarded
+because the length of search lists in the popup tend to be short,
+so the addition of marked inactive entries at the bottom
+do not bloat the lists.
+Additionally,
+we have found that users often resort
+to using the popup list when they are unable to find an item,
+and do not guess that the reason is because the item was marked inactive.

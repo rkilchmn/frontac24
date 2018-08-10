@@ -194,13 +194,13 @@ function get_suppliers_search_sql($supplier)
 {
 	global $SysPrefs;
 
-	$sql = "SELECT supplier_id, supp_name, supp_ref, address, gst_no
+	$sql = "SELECT supplier_id, IF(inactive=0, supp_name, CONCAT('(INACTIVE) ', supp_name)) as supp_name, supp_ref, address, gst_no
 		FROM ".TB_PREF."suppliers
 		WHERE (supp_name LIKE " . db_escape("%" . $supplier. "%") . " OR 
             supp_ref LIKE " . db_escape("%" . $supplier. "%") . " OR
 			address LIKE " . db_escape("%" . $supplier. "%") . " OR 
 			gst_no LIKE " . db_escape("%" . $supplier. "%") . ")
-		ORDER BY supp_name ";
+		ORDER BY inactive, supp_name ";
 
 	return $sql;
 }

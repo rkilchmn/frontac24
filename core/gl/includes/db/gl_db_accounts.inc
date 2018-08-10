@@ -291,13 +291,13 @@ function is_bank_account($account_code)
 
 function get_chart_accounts_search_sql($like)
 {
-	$sql = "SELECT chart.account_code, chart.account_name, type.name
+	$sql = "SELECT chart.account_code, IF(chart.inactive=0, chart.account_name, CONCAT('(INACTIVE) ', chart.account_name)) as account_name, type.name
 			FROM ".TB_PREF."chart_master chart,".TB_PREF."chart_types type
 			WHERE chart.account_type=type.id
         AND (
           chart.account_name LIKE " . db_escape("%" . $like. "%") . " OR
           chart.account_code LIKE " . db_escape("%" . $like. "%") . "
         ) 
-      	ORDER BY chart.account_code ";
+      	ORDER BY chart.inactive, chart.account_code ";
 	return $sql;
 }

@@ -183,11 +183,10 @@ function get_items_search_sql($description, $type)
 {
 	global $SysPrefs;
 
-	$sql = "SELECT COUNT(i.item_code) AS kit, i.item_code, i.description, c.description category
+	$sql = "SELECT COUNT(i.item_code) AS kit, i.item_code, IF(i.inactive = 0 AND s.inactive = 0,i.description,CONCAT('(INACTIVE) ',i.description)) AS description, c.description category, (i.inactive OR s.inactive) AS inact
 		FROM ".TB_PREF."stock_master s, ".TB_PREF."item_codes i
 			LEFT JOIN ".TB_PREF."stock_category c ON i.category_id=c.category_id
 		WHERE i.stock_id=s.stock_id
-			AND !i.inactive AND !s.inactive
 			AND (  i.item_code LIKE " . db_escape("%" . $description. "%") . " OR 
 				i.description LIKE " . db_escape("%" . get_post("description"). "%") . " OR 
 				c.description LIKE " . db_escape("%" . get_post("description"). "%") . ") ";
@@ -217,7 +216,7 @@ function get_items_search_sql($description, $type)
 			break;
 	}
 
-	$sql .= " GROUP BY i.item_code ORDER BY i.description ";
+	$sql .= " GROUP BY i.item_code ORDER BY inact, i.description ";
 
 	return $sql;
 }

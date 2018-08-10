@@ -202,12 +202,12 @@ function get_customer_currency($customer_id=null, $branch_id=null)
 
 function get_customers_search_sql($customer)
 {
-	$sql = "SELECT debtor_no, name, debtor_ref, address, tax_id FROM ".TB_PREF."debtors_master 
+	$sql = "SELECT debtor_no, IF(inactive=0,name,CONCAT('(INACTIVE) ', name)) as name, debtor_ref, address, tax_id FROM ".TB_PREF."debtors_master 
 	  WHERE (  name LIKE " . db_escape("%" . $customer. "%") . " OR 
     		 debtor_ref LIKE " . db_escape("%" . $customer. "%") . " OR 
 	        address LIKE " . db_escape("%" . $customer. "%") . " OR 
     	     tax_id LIKE " . db_escape("%" . $customer. "%").")
-	  ORDER BY name ";
+	  ORDER BY inactive, name ";
 
 	return $sql;
 }
