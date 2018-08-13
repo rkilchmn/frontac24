@@ -543,3 +543,5 @@ Additionally,
 we have found that users often resort
 to using the popup list when they are unable to find an item,
 and do not guess that the reason is because the item was marked inactive.
+
+## do not show bank deposits when invoice filter is selected in supplier inquiry

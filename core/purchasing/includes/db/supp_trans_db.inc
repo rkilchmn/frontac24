@@ -236,7 +236,7 @@ function get_sql_for_supplier_inquiry($filter, $after_date, $to_date, $supplier_
    	{
    		if (($filter == '1')) 
    		{
-   			$sql .= " AND (trans.type = ".ST_SUPPINVOICE." OR trans.type = ".ST_BANKDEPOSIT.")";
+   			$sql .= " AND trans.type = ".ST_SUPPINVOICE;
    		} 
    		elseif ($filter == '3') 
    		{
