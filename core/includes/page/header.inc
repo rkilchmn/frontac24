@@ -142,6 +142,7 @@ function page_header($title, $no_menu=false, $is_index=false, $onload="", $js=""
         }
 	}
 	echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
+    echo "<meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'> \n";
 	echo "<html dir='" . $_SESSION['language']->dir . "' >\n";
 	echo "<head profile=\"http://www.w3.org/2005/10/profile\"><title>$title</title>";
 	if (strpos($_SERVER['HTTP_USER_AGENT'], 'Trident/7.0; rv:11.0') != -1) // IE 11 doesn't work with input file type in form.
