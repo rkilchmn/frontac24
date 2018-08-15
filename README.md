@@ -560,4 +560,18 @@ to the device.)
 
 See http://frontaccounting.com/punbb/viewtopic.php?pid=30616#p30616.
 
+## select next item after item delete
 
+When an item is deleted in FA, the item list is refreshed
+and positioned to "New Item".
+This is not very helpful, because often the user wants to delete
+more than one item.
+In addition,
+it is useful to redisplay the list with the deleted item removed,
+giving the user satisfaction that the item is indeed gone.
+
+BF positions the list to the next item after the deleted one
+and selects that item.
+Thus, if the user is deleting a series of consecutive inventory items,
+the user just has to keep hitting the delete key
+to delete them.

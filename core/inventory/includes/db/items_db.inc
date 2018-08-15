@@ -125,6 +125,30 @@ function get_item($stock_id)
 	return db_fetch($result);
 }
 
+function get_next_stock_id($stock_id)
+{
+global $SysPrefs;
+
+	$sql = "SELECT stock_id
+		FROM ".TB_PREF."stock_master";
+
+        if (@$SysPrefs->sort_item_list_desc)
+            $sql .= " WHERE stock_id != ".db_escape($stock_id) . "
+                AND description >=
+                (SELECT sm.description FROM ".TB_PREF."stock_master sm
+                    WHERE sm.stock_id = ".db_escape($stock_id) . ")
+                    ORDER BY description LIMIT 1";
+
+        else
+            $sql .= " WHERE stock_id > ".db_escape($stock_id)
+                ." ORDER BY stock_id LIMIT 1";
+
+	$result = db_query($sql,"an item could not be retreived");
+
+	$row = db_fetch($result);
+    return $row['stock_id'];
+}
+
 function get_items($fixed_asset = 0)
 {
 	$sql = "SELECT * FROM ".TB_PREF."stock_master WHERE fixed_asset=".db_escape($fixed_asset);

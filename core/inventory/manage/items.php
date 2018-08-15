@@ -288,12 +288,12 @@ if (isset($_POST['delete']) && strlen($_POST['delete']) > 1)
 	if (check_usage($_POST['NewStockID'])) {
 
 		$stock_id = $_POST['NewStockID'];
+		$_POST['stock_id'] = get_next_stock_id($stock_id);
 		delete_item($stock_id);
 		$filename = company_path().'/images/'.item_img_name($stock_id).".jpg";
 		if (file_exists($filename))
 			unlink($filename);
 		display_notification(_("Selected item has been deleted."));
-		$_POST['stock_id'] = '';
 		clear_data();
 		set_focus('stock_id');
 		$new_item = true;
