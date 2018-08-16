@@ -18,6 +18,9 @@ include_once($path_to_root . "/includes/banking.inc");
 include_once($path_to_root . "/sales/includes/sales_db.inc");
 
 include_once($path_to_root . "/includes/ui.inc");
+include_once($path_to_root . "/includes/db_pager.inc");
+
+
 $js = "";
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
@@ -106,7 +109,7 @@ $th = array(_("Type"), _("#"), _("Reference"));
 if ($display_location)
 	array_push($th, _("Location"));
 
-array_push($th, _("Date"), _("Detail"), _("Quantity In"), _("Quantity Out"), _("Quantity On Hand"));
+array_push($th, _("Date"), _("Detail"), _("Quantity In"), _("Quantity Out"), _("Quantity On Hand"), "");
 
 table_header($th);
 
@@ -170,6 +173,7 @@ while ($myrow = db_fetch($result))
 	label_cell((($myrow["qty"] >= 0) ? $quantity_formatted : ""), "nowrap align=right");
 	label_cell((($myrow["qty"] < 0) ? $quantity_formatted : ""), "nowrap align=right");
 	qty_cell($after_qty, false, $dec);
+    label_cell(pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $myrow['trans_no'] . "&filterType=". $myrow['type'], ICON_DELETE));
 	end_row();
 
 	$j++;
@@ -185,6 +189,7 @@ label_cell("<b>"._("Quantity on hand after") . " " . $_POST['BeforeDate']."</b>"
 qty_cell($total_in, false, $dec);
 qty_cell($total_out, false, $dec);
 qty_cell($after_qty, false, $dec);
+
 end_row();
 
 end_table(1);
