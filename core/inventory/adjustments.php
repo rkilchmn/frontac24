@@ -151,9 +151,9 @@ if (isset($_POST['Process']) && can_process()){
 	unset($_SESSION['adj_items']);
 
   if ($fixed_asset)
-   	meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no&FixedAsset=1");
+   	meta_forward_self("AddedID=$trans_no&FixedAsset=1");
   else
-   	meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no");
+   	meta_forward_self("AddedID=$trans_no");
 
 } /*end of process credit note */
 

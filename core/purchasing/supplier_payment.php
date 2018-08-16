@@ -238,7 +238,7 @@ function handle_add_payment()
    	unset($_POST['discount']);
    	unset($_POST['ProcessSuppPayment']);
 
-	meta_forward($_SERVER['PHP_SELF'], "AddedID=$payment_id&supplier_id=".$_POST['supplier_id']);
+	meta_forward_self("AddedID=$payment_id&supplier_id=".$_POST['supplier_id']);
 }
 
 //----------------------------------------------------------------------------------------

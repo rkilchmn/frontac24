@@ -369,9 +369,9 @@ if (isset($_POST['process_invoice']) && check_data()) {
 		processing_end();
 
 		if ($newinvoice) {
-			meta_forward($_SERVER['PHP_SELF'], "AddedID=$invoice_no");
+			meta_forward_self("AddedID=$invoice_no");
 		} else {
-			meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$invoice_no");
+			meta_forward_self("UpdatedID=$invoice_no");
 		}
 	}	
 }

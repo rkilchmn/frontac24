@@ -251,7 +251,7 @@ if (get_post('AddPaymentItem') && can_process()) {
 	$_SESSION['alloc']->write();
 
 	unset($_SESSION['alloc']);
-	meta_forward($_SERVER['PHP_SELF'], $new_pmt ? "AddedID=$payment_no&DateBanked=" . $_POST['DateBanked'] : "UpdatedID=$payment_no");
+	meta_forward_self($new_pmt ? "AddedID=$payment_no&DateBanked=" . $_POST['DateBanked'] : "UpdatedID=$payment_no");
 }
 
 //----------------------------------------------------------------------------------------------

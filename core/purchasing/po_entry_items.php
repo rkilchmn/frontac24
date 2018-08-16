@@ -434,16 +434,16 @@ function handle_commit_order()
 			if ($trans_no) {
 				unset($_SESSION['PO']);
 				if ($cart->trans_type == ST_PURCHORDER)
-	 				meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no");
+	 				meta_forward_self("AddedID=$trans_no");
 				elseif ($cart->trans_type == ST_SUPPRECEIVE)
-					meta_forward($_SERVER['PHP_SELF'], "AddedGRN=$trans_no");
+					meta_forward_self("AddedGRN=$trans_no");
 				else
-					meta_forward($_SERVER['PHP_SELF'], "AddedPI=$trans_no");
+					meta_forward_self("AddedPI=$trans_no");
 			}
 		} else { // order modification
 			$order_no = update_po($cart);
 			unset($_SESSION['PO']);
-        	meta_forward($_SERVER['PHP_SELF'], "AddedID=$order_no&Updated=1");	
+        	meta_forward_self("AddedID=$order_no&Updated=1");	
 		}
 	}
 }

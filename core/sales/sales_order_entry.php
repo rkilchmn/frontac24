@@ -499,8 +499,6 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
             meta_forward($path_to_root . "/sales/customer_delivery.php", $params);
         }
 
-        $params = "";
-        $referer = "";
         if ($modified) {
             if ($trans_type == ST_SALESQUOTE)
                 $params = "UpdatedQU=$trans_no";
@@ -515,18 +513,7 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
         } else {
             $params="AddedDN=$trans_no&Type=$so_type";
         }
-
-        if (!isset($_POST['referer']))
-            $referer=$_SERVER['PHP_SELF'];
-        else {
-            $referer=parse_url($_POST['referer'], PHP_URL_PATH);
-            $ref_params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
-            $ref_params = preg_replace('/[&]*message.*/', '', $ref_params);
-            if (!empty($ref_params))
-                $ref_params .= "&";
-            $params = $ref_params . $params . "&message=Order Updated";
-        }
-        meta_forward($referer, $params);
+        meta_forward_self($params);
     }
 }
 
