@@ -43,10 +43,7 @@ if (get_post('fixed_asset') == 1)
 else
 	check_db_has_stock_items(_("There are no items defined in the system."));
 
-if(get_post('ShowMoves'))
-{
-	$Ajax->activate('doc_tbl');
-}
+$Ajax->activate('doc_tbl');
 
 if (isset($_GET['stock_id']))
 {
@@ -66,7 +63,7 @@ if (!$page_nested)
 {
 	if (get_post('fixed_asset') == 1) {
 		stock_items_list_cells(_("Item:"), 'stock_id', $_POST['stock_id'],
-			false, false, check_value('show_inactive'), false, array('fixed_asset' => true));
+			false, true, check_value('show_inactive'), false, array('fixed_asset' => true));
 		check_cells(_("Show inactive:"), 'show_inactive', null, true);
 
 		if (get_post('_show_inactive_update')) {

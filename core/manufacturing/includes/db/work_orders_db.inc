@@ -12,14 +12,14 @@
 /*
 	Common entry procedure for all work order types
 */
-function add_work_order($wo_ref, $loc_code, $units_reqd, $stock_id,
+function add_work_order($wo_ref, $loc_code, $units_reqd, $stock_id, $bom,
 	$type, $date_, $required_by, $memo_, $costs, $cr_acc, $labour, $cr_lab_acc)
 {
 	global $Refs;
 
 	begin_transaction();
 	$args = func_get_args();
-	$args = (object)array_combine(array('wo_ref', 'loc_code', 'units_reqd', 'stock_id',
+	$args = (object)array_combine(array('wo_ref', 'loc_code', 'units_reqd', 'stock_id', 'bom',
 		'type', 'date_', 'required_by', 'memo_', 'costs', 'cr_acc', 'labour', 'cr_lab_acc'), $args);
 
 	$args->woid = 0;
@@ -50,7 +50,7 @@ function add_work_order($wo_ref, $loc_code, $units_reqd, $stock_id,
 	if ($type != WO_ADVANCED)
 	{
 	 	$stockitem = get_item($stock_id);
-		release_work_order($woid, $date_, '');
+		release_work_order($woid, $date_, '', $bom);
 		if ($costs != 0)
 			add_wo_costs_journal($woid, $costs, WO_OVERHEAD, $cr_acc, $date_, $stockitem["dimension_id"], $stockitem["dimension2_id"]);
 
@@ -71,12 +71,12 @@ function add_work_order($wo_ref, $loc_code, $units_reqd, $stock_id,
 
 //--------------------------------------------------------------------------------------
 
-function update_work_order($woid, $loc_code, $units_reqd, $stock_id,
+function update_work_order($woid, $loc_code, $units_reqd, $stock_id, $bom,
 					$date_, $required_by, $memo_)
 {
 	begin_transaction();
 	$args = func_get_args();
-	$args = (object)array_combine(array('woid', 'loc_code', 'units_reqd', 'stock_id',
+	$args = (object)array_combine(array('woid', 'loc_code', 'units_reqd', 'stock_id', 'bom',
 		'date_', 'required_by', 'memo_'), $args);
 	hook_db_prewrite($args, ST_WORKORDER);
 
@@ -175,12 +175,13 @@ function work_order_has_payments($woid)
 
 //--------------------------------------------------------------------------------------
 
-function release_work_order($woid, $releaseDate, $memo_)
+function release_work_order($woid, $releaseDate, $memo_, $bom = null)
 {
 	begin_transaction();
 
 	$myrow = get_work_order($woid);
-	$stock_id = $myrow["stock_id"];
+    if ($bom == null)
+        $bom = $myrow["stock_id"];
 
 	$date = date2sql($releaseDate);
 
@@ -189,7 +190,7 @@ function release_work_order($woid, $releaseDate, $memo_)
 	db_query($sql, "could not release work order");
 
 	// create wo_requirements records according to current BOM
-	create_wo_requirements($woid, $stock_id);
+	create_wo_requirements($woid, $bom);
 
 	add_comments(ST_WORKORDER, $woid, $releaseDate, $memo_);
 	add_audit_trail(ST_WORKORDER, $woid, sql2date($myrow['date_']), _("Released."));

@@ -575,3 +575,49 @@ and selects that item.
 Thus, if the user is deleting a series of consecutive inventory items,
 the user just has to keep hitting the delete key
 to delete them.
+
+## FEATURE: basic manufacturing option to specify single component/no bom
+
+It is useful to be able to morph one item into another
+so that a single manufactured item can be made in different ways
+(part substitution).
+
+For example, item A is a manufactured item offered for sale,
+item B is a manufactured item built one way
+and item C is a manufactured item built another way (different BOM).
+Thus to replenish the supply of item A,
+either B or C can be morphed into item A.
+
+Morphing can also be used to simplify manufacture of items sized by volume.
+For example, manufactured item A is the blend of item B and item C;
+where volume(A) = volume(B) + volume(C).
+To create A, first morph B into A and then morph C into A.
+
+One can accomplish the same thing
+by creating a BOM of item A with component ratios,
+but this often difficult to calculate in practice,
+especially if the exact blend is inconsequential.
+Often one wants to add ingredients on a step-wise basis
+before the final quantity is known.
+
+FA Advanced Manufacture can assign issues ("ingredients") to a work order.
+It does not require a BOM,
+produces a finished product
+and requires the user to know how much of the finished product
+is to be manufactured before the issues are added.
+Thus while it can be used to morph items,
+ingredients are added after defining the finished quantity,
+which is not only a bit of a math problem
+but impossible if
+the exact amount of the ingredients are not known in advance.
+
+FA Basic Manufacturing requires a BOM and does not
+allow the assignment of issues.
+
+BF modifies Basic Manufacturing
+so a BOM is not required
+and allows the assignment of a single issue
+to support morphing and step-wise adding ingredients by volume.
+No database changes were needed.
+This addresses the issue raised in
+http://frontaccounting.com/punbb/viewtopic.php?id=7433.

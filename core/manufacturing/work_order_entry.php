@@ -187,7 +187,22 @@ function can_process()
         	if ($_POST['type'] == WO_ASSEMBLY)
         	{
         		// check bom if assembling
-                $result = get_bom($_POST['stock_id']);
+                $bom = $_POST['bom'];
+                if (isset($_POST['ComponentQuantity'])) {
+                    $item = get_item($bom);
+            		if (has_stock_holding($item["mb_flag"])) {
+                        $quantity = input_num('ComponentQuantity');
+
+                        if (check_negative_stock($bom, -$quantity, $_POST["ComponentLocation"], $_POST['date_']))
+                        {
+                            display_error(_("The work order cannot be processed because there is an insufficient quantity for component:") .
+                                " " . $bom . " - " .  $item["description"] . ".  " . _("Location:") . " " . $_POST["ComponentLocation"]);
+                            set_focus('ComponentQuantity');
+                            return false;
+                        }
+                    }
+                } else if ($bom != "") {
+                $result = get_bom($bom);
 
             	while ($bom_item = db_fetch($result))
             	{
@@ -207,6 +222,7 @@ function can_process()
             		}
             	}
         	}
+            }
         	elseif ($_POST['type'] == WO_UNASSEMBLY)
         	{
         		// if unassembling, check item to unassemble
@@ -240,6 +256,19 @@ function can_process()
 	return true;
 }
 
+function get_bom_array()
+{
+    if (!isset($_POST['bom']))
+        return $_POST['stock_id'];
+    else if (isset($_POST['ComponentQuantity'])) {
+        return array('component' => $_POST['bom'],
+            'workcentre_added' => $_POST['ComponentWorkCentre'],
+            'quantity' => $_POST['ComponentQuantity'] / $_POST['quantity'],
+            'loc_code' => $_POST['ComponentLocation']);
+    }
+    return $_POST['bom'];
+}
+
 //-------------------------------------------------------------------------------------
 
 if (isset($_POST['ADD_ITEM']) && can_process())
@@ -249,7 +278,7 @@ if (isset($_POST['ADD_ITEM']) && can_process())
 	if (!isset($_POST['cr_lab_acc']))
 		$_POST['cr_lab_acc'] = "";
 	$id = add_work_order($_POST['wo_ref'], $_POST['StockLocation'], input_num('quantity'),
-		$_POST['stock_id'],  $_POST['type'], $_POST['date_'],
+		$_POST['stock_id'], get_bom_array(), $_POST['type'], $_POST['date_'],
 		$_POST['RequDate'], $_POST['memo_'], input_num('Costs'), $_POST['cr_acc'], input_num('Labour'), $_POST['cr_lab_acc']);
 
 	new_doc_date($_POST['date_']);
@@ -262,7 +291,7 @@ if (isset($_POST['UPDATE_ITEM']) && can_process())
 {
 
 	update_work_order($selected_id, $_POST['StockLocation'], input_num('quantity'),
-		$_POST['stock_id'],  $_POST['date_'], $_POST['RequDate'], $_POST['memo_']);
+		$_POST['stock_id'], get_bom_array(),  $_POST['date_'], $_POST['RequDate'], $_POST['memo_']);
 	new_doc_date($_POST['date_']);
 	meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$selected_id");
 }
@@ -444,6 +473,40 @@ if (get_post('released'))
 textarea_row(_("Memo:"), 'memo_', null, 40, 5);
 
 end_table(1);
+
+if (!($_POST['type'] == WO_ADVANCED)) {
+
+    // If bom id is the same as stock id, then a bom is needed.
+    // Otherwise, it can be any purchasable or manufactured item.
+    // This is used to morph inventory items, such as functionally identical
+    // items (perhaps built with part substitutions on different BOMs).
+
+    if (list_updated('bom'))
+        $Ajax->activate('component');
+    else
+        $_POST['bom'] = $_POST['stock_id'];
+
+    div_start('component');
+    start_table(TABLESTYLE2);
+
+    stock_items_list_row(_("BOM or Component:"), 'bom', null, "No BOM" , true, false, true, array('editable' => 30, 'where'=>array("(NOT no_purchase
+            OR mb_flag='M') AND stock_id != ".db_escape($_POST['stock_id'])
+            . " OR EXISTS (SELECT * FROM ".TB_PREF."bom WHERE parent=".db_escape($_POST['stock_id']). ")")));
+
+
+    if ($_POST['bom'] != "" 
+        && $_POST['stock_id'] != $_POST['bom']) {
+        if (!isset($_POST['ComponentQuantity']))
+            $_POST['ComponentQuantity'] = $_POST['quantity'];
+        else
+            $_POST['ComponentQuantity'] = qty_format($_POST['ComponentQuantity'], $_POST['stock_id'], $dec);
+        locations_list_row(_("Component Location:"), 'ComponentLocation', null);
+        qty_row(_("Component Quantity:"), 'ComponentQuantity', null, null, null, $dec);
+        workcenter_list_row(_("Component Work Centre:"), 'ComponentWorkCentre', null);
+    }
+    end_table(1);
+    div_end();
+}
 
 if (isset($selected_id))
 {
