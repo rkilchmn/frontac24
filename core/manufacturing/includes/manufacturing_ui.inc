@@ -63,7 +63,7 @@ function display_bom($item_check)
 		{
 			$total_cost += $item['labour_cost'];
 			alt_table_row_color($k);
-	        label_cells(_("Standard Labour Cost"), number_format2($item['labour_cost'],user_price_dec()),
+	        label_cells(_("Standard Cost 1"), number_format2($item['labour_cost'],user_price_dec()),
     	    	"colspan=6 align=left", "class=odd_row nowrap align=right");
     	    end_row();
 		}
@@ -71,7 +71,7 @@ function display_bom($item_check)
 		{
 			$total_cost += $item['overhead_cost'];
 			alt_table_row_color($k);
-	        label_cells(_("Standard Overhead Cost"), number_format2($item['overhead_cost'],user_price_dec()),
+	        label_cells(_("Standard Cost 2"), number_format2($item['overhead_cost'],user_price_dec()),
     	    	"colspan=6 align=left", "nowrap align=right");
     	    end_row();
 		}

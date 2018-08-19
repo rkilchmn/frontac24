@@ -28,7 +28,7 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max"));
+$js .= get_js_history(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max", "select"));
 
 page(_($help_context = "General Ledger Inquiry"), false, false, '', $js, false, '', true);
 
@@ -40,7 +40,7 @@ if (get_post('Show'))
 	$Ajax->activate('trans_tbl');
 }
 
-set_posts(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max", "person_id"));
+set_posts(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max", "person_id", "select"));
 
 if (!isset($_POST["amount_min"]))
 	$_POST["amount_min"] = price_format(0);
@@ -56,7 +56,11 @@ function gl_inquiry_controls()
 
     start_table(TABLESTYLE_NOBORDER);
 	start_row();
-    gl_all_accounts_list_cells(_("Account:"), 'account', null, false, false, _("All Accounts"), true);
+    if (get_post('select')) {
+        label_cells(_("Account:"), get_gl_account_name(get_post('account')));
+        hidden('account', get_post('account'));
+    } else
+        gl_all_accounts_list_cells(_("Account:"), 'account', null, false, false, _("All Accounts"), true);
     $days = user_transaction_days();
     date_cells(_("from:"), 'TransFromDate', '', null, -abs($days));
     if ($days >= 0) {
@@ -81,6 +85,7 @@ function gl_inquiry_controls()
 	small_amount_cells(_("Amount min:"), 'amount_min', null, " ");
 	small_amount_cells(_("Amount max:"), 'amount_max', null, " ");
     hidden("person_id");
+    hidden('select', get_post('select')); 
 	submit_cells('Show',_("Show"),'','', 'default');
 	end_row();
 	end_table();
@@ -109,7 +114,7 @@ function delete_link($row)
 
 function ok_link($row)
 {
-        return pager_link_absolute(_("OK"), preg_replace('/&account=.*/','',htmlspecialchars_decode($_POST['referer'])) . "&account=".$_POST['account'] . "&amount=". $row['amount'], ICON_OK);
+        return pager_link_absolute(_("OK"), preg_replace('/&account=.*/','',htmlspecialchars_decode($_POST['referer'])) . "&account=".$_POST['account'] . "&amount=". $row['amount'] . "&memo=".$row['memo_'], ICON_OK);
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -220,7 +225,7 @@ function show_results()
 		if ($myrow['memo_'] == "")
 			$myrow['memo_'] = get_comments_string($myrow['type'], $myrow['type_no']);
     	label_cell($myrow['memo_']);
-        if (isset($_GET['select']))
+        if (get_post('select'))
             echo "<td>" . ok_link($myrow) . "</td>";
         else {
             echo "<td>" . edit_link($myrow) . "</td>";

@@ -134,8 +134,8 @@ amount_row(_("Unit cost"), "material_cost", null, "class='tableheader2'", null, 
 
 if ($myrow["mb_flag"]=='M')
 {
-	amount_row(_("Standard Labour Cost Per Unit"), "labour_cost", null, "class='tableheader2'", null, $dec2);
-	amount_row(_("Standard Overhead Cost Per Unit"), "overhead_cost", null, "class='tableheader2'", null, $dec3);
+	amount_row(_("Standard Cost 1 Per Unit"), "labour_cost", null, "class='tableheader2'", null, $dec2);
+	amount_row(_("Standard Cost 2 Per Unit"), "overhead_cost", null, "class='tableheader2'", null, $dec3);
 }
 else
 {

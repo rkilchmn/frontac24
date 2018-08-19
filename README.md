@@ -578,7 +578,7 @@ to delete them.
 
 ## FEATURE: basic manufacturing option to specify single component/no bom
 
-It is useful to be able to morph one item into another
+It is useful to be able to transfer one item to another
 so that a single manufactured item can be made in different ways
 (part substitution).
 
@@ -586,38 +586,55 @@ For example, item A is a manufactured item offered for sale,
 item B is a manufactured item built one way
 and item C is a manufactured item built another way (different BOM).
 Thus to replenish the supply of item A,
-either B or C can be morphed into item A.
+either B or C can be transferred to item A.
 
-Morphing can also be used to simplify manufacture of items sized by volume.
+Item transfer can also be used to manufacture of items sized by volume.
 For example, manufactured item A is the blend of item B and item C;
 where volume(A) = volume(B) + volume(C).
-To create A, first morph B into A and then morph C into A.
 
-One can accomplish the same thing
+One could accomplish this in FA Basic Manufacture
 by creating a BOM of item A with component ratios,
 but this often difficult to calculate in practice,
 especially if the exact blend is inconsequential.
 Often one wants to add ingredients on a step-wise basis
 before the final quantity is known.
 
-FA Advanced Manufacture can assign issues ("ingredients") to a work order.
-It does not require a BOM,
-produces a finished product
-and requires the user to know how much of the finished product
-is to be manufactured before the issues are added.
-Thus while it can be used to morph items,
-ingredients are added after defining the finished quantity,
-which is not only a bit of a math problem
-but impossible if
-the exact amount of the ingredients are not known in advance.
+A better way is to use FA Advanced Manufacture
+which can assign issues
+("ingredients" or "raw materials") to a work order.
+It does not require a BOM.
+For manufactured items where the intermediate result is
+not desired, each ingredient can be added
+and the quantity produced can be edited.
+
+However, if intermediate results are needed
+(such as if the item is needed in another manufacturing process),
+the item needs to be produced and another
+workorder is required for further work.
+
+Multiple workorders for a single item
+are also needed when the manufacturer
+wants to monitor the manufactured item in inventory rather than
+as works-in-progress in the manufacturing tab.
+For example,
+a legal authority monitoring alcohol inventory does not want to
+see alcohol disappear from inventory when it is used as an ingredient
+in Advanced Manufacture for a blended item that has not yet
+been produced.
+
+So when multiple workorders are needed to add each ingredient,
+an easier process is desired.
 
 FA Basic Manufacturing requires a BOM and does not
 allow the assignment of issues.
 
 BF modifies Basic Manufacturing
-so a BOM is not required
-and allows the assignment of a single issue
-to support morphing and step-wise adding ingredients by volume.
+so that a BOM is not required, just like for Advanced Manufacture.
+BF allows the addition of a single issue
+to support item transfer and one ingredient per workorder.
+Using this approach,
+Basic Manufacturing is simpler than Advanced Manufacturing
+when a single item/multiple workorder production process is desired.
+
+This is strictly a user-interface change.
 No database changes were needed.
-This addresses the issue raised in
-http://frontaccounting.com/punbb/viewtopic.php?id=7433.

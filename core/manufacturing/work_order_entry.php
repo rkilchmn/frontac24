@@ -33,9 +33,9 @@ page(_($help_context = "Work Order Entry"), false, false, "", $js);
 set_posts($posts);
 if (isset($_GET['account'])) {
     if ($_GET['account'] == $_POST['cr_lab_acc'])
-        $_POST['Labour'] += $_GET['amount'];
+        $_POST['Labour'] += abs($_GET['amount']);
     if ($_GET['account'] == $_POST['cr_acc'])
-        $_POST['Costs'] += $_GET['amount'];
+        $_POST['Costs'] += abs($_GET['amount']);
 }
 
 check_db_has_manufacturable_items(_("There are no manufacturable items defined in the system."));
@@ -282,7 +282,7 @@ if (isset($_POST['ADD_ITEM']) && can_process())
 		$_POST['RequDate'], $_POST['memo_'], input_num('Costs'), $_POST['cr_acc'], input_num('Labour'), $_POST['cr_lab_acc']);
 
 	new_doc_date($_POST['date_']);
-	meta_forward($_SERVER['PHP_SELF'], "AddedID=$id&type=".$_POST['type']."&date=".$_POST['date_']);
+	meta_forward_self("AddedID=$id&type=".$_POST['type']."&date=".$_POST['date_']);
 }
 
 //-------------------------------------------------------------------------------------
@@ -293,7 +293,7 @@ if (isset($_POST['UPDATE_ITEM']) && can_process())
 	update_work_order($selected_id, $_POST['StockLocation'], input_num('quantity'),
 		$_POST['stock_id'], get_bom_array(),  $_POST['date_'], $_POST['RequDate'], $_POST['memo_']);
 	new_doc_date($_POST['date_']);
-	meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$selected_id");
+	meta_forward_self("UpdatedID=$selected_id");
 }
 
 //--------------------------------------------------------------------------------------
@@ -318,7 +318,7 @@ if (isset($_POST['delete']))
 
 		// delete the actual work order
 		delete_work_order($selected_id, $_POST['stock_id'], $_POST['quantity'], $_POST['date_']);
-		meta_forward($_SERVER['PHP_SELF'], "DeletedID=$selected_id");
+		meta_forward_self("DeletedID=$selected_id");
 	}
 }
 
@@ -329,7 +329,7 @@ if (isset($_POST['close']))
 
 	// update the closed flag in the work order
 	close_work_order($selected_id);
-	meta_forward($_SERVER['PHP_SELF'], "ClosedID=$selected_id");
+	meta_forward_self("ClosedID=$selected_id");
 }
 
 //-------------------------------------------------------------------------------------
@@ -462,7 +462,7 @@ else
 	gl_all_accounts_list_cells($wo_cost_types[WO_OVERHEAD] . " " ._("Account"), 'cr_acc', null, false, false, false, true);
     end_row();
 	amount_row(
-        menu_link("gl/inquiry/gl_account_inquiry.php" . "?NewPayment=yes&account=".$_POST['cr_acc'], _("Add Cost")),
+        menu_link("gl/inquiry/gl_account_inquiry.php" . "?select=true&account=".$_POST['cr_acc'], _("Add Cost")),
         'Costs');
 
 }
