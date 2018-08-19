@@ -638,3 +638,12 @@ when a single item/multiple workorder production process is desired.
 
 This is strictly a user-interface change.
 No database changes were needed.
+
+## FEATURE: allow component stock item to be changed on BOM
+
+FA disallows changing the component stock item during BOM edit. 
+If one wants to change a stock item on a BOM, one has to delete it
+and then add the desired one.
+This is slow and error prone.
+
+BF allows changing the component stock item.
