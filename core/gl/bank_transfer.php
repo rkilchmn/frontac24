@@ -278,7 +278,7 @@ function bank_transfer_handle_submit()
 		$trans_no = add_bank_transfer($_POST['FromBankAccount'], $_POST['ToBankAccount'], $_POST['DatePaid'], input_num('amount'), $_POST['ref'], $_POST['memo_'], input_num('charge'), input_num('target_amount'));
 	}
 
-	meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no");
+	meta_forward_self("AddedID=$trans_no");
 }
 
 //----------------------------------------------------------------------------------------
