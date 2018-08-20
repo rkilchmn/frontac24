@@ -157,6 +157,14 @@ if ($Mode == 'RESET')
 
 //--------------------------------------------------------------------------------------------------
 
+if (list_updated('new_stock_id')) {
+    copy_bom_items($_POST['stock_id'], $_POST['new_stock_id']);
+    $item = get_item($_POST['new_stock_id']);
+    $_POST['stock_id'] = $_POST['new_stock_id'];
+    $Ajax->activate('_page_body');
+    display_notification("BOM copied to " . $item['description']);
+}
+
 start_form();
 
 start_form(false, true);
@@ -178,11 +186,6 @@ end_form();
 if (get_post('stock_id') != '')
 { //Parent Item selected so display bom or edit component
 	$selected_parent = $_POST['stock_id'];
-    if (list_updated('new_stock_id')) {
-        copy_bom_items($selected_parent, $_POST['new_stock_id']);
-        $item = get_item($_POST['new_stock_id']);
-        display_notification("BOM copied to " . $item['description']);
-    }
 
 	if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM')
 		on_submit($selected_parent, $selected_id);
