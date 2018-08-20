@@ -647,3 +647,8 @@ and then add the desired one.
 This is slow and error prone.
 
 BF allows changing the component stock item.
+
+## FEATURE: inactive checkbox and zero inventory button on inv. adjustments
+
+BF adds a checkbox to show inactive inventory items and
+a "zero inventory" button to zero out an inventory item.

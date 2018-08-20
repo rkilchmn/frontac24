@@ -1067,19 +1067,19 @@ function stock_component_items_list_cells($label, $name, $parent_stock_id,
 //------------------------------------------------------------------------------------
 
 function stock_costable_items_list($name, $selected_id=null,
-	$all_option=false, $submit_on_change=false)
+	$all_option=false, $submit_on_change=false, $all=false)
 {
 	return stock_items_list($name, $selected_id, $all_option, $submit_on_change,
-		array('where'=>array("mb_flag!='D'")), false, "stock_costable");
+		array('where'=>array("mb_flag!='D'"), 'show_inactive'=>$all), false, "stock_costable");
 }
 
 function stock_costable_items_list_cells($label, $name, $selected_id=null, 
-	$all_option=false, $submit_on_change=false)
+	$all_option=false, $submit_on_change=false, $all=false)
 {
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo stock_items_list($name, $selected_id, $all_option, $submit_on_change,
-		array('where'=>array("mb_flag!='D'"), 'cells'=>true), false, "stock_costable");
+		array('where'=>array("mb_flag!='D'"), 'cells'=>true, 'show_inactive'=>$all), false, "stock_costable");
 }
 
 //------------------------------------------------------------------------------------

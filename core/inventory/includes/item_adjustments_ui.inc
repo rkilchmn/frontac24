@@ -26,7 +26,7 @@ function add_to_order(&$order, $new_item, $new_item_qty, $standard_cost)
 
 function display_order_header(&$order)
 {
-	global $Refs;
+	global $Refs, $Ajax;
 
 	start_outer_table(TABLESTYLE2, "width='70%'"); // outer table
 	table_section(1);
@@ -38,6 +38,8 @@ function display_order_header(&$order)
 
 	ref_row(_("Reference:"), 'ref', '', $Refs->get_next(ST_INVADJUST, null, array('location'=>get_post('StockLocation'), 'date'=>get_post('AdjDate'))),
 		 false, ST_INVADJUST);
+    check_cells(_("Show inactive:"), 'show_inactive', null, true);
+    $Ajax->activate('items_table');
 
 	end_outer_table(1); // outer table
 }
@@ -54,13 +56,11 @@ function display_adjustment_items($title, &$order)
 
 	if ($order->fixed_asset) {
 		$th = array(_("Item Code"), _("Item Description"), _("Quantity"),
-		_("Unit"), _("Unit Cost"), _("Initial Value"), "");
+		_("Unit"), _("Unit Cost"), _("Initial Value"), "", "");
 	} else {
 		$th = array(_("Item Code"), _("Item Description"), _("Quantity"),
-		_("Unit"), _("Unit Cost"), _("Total"), "");
-		if ( count($order->line_items)) $th[] = '';
+		_("Unit"), _("Unit Cost"), _("Total"), "", "");
 	}
-	if ( count($order->line_items)) $th[] = '';
 
 	table_header($th);
 	$total = 0;
@@ -147,7 +147,7 @@ function adjustment_edit_item_controls(&$order, $line_no=-1)
 		if ($order->fixed_asset)
 			stock_disposable_fa_list_cells(null, 'stock_id', null, false, true, $order->line_items);
 		else
-			stock_costable_items_list_cells(null, 'stock_id', null, false, true);
+			stock_costable_items_list_cells(null, 'stock_id', null, false, true, check_value('show_inactive'));
 
 		if (list_updated('stock_id')) {
 			    $Ajax->activate('units');
@@ -196,7 +196,9 @@ function adjustment_edit_item_controls(&$order, $line_no=-1)
 	}
 	else
 	{
-		submit_cells('AddItem', _("Add Item"), "colspan=2",
+		submit_cells('ZeroInv', _("Zero Inv."), "colspan=1",
+		    _('Zero item inventory'), true);
+		submit_cells('AddItem', _("Add Item"), "colspan=1",
 		    _('Add new item to document'), true);
 	}
 

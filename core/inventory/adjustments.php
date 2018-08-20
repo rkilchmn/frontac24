@@ -210,6 +210,12 @@ $id = find_submit('Delete');
 if ($id != -1)
 	handle_delete_item($id);
 
+if (isset($_POST['ZeroInv'])) {
+	$_POST['qty'] = -get_qoh_on_date($_POST['stock_id']);
+    if (check_item_data())
+        handle_new_item();
+}
+
 if (isset($_POST['AddItem']) && check_item_data())
 	handle_new_item();
 
