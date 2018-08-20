@@ -34,7 +34,7 @@ function get_stock_movements($stock_id, $StockLocation,	$BeforeDate, $AfterDate)
 {
 	$before_date = date2sql($BeforeDate);
 	$after_date = date2sql($AfterDate);
-  	$sql = "SELECT move.*, IF(ISNULL(supplier.supplier_id), IF(ISNULL(debtor.debtor_no), sm.description, debtor.name), supplier.supp_name) name";
+  	$sql = "SELECT move.*, IF(ISNULL(supplier.supplier_id), IF(ISNULL(debtor.debtor_no), IF(ISNULL(wo.stock_id), c.memo_,sm.description), debtor.name), supplier.supp_name) name";
 
 	if(!$StockLocation) {
 		 $sql .= ", move.loc_code";
@@ -46,7 +46,8 @@ function get_stock_movements($stock_id, $StockLocation,	$BeforeDate, $AfterDate)
 				LEFT JOIN ".TB_PREF."debtor_trans cust_trans ON cust_trans.trans_no=move.trans_no AND cust_trans.type=move.type
 				LEFT JOIN ".TB_PREF."debtors_master debtor ON cust_trans.debtor_no=debtor.debtor_no
 				LEFT JOIN ".TB_PREF."wo_manufacture wom ON wom.id=move.trans_no AND " . ST_MANURECEIVE . "=move.type
-				LEFT JOIN ".TB_PREF."workorders wo ON (wo.id=move.trans_no AND " . ST_MANUISSUE . "=move.type OR wo.id= wom.workorder_id AND " . ST_MANURECEIVE . "=move.type)
+				LEFT JOIN ".TB_PREF."workorders wo ON wo.id=move.trans_no AND " . ST_MANUISSUE . "=move.type OR wo.id= wom.workorder_id AND " . ST_MANURECEIVE . "=move.type
+				LEFT JOIN ".TB_PREF."comments c ON c.id=move.trans_no AND c.type= move.type
 				LEFT JOIN ".TB_PREF."stock_master sm ON sm.stock_id=wo.stock_id
 
 		WHERE";
