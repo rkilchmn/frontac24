@@ -399,9 +399,12 @@ $opts = array(		// default options
 	if ($opts['editlink'])
 		$selector .= ' '.$opts['editlink'];
 
-	if ($search_box && $opts['cells'])
-		$str = ($edit_entry!='' ? "<td>$edit_entry</td>" : '')."<td>$selector$img</td>";
-	else
+	if ($search_box && $opts['cells']) {
+        if ($class = "combo4")
+            $str = "<td></td><td>$edit_entry$selector$img</td>";
+        else
+            $str = ($edit_entry!='' ? "<td>$edit_entry</td>" : '')."<td>$selector$img</td>";
+	} else
 		$str = $edit_entry.$selector.$img;
 	return $str;
 }
@@ -1783,7 +1786,7 @@ function stock_categories_list($name, $selected_id=null, $spec_opt=false, $submi
 	$sql = "SELECT category_id, description, inactive FROM ".TB_PREF."stock_category";
 
 	$sort_opts = array('category_id');
-	if (@$SysPrefs->search_autocomplete)
+	if (@$SysPrefs->sort_item_list_desc)
 		$sort_opts = array('description', 'category_id');
 
 	return combo_input($name, $selected_id, $sql, 'category_id', 'description',
@@ -2728,14 +2731,14 @@ function subledger_list($name, $account, $selected_id=null)
 		.TB_PREF."suppliers s
 		WHERE NOT s.inactive AND s.payable_account=".db_escape($account);
 
-	$mode = get_company_pref('no_customer_list');
+	$mode = get_company_pref('no_customer_list');   // not implemented
 
 	return combo_input($name, $selected_id, $sql, 'id', 'name',
 	array(
-		'type' => (@$SysPrefs->search_autocomplete ? 4 : 1),
+		'type' => 1,
 		'size' => 20,
 		'async' => false,
-        'spec_option' => '<No Counterparty>'
+        'spec_option' => '[No Counterparty]'
 	) );
 }
 

@@ -65,6 +65,8 @@ function expandtab(tabcontentid, tabnumber) {
  _expand(tabs.getElementsByTagName("input")[tabnumber]);
 }
 
+var _autocomplete=true;
+
 function _set_combo_input(e) {
 		e.setAttribute('_last', e.value);
 		e.onblur=function() {
@@ -77,8 +79,7 @@ function _set_combo_input(e) {
 
 		  if (button && (this.value != this.getAttribute('_last'))) {
 			JsHttpRequest.request(button);
-		  } else if(string_contains(this.className, 'combo2')
-		    || string_contains(this.className, 'combo4')) {
+		  } else if(string_contains(this.className, 'combo2')) {
 				this.style.display = 'none';
 				select.style.display = 'inline';
 				setFocus(select);
@@ -86,6 +87,25 @@ function _set_combo_input(e) {
 		  return false;
 		};
 		e.onkeyup = function(ev) {
+		    if (string_contains(this.className, 'combo4')) {
+                if (!_autocomplete)
+                    return;
+                var div = document.getElementById(this.getAttribute('rel')+"_div");
+                var ac = this.value.toUpperCase();
+                b = div.getElementsByTagName("a");
+                count=0;
+                for (i = 0; i < b.length; i++) {
+                    if ((b[i].innerHTML.toUpperCase().indexOf(ac) > -1
+                        || b[i].getAttribute('data-value').toUpperCase().indexOf(ac) > -1)
+                             && count < 12) {
+                        b[i].style.display = "block";
+                        count++;
+                    } else {
+                        b[i].style.display = "none";
+                    }
+                }
+                return;
+            }
 			var select = document.getElementsByName(this.getAttribute('rel'))[0];
 			if(select && select.selectedIndex>=0) {
 			  var len = select.length;
@@ -116,7 +136,13 @@ function _set_combo_input(e) {
 	  		ev = ev||window.event;
 	  		key = ev.keyCode||ev.which;
 	  		if(key == 13) {
-			  this.blur();
+		        if(string_contains(this.className, 'combo4')) {
+                    var select = document.getElementsByName(this.getAttribute('rel'))[0];
+                    this.style.display = 'none';
+                    select.style.display = 'inline';
+                    setFocus(select);
+                } else
+                  this.blur();
 	  		  return false;
 	  		}
 		}
@@ -173,11 +199,16 @@ function _set_combo_select(e) {
 				event.returnValue = false;
   			  	return false;
   			}
-		    if (box && (key == 32) && (string_contains(this.className, 'combo2') || string_contains(this.className, 'combo4') )) {
-			    this.style.display = 'none';
-			    box.style.display = 'inline';
-				box.value='';
-				setFocus(box);
+            // spacebar or ctrl-B (used for barcode reader) activates search
+		    if (box && (key == 32 || (key == 66 && event.ctrlKey)) && (string_contains(this.className, 'combo2') || string_contains(this.className, 'combo4') )) {
+                if (key == 66)
+                    _autocomplete = false;  // save some time
+                else
+                    _autocomplete = true;
+                this.style.display = 'none';
+                box.style.display = 'inline';
+                box.value='';
+                setFocus(box);
 			    return false;
 			 } else {
 			 	if (key == 13 && !e.length) // prevent chrome issue (blocked cursor after CR on empty selector)
@@ -283,23 +314,6 @@ function fix_date(date, last)
  Behaviour definitions
 */
 var inserts = {
-        'input.combo4' : function(e) {
-                e.onkeyup = function(ev) {
-                    var div = document.getElementById(this.getAttribute('rel')+"_div");
-                    var ac = this.value.toUpperCase();
-                    b = div.getElementsByTagName("a");
-                    count=0;
-                    for (i = 0; i < b.length; i++) {
-                        if (b[i].innerHTML.toUpperCase().indexOf(ac) > -1 && count < 12) {
-                            b[i].style.display = "block";
-                            count++;
-                        } else {
-                            b[i].style.display = "none";
-                        }
-                    }
-                }
-        },
-
 	'input': function(e) {
 		if(e.onfocus==undefined) {
 			e.onfocus = function() {
@@ -308,7 +322,7 @@ var inserts = {
 					this.select();
 			};
 		}
-		if (string_contains(e.className, 'combo') || string_contains(e.className, 'combo2') || string_contains(e.className, 'combo3')) {
+		if (string_contains(e.className, 'combo') || string_contains(e.className, 'combo2') || string_contains(e.className, 'combo3') || string_contains(e.className, 'combo4')) {
 				_set_combo_input(e);
 		}
 		else
@@ -457,18 +471,24 @@ var inserts = {
 			return false;
 		}
 	},
-        'a.combo4' : function(l) {
-		l.onclick = function() {
-                     var sname = '_'+l.dataset.rel+'_update';
-                     var target = document.getElementsByName(l.dataset.rel)[0];
-                    target.value=l.dataset.value;
-                     var update = document.getElementsByName(sname)[0];
-                     if(update) {
-                        JsHttpRequest.request(update);
-                    }
-		     return false;
-                }
-        },
+    'a.combo4' : function(l) {
+        l.onclick = function() {
+            var sname = '_'+l.dataset.rel+'_update';
+            var select = document.getElementsByName(l.dataset.rel)[0];
+            select.value=l.dataset.value;
+
+            var box = document.getElementsByName(select.getAttribute('rel'))[0];
+            box.style.display = 'none';
+            select.style.display = 'inline';
+            setFocus(select);
+
+            var update = document.getElementsByName(sname)[0];
+            if(update) {
+                JsHttpRequest.request(update);
+            }
+            return false;
+        }
+    },
 	'a.repopts_link': 	function(l) {
 		l.onclick = function() {
 		    save_focus(this);

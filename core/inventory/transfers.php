@@ -66,7 +66,7 @@ function line_start_focus() {
   global 	$Ajax;
 
   $Ajax->activate('items_table');
-  set_focus('_stock_id_edit');
+  set_focus_searchbox('stock_id');
 }
 //-----------------------------------------------------------------------------------------------
 

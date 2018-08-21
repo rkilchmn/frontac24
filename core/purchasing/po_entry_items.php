@@ -153,7 +153,7 @@ function line_start_focus() {
   global 	$Ajax;
 
   $Ajax->activate('items_table');
-  set_focus('_stock_id_edit');
+  set_focus_searchbox('stock_id');
 }
 //--------------------------------------------------------------------------------------------------
 
@@ -226,7 +226,7 @@ function check_data()
 {
 	if(!get_post('stock_id_text', true)) {
 		display_error( _("Item description cannot be empty."));
-		set_focus('stock_id_edit');
+		set_focus_searchbox('stock_id');
 		return false;
 	}
 

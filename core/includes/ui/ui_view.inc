@@ -964,6 +964,19 @@ function default_focus($name=null, $form_no=0) {
     }
 	return $name;
 }
+
+// focus on item if no search box
+// (autocomplete option searches both code and description)
+function set_focus_searchbox($name)
+{
+    global $SysPrefs;
+    if (@$SysPrefs->search_autocomplete
+        && get_company_pref('no_item_list')!=0)
+        set_focus($name);
+    else
+        set_focus("_" . $name . "_edit");
+}
+
 /*
 	Reset focus to next control element (e.g. link).
 */
