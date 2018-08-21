@@ -225,6 +225,7 @@ $opts = array(		// default options
 				$selector .= "<optgroup label='".$cat."'>\n";
 				$lastcat = $cat;
 			}
+
 			$selector .= "<option $sel $optclass value='$value'>$descr</option>\n";
 		}
 		if ($lastcat!==null)
@@ -885,7 +886,7 @@ function stock_items_list($name, $selected_id=null, $all_option=false,
 			'spec_option' => $all_option===true ?  _("All Items") : $all_option,
 			'spec_id' => ALL_TEXT,
 			'search_box' => true,
-			'search' => array("stock_id", "c.description","s.description"),
+			'search' => array("stock_id", "c.description","s.description", "(SELECT item_code i FROM ".TB_PREF."item_codes i WHERE is_foreign AND i.stock_id=s.stock_id)"),
 			'search_submit' => get_company_pref('no_item_list')!=0 && (!isset($opts['fixed_asset']) || !$opts['fixed_asset']),
 			'size'=>10,
 			'select_submit'=> $submit_on_change,
@@ -962,10 +963,10 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
       AND mb_flag != 'F'";
 
 	
-	if ($type == 'local')	{ // exclude foreign codes
-		$sql .=	" AND !i.is_foreign"; 
-	} elseif ($type == 'kits') { // sales kits
-		$sql .=	" AND !i.is_foreign AND i.item_code!=i.stock_id";
+    $sql .=	" AND !i.is_foreign"; // exclude foreign codes
+
+	if ($type == 'kits') { // sales kits
+		$sql .=	" AND i.item_code!=i.stock_id";
 	}
 	$sql .= " AND !i.inactive AND !s.inactive AND !s.no_sale";
 	$sql .= " GROUP BY i.item_code";
@@ -984,7 +985,7 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
 			'spec_option' => $all_option===true ?  _("All Items") : $all_option,
 			'spec_id' => ALL_TEXT,
 			'search_box' => true,
-			'search' => array("i.item_code", "c.description", "i.description"),
+			'search' => array("i.item_code", "c.description", "i.description", "(SELECT item_code i FROM ".TB_PREF."item_codes i WHERE is_foreign AND i.stock_id=s.stock_id)"),
 			'search_submit' => get_company_pref('no_item_list')!=0,
 			'size'=>15,
 			'select_submit'=> $submit_on_change,

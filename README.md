@@ -660,3 +660,17 @@ BF allows changing the component stock item.
 
 BF adds a checkbox to show inactive inventory items and
 a "zero inventory" button to zero out an inventory item.
+
+## FEATURE: Allow searching of all stock items by foreign code and hide them from lists
+
+FA allows searching by foreign codes during sales order entry.
+This supports sales of stock items using these codes, usually UPC/EAN.
+Thus a barcode scanner can be used for sales order entry.
+
+However, these additional codes clutter the visable lists
+which are also used for manual entry.
+
+BF removes these codes from the visable lists
+while enablng search for these codes in any list of stock items,
+which is helpful in inventory management,
+such as when entering purchase order receipts.
