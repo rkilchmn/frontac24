@@ -674,3 +674,11 @@ BF removes these codes from the visable lists
 while enablng search for these codes in any list of stock items,
 which is helpful in inventory management,
 such as when entering purchase order receipts.
+
+BF also allows a foreign code to be a regular expression (RE).
+REs are useful to map multiple barcodes into a single inventory item.
+For example,
+a supplier offer a series of barcodes for essentially the same item,
+at least from the buyers perspective.
+While these can be entered as additional foreign codes,
+alternatively an RE can be devised to handle them as a single foreign code.

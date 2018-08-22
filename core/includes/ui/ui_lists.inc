@@ -155,7 +155,9 @@ $opts = array(		// default options
 				if ($txt != '*') {
 					foreach($opts['search'] as $i=> $s)
 						$opts['search'][$i] = $s . " LIKE "
-							.db_escape(($class=='combo3' ? '' : '%').$txt.'%');
+							.db_escape(($class=='combo3' ? '' : '%').$txt.'%')
+                            . " OR " . db_escape($txt) . " REGEXP $s ";
+ ;
 					$opts['where'][] = '('. implode($opts['search'], ' OR ') . ')';
 				}
 		}
