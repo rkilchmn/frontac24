@@ -12,8 +12,20 @@
 $path_to_root = "..";
 include_once($path_to_root . "/includes/ui/items_cart.inc");
 include_once($path_to_root . "/includes/session.inc");
+
+if (isset($_POST['pay_items'])) {
+    display_notification("hello");
+    $_POST['pay_items'] = unserialize(html_entity_decode($_POST['pay_items']));
+    $order=$_POST['pay_items'];
+    foreach ($order->gl_items as $line => $item)
+    {
+            display_notification($item->code_id);
+    }
+}
+
+
 $page_security = isset($_GET['NewPayment']) || 
-	@($_SESSION['pay_items']->trans_type==ST_BANKPAYMENT)
+	@($_POST['pay_items']->trans_type==ST_BANKPAYMENT)
  ? 'SA_PAYMENT' : 'SA_DEPOSIT';
 
 include_once($path_to_root . "/includes/date_functions.inc");
@@ -52,7 +64,7 @@ page($_SESSION['page_title'], false, false, '', $js);
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
 
 if (isset($_GET['ModifyDeposit']) || isset($_GET['ModifyPayment']))
-	check_is_editable($_SESSION['pay_items']->trans_type, $_SESSION['pay_items']->order_id);
+	check_is_editable($_POST['pay_items']->trans_type, $_POST['pay_items']->order_id);
 
 //----------------------------------------------------------------------------------------
 if (list_updated('PersonDetailID')) {
@@ -145,9 +157,9 @@ function create_cart($type, $trans_no)
 {
 	global $Refs;
 
-	if (isset($_SESSION['pay_items']))
+	if (isset($_POST['pay_items']))
 	{
-		unset ($_SESSION['pay_items']);
+		unset ($_POST['pay_items']);
 	}
 
 	$cart = new items_cart($type);
@@ -214,7 +226,7 @@ function create_cart($type, $trans_no)
 	$_POST['ref'] = $cart->reference;
 	$_POST['date_'] = $cart->tran_date;
 
-	$_SESSION['pay_items'] = &$cart;
+	$_POST['pay_items'] = &$cart;
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -224,7 +236,7 @@ function check_trans()
 
 	$input_error = 0;
 
-    if ($_SESSION['pay_items']->count_gl_items() < 1) {
+    if ($_POST['pay_items']->count_gl_items() < 1) {
         display_error(_("You must enter at least one payment line."));
         set_focus('code_id');
         $input_error = 1;
@@ -232,11 +244,11 @@ function check_trans()
 
 	$limit = get_bank_account_limit($_POST['bank_account'], $_POST['date_']);
 
-	$amnt_chg = -$_SESSION['pay_items']->gl_items_total()-$_SESSION['pay_items']->original_amount;
+	$amnt_chg = -$_POST['pay_items']->gl_items_total()-$_POST['pay_items']->original_amount;
 
 	if ($limit !== null && floatcmp($limit, -$amnt_chg) < 0)
 	{
-		display_error(sprintf(_("The total bank amount exceeds allowed limit (%s)."), price_format($limit-$_SESSION['pay_items']->original_amount)));
+		display_error(sprintf(_("The total bank amount exceeds allowed limit (%s)."), price_format($limit-$_POST['pay_items']->original_amount)));
 		set_focus('code_id');
 		$input_error = 1;
 	}
@@ -247,7 +259,7 @@ function check_trans()
 		set_focus('amount');
 		$input_error = 1;
 	}
-	if (!check_reference($_POST['ref'], $_SESSION['pay_items']->trans_type, $_SESSION['pay_items']->order_id))
+	if (!check_reference($_POST['ref'], $_POST['pay_items']->trans_type, $_POST['pay_items']->order_id))
 	{
 		set_focus('ref');
 		$input_error = 1;
@@ -290,14 +302,14 @@ if (isset($_POST['Process']) && !check_trans())
 {
 	begin_transaction();
 
-	$_SESSION['pay_items'] = &$_SESSION['pay_items'];
-	$new = $_SESSION['pay_items']->order_id == 0;
+	$_POST['pay_items'] = &$_POST['pay_items'];
+	$new = $_POST['pay_items']->order_id == 0;
 
 	add_new_exchange_rate(get_bank_account_currency(get_post('bank_account')), get_post('date_'), input_num('_ex_rate'));
 
 	$trans = write_bank_transaction(
-		$_SESSION['pay_items']->trans_type, $_SESSION['pay_items']->order_id, $_POST['bank_account'],
-		$_SESSION['pay_items'], $_POST['date_'],
+		$_POST['pay_items']->trans_type, $_POST['pay_items']->order_id, $_POST['bank_account'],
+		$_POST['pay_items'], $_POST['date_'],
 		$_POST['PayType'], $_POST['person_id'], get_post('PersonDetailID'),
 		$_POST['ref'], $_POST['memo_'], true, input_num('settled_amount', null));
 
@@ -315,8 +327,8 @@ if (isset($_POST['Process']) && !check_trans())
 
 	new_doc_date($_POST['date_']);
 
-	$_SESSION['pay_items']->clear_items();
-	unset($_SESSION['pay_items']);
+	$_POST['pay_items']->clear_items();
+	unset($_POST['pay_items']);
 
 	commit_transaction();
 
@@ -355,10 +367,10 @@ function check_item_data()
 
 function handle_update_item()
 {
-	$amount = ($_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ? 1:-1) * input_num('amount');
+	$amount = ($_POST['pay_items']->trans_type==ST_BANKPAYMENT ? 1:-1) * input_num('amount');
     if($_POST['UpdateItem'] != "" && check_item_data())
     {
-    	$_SESSION['pay_items']->update_gl_item($_POST['Index'], $_POST['code_id'], 
+    	$_POST['pay_items']->update_gl_item($_POST['Index'], $_POST['code_id'], 
     	    $_POST['dimension_id'], $_POST['dimension2_id'], $amount , $_POST['LineMemo']);
     }
 	line_start_focus();
@@ -368,7 +380,7 @@ function handle_update_item()
 
 function handle_delete_item($id)
 {
-	$_SESSION['pay_items']->remove_gl_item($id);
+	$_POST['pay_items']->remove_gl_item($id);
 	line_start_focus();
 }
 
@@ -378,9 +390,9 @@ function handle_new_item()
 {
 	if (!check_item_data())
 		return;
-	$amount = ($_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ? 1:-1) * input_num('amount');
+	$amount = ($_POST['pay_items']->trans_type==ST_BANKPAYMENT ? 1:-1) * input_num('amount');
 
-	$_SESSION['pay_items']->add_gl_item($_POST['code_id'], $_POST['dimension_id'],
+	$_POST['pay_items']->add_gl_item($_POST['code_id'], $_POST['dimension_id'],
 		$_POST['dimension2_id'], $amount, $_POST['LineMemo']);
 	line_start_focus();
 }
@@ -401,8 +413,8 @@ if (isset($_POST['CancelItemChanges'])
 
 if (isset($_POST['go']))
 {
-	display_quick_entries($_SESSION['pay_items'], $_POST['person_id'], input_num('totamount'), 
-		$_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ? QE_PAYMENT : QE_DEPOSIT);
+	display_quick_entries($_POST['pay_items'], $_POST['person_id'], input_num('totamount'), 
+		$_POST['pay_items']->trans_type==ST_BANKPAYMENT ? QE_PAYMENT : QE_DEPOSIT);
 	$_POST['totamount'] = price_format(0); $Ajax->activate('totamount');
 	line_start_focus();
 }
@@ -410,14 +422,14 @@ if (isset($_POST['go']))
 
 start_form();
 
-display_bank_header($_SESSION['pay_items']);
+display_bank_header($_POST['pay_items']);
 
 start_table(TABLESTYLE2, "width='90%'", 10);
 start_row();
 echo "<td>";
-display_gl_items($_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ?
-	_("Payment Items"):_("Deposit Items"), $_SESSION['pay_items']);
-gl_options_controls($_SESSION['pay_items']);
+display_gl_items($_POST['pay_items']->trans_type==ST_BANKPAYMENT ?
+	_("Payment Items"):_("Deposit Items"), $_POST['pay_items']);
+gl_options_controls($_POST['pay_items']);
 echo "</td>";
 end_row();
 end_table(1);
@@ -433,8 +445,8 @@ global $Ajax;
 $Ajax->activate("submit");
 
 if (find_submit('Edit') == -1
-	&& $_SESSION['pay_items']->count_gl_items() >= 1)
-    submit_center('Process', $_SESSION['pay_items']->trans_type==ST_BANKPAYMENT ?
+	&& $_POST['pay_items']->count_gl_items() >= 1)
+    submit_center('Process', $_POST['pay_items']->trans_type==ST_BANKPAYMENT ?
         _("Process Payment"):_("Process Deposit"), true, '', 'default');
 
 div_end();

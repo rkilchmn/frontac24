@@ -216,6 +216,7 @@ function display_gl_items($title, &$order)
 	if ($order->count_gl_items())
 		label_row(_("Total"), number_format2(abs($order->gl_items_total()), user_price_dec()),"colspan=" . $colspan . " align=right", "align=right",3);
 
+    hidden('pay_items', htmlentities(serialize($order)));
     end_table();
 	div_end();
 }
