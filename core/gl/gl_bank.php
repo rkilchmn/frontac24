@@ -13,16 +13,8 @@ $path_to_root = "..";
 include_once($path_to_root . "/includes/ui/items_cart.inc");
 include_once($path_to_root . "/includes/session.inc");
 
-if (isset($_POST['pay_items'])) {
-    display_notification("hello");
+if (isset($_POST['pay_items']))
     $_POST['pay_items'] = unserialize(html_entity_decode($_POST['pay_items']));
-    $order=$_POST['pay_items'];
-    foreach ($order->gl_items as $line => $item)
-    {
-            display_notification($item->code_id);
-    }
-}
-
 
 $page_security = isset($_GET['NewPayment']) || 
 	@($_POST['pay_items']->trans_type==ST_BANKPAYMENT)
