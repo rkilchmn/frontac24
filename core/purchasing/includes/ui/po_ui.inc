@@ -44,7 +44,7 @@ function numeric_offset($text) {
 
 function copy_from_cart()
 {
-	$cart = &$_SESSION['PO'];
+	$cart = &$_POST['PO'];
 
 	$_POST['supplier_id'] = $cart->supplier_id;
 	$_POST['OrderDate'] = $cart->orig_order_date;
@@ -66,7 +66,7 @@ function copy_from_cart()
 
 function copy_to_cart()
 {
-	$cart = &$_SESSION['PO'];
+	$cart = &$_POST['PO'];
 
 	$cart->supplier_id = $_POST['supplier_id'];	
 	$cart->orig_order_date = $_POST['OrderDate'];
@@ -128,8 +128,8 @@ function create_new_po($trans_type, $trans_no)
 {
 	global $Refs;
 
-	if (isset($_SESSION['PO']))
-		unset ($_SESSION['PO']->line_items, $_SESSION['PO']);
+	if (isset($_POST['PO']))
+		unset ($_POST['PO']->line_items, $_POST['PO']);
 
 	$cart = new purch_order;
 	$_POST['OrderDate'] = new_doc_date();
@@ -146,7 +146,7 @@ function create_new_po($trans_type, $trans_no)
 	} else
 		$cart->reference = $Refs->get_next($trans_type, null,
 			array('supplier_id' => $cart->supplier_id, 'date' => get_post('OrderDate')));
-	$_SESSION['PO'] = &$cart;
+	$_POST['PO'] = &$cart;
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -246,8 +246,8 @@ function display_po_header(&$order)
         {
     	  	$_POST['delivery_address'] = $loc_row["delivery_address"];
 			$Ajax->activate('delivery_address');
-    	  	$_SESSION['PO']->Location = $_POST['StkLocation'];
-    	  	$_SESSION['PO']->delivery_address = $_POST['delivery_address'];
+    	  	$_POST['PO']->Location = $_POST['StkLocation'];
+    	  	$_POST['PO']->delivery_address = $_POST['delivery_address'];
 
         }
         else
@@ -347,6 +347,8 @@ function display_po_items(&$order, $editable=true)
        $order->trans_type == ST_SUPPINVOICE
         ? submit_cells('update', _("Update"), "colspan=2 align='center'", _("Refresh"), true)
                : label_cell('', "colspan=2");
+
+    hidden('PO', htmlentities(serialize($order)));
 
 	end_row();
 

@@ -229,6 +229,7 @@ function display_order_summary($title, &$order, $editable_items=false)
 	start_row();
 	label_cells(_("Amount Total"), $display_total, "colspan=$colspan align=right","align=right");
 	submit_cells('update', _("Update"), "colspan=2 align='center'", _("Refresh"), true);
+    hidden('Items', htmlentities(serialize($order)));
 	end_row();
 
 	end_table();
@@ -266,10 +267,11 @@ function display_order_header(&$order, $editable, $date_text)
 	{
 		customer_list_row(_("Customer:"), 'customer_id', null, _("New Customer"), true, false, true);
 
-        if (get_post('customer_id') == 0)
+        if (get_post('customer_id') == 0) {
             label_row("", menu_link('sales/manage/customers.php', 'Create New Customer'));
+            hidden('Items', htmlentities(serialize($order)));
 
-        else {
+        } else {
 
 		if ($order->customer_id != get_post('customer_id', -1))
 		{

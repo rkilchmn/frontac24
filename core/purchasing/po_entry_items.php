@@ -17,7 +17,10 @@ include_once($path_to_root . "/purchasing/includes/purchasing_ui.inc");
 include_once($path_to_root . "/purchasing/includes/db/suppliers_db.inc");
 include_once($path_to_root . "/reporting/includes/reporting.inc");
 
-set_page_security( @$_SESSION['PO']->trans_type,
+if (isset($_POST['PO']))
+    $_POST['PO'] = unserialize(html_entity_decode($_POST['PO']));
+
+set_page_security( @$_POST['PO']->trans_type,
 	array(	ST_PURCHORDER => 'SA_PURCHASEORDER',
 			ST_SUPPRECEIVE => 'SA_GRN',
 			ST_SUPPINVOICE => 'SA_SUPPLIERINVOICE'),
@@ -58,7 +61,7 @@ if (isset($_GET['ModifyOrderNumber']) && is_numeric($_GET['ModifyOrderNumber']))
 
 	if (isset($_GET['FixedAsset'])) {
 		$_SESSION['page_title'] = _($help_context = "Fixed Asset Purchase Invoice Entry");
-		$_SESSION['PO']->fixed_asset = true;
+		$_POST['PO']->fixed_asset = true;
 	} else
 		$_SESSION['page_title'] = _($help_context = "Direct Purchase Invoice Entry");
 }
@@ -143,7 +146,7 @@ if (isset($_GET['AddedID']))
 	display_footer_exit();	
 }
 
-if ($_SESSION['PO']->fixed_asset)
+if ($_POST['PO']->fixed_asset)
   check_db_has_purchasable_fixed_assets(_("There are no purchasable fixed assets defined in the system."));
 else
   check_db_has_purchasable_items(_("There are no purchasable inventory items defined in the system."));
@@ -168,9 +171,9 @@ function unset_form_variables() {
 
 function handle_delete_item($line_no)
 {
-	if($_SESSION['PO']->some_already_received($line_no) == 0)
+	if($_POST['PO']->some_already_received($line_no) == 0)
 	{
-		$_SESSION['PO']->remove_from_order($line_no);
+		$_POST['PO']->remove_from_order($line_no);
 		unset_form_variables();
 	} 
 	else 
@@ -187,20 +190,20 @@ function handle_cancel_po()
 	global $path_to_root;
 	
 	//need to check that not already dispatched or invoiced by the supplier
-	if(($_SESSION['PO']->order_no != 0) && 
-		$_SESSION['PO']->any_already_received() == 1)
+	if(($_POST['PO']->order_no != 0) && 
+		$_POST['PO']->any_already_received() == 1)
 	{
 		display_error(_("This order cannot be cancelled because some of it has already been received.") 
 			. "<br>" . _("The line item quantities may be modified to quantities more than already received. prices cannot be altered for lines that have already been received and quantities cannot be reduced below the quantity already received."));
 		return;
 	}
 
-	$fixed_asset = $_SESSION['PO']->fixed_asset;
+	$fixed_asset = $_POST['PO']->fixed_asset;
 
-	if($_SESSION['PO']->order_no != 0)
-		delete_po($_SESSION['PO']->order_no);
+	if($_POST['PO']->order_no != 0)
+		delete_po($_POST['PO']->order_no);
 	else {
-		unset($_SESSION['PO']);
+		unset($_POST['PO']);
 
     	if ($fixed_asset)
 			meta_forward($path_to_root.'/index.php','application=assets');
@@ -208,8 +211,8 @@ function handle_cancel_po()
 			meta_forward($path_to_root.'/index.php','application=AP');
 	}
 
-	$_SESSION['PO']->clear_items();
-	$_SESSION['PO'] = new purch_order;
+	$_POST['PO']->clear_items();
+	$_POST['PO'] = new purch_order;
 
 	display_notification(_("This purchase order has been cancelled."));
 
@@ -245,14 +248,14 @@ function check_data()
     // zeroed out anyway.
 
     if (!check_num('price', 0)
-        && !($_POST['reprice'] != 0 && $_SESSION['PO']->is_service_item($_POST['stock_id'])))
+        && !($_POST['reprice'] != 0 && $_POST['PO']->is_service_item($_POST['stock_id'])))
     {
 	   	display_error(_("The price entered must be numeric and not less than zero."));
 	   	display_error(_("HINT: If you change the 'Service Costs In Item Prices?' option from 'No', a negative price will discount the other items on the order"));
 		set_focus('price');
 	   	return false;	   
     }
-    if ($_SESSION['PO']->trans_type == ST_PURCHORDER && !is_date($_POST['req_del_date'])){
+    if ($_POST['PO']->trans_type == ST_PURCHORDER && !is_date($_POST['req_del_date'])){
     		display_error(_("The date entered is in an invalid format."));
 		set_focus('req_del_date');
    		return false;    	 
@@ -269,8 +272,8 @@ function handle_update_item()
 
 	if ($allow_update)
 	{
-		if ($_SESSION['PO']->line_items[$_POST['line_no']]->qty_inv > input_num('qty') ||
-			$_SESSION['PO']->line_items[$_POST['line_no']]->qty_received > input_num('qty'))
+		if ($_POST['PO']->line_items[$_POST['line_no']]->qty_inv > input_num('qty') ||
+			$_POST['PO']->line_items[$_POST['line_no']]->qty_received > input_num('qty'))
 		{
 			display_error(_("You are attempting to make the quantity ordered a quantity less than has already been invoiced or received.  This is prohibited.") .
 				"<br>" . _("The quantity received can only be modified by entering a negative receipt and the quantity invoiced can only be reduced by entering a credit note against this item."));
@@ -278,10 +281,10 @@ function handle_update_item()
 			return;
 		}
 	
-		$_SESSION['PO']->update_order_item($_POST['line_no'], input_num('qty'), input_num('price'),
+		$_POST['PO']->update_order_item($_POST['line_no'], input_num('qty'), input_num('price'),
   			@$_POST['req_del_date'], $_POST['item_description'] );
                 if ($_POST['reprice'] != 0)
-                    $_SESSION['PO']->reprice_order($_POST['reprice']);
+                    $_POST['PO']->reprice_order($_POST['reprice']);
 		unset_form_variables();
 	}	
     line_start_focus();
@@ -295,9 +298,9 @@ function handle_add_new_item()
 	
 	if ($allow_update == true)
 	{ 
-		if (count($_SESSION['PO']->line_items) > 0)
+		if (count($_POST['PO']->line_items) > 0)
 		{
-		    foreach ($_SESSION['PO']->line_items as $order_item) 
+		    foreach ($_POST['PO']->line_items as $order_item) 
 		    {
     			/* do a loop round the items on the order to see that the item
     			is not already on this order */
@@ -319,12 +322,12 @@ function handle_add_new_item()
 
 			if ($allow_update)
 			{
-				$_SESSION['PO']->add_to_order (count($_SESSION['PO']->line_items), $_POST['stock_id'], input_num('qty'), 
+				$_POST['PO']->add_to_order (count($_POST['PO']->line_items), $_POST['stock_id'], input_num('qty'), 
 					get_post('stock_id_text'), //$myrow["description"], 
 					input_num('price'), '', // $myrow["units"], (retrived in cart)
-					$_SESSION['PO']->trans_type == ST_PURCHORDER ? $_POST['req_del_date'] : '', 0, 0);
+					$_POST['PO']->trans_type == ST_PURCHORDER ? $_POST['req_del_date'] : '', 0, 0);
                                 if ($_POST['reprice'] != 0)
-                                    $_SESSION['PO']->reprice_order($_POST['reprice']);
+                                    $_POST['PO']->reprice_order($_POST['reprice']);
 
 				unset_form_variables();
 				$_POST['stock_id']	= "";
@@ -356,43 +359,43 @@ function can_commit()
 		set_focus('OrderDate');
 		return false;
 	} 
-	if (($_SESSION['PO']->trans_type == ST_SUPPRECEIVE || $_SESSION['PO']->trans_type == ST_SUPPINVOICE) 
+	if (($_POST['PO']->trans_type == ST_SUPPRECEIVE || $_POST['PO']->trans_type == ST_SUPPINVOICE) 
 		&& !is_date_in_fiscalyear($_POST['OrderDate'])) {
 		display_error(_("The entered date is out of fiscal year or is closed for further data entry."));
 		set_focus('OrderDate');
 		return false;
 	}
 
-	if (($_SESSION['PO']->trans_type==ST_SUPPINVOICE) && !is_date($_POST['due_date'])) 
+	if (($_POST['PO']->trans_type==ST_SUPPINVOICE) && !is_date($_POST['due_date'])) 
 	{
 		display_error(_("The entered due date is invalid."));
 		set_focus('due_date');
 		return false;
 	} 
 
-	if (!$_SESSION['PO']->order_no) 
+	if (!$_POST['PO']->order_no) 
 	{
-    	if (!check_reference(get_post('ref'), $_SESSION['PO']->trans_type))
+    	if (!check_reference(get_post('ref'), $_POST['PO']->trans_type))
     	{
 			set_focus('ref');
     		return false;
     	}
 	}
 
-	if ($_SESSION['PO']->trans_type == ST_SUPPINVOICE && trim(get_post('supp_ref')) == false)
+	if ($_POST['PO']->trans_type == ST_SUPPINVOICE && trim(get_post('supp_ref')) == false)
 	{
 		display_error(_("You must enter a supplier's invoice reference."));
 		set_focus('supp_ref');
 		return false;
 	}
-	if ($_SESSION['PO']->trans_type==ST_SUPPINVOICE 
-		&& is_reference_already_there($_SESSION['PO']->supplier_id, get_post('supp_ref'), $_SESSION['PO']->order_no))
+	if ($_POST['PO']->trans_type==ST_SUPPINVOICE 
+		&& is_reference_already_there($_POST['PO']->supplier_id, get_post('supp_ref'), $_POST['PO']->order_no))
 	{
 		display_error(_("This invoice number has already been entered. It cannot be entered again.") . " (" . get_post('supp_ref') . ")");
 		set_focus('supp_ref');
 		return false;
 	}
-	if ($_SESSION['PO']->trans_type == ST_PURCHORDER && get_post('delivery_address') == '')
+	if ($_POST['PO']->trans_type == ST_PURCHORDER && get_post('delivery_address') == '')
 	{
 		display_error(_("There is no delivery address specified."));
 		set_focus('delivery_address');
@@ -404,14 +407,14 @@ function can_commit()
 		set_focus('StkLocation');
 		return false;
 	} 
-	if (!db_has_currency_rates($_SESSION['PO']->curr_code, $_POST['OrderDate'], true))
+	if (!db_has_currency_rates($_POST['PO']->curr_code, $_POST['OrderDate'], true))
 		return false;
-	if ($_SESSION['PO']->order_has_items() == false)
+	if ($_POST['PO']->order_has_items() == false)
 	{
      	display_error (_("The order cannot be placed because there are no lines entered on this order."));
      	return false;
 	}
-	if (floatcmp(input_num('prep_amount'), $_SESSION['PO']->get_trans_total()) > 0)
+	if (floatcmp(input_num('prep_amount'), $_POST['PO']->get_trans_total()) > 0)
 	{
 		display_error(_("Required prepayment is greater than total invoice value."));
 		set_focus('prep_amount');
@@ -423,7 +426,7 @@ function can_commit()
 
 function handle_commit_order()
 {
-	$cart = &$_SESSION['PO'];
+	$cart = &$_POST['PO'];
 
 	if (can_commit()) {
 
@@ -432,7 +435,7 @@ function handle_commit_order()
 		if ($cart->order_no == 0) { // new po/grn/invoice
 			$trans_no = add_direct_supp_trans($cart);
 			if ($trans_no) {
-				unset($_SESSION['PO']);
+				unset($_POST['PO']);
 				if ($cart->trans_type == ST_PURCHORDER)
 	 				meta_forward_self("AddedID=$trans_no");
 				elseif ($cart->trans_type == ST_SUPPRECEIVE)
@@ -442,7 +445,7 @@ function handle_commit_order()
 			}
 		} else { // order modification
 			$order_no = update_po($cart);
-			unset($_SESSION['PO']);
+			unset($_POST['PO']);
         	meta_forward_self("AddedID=$order_no&Updated=1");	
 		}
 	}
@@ -482,30 +485,30 @@ if (isset($_POST['CancelUpdate']) || isset($_POST['UpdateLine'])) {
 
 start_form();
 
-display_po_header($_SESSION['PO']);
+display_po_header($_POST['PO']);
 echo "<br>";
 
-display_po_items($_SESSION['PO']);
+display_po_items($_POST['PO']);
 
-display_po_footer($_SESSION['PO'], false);
+display_po_footer($_POST['PO'], false);
 
 div_start('controls', 'items_table');
 $process_txt = _("Place Order");
 $update_txt = _("Update Order");
 $cancel_txt = _("Cancel Order");
-if ($_SESSION['PO']->trans_type == ST_SUPPRECEIVE) {
+if ($_POST['PO']->trans_type == ST_SUPPRECEIVE) {
 	$process_txt = _("Process GRN");
 	$update_txt = _("Update GRN");
 	$cancel_txt = _("Cancel GRN");
 }	
-elseif ($_SESSION['PO']->trans_type == ST_SUPPINVOICE) {
+elseif ($_POST['PO']->trans_type == ST_SUPPINVOICE) {
 	$process_txt = _("Process Invoice");
 	$update_txt = _("Update Invoice");
 	$cancel_txt = _("Cancel Invoice");
 }	
-if ($_SESSION['PO']->order_has_items()) 
+if ($_POST['PO']->order_has_items()) 
 {
-	if ($_SESSION['PO']->order_no)
+	if ($_POST['PO']->order_no)
 		submit_center_first('Commit', $update_txt, '', 'default');
 	else
 		submit_center_first('Commit', $process_txt, '', 'default');
