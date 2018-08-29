@@ -21,21 +21,24 @@ function processing_start()
 {
 	page_processing(false);
     processing_end();
-    $_SESSION['Processing'] = $_SERVER['PHP_SELF'];
+//    $_SESSION['Processing'] = $_SERVER['PHP_SELF'];
 }
 
 function processing_end()
 {
 	page_processing(true);
+/*
     unset($_SESSION['Processing']);
-    if ( isset($_SESSION['Items']) ) {
-		unset($_SESSION['Items']->line_items);
-		unset($_SESSION['Items']);
+    if ( isset($_POST['Items']) ) {
+		unset($_POST['Items']->line_items);
+		unset($_POST['Items']);
     }
+*/
 }
 
 function processing_active()
 {
+    // obsolete code; cookie is not set
     return (isset($_SESSION['Processing']) && $_SESSION['Processing']==$_SERVER['PHP_SELF']);
 }
 /*
@@ -46,7 +49,10 @@ function check_edit_conflicts($cart_id, $cartname='Items')
 {
 	global $Ajax, $SysPrefs;
 
-	if ((!isset($SysPrefs->no_check_edit_conflicts) || $SysPrefs->no_check_edit_conflicts==0) && $cart_id && isset($_SESSION[$cartname]) && $cart_id != $_SESSION[$cartname]->cart_id) {
+    // Obsolete code when a cookie was used for cart (bad idea)
+    // Now items cart is hidden variable passed with the form
+    // So this message will never appear again
+	if ((!isset($SysPrefs->no_check_edit_conflicts) || $SysPrefs->no_check_edit_conflicts==0) && $cart_id && isset($_POST[$cartname]) && $cart_id != $_POST[$cartname]->cart_id) {
 		display_error(_('This edit session has been abandoned by opening sales document in another browser tab. You cannot edit more than one sales document at once.'));
 		$Ajax->activate('_page_body');
 		display_footer_exit();
