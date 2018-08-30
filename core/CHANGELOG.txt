@@ -1,6 +1,12 @@
 2018-10-11 Janusz Dobrowolski
 Work Order voided reference reusage, costing and reporting issues fixed
 M	manufacturing/includes/db/work_orders_db.inc
+M	gl/includes/ui/gl_bank_ui.inc
+M	gl/inquiry/bank_inquiry.php
+M	includes/dashboard.inc
+M	includes/ui/ui_input.inc
+
+2018-08-26 Joe Hunt
 M	reporting/includes/reports_classes.inc
 M	reporting/rep409.php
 M	manufacturing/includes/db/work_order_costing_db.inc
