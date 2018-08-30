@@ -373,6 +373,7 @@ var inserts = {
 				}, 100);
 				return true;
 			}
+			return false;
 		},
 		e.onkeydown = function(ev) {	// block unintentional page escape with 'history back' key pressed on buttons
 			ev = ev||window.event;
