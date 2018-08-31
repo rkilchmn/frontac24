@@ -684,3 +684,4 @@ While these can be entered as additional foreign codes,
 alternatively an RE can be devised to handle them as a single foreign code.
 
 ## BUGFIX: 0004664: gl_bank.php use of $_SESSION['pay_items'] corrupted by multiple tabs entering/modifying payments
+## Retain date on successive order entry

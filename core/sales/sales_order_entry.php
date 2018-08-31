@@ -102,7 +102,7 @@ if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 	create_cart(ST_SALESQUOTE, $_GET['NewQuoteToSalesOrder']);
 }
 
-set_posts(array('DirectInvoice'));
+set_posts(array('DirectInvoice', 'OrderDate'));
 
 page($_SESSION['page_title'], false, false, "", $js);
 
@@ -140,7 +140,7 @@ if (isset($_GET['AddedID'])) {
 
 	submenu_option(_("Work &Order Entry"),	"/manufacturing/work_order_entry.php?");
 
-	submenu_option(_("Enter a &New Order"),	"/sales/sales_order_entry.php?NewOrder=0");
+	submenu_option(_("Enter a &New Order"),	"/sales/sales_order_entry.php?NewOrder=0&OrderDate=".$_POST['OrderDate']);
 
 	display_footer_exit();
 
@@ -174,9 +174,9 @@ if (isset($_GET['AddedID'])) {
 	set_focus('prtopt');
 	
 	submenu_option(_("Make &Sales Order Against This Quotation"),
-		"/sales/sales_order_entry.php?NewQuoteToSalesOrder=$order_no");
+		"/sales/sales_order_entry.php?NewQuoteToSalesOrder=$order_no&OrderDate=".$_POST['OrderDate']);
 
-	submenu_option(_("Enter a New &Quotation"),	"/sales/sales_order_entry.php?NewQuotation=0");
+	submenu_option(_("Enter a New &Quotation"),	"/sales/sales_order_entry.php?NewQuotation=0&OrderDate=".$_POST['OrderDate']);
 
 	display_footer_exit();
 
@@ -192,7 +192,7 @@ if (isset($_GET['AddedID'])) {
 	set_focus('prtopt');
 
 	submenu_option(_("Make &Sales Order Against This Quotation"),
-		"/sales/sales_order_entry.php?NewQuoteToSalesOrder=$order_no");
+		"/sales/sales_order_entry.php?NewQuoteToSalesOrder=$order_no&OrderDate=".$_POST['OrderDate']);
 
 	submenu_option(_("Select A Different &Quotation"),
 		"/sales/inquiry/sales_orders_view.php?type=".ST_SALESQUOTE);
@@ -218,10 +218,10 @@ if (isset($_GET['AddedID'])) {
 
 	if ((isset($_GET['Type']) && $_GET['Type'] == 1))
 		submenu_option(_("Enter a New Template &Delivery"),
-			"/sales/inquiry/sales_orders_view.php?DeliveryTemplates=Yes");
+			"/sales/inquiry/sales_orders_view.php?DeliveryTemplates=Yes&OrderDate=".$_POST['OrderDate']);
 	else
 		submenu_option(_("Enter a &New Delivery"), 
-			"/sales/sales_order_entry.php?NewDelivery=0");
+			"/sales/sales_order_entry.php?NewDelivery=0&OrderDate=".$_POST['OrderDate']);
 
 	display_footer_exit();
 
@@ -244,10 +244,10 @@ if (isset($_GET['AddedID'])) {
 
 	if ((isset($_GET['Type']) && $_GET['Type'] == 1))
 		submenu_option(_("Enter a &New Template Invoice"), 
-			"/sales/inquiry/sales_orders_view.php?InvoiceTemplates=Yes");
+			"/sales/inquiry/sales_orders_view.php?InvoiceTemplates=Yes&OrderDate=".$_POST['OrderDate']);
 	else
 		submenu_option(_("Enter a &New Direct Invoice"),
-			"/sales/sales_order_entry.php?NewInvoice=0");
+			"/sales/sales_order_entry.php?NewInvoice=0&OrderDate=".$_POST['OrderDate']);
 
 	if ($row === false)
 		submenu_option(_("Entry &customer payment for this invoice"), "/sales/customer_payments.php?SInvoice=".$invoice);
@@ -516,6 +516,7 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
         } else {
             $params="AddedDN=$trans_no&Type=$so_type";
         }
+        $params .= "&OrderDate=".$_POST['OrderDate'];
         meta_forward_self($params);
     }
 }
@@ -619,16 +620,16 @@ function  handle_cancel_order()
 
 	if ($_POST['Items']->trans_type == ST_CUSTDELIVERY) {
 		display_notification(_("Direct delivery entry has been cancelled as requested."), 1);
-		submenu_option(_("Enter a New Sales Delivery"),	"/sales/sales_order_entry.php?NewDelivery=1");
+		submenu_option(_("Enter a New Sales Delivery"),	"/sales/sales_order_entry.php?NewDelivery=1&OrderDate=".$_POST['OrderDate']);
 	} elseif ($_POST['Items']->trans_type == ST_SALESINVOICE) {
 		display_notification(_("Direct invoice entry has been cancelled as requested."), 1);
-		submenu_option(_("Enter a New Sales Invoice"),	"/sales/sales_order_entry.php?NewInvoice=1");
+		submenu_option(_("Enter a New Sales Invoice"),	"/sales/sales_order_entry.php?NewInvoice=1&OrderDate=".$_POST['OrderDate']);
 	} elseif ($_POST['Items']->trans_type == ST_SALESQUOTE)
 	{
 		if ($_POST['Items']->trans_no != 0) 
 			delete_sales_order(key($_POST['Items']->trans_no), $_POST['Items']->trans_type);
 		display_notification(_("This sales quotation has been cancelled as requested."), 1);
-		submenu_option(_("Enter a New Sales Quotation"), "/sales/sales_order_entry.php?NewQuotation=Yes");
+		submenu_option(_("Enter a New Sales Quotation"), "/sales/sales_order_entry.php?NewQuotation=Yes&OrderDate=".$_POST['OrderDate']);
 	} else { // sales order
 		if ($_POST['Items']->trans_no != 0) {
 			$order_no = key($_POST['Items']->trans_no);
