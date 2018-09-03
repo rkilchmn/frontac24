@@ -21,25 +21,16 @@ function processing_start()
 {
 	page_processing(false);
     processing_end();
-//    $_SESSION['Processing'] = $_SERVER['PHP_SELF'];
 }
 
 function processing_end()
 {
 	page_processing(true);
-/*
-    unset($_SESSION['Processing']);
-    if ( isset($_POST['Items']) ) {
-		unset($_POST['Items']->line_items);
-		unset($_POST['Items']);
-    }
-*/
 }
 
 function processing_active()
 {
-    // obsolete code; cookie is not set
-    return (isset($_SESSION['Processing']) && $_SESSION['Processing']==$_SERVER['PHP_SELF']);
+    return true;
 }
 /*
 	Check if the cart was not destroyed during opening the edition page in
