@@ -307,7 +307,7 @@ if (isset($_POST['process_delivery']) && check_data()) {
 		processing_end();
 
         if (get_post('DirectInvoice') == 1) {
-            $params="DeliveryNumber=".$delivery_no;
+            $params="DeliveryNumber=".$delivery_no."&DirectInvoice=1";
             meta_forward($path_to_root . "/sales/customer_invoice.php", $params);
         }
 

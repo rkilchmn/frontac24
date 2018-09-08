@@ -33,6 +33,9 @@ if (user_use_date_picker()) {
 	$js .= get_js_date_picker();
 }
 
+if (isset($_GET['DirectInvoice']))
+    unset($_SERVER['HTTP_REFERER']);
+
 if (isset($_GET['ModifyInvoice'])) {
 	$_SESSION['page_title'] = sprintf(_("Modifying Sales Invoice # %d.") ,$_GET['ModifyInvoice']);
 	$help_context = "Modifying Sales Invoice";
