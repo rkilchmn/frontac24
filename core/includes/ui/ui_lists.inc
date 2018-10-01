@@ -864,13 +864,13 @@ function stock_items_list($name, $selected_id=null, $all_option=false,
 	$submit_on_change=false, $opts=array(), $editkey = false, $type = "stock")
 {
     global $SysPrefs;
-	$sql = "SELECT stock_id, s.description, c.description, s.inactive, s.editable
-			FROM ".TB_PREF."stock_master s,".TB_PREF."stock_category c WHERE s.category_id=c.category_id";
+	$sql = "SELECT s.stock_id, s.description, c.description, s.inactive, s.editable
+			FROM ".TB_PREF."stock_master s LEFT JOIN ".TB_PREF."stock_category c ON s.category_id=c.category_id LEFT JOIN ".TB_PREF."item_codes i ON is_foreign AND s.stock_id=i.stock_id WHERE";
 
 	if (isset($opts['fixed_asset']) && $opts['fixed_asset'])
-		$sql .= " AND mb_flag='F'";
+		$sql .= " mb_flag='F'";
 	else
-		$sql .= " AND mb_flag!='F'";
+		$sql .= " mb_flag!='F'";
 
 	if ($editkey)
 		set_editor('item', $name, $editkey);
@@ -879,16 +879,16 @@ function stock_items_list($name, $selected_id=null, $all_option=false,
             'type' => (@$SysPrefs->search_autocomplete
                 && get_company_pref('no_item_list')!=0 ? 4 : 0),
 			'order' => (@$SysPrefs->sort_item_list_desc ?
-                array('c.description','s.description', 'stock_id') :
-                array('c.description','stock_id')));
-	$ret = combo_input($name, $selected_id, $sql, 'stock_id', 's.description',
+                array('c.description','s.description', 's.stock_id') :
+                array('c.description','s.stock_id')));
+	$ret = combo_input($name, $selected_id, $sql, 's.stock_id', 's.description',
 		array_merge(
 		  array(
 			'format' => '_format_stock_items',
 			'spec_option' => $all_option===true ?  _("All Items") : $all_option,
 			'spec_id' => ALL_TEXT,
 			'search_box' => true,
-			'search' => array("stock_id", "c.description","s.description", "(SELECT item_code i FROM ".TB_PREF."item_codes i WHERE is_foreign AND i.stock_id=s.stock_id)"),
+			'search' => array("s.stock_id", "c.description","s.description", "i.item_code"),
 			'search_submit' => get_company_pref('no_item_list')!=0 && (!isset($opts['fixed_asset']) || !$opts['fixed_asset']),
 			'size'=>10,
 			'select_submit'=> $submit_on_change,
