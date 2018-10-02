@@ -178,11 +178,14 @@ function meta_forward($forward_to, $params="", $timeout=0, $return=false)
 	if (!$return) exit;
 }
 
+// If the prior php page was an inquiry page,
+// then return control back to that page.
+// Otherwise, stay on the current page.
 function meta_forward_self($params_in="", $timeout=0, $return=false)
 {
     $referer = "";
     $params = "";
-    if (!isset($_POST['referer']))
+    if (!isset($_POST['referer']) || strpos($_POST['referer'], "inquiry") === false)
         $referer=$_SERVER['PHP_SELF'];
     else {
         $referer=parse_url($_POST['referer'], PHP_URL_PATH);
