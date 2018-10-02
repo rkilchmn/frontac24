@@ -484,6 +484,8 @@ var inserts = {
 
             var update = document.getElementsByName(sname)[0];
             if(update) {
+                if (typeof changeVar === "function")
+                    changeVar();
                 JsHttpRequest.request(update);
             }
             return false;
