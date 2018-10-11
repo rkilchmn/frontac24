@@ -1,3 +1,10 @@
+2018-10-11 Janusz Dobrowolski
+Work Order voided reference reusage, costing and reporting issues fixed
+M	manufacturing/includes/db/work_orders_db.inc
+M	reporting/includes/reports_classes.inc
+M	reporting/rep409.php
+M	manufacturing/includes/db/work_order_costing_db.inc
+
 2018-07-12 Joe Hunt
 Stock goes negative even if negative inventory is turned off. Fix by @kvvaradha
 M	admin/void_transaction.php
