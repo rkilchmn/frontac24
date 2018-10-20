@@ -207,22 +207,14 @@ class purch_order
 		return $total;
 	}
 
-        function is_service_item($stock_id)
-        {
-                $item_row = get_item($stock_id);
-                if (!$item_row) 
-                        return false;
-                return is_service($item_row['mb_flag']);
-        }
-
-        function service_price_per_line($method)
+        function service_price_per_line($method, $service_itm)
         {
             $total_service = 0;
             $total = 0;
             $dec = user_price_dec();
 
             foreach ($this->line_items as $ln_itm) {
-                if ($this->is_service_item($ln_itm->stock_id)) {
+                if ($ln_itm == $service_itm) {
                     $value = round($ln_itm->quantity * $ln_itm->price, $dec);
                     $total_service += $value;
                 } else {
@@ -251,16 +243,17 @@ class purch_order
         //          2 Line Item
         //          3 Line Total
 
-        function reprice_order($method)
+        function reprice_order($method, $line_no)
         {
-            $service_cost = $this->service_price_per_line($method);
+            $service_itm=$this->line_items[$line_no];
+            $service_cost = $this->service_price_per_line($method, $service_itm);
             if ($service_cost == 0)
                 return;
 
             $total = $this->get_trans_subtotal();
             $dec = user_price_dec();
             foreach ($this->line_items as $ln_itm) {
-                    if ($this->is_service_item($ln_itm->stock_id))
+                    if ($ln_itm == $service_itm)
                         $ln_itm->price = 0;
                     else {
                         if ($method == 1)

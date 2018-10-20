@@ -231,7 +231,6 @@ function display_po_header(&$order)
 	if (get_company_pref('use_dimension') == 2)
 		dimensions_list_row(_('Dimension 2').':', 'dimension2', null, true, _('Default'), false, 2);
 	locations_list_row(_("Receive Into:"), 'StkLocation', null, false, true, $order->fixed_asset); 
-        service_alg_list_row(_('Service Costs In Item Prices?'), 'reprice');
 
 	table_section(3);
 
@@ -274,7 +273,7 @@ function display_po_items(&$order, $editable=true)
 	$new = $order->order_no == 0;
 
    	$th = array(_("Item Code"), _("Item Description"), _("Quantity"), _("Received"),
-   		_("Unit"), _("Required Delivery Date"), $order->tax_included ? _("Price after Tax") : _("Price before Tax"), _("Line Total"), "");
+   		_("Unit"), _("Required Delivery Date"), $order->tax_included ? _("Price after Tax") : _("Price before Tax"), _("Line Total"), _("COGS"), "");
 
 	if ($order->trans_type != ST_PURCHORDER)
 		array_remove($th, 5);
@@ -307,6 +306,7 @@ function display_po_items(&$order, $editable=true)
         	    label_cell($po_line->req_del_date);
     		amount_decimal_cell($po_line->price);
             amount_cell($line_total);
+            label_cell("");
 
 			if ($editable)
 			{
@@ -465,6 +465,7 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
         $Ajax->activate('qty');
         $Ajax->activate('req_del_date');
         $Ajax->activate('line_total');
+        $Ajax->activate('reprice');
 
         $item_info = get_item_edit_info($_POST['stock_id']);
 		$_POST['units'] = $item_info["units"];
@@ -502,6 +503,16 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
 		amount_cells(null, 'price', null, null, null, $dec2, true);
 
 	amount_cell($line_total, false, '','line_total');
+
+    if (list_updated('stock_id')) {
+	    $Ajax->activate('items_table');
+    }
+    if (is_service(get_mb_flag($_POST['stock_id'])))
+        service_alg_list_cells(null, 'reprice');
+    else {
+        label_cell("");
+        hidden('reprice', 0);
+    }
 
 	if ($id!=-1)
 	{

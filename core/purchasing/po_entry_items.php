@@ -248,10 +248,10 @@ function check_data()
     // zeroed out anyway.
 
     if (!check_num('price', 0)
-        && !($_POST['reprice'] != 0 && $_POST['PO']->is_service_item($_POST['stock_id'])))
+        && !($_POST['reprice'] != 0 && is_service(get_mb_flag($_POST['stock_id']))))
     {
 	   	display_error(_("The price entered must be numeric and not less than zero."));
-	   	display_error(_("HINT: If you change the 'Service Costs In Item Prices?' option from 'No', a negative price will discount the other items on the order"));
+	   	display_error(_("HINT: To enter a supplier discount using a service item, change the 'COGS' option from 'No'. Then a negative price will discount the other items on the order."));
 		set_focus('price');
 	   	return false;	   
     }
@@ -284,7 +284,7 @@ function handle_update_item()
 		$_POST['PO']->update_order_item($_POST['line_no'], input_num('qty'), input_num('price'),
   			@$_POST['req_del_date'], $_POST['item_description'] );
                 if ($_POST['reprice'] != 0)
-                    $_POST['PO']->reprice_order($_POST['reprice']);
+                    $_POST['PO']->reprice_order($_POST['reprice'], $_POST['line_no']);
 		unset_form_variables();
 	}	
     line_start_focus();
@@ -322,12 +322,13 @@ function handle_add_new_item()
 
 			if ($allow_update)
 			{
-				$_POST['PO']->add_to_order (count($_POST['PO']->line_items), $_POST['stock_id'], input_num('qty'), 
+                $line_no = count($_POST['PO']->line_items);
+				$_POST['PO']->add_to_order ($line_no, $_POST['stock_id'], input_num('qty'), 
 					get_post('stock_id_text'), //$myrow["description"], 
 					input_num('price'), '', // $myrow["units"], (retrived in cart)
 					$_POST['PO']->trans_type == ST_PURCHORDER ? $_POST['req_del_date'] : '', 0, 0);
                                 if ($_POST['reprice'] != 0)
-                                    $_POST['PO']->reprice_order($_POST['reprice']);
+                                    $_POST['PO']->reprice_order($_POST['reprice'], $line_no);
 
 				unset_form_variables();
 				$_POST['stock_id']	= "";
