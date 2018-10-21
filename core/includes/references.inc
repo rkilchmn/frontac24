@@ -169,7 +169,8 @@ class references
 		// retrieve last ref number in the refline from original transaction table
 		$sql = "SELECT MAX(CAST(SUBSTR($ref_fld, ".(strlen($prefix)+1).",LENGTH($ref_fld)-".(strlen($postfix)+strlen($prefix)).") AS UNSIGNED))"
 				." FROM `$trans_table` tbl
-                WHERE TRUE"
+					LEFT JOIN ".TB_PREF."voided v ON tbl.`$tno_fld`=v.id AND v.type=$type"
+				." WHERE ISNULL(v.id)"
 				.($type_fld ? " AND tbl.`$type_fld`=$type" : '')
 				." AND `$ref_fld` REGEXP ".db_escape('^'.preg_quote($prefix).'[0-9]*'.preg_quote($postfix).'$');
 // display_notification($sql);
@@ -229,6 +230,7 @@ class references
 	//
 	function get_next($type, $line=null, $context=null) 
 	{
+
 		if (isset($line))
 			$refline = $this->reflines->get($line);
 		else {
