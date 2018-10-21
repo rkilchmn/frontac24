@@ -265,8 +265,8 @@ function inventory_movements()
 			continue;
 		$rep->NewLine();
 		$rep->TextCol(0, 1,	$myrow['stock_id']);
-		$rep->TextCol(1, 2, $myrow['name']);
-		$rep->TextCol(2, 3, ' ' . $myrow['units']);
+		$rep->TextCol(1, 2, substr($myrow['name'], 0, 24) . ' ');
+		$rep->TextCol(2, 3, $myrow['units']);
 		$rep->AmountCol(3, 4, $qoh_start, get_qty_dec($myrow['stock_id']));
 		$rep->AmountCol(4, 5, $openCost, $dec);
 		$openCost *= $qoh_start;
