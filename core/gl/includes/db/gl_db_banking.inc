@@ -334,12 +334,25 @@ function check_bank_transfer($trans_no, $from_account, $to_account, $date_,
 	// 3) The edited from account, that is having funds removed which may result in a
 	//    negative balance in the account at some time and therefore needs to be checked.
 	$balance_offset = 0;
-	if ($from_account == $old_from['bank_act'] && sql_date_comp(date2sql($date_), $old_from['trans_date']) >= 0) {
-		// If the edited from_account is the same as the original transaction, and the new date is later than the old date
-		// then add the amount from the original from transaction when checking the history to simulate the void that would
-		// take effect from that date.
-		$balance_offset = -$old_from['amount'];
-	}
+	if ($from_account == $old_from['bank_act']) {
+
+        // If the edited from_account is the same as the original transaction
+        // and the new date is earlier than the old date
+        // first check between the earlier and old date
+
+        if (sql_date_comp(date2sql($date_), $old_from['trans_date']) < 0)
+            $problemTransaction = check_bank_account_history(-$amount, $from_account, $date_, null, null, $old_from['trans_date']);
+
+        if ($problemTransaction == null) {
+
+        // Then add the amount from the original from transaction
+        // to check the later history to account for the difference that would
+        // take effect from that date.
+
+            $balance_offset = -$old_from['amount'];
+        }
+    }
+
 	$problemTransaction = check_bank_account_history(-$amount, $from_account, $date_, null, $balance_offset);
 	if ($problemTransaction != null) {
 		$problemTransaction['account'] = $old_from['bank_act'];

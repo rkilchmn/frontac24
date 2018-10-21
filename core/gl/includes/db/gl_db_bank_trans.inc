@@ -210,7 +210,7 @@ function void_bank_trans($type, $type_no, $nested=false)
 *	Returns null or transaction in conflict. Running balance is checked on daily basis only, to enable ID change after edition.
 *	$delta_amount - tested change in bank balance at $date.
 **/
-function check_bank_account_history($delta_amount, $bank_account, $date=null, $user=null, $balance_offset = 0)
+function check_bank_account_history($delta_amount, $bank_account, $date=null, $user=null, $balance_offset = 0, $end_date = null)
 {
 	if ($delta_amount >= 0 && isset($date))
 		 return null;	// amount increase is always safe
@@ -234,6 +234,12 @@ function check_bank_account_history($delta_amount, $bank_account, $date=null, $u
 		$date = date2sql($date);
 		$sql .= " AND trans_date > '$date'";
 	}
+
+	if ($end_date)
+	{
+		$sql .= " AND trans_date < '$end_date'";
+	}
+
 	$sql .= " GROUP BY trans_date ORDER BY trans_date ASC";
 
 	$history = db_query($sql, "cannot retrieve cash account history");
