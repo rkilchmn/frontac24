@@ -420,8 +420,7 @@ else
 if (!isset($_POST['quantity']))
 	$_POST['quantity'] = qty_format(1, $_POST['stock_id'], $dec);
 else
-	$_POST['quantity'] = qty_format($_POST['quantity'], $_POST['stock_id'], $dec);
-	
+	$_POST['quantity'] = qty_format(str_replace(",","", $_POST['quantity']), $_POST['stock_id'], $dec);
 
 if (get_post('type') == WO_ADVANCED)
 {
@@ -439,9 +438,9 @@ else
 
     $bank_act = get_default_bank_account();
     if (!isset($_POST['cr_acc']))
-        $_POST['cr_acc'] = $bank_act;
+        $_POST['cr_acc'] = $bank_act['account_code'];
     if (!isset($_POST['cr_lab_acc']))
-        $_POST['cr_lab_acc'] = $bank_act;
+        $_POST['cr_lab_acc'] = $bank_act['account_code'];
 
 	if (!isset($_POST['Labour']) || list_updated('stock_id') || list_updated('type'))
 	{
@@ -490,7 +489,7 @@ if (!($_POST['type'] == WO_ADVANCED)) {
     start_table(TABLESTYLE2);
 
     stock_items_list_row(_("BOM or Component:"), 'bom', null, "No BOM" , true, false, true, array('editable' => 30, 'where'=>array("(NOT no_purchase
-            OR mb_flag='M') AND stock_id != ".db_escape($_POST['stock_id'])
+            OR mb_flag='M') AND s.stock_id != ".db_escape($_POST['stock_id'])
             . " OR EXISTS (SELECT * FROM ".TB_PREF."bom WHERE parent=".db_escape($_POST['stock_id']). ")")));
 
 
