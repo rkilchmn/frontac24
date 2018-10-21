@@ -19,13 +19,12 @@ include_once($path_to_root . "/includes/banking.inc");
 //
 function processing_start()
 {
-	page_processing(false);
-    processing_end();
+	page_processing(true);
 }
 
 function processing_end()
 {
-	page_processing(true);
+	page_processing(false);
 }
 
 function processing_active()

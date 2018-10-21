@@ -705,8 +705,14 @@ function page_processing($msg = false)
 	if ($msg === true)
 		$msg = _("Entered data has not been saved yet.\nDo you want to abandon changes?");
 
+
 	$js = "_validate._processing=" . (
 		$msg ? '\''.strtr($msg, array("\n"=>'\\n')) . '\';' : 'null;');
+
+	$js .= "window.onbeforeunload = function() { return " .
+		($msg ? '\''.strtr($msg, array("\n"=>'\\n')) . '\';' : 'null;');
+    $js .= "};";
+
 	if (in_ajax()) {
 		$Ajax->addScript(true, $js);
 	} else

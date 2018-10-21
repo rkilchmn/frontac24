@@ -686,3 +686,4 @@ alternatively an RE can be devised to handle them as a single foreign code.
 ## BUGFIX: 0004664: gl_bank.php use of $_SESSION['pay_items'] corrupted by multiple tabs entering/modifying payments
 ## Retain date on successive order entry
 ## BUGFIX: 0004743: Modifying a bank transfer from a cash account by changing date to an earlier date can fail
+## Confirm when user exits/refreshes sales invoice page and data has been entered
