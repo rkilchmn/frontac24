@@ -128,9 +128,8 @@ function add_wo_costs_journal($wo_id, $amount, $cost_type, $cr_acc, $date, $dim1
 
     if (!$ref) $ref = $Refs->get_next(ST_JOURNAL, null, $date);
 
-    $item=get_item($wo['stock_id']);
 	add_gl_trans_std_cost(ST_JOURNAL, $journal_id, $date, $cr_acc,
-		0, 0, $item['description'], -$amount);
+		0, 0, $wo_cost_types[$cost_type], -$amount);
 
 	$is_bank_to = is_bank_account($cr_acc);
 	if ($is_bank_to)
@@ -142,7 +141,7 @@ function add_wo_costs_journal($wo_id, $amount, $cost_type, $cr_acc, $date, $dim1
 	add_journal(ST_JOURNAL, $journal_id, $amount, $date, get_company_currency(), $ref, '', 1, $date, $date);
 
 	add_gl_trans_std_cost(ST_JOURNAL, $journal_id, $date, $wo['wip_account'],
-		$dim1, $dim2,  $item['description'], $amount);
+		$dim1, $dim2,  $wo_cost_types[$cost_type], $amount);
 
 	$wo = get_work_order($wo_id);
 	$wip = $wo['wip_account'];
@@ -202,10 +201,9 @@ function work_order_production_gl($woid, $stock_id, $quantity, $date_, $rcv_no)
 			$memo, -$bom_item["ComponentCost"] * $bom_item["units_req"] * $quantity);
 	}
 
-    $item = get_item($stock_id);
 	$wo = get_work_order($woid);
     add_gl_trans_std_cost(ST_MANURECEIVE, $rcv_no, $date_, $wo['wip_account'],
-        0, 0, $item['description'], -$total_cost);
+        0, 0, $memo, -$total_cost);
 	if ($SysPrefs->loc_notification() == 1 && count($st_ids) > 0)
 		send_reorder_email($loc, $st_ids, $st_names, $st_num, $st_reorder);
 }
