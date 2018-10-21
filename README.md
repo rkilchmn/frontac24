@@ -411,8 +411,6 @@ It also replaces the code for Payments to Suppliers.
 Thus, if a payment to a supplier is made with either interface,
 the bank account from that payment will be recalled.
 
-## 0004563 BUGFIX: rep308 costed inventory movements do not reconcile
-
 ## FEATURE: system preference option to sort item lists by description rather than by stock id
 
 ## FEATURE: Hide Process Button until add/edit is confirmed/canceled
