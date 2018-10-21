@@ -70,6 +70,10 @@ var _autocomplete=true;
 function _set_combo_input(e) {
 		e.setAttribute('_last', e.value);
 		e.onblur=function() {
+          var boxvalue = this.value;
+          this.value = "";  // reset box to full content
+          if(string_contains(this.className, 'combo4'))
+            return false;
 		  var but_name = this.name.substring(0, this.name.length-4)+'button';
 		  var button = document.getElementsByName(but_name)[0];
 		  var select = document.getElementsByName(this.getAttribute('rel'))[0];
@@ -77,7 +81,7 @@ function _set_combo_input(e) {
 // submit request if there is submit_on_change option set and
 // search field has changed.
 
-		  if (button && (this.value != this.getAttribute('_last'))) {
+		  if (button && (boxvalue != this.getAttribute('_last'))) {
 			JsHttpRequest.request(button);
 		  } else if(string_contains(this.className, 'combo2')) {
 				this.style.display = 'none';
@@ -137,15 +141,24 @@ function _set_combo_input(e) {
 	  		key = ev.keyCode||ev.which;
 	  		if(key == 13) {
 		        if(string_contains(this.className, 'combo4')) {
-                    var select = document.getElementsByName(this.getAttribute('rel'))[0];
-                    this.style.display = 'none';
-                    select.style.display = 'inline';
-                    setFocus(select);
+                      var but_name = this.name.substring(0, this.name.length-4)+'button';
+                      var button = document.getElementsByName(but_name)[0];
+                      var select = document.getElementsByName(this.getAttribute('rel'))[0];
+                      save_focus(select);
+
+                      if (button)
+                        JsHttpRequest.request(button);
+                      else {
+                            this.style.display = 'none';
+                            select.style.display = 'inline';
+                            setFocus(select);
+                      }
+                      return false;
                 } else
                   this.blur();
 	  		  return false;
 	  		}
-		}
+		};
 }
 
 function _update_box(s) {
@@ -478,6 +491,7 @@ var inserts = {
             select.value=l.dataset.value;
 
             var box = document.getElementsByName(select.getAttribute('rel'))[0];
+
             box.style.display = 'none';
             select.style.display = 'inline';
             setFocus(select);
@@ -522,9 +536,10 @@ var inserts = {
 				 && !confirm(_validate._processing)) {
 					ev.returnValue = false;
 					return false;
-				}
+                }
 				if (_hotkeys.alt)	// ommit Chrome accesskeys
 					return false;
+                window.onbeforeunload = null;
  				window.location = e.href;
 			}
 	},

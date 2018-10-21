@@ -91,7 +91,6 @@ $opts = array(		// default options
 		$by_id = false;
 		$class = 'combo4';
 	}
-
 	$disabled = $opts['disabled'] ? "disabled" : '';
 	$multi = $opts['multi'];
 	
@@ -205,8 +204,9 @@ $opts = array(		// default options
 				$sel = 'selected';
 				$found = $value;
 				$edit = $opts['editable'] && $contact_row['editable'] 
-					&& (@$_POST[$search_box] == $value)
+//					&& (@$_POST[$search_box] == $value)
 					? $contact_row[1] : false; // get non-formatted description
+
 				if ($edit)
 					break;	// selected field is editable - abandon list construction
 			}
@@ -292,14 +292,16 @@ $opts = array(		// default options
 
         $selector .= $autocomplete;     // combo4
 
-	if ($by_id && ($search_box != false || $opts['editable']) ) {
-		// on first display show selector list
-		if (isset($_POST[$search_box]) && $opts['editable'] && $edit) {
-			$selector = "<input type='hidden' name='$name' value='".$_POST[$name]."'>"
-			."<input type='text' $disabled name='{$name}_text' id='{$name}_text' size='".
-				$opts['editable']."' maxlength='".$opts['max']."' $rel value='$edit'>\n";
-				set_focus($name.'_text'); // prevent lost focus
-		} else if (get_post($search_submit ? $search_submit : "_{$name}_button"))
+    if (isset($_POST[$search_box])
+        && !isset($_POST[$name.'_text'])
+        && $opts['editable']
+        && $edit) {
+        $selector = "<input type='hidden' name='$name' value='".$_POST[$name]."'>"
+        ."<input type='text' $disabled name='{$name}_text' id='{$name}_text' size='".
+            $opts['editable']."' maxlength='".$opts['max']."' $rel value='$edit'>\n";
+            set_focus($name.'_text'); // focus on newly created text field
+	} else if ($by_id && ($search_box != false || $opts['editable'])) {
+		if (get_post($search_submit ? $search_submit : "_{$name}_button"))
 			set_focus($name); // prevent lost focus
 		if (!$opts['editable'])
 	 		$txt = $found;
@@ -403,7 +405,7 @@ $opts = array(		// default options
 		$selector .= ' '.$opts['editlink'];
 
 	if ($search_box && $opts['cells']) {
-        if ($class = "combo4")
+        if ($class == "combo4")
             $str = "<td></td><td>$edit_entry$selector$img</td>";
         else
             $str = ($edit_entry!='' ? "<td>$edit_entry</td>" : '')."<td>$selector$img</td>";
@@ -1057,7 +1059,7 @@ function stock_component_items_list($name, $parent_stock_id, $selected_id=null,
 {
 	$parent = db_escape($parent_stock_id);
 	return stock_items_list($name, $selected_id, $all_option, $submit_on_change,
-		array('where'=>array("stock_id != $parent"), 'parent'=> $parent_stock_id), $editkey, "component");
+		array('where'=>array("s.stock_id != $parent"), 'parent'=> $parent_stock_id), $editkey, "component");
 }
 
 
@@ -1068,7 +1070,7 @@ function stock_component_items_list_cells($label, $name, $parent_stock_id,
 		echo "<td>$label</td>\n";
 	$parent = db_escape($parent_stock_id);
 	echo stock_items_list($name, $selected_id, $all_option, $submit_on_change,
-		array('where'=>array("stock_id != '$parent_stock_id'"), 'cells'=>true, 'parent'=> $parent_stock_id), $editkey, "component");
+		array('where'=>array("s.stock_id != '$parent_stock_id'"), 'cells'=>true, 'parent'=> $parent_stock_id), $editkey, "component");
 }
 //------------------------------------------------------------------------------------
 
