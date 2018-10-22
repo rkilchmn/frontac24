@@ -1,15 +1,106 @@
 2018-10-11 Janusz Dobrowolski
 Work Order voided reference reusage, costing and reporting issues fixed
 M	manufacturing/includes/db/work_orders_db.inc
+M	reporting/includes/reports_classes.inc
+M	reporting/rep409.php
+M	manufacturing/includes/db/work_order_costing_db.inc
+
+2018-10-06 Joe Hunt
+@braathwaate: Fixed Customer statement reflecting wrong balance. 
+M	reporting/rep108.php
+
+2018-10-02 Joe Hunt
+@braathwaate 0004641: items->transactions should not show QOH for service items. Fixed by disabling transactions when non inventory item.
+M	inventory/manage/items.php
+
+2018-09-17 Janusz Dobrowolski
+Fixed comment for crm_contacts table in init sql files.
+M	sql/en_US-demo.sql
+M	sql/en_US-new.sql 
+
+2018-09-15 Joe Hunt
+@notrinos: Fixed Line break in supplier_list_cells when label is null
+M	includes/ui/ui_lists.inc
+
+2018-09-13 Joe Hunt
+@notrinos: Left to allocate fixed and rerun
+M	includes/ui/ui_view.inc
+
+2018-09-12 Joe Hunt
+@notrinos: Fixed error creating customer credit note: Undefined index: sales_gl_code
+M	taxes/tax_calc.inc
+
+2018-08-31 Joe Hunt
+Rerun @braathwaate Bug 4601: memo line not cleared after enter new payment item.
+M	gl/includes/ui/gl_journal_ui.inc
+M	gl/inquiry/bank_inquiry.php
+M	includes/dashboard.inc (reverted)
+M	includes/ui/ui_input.inc (reverted)
+
+2018-08-31 Joe Hunt
+Rerun @notrinos: Update material cost when quantity on hand is zero.
+M	manufacturing/includes/db/work_order_costing_db.inc
+
+2018-08-30 Joe Hunt
+@braathwaate: FA 2.4.4 no longer displays 0.00 Sales Invoices in customer_inquiry - Fixed.
+M	sales/includes/db/cust_trans_db.inc
+M	sales/inquiry/customer_inquiry.php
+
+2018-08-30 Joe Hunt
+@notrinos: Update material cost when quantity on hand is zero.
+M	manufacturing/includes/db/work_order_costing_db.inc
+
+2018-08-26 Joe Hunt
+@braathwaate Bug 4601: memo line not cleared after enter new payment item.
+M	gl/gl_bank.php
 M	gl/includes/ui/gl_bank_ui.inc
 M	gl/inquiry/bank_inquiry.php
 M	includes/dashboard.inc
 M	includes/ui/ui_input.inc
 
 2018-08-26 Joe Hunt
-M	reporting/includes/reports_classes.inc
-M	reporting/rep409.php
+@braathwaate Bug 4504: utf-8 decoding not working for some special characters on pdf reports. PHP4 support removed.
+M	reporting/includes/tcpdf.php
+
+2018-08-26 Janusz Dobrowolski
+Bug 4577: Ajax confirmation dialog ignored user answer in Sales Order cancellation.
+M	js/inserts.js
+
+2018-08-26 Joe Hunt
+@braathwaate Bug 4617: Initialised missing variable $memo in work order costing
 M	manufacturing/includes/db/work_order_costing_db.inc
+
+2018-08-26 Joe Hunt
+@braathwaate Bug 4563: rep308 costed inventory movements do not reconcile.
+M	reporting/rep308.php
+
+2018-08-23 Joe Hunt
+Whitespace changes to sales_order_ui.inc on commit and rollback
+M	sales/includes/ui/sales_order_ui.inc
+
+2018-08-19 Joe Hunt
+Fixed bug in Report Supplier Balances.
+M	reporting/rep201.php
+
+2018-08-19 Joe Hunt
+Removed redundant sql sentences in Report Filters.
+M	reporting/includes/reports_classes.inc
+
+2018-08-12 Joe Hunt
+Avoid running same query multiple times. Rep307.php. Fixed
+M	reporting/rep307.php
+
+2018-08-12 Joe Hunt
+Solution for item editable description
+M	includes/ui/ui_view.inc
+
+2018-08-11 Joe Hunt
+Marker in Void Transactions fixed
+M	admin/void_transaction.php
+
+2018-08-11 Joe Hunt
+Whitespace corrections
+M	admin/void_transaction.php
 
 2018-07-12 Joe Hunt
 Stock goes negative even if negative inventory is turned off. Fix by @kvvaradha

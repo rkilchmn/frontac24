@@ -187,6 +187,7 @@ if ($_POST['filterType'] != '2')
         date_cells(_("To:"), 'TransToDate', '', null, 0, 2);
     }
 }
+check_cells(_("Zero values"), 'show_voided');
 
 submit_cells('RefreshInquiry', _("Search"),'',_('Refresh Inquiry'), 'default');
 end_row();
@@ -211,7 +212,7 @@ if (get_post('RefreshInquiry') || list_updated('filterType'))
 }
 //------------------------------------------------------------------------------------------------
 $sql = get_sql_for_customer_inquiry(get_post('TransAfterDate'), get_post('TransToDate'),
-	get_post('customer_id'), get_post('sales_type'), get_post('filterType'));
+	get_post('customer_id'), get_post('sales_type'), get_post('filterType'), check_value('show_voided'));
 
 //------------------------------------------------------------------------------------------------
 //db_query("set @bal:=0");
