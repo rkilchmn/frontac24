@@ -334,11 +334,6 @@ FA does not offer a way to search for transactions for quick entries.
 
 BF allows G/L search on Quick Entries.
 
-## BUGFIX: 0004468: Cannot modify a funds transfer twice
-Editing a funds transfer twice results in the message:
-
-    The entered reference is already in use.
-
 ## BUGFIX: 0004475: Editing GJ transaction with no counterparty displays incorrect edit table
 
 ## FEATURE: Add legal terms to payment terms
@@ -417,8 +412,6 @@ the bank account from that payment will be recalled.
 
 BF removes the Process Button while payment items are being added or edited;
 Otherwise, if the user neglects to confirm, the work is lost unexpectantly.
-
-## 00457 BUGFIX: sales order cancel goes ahead even if user clicks cancel on confirmation
 
 ## FEATURE: confirm price changes on invoice entry when changing suppliers
 
