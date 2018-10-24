@@ -106,21 +106,26 @@ $th = array(_("Type"), _("#"), _("Reference"));
 if ($display_location)
 	array_push($th, _("Location"));
 
-array_push($th, _("Date"), _("Detail"), _("Quantity In"), _("Quantity Out"), _("Quantity On Hand"), "");
+array_push($th, _("Date"), _("Detail"), _("Quantity In"), _("Quantity Out"));
+if (is_inventory_item($_POST['stock_id']))
+    array_push($th, _("Quantity On Hand"));
+array_push($th, "");
 
 table_header($th);
 
-$before_qty = get_qoh_on_date($_POST['stock_id'], $_POST['StockLocation'], add_days($_POST['AfterDate'], -1));
-
-$after_qty = $before_qty;
-
-start_row("class='inquirybg'");
-$header_span = $display_location ? 6 : 5;
-label_cell("<b>"._("Quantity on hand before") . " " . $_POST['AfterDate']."</b>", "align=center colspan=$header_span");
-label_cell("&nbsp;", "colspan=2");
 $dec = get_qty_dec($_POST['stock_id']);
-qty_cell($before_qty, false, $dec);
-end_row();
+if (is_inventory_item($_POST['stock_id'])) {
+    $before_qty = get_qoh_on_date($_POST['stock_id'], $_POST['StockLocation'], add_days($_POST['AfterDate'], -1));
+
+    $after_qty = $before_qty;
+
+    start_row("class='inquirybg'");
+    $header_span = $display_location ? 6 : 5;
+    label_cell("<b>"._("Quantity on hand before") . " " . $_POST['AfterDate']."</b>", "align=center colspan=$header_span");
+    label_cell("&nbsp;", "colspan=2");
+    qty_cell($before_qty, false, $dec);
+    end_row();
+}
 
 $j = 1;
 $k = 0; //row colour counter
@@ -150,7 +155,8 @@ while ($myrow = db_fetch($result))
 		$quantity_formatted = number_format2(-$myrow["qty"], $dec);
 		$total_out += -$myrow["qty"];
 	}
-	$after_qty += $myrow["qty"];
+    if (is_inventory_item($_POST['stock_id']))
+        $after_qty += $myrow["qty"];
 
 	label_cell($type_name);
 
@@ -167,9 +173,10 @@ while ($myrow = db_fetch($result))
 
 	label_cell($myrow['name']);
 
-	label_cell((($myrow["qty"] >= 0) ? $quantity_formatted : ""), "nowrap align=right");
-	label_cell((($myrow["qty"] < 0) ? $quantity_formatted : ""), "nowrap align=right");
-	qty_cell($after_qty, false, $dec);
+        label_cell((($myrow["qty"] >= 0) ? $quantity_formatted : ""), "nowrap align=right");
+        label_cell((($myrow["qty"] < 0) ? $quantity_formatted : ""), "nowrap align=right");
+    if (is_inventory_item($_POST['stock_id']))
+        qty_cell($after_qty, false, $dec);
     label_cell(pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $myrow['trans_no'] . "&filterType=". $myrow['type'], ICON_DELETE));
 	end_row();
 
@@ -181,13 +188,15 @@ while ($myrow = db_fetch($result))
 	}
 }
 
-start_row("class='inquirybg'");
-label_cell("<b>"._("Quantity on hand after") . " " . $_POST['BeforeDate']."</b>", "align=center colspan=$header_span");
-qty_cell($total_in, false, $dec);
-qty_cell($total_out, false, $dec);
-qty_cell($after_qty, false, $dec);
+if (is_inventory_item($_POST['stock_id'])) {
+    start_row("class='inquirybg'");
+    label_cell("<b>"._("Quantity on hand after") . " " . $_POST['BeforeDate']."</b>", "align=center colspan=$header_span");
+    qty_cell($total_in, false, $dec);
+    qty_cell($total_out, false, $dec);
+    qty_cell($after_qty, false, $dec);
 
-end_row();
+    end_row();
+}
 
 end_table(1);
 div_end();

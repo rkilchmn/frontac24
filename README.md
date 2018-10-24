@@ -676,3 +676,14 @@ alternatively an RE can be devised to handle them as a single foreign code.
 ## Retain date on successive order entry
 ## BUGFIX: 0004743: Modifying a bank transfer from a cash account by changing date to an earlier date can fail
 ## Confirm when user exits/refreshes sales invoice page and data has been entered
+
+## FEATURE: Display transactions but not QOH for service items
+
+In FA, bug fix "0004641: items->transactions should not show QOH for service items"
+was fixed by disabling transactions when non inventory item.
+While this is arguably the simple fix,
+it left FA with no way to display transactions for service items,
+which can be a useful way to search for orders for a service item.
+
+BF retains the transactions tab for service items, but removes the QOH field,
+which is not meaningful.
