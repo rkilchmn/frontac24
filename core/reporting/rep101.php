@@ -191,7 +191,7 @@ function print_customer_balances()
                 if ($show_balance) {
                     if ($trans['TotalAmount'] == 0) continue;
                 } else {
-                    if (floatcmp($trans['TotalAmount'], $trans['Allocated']) == 0) continue;
+                    if (floatcmp(($trans['type'] == ST_JOURNAL ? -$trans['TotalAmount'] : $trans['TotalAmount']), $trans['Allocated']) == 0) continue;
                 }
             }
 
@@ -227,9 +227,10 @@ function print_customer_balances()
 			$rep->DateCol(2, 3,	$trans['tran_date'], true);
 			if ($trans['type'] == ST_SALESINVOICE)
 				$rep->DateCol(3, 4,	$trans['due_date'], true);
-			$item[0] = $item[1] = 0.0;
+
 			if ($trans['type'] == ST_CUSTCREDIT || $trans['type'] == ST_CUSTPAYMENT || $trans['type'] == ST_BANKDEPOSIT)
 				$trans['TotalAmount'] *= -1;
+			$item[0] = $item[1] = 0.0;
 			if ($trans['TotalAmount'] > 0.0)
 			{
 				$item[0] = round2(abs($trans['TotalAmount']) * $rate, $dec);
