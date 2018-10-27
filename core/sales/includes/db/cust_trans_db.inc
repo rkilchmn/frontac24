@@ -127,6 +127,7 @@ function get_customer_trans($trans_id, $trans_type, $customer_id=null)
 		."cust.name AS DebtorName, cust.address, "
 		."cust.curr_code, "
 		."cust.tax_id,
+		cust.address,
 		trans.prep_amount>0 as prepaid,"
 		."com.memo_";
 

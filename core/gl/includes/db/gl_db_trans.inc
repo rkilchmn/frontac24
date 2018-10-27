@@ -480,8 +480,7 @@ function get_trans_tax_details($trans_type, $trans_no)
 {
 	$sql = "SELECT tax_details.*,
 				tax_type.name AS tax_type_name,
-				tax_details.rate AS effective_rate,
-				tax_type.rate AS rate
+				tax_details.rate AS rate
 		FROM ".TB_PREF."trans_tax_details tax_details,
 			".TB_PREF."tax_types tax_type
 		WHERE 

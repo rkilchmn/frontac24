@@ -89,13 +89,10 @@ function delete_tax_group_items($id)
 //
 function get_tax_group_rates($group_id=null, $tax_shipping=false)
 {
-	global $SysPrefs;
-
 	$sql = 
-	"SELECT t.id as tax_type_id,"
-		.($SysPrefs->suppress_tax_rates() == 1 ? "t.name as tax_type_name,"
-			: "CONCAT(t.name, ' (', t.rate, '%)') as tax_type_name,")
-		."t.sales_gl_code,
+	"SELECT t.id as tax_type_id,
+          t.name as tax_type_name,
+		  t.sales_gl_code,
 		  t.purchasing_gl_code,
 		  IF(g.tax_type_id, t.rate, NULL) as rate,
 		  g.tax_shipping
@@ -108,17 +105,23 @@ function get_tax_group_rates($group_id=null, $tax_shipping=false)
 	return db_query($sql, "cannot get tax types as array");
 }
 
-function get_tax_group_items_as_array($id)
+function get_tax_group_items_as_array($id, $address='')
 {
+	global $SysPrefs;
 	$ret_tax_array = array();
 	
-	$tax_group_items = get_tax_group_rates($id);
+	$tax_group_items = get_tax_group_rates($id, '');
 	
 	while ($tax_group_item = db_fetch($tax_group_items)) 
 	{
 		$tax_group_item['Value'] = 0;
-		$ret_tax_array[$tax_group_item['tax_type_id']] = $tax_group_item;
+        $rate = hook_retrieve_tax_rate($tax_group_item['tax_type_name'], $address);
+        if (is_numeric($rate))
+            $tax_group_item['rate'] = $rate;
 
+		if ($SysPrefs->suppress_tax_rates() != 1 && is_numeric($tax_group_item['rate']))
+			$tax_group_item['tax_type_name'] .= ' (' . $tax_group_item['rate'] . '%)';
+		$ret_tax_array[$tax_group_item['tax_type_id']] = $tax_group_item;
 	}
 	
 	return $ret_tax_array;

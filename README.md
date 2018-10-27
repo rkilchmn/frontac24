@@ -687,3 +687,46 @@ which can be a useful way to search for orders for a service item.
 
 BF retains the transactions tab for service items, but removes the QOH field,
 which is not meaningful.
+
+## FEATURE: Support for tax rate lookup by address
+
+For goods that are shipped to a customer location,
+the states of the United States are quickly migrating to
+a system of charging tax according to the jurisidication in which the customer resides.
+
+Because there are many such jurisdications per state
+(over 600 in Colorado for example)
+and 50 states,
+maintaining an ecommerce site using a database of tax rates built into an accounting
+system is quickly becoming unmanageable.
+In FA, one must create tax types, tax groups, and g/l accounts for
+each of these jurisdications,
+assign the correct jurisdication to the customer when the customer is created,
+and maintain this mass of data in the face of ongoing tax rate changes which
+can occur at any time.
+
+BF provides support for tax rate lookup by address,
+pushing the tax rate data responsibility to an external database.
+
+This is done in a similar fashion to currency rate lookup.
+There is a new hook in hooks.php: retrieve_tax_rate($tax_group, $address).
+To override the FA tax system for a given tax_group,
+create an extension with this hook function
+and return the rate that based on the passed $address parameter.
+
+The address is supplied internally from the customer branch address
+in the third argument of the set_branch() call to set the tax rate in the cart,
+replacing the tax_group_name parameter which was defined but not used.
+The set_branch() function
+now calls retrieve_tax_rate()
+and if a tax rate is returned, it uses that.
+Otherwise it uses the FA tax rate data just as in FA.
+External software (i.e. extensions) can call set_branch() directly to set the tax rate.
+
+Note that there is an additional function in FA, set_delivery() which
+sets a delivery address and would appear to be more appropriate for
+setting the tax rate.  However, delivery address is always
+set to the internal branch address.
+It is copied to the order table, so one minor difference is that it remains
+unchanged in the order even if the customer branch address is changed.
+

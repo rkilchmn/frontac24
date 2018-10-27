@@ -311,7 +311,7 @@ function read_sales_order($order_no, &$order, $trans_type)
 	  $myrow["curr_code"], $myrow["discount"], $myrow["payment_terms"]);
 
 	$order->set_branch($myrow["branch_code"], $myrow["tax_group_id"],
-	  $myrow["tax_group_name"], $myrow["contact_phone"]);
+	  $myrow["delivery_address"], $myrow["contact_phone"]);
 
 	$order->set_sales_type($myrow["sales_type_id"], $myrow["sales_type"], 
 	    $myrow["tax_included"], $myrow["factor"]); // no default price calculations on edit

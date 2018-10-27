@@ -60,7 +60,6 @@ class Cart
 	var $freight_cost = 0;
 
 	var $tax_group_id;
-	var $tax_group_name;
 	var $tax_group_array = null; // saves db queries
 	var $price_factor;	 // ditto for price calculations
 
@@ -342,7 +341,6 @@ class Cart
 		}
 
 		commit_transaction();
-
 		return $ret;
 	}
 
@@ -363,13 +361,13 @@ class Cart
 		$this->credit = get_current_cust_credit($customer_id);
 	}
 
-	function set_branch($branch_id, $tax_group_id, $tax_group_name, $phone='', $email='')
+	function set_branch($branch_id, $tax_group_id, $address='', $phone='', $email='')
 	{
 		$this->Branch = $branch_id;
 		$this->phone = $phone;
 		$this->email = $email;
 		$this->tax_group_id = $tax_group_id;
-		$this->tax_group_array = get_tax_group_items_as_array($tax_group_id);
+		$this->tax_group_array = get_tax_group_items_as_array($tax_group_id, $address);
 	}
 
 	function set_sales_type($sales_type, $sales_name, $tax_included=0, $factor=0)

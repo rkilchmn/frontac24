@@ -244,8 +244,11 @@ function read_sales_trans($doc_type, $trans_no, &$cart)
 		$cart->set_customer($myrow["debtor_no"], $myrow["DebtorName"],
 			$myrow["curr_code"], $myrow["discount"], $myrow["payment_terms"]);
 
+        $address = trim($myrow["br_post_address"]) != '' ? $myrow["br_post_address"]
+            : (trim($myrow["br_address"]) != '' ? $myrow["br_address"]:$myrow["address"]);
+
 		$cart->set_branch($myrow["branch_code"], $myrow["tax_group_id"],
-			$myrow["tax_group_name"]);
+            $address);
 
 		$cart->reference = $myrow["reference"];
 		$cart->prepaid = $myrow["prepaid"];
