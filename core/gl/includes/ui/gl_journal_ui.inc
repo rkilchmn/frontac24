@@ -103,9 +103,7 @@ function display_gl_items($title, &$order)
 	$dim = get_company_pref('use_dimension');
 
 	$id = find_submit('Edit');
-	$has_subaccounts = $order->has_sub_accounts()
-        || (!empty($_POST['code_id']) &&
-            is_subledger_account($_POST['code_id']));
+	$has_subaccounts = $order->has_sub_accounts();
 
     div_start('items_table');
 	start_table(TABLESTYLE, "width='95%'");
