@@ -28,7 +28,8 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max", "select"));
+$fields = array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max", "person_type", "person_id", "select");
+$js .= get_js_history($fields);
 
 page(_($help_context = "General Ledger Inquiry"), false, false, '', $js, false, '', true);
 
@@ -40,7 +41,7 @@ if (get_post('Show'))
 	$Ajax->activate('trans_tbl');
 }
 
-set_posts(array("account", "TransFromDate", "TransToDate", "Dimension", "Dimension2", "Memo", "amount_min", "amount_max", "person_type", "person_id", "select"));
+set_posts($fields);
 
 if (!isset($_POST["amount_min"]))
 	$_POST["amount_min"] = price_format(0);
@@ -51,6 +52,7 @@ if (!isset($_POST["amount_max"]))
 
 function gl_inquiry_controls()
 {
+    global $Ajax;
 	$dim = get_company_pref('use_dimension');
     start_form();
 
@@ -71,6 +73,7 @@ function gl_inquiry_controls()
     end_row();
 	end_table();
 
+    div_start('header');
 	start_table(TABLESTYLE_NOBORDER);
 	start_row();
         if (!isset($_POST['Dimension'])
@@ -84,12 +87,34 @@ function gl_inquiry_controls()
 	ref_cells(_("Memo:"), 'Memo', '',null, _('Enter memo fragment or leave empty'));
 	small_amount_cells(_("Amount min:"), 'amount_min', null, " ");
 	small_amount_cells(_("Amount max:"), 'amount_max', null, " ");
-    hidden("person_type");
-    hidden("person_id");
+
+    if (!isset($_POST['person_type']))
+        $_POST['person_type'] = PT_MISC;
+    payment_person_types_list_cells( _("Person Type:"), 'person_type', $_POST['person_type'], true);
+    if (list_updated('person_type'))
+        $Ajax->activate('header');
+
+    switch ($_POST['person_type'])
+    {
+        case PT_MISC :
+            unset($_POST['person_id']);
+            hidden('person_id');
+            break;
+        case PT_SUPPLIER :
+            supplier_list_cells(_("Supplier:"), 'person_id', null, false, true, false, true);
+            break;
+        case PT_CUSTOMER :
+            customer_list_cells(_("Customer:"), 'person_id', null, false, true, false, true);
+            break;
+        case PT_QUICKENTRY :
+            quick_entries_list_cells(_("Type").":", 'person_id', null, null, true);
+    }
+
     hidden('select', get_post('select')); 
 	submit_cells('Show',_("Show"),'','', 'default');
 	end_row();
 	end_table();
+    div_end();
 
 	echo '<hr>';
     end_form();

@@ -51,8 +51,10 @@ function display_bank_header(&$order)
 		$Ajax->activate('footer');
 	}
 
-    if ($_POST['person_id'] == null)
+    if ($_POST['person_id'] == null) {
+        $_POST['PayType'] = last_bank_trans('person_type_id');
         $_POST['person_id'] = last_bank_trans('person_id', $_POST['PayType']);
+    }
     payment_person_types_list_row( $payment ? _("Pay To:"):_("From:"),
 		 'PayType', $_POST['PayType'], true);
     switch ($_POST['PayType'])

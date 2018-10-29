@@ -2043,8 +2043,6 @@ function payment_person_types_list($name, $selected_id=null, $submit_on_change=f
 		if ($key != PT_WORKORDER)
 			$items[$key] = $type;
 	}		
-        if ($selected_id == null)
-            $selected_id=last_bank_trans('person_type_id');
 
 	return array_selector($name, $selected_id, $items, 
 		array( 'select_submit'=> $submit_on_change ) );
