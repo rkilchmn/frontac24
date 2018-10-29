@@ -151,24 +151,27 @@ function payment_person_name_link($type, $person_id, $full=true, $from_date="", 
             $link = pager_link(payment_person_name($type, $person_id, $full), 
 			    "/sales/manage/customers.php?customer_id=$person_id");
             $img_title = "Customer Search";
+            $date_field="TransAfterDate";
             break;
 		case PT_SUPPLIER :
 			$search_link = "/purchasing/inquiry/supplier_inquiry.php?supplier_id=$person_id";
             $link = pager_link(payment_person_name($type, $person_id, $full), 
 			    "/purchasing/manage/suppliers.php?supplier_id=$person_id");
             $img_title = "Supplier Search";
+            $date_field="TransAfterDate";
             break;
 		case PT_QUICKENTRY :
-			$search_link = "/gl/inquiry/gl_account_inquiry.php?person_id=$person_id";
+			$search_link = "/gl/inquiry/gl_account_inquiry.php?person_type=$type&person_id=$person_id";
 			$link = payment_person_name($type, $person_id, $full);
-            $img_title = "Supplier Search";
+            $img_title = "Quick Entry Search";
+            $date_field="TransFromDate";
             break;
 		default :
 			return payment_person_name($type, $person_id, $full);
 	}
 
     if ($from_date != "") {
-        $search_link .= "&TransAfterDate=$from_date";
+        $search_link .= "&$date_field=$from_date";
         if ($to_date == "")
             $to_date = Today();
         $search_link .= "&TransToDate=$to_date";

@@ -105,7 +105,7 @@ function add_gl_balance($type, $trans_id, $date_, $amount, $person_type_id=null,
 
 function get_gl_transactions($from_date, $to_date, $trans_no=0,
 	$account=null, $dimension=0, $dimension2=0, $filter_type=null,
-        $amount_min=null, $amount_max=null, $person_id=null, $memo='')
+        $amount_min=null, $amount_max=null, $person_type=null, $person_id=null, $memo='')
 {
 	global $SysPrefs;
 
@@ -172,8 +172,11 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 
 	$sql .= " GROUP BY counter";
 
-	if ($person_id)
-		$sql .= " HAVING person_id=".db_escape($person_id); 
+    $sql .= " HAVING TRUE";
+    if ($person_type != 0)
+            $sql .= " AND person_type_id=".db_escape($person_type); 
+    if ($person_id != 0)
+            $sql .= " AND person_id=".db_escape($person_id); 
 
 	$sql .= " ORDER BY tran_date, counter";
 //display_notification($sql);
