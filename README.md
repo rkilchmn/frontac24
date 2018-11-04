@@ -148,7 +148,7 @@ under debit/credit.
 BF displays the debit/credit in the proper columns
 and the balance under the balance column.
 
-## customer inquiry: display zero invoices; filter on sales type
+## customer inquiry: display zero invoices; filter on tax group
 
 BF displays zero invoices.
 A zero invoice is often used when supplying

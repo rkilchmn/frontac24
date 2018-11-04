@@ -303,7 +303,7 @@ function post_void_customer_trans($type, $type_no)
 }
 
 //----------------------------------------------------------------------------------------
-function get_sql_for_customer_inquiry($from, $to, $cust_id = ALL_TEXT, $sales_type, $filter = ALL_TEXT, $show_voided = 0)
+function get_sql_for_customer_inquiry($from, $to, $cust_id = ALL_TEXT, $tax_group_id, $filter = ALL_TEXT, $show_voided = 0)
 {
     $date_after = date2sql($from);
     $date_to = date2sql($to);
@@ -396,8 +396,8 @@ function get_sql_for_customer_inquiry($from, $to, $cust_id = ALL_TEXT, $sales_ty
     	}
    	}
 
-        if ($sales_type != null)
-            $sql .= " AND debtor.sales_type = '$sales_type'";
+        if ($tax_group_id != null)
+            $sql .= " AND branch.tax_group_id = '$tax_group_id'";
 
 	$sql .= " GROUP BY trans.trans_no, trans.type";
 

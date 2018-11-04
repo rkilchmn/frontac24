@@ -23,7 +23,7 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array("customer_id", "sales_type", "TransAfterDate", "TransToDate", "filterType"));
+$js .= get_js_history(array("customer_id", "type_group_id", "TransAfterDate", "TransToDate", "filterType"));
 
 page(_($help_context = "Customer Transactions"), isset($_GET['customer_id']) && !isset($_GET['TransAfterDate']), false, "", $js);
 
@@ -153,7 +153,7 @@ function display_customer_summary($customer_record)
 	end_table();
 }
 
-set_posts(array("customer_id", "sales_type", "TransAfterDate", "TransToDate", "filterType"));
+set_posts(array("customer_id", "tax_group_id", "TransAfterDate", "TransToDate", "filterType"));
 
 //------------------------------------------------------------------------------------------------
 
@@ -167,12 +167,10 @@ start_row();
 
 if (!$page_nested) {
 	customer_list_cells(_("Select a customer: "), 'customer_id', null, true, true, false, true);
-        if (get_post('customer_id') != null) {
-            $cust = get_customer(get_post('customer_id'));
-            $sel_sales_type = $cust['sales_type'];
-        } else
-            $sel_sales_type = null;
-        sales_types_list_cells(null, 'sales_type', $sel_sales_type, false, true);
+    if (get_post('customer_id') != null)
+        $cust = get_customer(get_post('customer_id'));
+    else
+        tax_groups_list_cells(null, 'tax_group_id', null, 'All Tax Groups', true);
 }
 
 cust_allocations_list_cells(null, 'filterType', null, true, true);
@@ -211,8 +209,11 @@ if (get_post('RefreshInquiry') || list_updated('filterType'))
 	$Ajax->activate('_page_body');
 }
 //------------------------------------------------------------------------------------------------
+$tax_group_id = get_post('tax_group_id');
+if ($tax_group_id == -1)
+    $tax_group_id=null;
 $sql = get_sql_for_customer_inquiry(get_post('TransAfterDate'), get_post('TransToDate'),
-	get_post('customer_id'), get_post('sales_type'), get_post('filterType'), check_value('show_voided'));
+	get_post('customer_id'), $tax_group_id, get_post('filterType'), check_value('show_voided'));
 
 //------------------------------------------------------------------------------------------------
 //db_query("set @bal:=0");
