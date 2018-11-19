@@ -313,8 +313,8 @@ $opts = array(		// default options
 	// span for select list/input field update
 	$selector = "<span id='_{$name}_sel'>".$selector."</span>\n";
 
-	 // if selectable or editable list is used - add select button
-	if ($select_submit != false || $search_button) {
+	// if selectable or editable list is used - add select button
+	if ($select_submit != false /* || $search_button */) {
 	// button class selects form reload/ajax selector update
 		$selector .= sprintf(SELECT_BUTTON, $disabled, user_theme(),
 			(fallback_mode() ? '' : 'display:none;'),
