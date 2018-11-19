@@ -334,6 +334,7 @@ FA does not offer a way to search for transactions for quick entries.
 
 BF allows G/L search on Quick Entries.
 
+## BUGFIX: 0004475: Editing GJ transaction with no counterparty displays incorrect edit table
 
 ## FEATURE: Add legal terms to payment terms
 
@@ -728,3 +729,4 @@ setting the tax rate.  However, delivery address is always
 set to the internal branch address.
 It is copied to the order table, so one minor difference is that it remains
 unchanged in the order even if the customer branch address is changed.
+
