@@ -217,7 +217,7 @@ class BoxReports
 					$st = "<input type='text' name='$name' value='$date'>";
 					if (user_use_date_picker())
 					{
-                                                $todate = strpos($type, "END") !== false ? true : false;
+                        $todate = (strpos($type, "END") !== false) ? "true" : "false";
 						$calc_image = (file_exists("$path_to_root/themes/".user_theme()."/images/cal.gif")) ? 
 							"$path_to_root/themes/".user_theme()."/images/cal.gif" : "$path_to_root/themes/default/images/cal.gif";
 						$st .= "<a href=\"javascript:date_picker(document.forms[0].$name, $todate);\">"
