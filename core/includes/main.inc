@@ -71,6 +71,16 @@ function end_page($no_menu=false, $is_index=false, $final_screen=false, $type_no
 
 	include_once($path_to_root . "/includes/page/footer.inc");
 	page_footer($no_menu, $is_index);
+
+    $updateHistory = 'if (typeof changeVar === "function") changeVar();';
+
+    if (in_ajax()) {
+        global $Ajax;
+        $Ajax->addScript(true, $updateHistory);
+    } else
+        add_js_source($updateHistory);
+
+
 }
 
 function css_files_ensure_init() {
