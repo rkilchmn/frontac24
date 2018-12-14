@@ -26,13 +26,14 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array('bank_account', 'bank_date'));
+$js .= get_js_history(array('bank_account', 'bank_date', 'reconcile_date'));
 
 add_js_file('reconcile.js');
 
 page(_($help_context = "Reconcile Bank Account"), false, false, "", $js, false, "", true);
 
-set_posts(array('bank_account', 'bank_date'));
+set_posts(array('bank_account', 'bank_date', 'reconcile_date'));
+
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
 
 function check_date() {
@@ -162,6 +163,25 @@ function set_tpl_flag($reconcile_id)
 	$Ajax->activate('difference');
 }
 
+function clear_tpl_flag($reconcile_id)
+{
+	global	$Ajax;
+
+	if (!check_value("rec_".$reconcile_id))
+		return;
+
+	if (get_post('bank_date')=='')	// new reconciliation
+		$Ajax->activate('bank_date');
+
+	$reconcile_value =  'NULL';
+	
+	update_reconciled_values($reconcile_id, $reconcile_value, $_POST['reconcile_date'],
+		input_num('end_balance'), $_POST['bank_account']);
+		
+	$Ajax->activate('reconciled');
+	$Ajax->activate('difference');
+}
+
 if (!isset($_POST['reconcile_date'])) {
 	$_POST['reconcile_date'] = new_doc_date();
 //	$_POST['bank_date'] = date2sql(Today());
@@ -200,6 +220,15 @@ if (isset($_POST['ReconcileAll'])) {
 	set_focus('bank_date');
 	foreach($_POST['last'] as $id => $value)
 		set_tpl_flag($id);
+
+
+    $Ajax->activate('_page_body');
+}
+
+if (isset($_POST['ClearAll'])) {
+	set_focus('bank_date');
+	foreach($_POST['last'] as $id => $value)
+		clear_tpl_flag($id);
 
 
     $Ajax->activate('_page_body');
@@ -297,7 +326,8 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 br(1);
 echo '<center>';
 submit('Reconcile', _("Reconcile"), true, '', null);
-submit('ReconcileAll', _("Reconcile All"), true, '');
+submit('ReconcileAll', _("Check All"), true, '');
+submit('ClearAll', _("Uncheck All"), true, '');
 echo '</center>';
 end_form();
 
