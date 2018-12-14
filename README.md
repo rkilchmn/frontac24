@@ -730,3 +730,4 @@ set to the internal branch address.
 It is copied to the order table, so one minor difference is that it remains
 unchanged in the order even if the customer branch address is changed.
 
+## check all/none buttons on bank reconcile and remember dates after refresh
