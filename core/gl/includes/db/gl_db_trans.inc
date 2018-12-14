@@ -118,7 +118,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             IF(gl.person_id, gl.person_type_id, IF(sup.supplier_id,".  PT_SUPPLIER . "," .  "IF(debt.debtor_no," . PT_CUSTOMER . "," . 
             "IF(bt.person_id != '' AND !ISNULL(bt.person_id), bt.person_type_id, -1)))) as person_type_id,
 			IFNULL(st.tran_date, IFNULL(dt.tran_date, IFNULL(bt.trans_date, IFNULL(grn.delivery_date, gl.tran_date)))) as doc_date,
-			coa.account_name, ref.reference
+			coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl.memo_, CONCAT(gl.memo_,' ',c.memo_)) AS memo
 			 FROM "
 			.TB_PREF."gl_trans gl
 			LEFT JOIN ".TB_PREF."voided v ON gl.type_no=v.id AND v.type=gl.type
@@ -137,6 +137,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 			LEFT JOIN ".TB_PREF."journal j ON j.type=gl.type AND j.trans_no=gl.type_no
 			LEFT JOIN ".TB_PREF."audit_trail a ON a.type=gl.type AND a.trans_no=gl.type_no AND NOT ISNULL(gl_seq)
 			LEFT JOIN ".TB_PREF."users u ON a.user=u.id
+			LEFT JOIN ".TB_PREF."comments c ON c.id=gl.type_no AND c.type=gl.type
 
 			LEFT JOIN ".TB_PREF."refs ref ON ref.type=gl.type AND ref.id=gl.type_no,"
 		.TB_PREF."chart_master coa
@@ -168,7 +169,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 		$sql .= " AND ABS(gl.amount) <= ABS(".db_escape($amount_max).")";
 
     if ($memo)
-        $sql .= " AND gl.memo_ LIKE ". db_escape("%$memo%");
+        $sql .= " AND (gl.memo_ LIKE ". db_escape("%$memo%") . " OR c.memo_ LIKE " . db_escape("%$memo%") . ")";
 
 	$sql .= " GROUP BY counter";
 

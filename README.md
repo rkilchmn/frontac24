@@ -731,3 +731,7 @@ It is copied to the order table, so one minor difference is that it remains
 unchanged in the order even if the customer branch address is changed.
 
 ## check all/none buttons on bank reconcile and remember dates after refresh
+## improve memo search and display on gl inquiry
+
+Display and allow search on the gl account transaction memo as well as
+the bank transaction memo.
