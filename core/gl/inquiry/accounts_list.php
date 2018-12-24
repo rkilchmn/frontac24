@@ -59,7 +59,7 @@ end_row();
 
 end_table();
 
-$th = array("" => array('fun' => 'select_account'), _("Account Code"), _("Description"), _("Category"));'
+$th = array("" => array('fun' => 'select_account'), _("Account Code"), _("Description"), _("Category"));
 $skip = $_GET["skip"];
 $sql = get_chart_accounts_search_sql(get_post("description"), $skip);
 $table =& new_db_pager('account_tbl', $sql, $th);

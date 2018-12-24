@@ -289,12 +289,20 @@ function is_bank_account($account_code)
 		return false;
 }
 
-function get_chart_accounts_search_sql($like)
+function get_chart_accounts_search_sql($like, $skip=false)
 {
-	$sql = "SELECT chart.account_code, IF(chart.inactive=0, chart.account_name, CONCAT('(INACTIVE) ', chart.account_name)) as account_name, type.name
+    if ($skip)
+        $sql = "SELECT chart.account_code, IF(chart.inactive=0, chart.account_name, CONCAT('(INACTIVE) ', chart.account_name)) as account_name, type.name
+            FROM (".TB_PREF."chart_master chart,".TB_PREF."chart_types type) "
+            ."LEFT JOIN ".TB_PREF."bank_accounts acc "
+            ."ON chart.account_code=acc.account_code
+                WHERE acc.account_code  IS NULL
+            AND chart.account_type=type.id ";
+    else
+        $sql = "SELECT chart.account_code, IF(chart.inactive=0, chart.account_name, CONCAT('(INACTIVE) ', chart.account_name)) as account_name, type.name
 			FROM ".TB_PREF."chart_master chart,".TB_PREF."chart_types type
-			WHERE chart.account_type=type.id
-        AND (
+			WHERE chart.account_type=type.id ";
+    $sql .= "AND (
           chart.account_name LIKE " . db_escape("%" . $like. "%") . " OR
           chart.account_code LIKE " . db_escape("%" . $like. "%") . "
         ) 
