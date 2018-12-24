@@ -115,9 +115,11 @@ function get_tax_group_items_as_array($id, $address='')
 	while ($tax_group_item = db_fetch($tax_group_items)) 
 	{
 		$tax_group_item['Value'] = 0;
-        $rate = hook_retrieve_tax_rate($tax_group_item['tax_type_name'], $address);
-        if (is_numeric($rate))
-            $tax_group_item['rate'] = $rate;
+        if (!is_null($tax_group_item['rate'])) {
+            $rate = hook_retrieve_tax_rate($tax_group_item['tax_type_name'], $address);
+            if (is_numeric($rate))
+                $tax_group_item['rate'] = $rate;
+        }
 
 		if ($SysPrefs->suppress_tax_rates() != 1 && is_numeric($tax_group_item['rate']))
 			$tax_group_item['tax_type_name'] .= ' (' . $tax_group_item['rate'] . '%)';
