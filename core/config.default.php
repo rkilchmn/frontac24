@@ -226,5 +226,5 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 /*
     Optional autocompletion search
 */
-	$search_autocomplete = false;
+	$auto_select_box = false;
 

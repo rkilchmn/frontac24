@@ -66,33 +66,26 @@ just the memo or date was changed.
 
 BF retains the reconciled status.
 
-## new combo4 autocomplete
-This option (config.php: $search_autocomplete = true)
-allows finding items, customers and suppliers quickly.
-The configuration parameter "search_autocomplete" when set to true
-changes the behavior of the Search Item List, Customer List, and
-Supplier List checkboxes in the Company Setup.
+## autocomplete
+anoopmb created the original autocomplete feature for FA
+http://frontaccounting.com/punbb/viewtopic.php?id=6198
+but this was not incorporated into the core.
+This option (config.php: $auto_select_box = true)
+adds an autocomplete feature to all lists.
 
 When this option is set to "true",
 an autocomplete list is updated after every character
-of the search text is entered into the search box.
+of the search text is entered into the menu box.
 Thus, once the desired search item appears on the autocomplete list,
 the user can make just one click to select the search item.
 
-More keystrokes are required in in FA to search.
-After the user enters the search text,
-the user has to hit the enter key,
-use the pull-down list to find the item,
-and click on the item to select it.
-And if the search term did not find the desired item,
-the user would have to repeat the process, taking more time.
+The original feature did not work with the popup search.
+BF enables the popup search for these lists.
 
-BF also makes the dropdown list work exactly the same
-even when the checkboxes are checked;
-the checkbox just adds the ability to use the space key
-to open a search box.
-Otherwise the drop lists work normally.
-So really there isn't any need for these checkboxes anymore.
+The original feature disabled itself if any of the list
+checkboxes were checked in Company Setup.
+BF allows both features to be used.
+The stock item checkbox is necessary for barcode scanning to work.
 
 For stock items,
 the BF autocomplete option searches by item code or description.

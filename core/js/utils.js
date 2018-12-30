@@ -283,7 +283,7 @@ function setFocus(name, byId) {
 			}
 	  }
       if (name)
-	    if(byId || !(el = document.getElementsByName(name)[0]))
+	    if(byId || !((el = document.getElementsByName(name+'mselect')[0]) || (el = document.getElementsByName(name)[0])))
 		  el = document.getElementById(name);
   }
   if (el != null && el.focus) {
