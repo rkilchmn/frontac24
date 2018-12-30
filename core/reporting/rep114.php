@@ -195,13 +195,14 @@ function print_sales_summary_report()
                 && $tax_group != $trans['tax_group']) {
                 $rep->Font('bold');
                 $rep->NewLine();
-                $rep->Line($rep->row + $rep->lineHeight);
+               $rep->Line($rep->row + $rep->lineHeight);
                 $rep->TextCol(0, 2, $tax_group);
                 $rep->AmountCol(2, 3, $st_totalnf, $dec);
                 $rep->AmountCol(3, 4, $st_totalnet, $dec);
                 $rep->AmountCol(4, 5, $st_totaltax, $dec);
                 $rep->Line($rep->row - 5);
                 $rep->Font();
+                $rep->NewLine();
                 $rep->NewLine();
                 $rep->NewLine();
                 $st_totalnf=0;
@@ -226,8 +227,9 @@ function print_sales_summary_report()
 	{
 		$rep->TextCol(0, 1, $custname);
 		$rep->TextCol(1, 2,	$tax_id);
-		$rep->AmountCol(2, 3, $total, $dec);
-		$rep->AmountCol(3, 4, $tax, $dec);
+		$rep->AmountCol(2, 3, $nf, $dec);
+		$rep->AmountCol(2, 4, $total, $dec);
+		$rep->AmountCol(3, 5, $tax, $dec);
 		$totalnf += $nf;
 		$totalnet += $total;
 		$totaltax += $tax;
