@@ -661,3 +661,80 @@ div._trans_tbl_short_span {
     overflow-y: auto;
 }
 
+
+/* BEGIN: AUTOCOMPLETE SELECT */
+.typer{
+	padding-right: 21px;
+	float: left;
+}
+
+.mb {
+	margin-left:-20px;
+	color: #51a5f4;
+	cursor: pointer;
+}
+
+.mb:hover, .mb:active, .mb:focus {
+	outline:0px;
+	color: #1a46f4;
+}
+
+.popups {
+	width: 100%;
+	border: 1px solid   #719ECE;
+	border-top: 0;
+	background: #fff;
+	box-shadow: 0 3px 4px rgba(113, 158, 206, 0.12);
+	display:none;
+	z-index: 100;
+}
+
+.mselect-rset {
+	overflow-y: auto;
+	margin: 0 2px 2px 0;
+	padding: 0 0 0 2px;
+	position: relative;
+	overflow-x: hidden;
+	list-style: none;
+	max-height: 270px;
+}
+
+.anoselect {
+	color: #036;
+	background-color: #fff;
+	display: block;
+	padding:3px 0 3px 15px;
+	line-height: 18px;
+	-webkit-touch-callout: none;
+	border-bottom:1px solid #f3f5f6;
+	text-decoration: none;
+	cursor:pointer;
+
+}
+
+.mselect-rset > li.abbrs {
+	display: block;
+	font-weight:bold;
+	padding:3px;
+	border-bottom:1px solid #f3f5f6;
+	text-decoration: none;
+	cursor:default;
+}
+
+.aselected {
+	background-color: #369;
+	color: #FFF;
+	display: block;
+	padding:3px 0 3px 15px;
+	line-height: 18px;
+	-webkit-touch-callout: none;
+	border-bottom:1px solid #f3f5f6;
+	text-decoration: none;
+	cursor:pointer;
+}
+
+.lister {
+	border-radius: 0 0 4px 4px;
+	background-clip: padding-box;
+}
+/* END: AUTOCOMPLETE SELECT */

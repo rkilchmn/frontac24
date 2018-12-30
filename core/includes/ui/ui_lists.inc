@@ -49,7 +49,6 @@ $opts = array(		// default options
 		// 2 - with (optional) visible search box, search by fragment at the start of id
 		// 3 - TODO reverse: box with hidden selector available via enter; this
 		// would be convenient for optional ad hoc adding of new item
-		// 4 - with hidden search box, search by option text
 	'search_submit' => true, //search submit button: true/false
 	'size' => 8,	// size and max of box tag
 	'max' => 50,
@@ -87,12 +86,12 @@ $opts = array(		// default options
 	} else if($opts['type'] == 2) {
 		$by_id = true;
 		$class = 'combo3';
-	} else {
-		$by_id = false;
-		$class = 'combo4';
 	}
 	$disabled = $opts['disabled'] ? "disabled" : '';
 	$multi = $opts['multi'];
+    if(@$SysPrefs->auto_select_box && !$multi
+        && ($search_box == "" || $search_submit == ""))
+            $class .=' mbselect';
 	
 	if(!count($opts['search'])) {
 		$opts['search'] = array($by_id ? $valfield : $namefield);
@@ -114,6 +113,7 @@ $opts = array(		// default options
 		$selected_id = array((string)$selected_id); // code is generalized for multiple selection support
 
 	$txt = get_post($search_box);
+//display_notification($search_box . ":" . $txt);
 	$rel = '';
 	$limit = '';
 	if (isset($_POST['_'.$name.'_update'])) { // select list or search box change
@@ -181,6 +181,7 @@ $opts = array(		// default options
 	}
 
 	$sql .= $limit;
+//display_notification($sql);
 	// ------ make selector ----------
 	$selector = $first_opt = '';
 	$first_id = false;
@@ -188,6 +189,14 @@ $opts = array(		// default options
 	$lastcat = null;
 	$edit = false;
 	$pname = false;
+    // select first value from list if searched
+
+//display_notification($search_box . ":" . get_post($search_box));
+
+ 		 	if (get_post($search_box) && $txt != '')
+                $selected_id[0] = $txt;
+//display_notification(print_r($selected_id, true));
+
 	if (($type === "customer" || $type === "supplier") && !empty($SysPrefs->prefs['shortname_name_in_list']))
 		$pname = true;
 	if($result = db_query($sql)) {
@@ -196,11 +205,7 @@ $opts = array(		// default options
 			$descr = $opts['format']==null ?  $contact_row[1] :
 				call_user_func($opts['format'], $contact_row, $pname);
 			$sel = '';
- 		 	if (get_post($search_button) && ($txt == $value)) {
- 		 		$selected_id[] = $value;
- 		 	}
-
- 		 	if (in_array((string)$value, $selected_id, true)) {
+            if (in_array((string)$value, $selected_id, true)) {
 				$sel = 'selected';
 				$found = $value;
 				$edit = $opts['editable'] && $contact_row['editable'] 
@@ -251,34 +256,6 @@ $opts = array(		// default options
 	
 	$_POST[$name] = $multi ? $selected_id : $selected_id[0];
 
-        $autocomplete = "";
-	if ($class=='combo4')
-            $autocomplete = "
-<style>
-    .combo4_div {
-        position: absolute;
-        background-color: #f6f6f6;
-        min-width: 230px;
-        overflow: auto;
-        border: 1px solid #ddd;
-        z-index: 1;
-    }
-    .combo4_div a {
-        color: black;
-        padding: 6px 6px;
-        text-decoration: none;
-        display: none;
-    }
-    .combo4_div div {
-        width: 200px;
-        word-wrap: break-word;
-    }
-    .combo4_div a:hover {background-color: #ddd}
-    .show {display:block;}
-</style>
-<div class='$class"."_div' id='$name"."_div' title='". $opts['sel_hint']."' $rel>"
-.str_replace("value=", "data-value=", str_replace("<option", "<a class='$class' data-rel='$name' href=''", str_replace("option>", "a>", str_replace("optgroup", "div", $selector))))."</div>\n";
-
         if ($SysPrefs->use_popup_search)
 		$selector = "<select id='$name' autocomplete='off' ".($multi ? "multiple" : '')
 		. ($opts['height']!==false ? ' size="'.$opts['height'].'"' : '')
@@ -289,8 +266,6 @@ $opts = array(		// default options
 		. ($opts['height']!==false ? ' size="'.$opts['height'].'"' : '')
 		. "$disabled name='$name".($multi ? '[]':'')."' class='$class' title='"
 		. $opts['sel_hint']."' $rel>".$selector."</select>\n";
-
-        $selector .= $autocomplete;     // combo4
 
     if (isset($_POST[$search_box])
         && !isset($_POST[$name.'_text'])
@@ -407,9 +382,11 @@ $opts = array(		// default options
 		$selector .= ' '.$opts['editlink'];
 
 	if ($search_box && $opts['cells']) {
-        if ($class == "combo4")
+/*
+        if (strpos($class, "mbselect") !== false)
             $str = "<td></td><td>$edit_entry$selector$img</td>";
         else
+*/
             $str = ($edit_entry!='' ? "<td>$edit_entry</td>" : '')."<td>$selector$img</td>";
 	} else
 		$str = $edit_entry.$selector.$img;
@@ -431,7 +408,7 @@ function list_updated($name)
 
 function array_selector($name, $selected_id, $items, $options=null)
 {
-	global $Ajax;
+	global $Ajax, $SysPrefs;
 
 $opts = array(		// default options
 	'spec_option'=>false, 	// option text or false
@@ -500,6 +477,7 @@ $opts = array(		// default options
 		$selected_id = array($first_id);
 	}
 	$_POST[$name] = $multi ? $selected_id : $selected_id[0];
+    if(@$SysPrefs->auto_select_box&&!$multi)$class ='combo mbselect';else $class='combo';
 
 	$selector = "<select autocomplete='off' ".($multi  ? "multiple" : '')
 		. ($opts['height']!==false ? ' size="'.$opts['height'].'"' : '')
@@ -580,7 +558,7 @@ function supplier_list($name, $selected_id=null, $spec_option=false, $submit_on_
 		'format' => '_format_add_curr',
 	    'order' => array('supp_ref'),
 		'search_box' => $mode!=0,
-		'type' => (@$SysPrefs->search_autocomplete ? 4 : 1),
+		'type' => 1,
         'search' => array("supp_ref","supp_name","gst_no"),        
 		'spec_option' => $spec_option === true ? _("All Suppliers") : $spec_option,
 		'spec_id' => ALL_TEXT,
@@ -634,7 +612,7 @@ function customer_list($name, $selected_id=null, $spec_option=false, $submit_on_
 	    'format' => '_format_add_curr',
 	    'order' => array('debtor_ref'),
 		'search_box' => $mode!=0,
-		'type' => (@$SysPrefs->search_autocomplete ? 4 : 1),
+		'type' => 1,
 		'size' => 20,
         'search' => array("debtor_ref","name","tax_id"),        
 		'spec_option' => $spec_option === true ? _("All Customers") : $spec_option,
@@ -881,8 +859,8 @@ function stock_items_list($name, $selected_id=null, $all_option=false,
 		set_editor('item', $name, $editkey);
 
 		$sort_opts = array(
-            'type' => (@$SysPrefs->search_autocomplete
-                && get_company_pref('no_item_list')!=0 ? 4 : 0),
+           // 'type' => (get_company_pref('no_item_list')!=0 ? 1 : 0),
+           'type' => 1,
 			'order' => (@$SysPrefs->sort_item_list_desc ?
                 array('c.description','s.description', 's.stock_id') :
                 array('c.description','s.stock_id')));
@@ -979,8 +957,8 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
 	$sql .= " GROUP BY i.item_code";
 
     $sort_opts = array(
-        'type' => (@$SysPrefs->search_autocomplete
-            && get_company_pref('no_item_list')!=0 ? 4 : 0),
+//        'type' => (get_company_pref('no_item_list')!=0 ? 1 : 0),
+        'type' => 1,
         'order' => (@$SysPrefs->sort_item_list_desc ?
             array('c.description','i.description', 'i.item_code') :
             array('c.description','i.item_code')));
@@ -1909,7 +1887,7 @@ function gl_all_accounts_list($name, $selected_id=null, $skip_bank_accounts=fals
 			'format' => '_format_account',
 			'spec_option' => $all_option===true ?  _("Use Item Sales Accounts") : $all_option,
 			'spec_id' => '',
-			'type' => 2,
+			'type' => 1,
 			'order' => array('type.class_id','type.id', ($SysPrefs->sort_gl_account_desc) ? 'account_name' : 'account_code'),
 			'search_box' => $cells,
 			'search_submit' => false,

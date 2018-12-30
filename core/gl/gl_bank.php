@@ -75,7 +75,7 @@ function line_start_focus() {
     unset($_POST['LineMemo']);
   	$Ajax->activate('items_table');
   	$Ajax->activate('footer');
-  	set_focus('_code_id_edit');
+    set_focus_searchbox('code_id');
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -232,7 +232,7 @@ function check_trans()
 
     if ($_POST['pay_items']->count_gl_items() < 1) {
         display_error(_("You must enter at least one payment line."));
-        set_focus('code_id');
+        set_focus_searchbox('code_id');
         $input_error = 1;
     }
 
@@ -243,7 +243,7 @@ function check_trans()
 	if ($limit !== null && floatcmp($limit, -$amnt_chg) < 0)
 	{
 		display_error(sprintf(_("The total bank amount exceeds allowed limit (%s)."), price_format($limit-$_POST['pay_items']->original_amount)));
-		set_focus('code_id');
+		set_focus_searchbox('code_id');
 		$input_error = 1;
 	}
 	if ($trans = check_bank_account_history($amnt_chg, $_POST['bank_account'], $_POST['date_'])) {

@@ -923,13 +923,24 @@ function get_js_select_combo_item() {
 				}
 			}
 		} else {			
-			var stock_element = doc.getElementsByName('stock_id');
-	    	if( stock_element.length > 0) {
-				stock_element.value = value;	
-				var stock_id = doc.getElementById('_stock_id_edit'); 
-				stock_id.value=value;
-				stock_id.onblur();		
-			}
+            var element = doc.getElementsByName(client_id);
+            if (element[0] != null) {
+                    element[0].value=value;
+                var sname = '_'+client_id+'_update';
+                var update = doc.getElementsByName(sname)[0];
+                if(update) {
+                    window.opener.JsHttpRequest.request(update);
+                }
+            } else {
+
+                var stock_element = doc.getElementsByName('stock_id');
+                if( stock_element.length > 0) {
+                    stock_element.value = value;	
+                    var stock_id = doc.getElementById('_stock_id_edit'); 
+                    stock_id.value=value;
+                    stock_id.onblur();		
+                }
+            }
 		}			
 		window.close();
 	}";
@@ -986,12 +997,10 @@ function default_focus($name=null, $form_no=0) {
 }
 
 // focus on item if no search box
-// (autocomplete option searches both code and description)
 function set_focus_searchbox($name)
 {
     global $SysPrefs;
-    if (@$SysPrefs->search_autocomplete
-        && get_company_pref('no_item_list')!=0)
+    if (@$SysPrefs->auto_select_box)
         set_focus($name);
     else
         set_focus("_" . $name . "_edit");
