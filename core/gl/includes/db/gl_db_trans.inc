@@ -127,7 +127,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 			LEFT JOIN ".TB_PREF."grn_batch grn ON grn.id=gl.type_no AND gl.type=".ST_SUPPRECEIVE."
 			LEFT JOIN ".TB_PREF."debtor_trans dt ON gl.type_no=dt.trans_no AND dt.type=gl.type AND (gl.type!=".ST_JOURNAL." OR gl.person_id=dt.debtor_no)
 
-			LEFT JOIN ".TB_PREF."suppliers sup ON st.supplier_id=sup.supplier_id OR grn.supplier_id=sup.supplier_id
+			LEFT JOIN ".TB_PREF."suppliers sup ON st.supplier_id=sup.supplier_id
 			LEFT JOIN ".TB_PREF."cust_branch branch ON dt.branch_code=branch.branch_code
 			LEFT JOIN ".TB_PREF."debtors_master debt ON dt.debtor_no=debt.debtor_no
 
