@@ -21,8 +21,22 @@ function display_bank_header(&$order)
 	start_outer_table(TABLESTYLE2, "width='90%'"); // outer table
 
 	table_section(1);
-	
-    date_row(_("Date:"), 'date_', '', true, 0, 0, 0, null, true);
+
+    // changed submit_on_change to false
+    // to fix erratic annoying bug where pressing the Process Payment button
+    // *sometimes* did not work the first time after changing the date
+    // but worked the second time.  This is somehow related to the request() call
+    // in the .date code in inserts.js because without it the bug disappears.
+    // The bug may be caused by an ordering/timing issue within the ajax
+    // code.  When the bug occurs, the .ajaxsubmit code is not called.
+    // I was unable to reproduce this bug on the demo site, which could
+    // be due to differing javascript code or server timing.
+    // I do not see the reason to set submit_on_change anyway
+    // because there is no code (unlike gl/includes/ui/gl_journal_ui.inc)
+    // that checks for _<name>_changed which is the only effect of calling request().
+    // Note that this bug may continue to exist in General Journal.
+
+    date_row(_("Date:"), 'date_', '', true, 0, 0, 0, null, false);
 
 	ref_row(_("Reference:"), 'ref', '', $order->reference, false, $order->trans_type, get_post('date_'));
 
