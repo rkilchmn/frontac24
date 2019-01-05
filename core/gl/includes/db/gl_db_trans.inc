@@ -159,8 +159,8 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 	if ($dimension2 != 0)
 		$sql .= " AND gl.dimension2_id = ".($dimension2<0 ? 0 : db_escape($dimension2));
 
-	if ($filter_type != null AND is_numeric($filter_type))
-		$sql .= " AND gl.type= ".db_escape($filter_type);
+	if ($filter_type != null)
+		$sql .= " AND gl.type IN (" . $filter_type .")";
 
 	if ($amount_min != null)
 		$sql .= " AND ABS(gl.amount) >= ABS(".db_escape($amount_min).")";
