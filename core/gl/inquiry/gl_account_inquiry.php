@@ -182,6 +182,11 @@ function show_results()
 	    $account_col = array(_("Account"));
 	else
 	    $account_col = array();
+
+    if ($_POST["person_id"] == null)
+        $person_col = array(_("Person/Item"));
+    else
+        $person_col = array();
 	
 	if ($dim == 2)
 		$dim_cols = array(_("Dimension")." 1", _("Dimension")." 2");
@@ -191,11 +196,11 @@ function show_results()
 		$dim_cols = array();
 	
 	if ($show_balances)
-	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Balance"), _("Memo"), "", "");
+	    $remaining_cols = array(_("Debit"), _("Credit"), _("Balance"), _("Memo"), "", "");
 	else
-	    $remaining_cols = array(_("Person/Item"), _("Debit"), _("Credit"), _("Memo"), "", "");
+	    $remaining_cols = array(_("Debit"), _("Credit"), _("Memo"), "", "");
 	    
-	$th = array_merge($first_cols, $account_col, $dim_cols, $remaining_cols);
+	$th = array_merge($first_cols, $account_col, $dim_cols, $person_col, $remaining_cols);
 			
 	table_header($th);
 	if ($_POST["account"] != null && is_account_balancesheet($_POST["account"]))
@@ -244,7 +249,8 @@ function show_results()
 			label_cell(get_dimension_string($myrow['dimension_id'], true));
 		if ($dim > 1)
 			label_cell(get_dimension_string($myrow['dimension2_id'], true));
-		label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, $trandate));
+        if ($_POST["person_id"] == null)
+            label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, $trandate));
 		display_debit_or_credit_cells($myrow["amount"]);
 		if ($show_balances)
 		    amount_cell($running_total);
