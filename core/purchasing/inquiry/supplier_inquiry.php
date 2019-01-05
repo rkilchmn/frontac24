@@ -120,7 +120,8 @@ function delete_link($row)
 {
 	global $page_nested;
 
-	if ($page_nested)
+	if ($page_nested
+        || get_voided_entry($row['type'], $row['trans_no']))
 		return '';
         return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_DELETE);
 }
