@@ -477,6 +477,8 @@ function escapeRegExp(str) {
 
 function decodeHtml(html) {
     var txt = document.createElement("textarea");
+    html = html.replace(/\<u\>/ig, '');
+    html = html.replace(/\<\/u\>/ig, '');
     txt.innerHTML = html;
     return txt.value;
 }
