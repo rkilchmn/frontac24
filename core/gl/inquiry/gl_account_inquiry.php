@@ -183,7 +183,7 @@ function show_results()
 	else
 	    $account_col = array();
 
-    if ($_POST["person_id"] == null)
+    if (@$_POST["person_id"] == null)
         $person_col = array(_("Person/Item"));
     else
         $person_col = array();
@@ -249,7 +249,7 @@ function show_results()
 			label_cell(get_dimension_string($myrow['dimension_id'], true));
 		if ($dim > 1)
 			label_cell(get_dimension_string($myrow['dimension2_id'], true));
-        if ($_POST["person_id"] == null)
+        if (@$_POST["person_id"] == null)
             label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, $trandate));
 		display_debit_or_credit_cells($myrow["amount"]);
 		if ($show_balances)
