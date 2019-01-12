@@ -925,11 +925,17 @@ function get_js_select_combo_item() {
 		} else {			
             var element = doc.getElementsByName(client_id);
             if (element[0] != null) {
-                    element[0].value=value;
+                element[0].value=value;
                 var sname = '_'+client_id+'_update';
                 var update = doc.getElementsByName(sname)[0];
                 if(update) {
                     window.opener.JsHttpRequest.request(update);
+                } else {
+                    var element = doc.getElementsByName(client_id+'mselect');
+                    if (element[0] != null) {
+                            element[0].setvalue(value);
+                            // element[0].value=value;
+                    }
                 }
             } else {
 

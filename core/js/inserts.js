@@ -290,6 +290,19 @@ function mbselect(elm)
 			}
 		}
 	}
+    typer.setvalue = function(id) {
+        for (var mm = 0; mm < list.length; mm++) {
+                if (id == list[mm].id) {
+                    selectedoption = list[mm];
+                    selectedvalue = id;
+                    list[mm].className = ' aselected';
+                    list[mm].scrollIntoView(false);
+                }
+        }
+        this.value = decodeHtml(selectedoption.innerHTML);
+		this.select();
+		this.focus();
+    }
 
 	typer.onmousedown = function (event) {
 		pop("block");
@@ -765,7 +778,7 @@ var inserts = {
    	  			e.onkeydown = function(ev) {
   					ev = ev||window.event;
   					key = ev.keyCode||ev.which;
- 	  				if(key == 13) {
+ 	  				if(key == 13 && e.className != 'typer') {
 						if(e.className == 'searchbox') {
                             e.onblur();
     						return false;

@@ -288,6 +288,15 @@ $opts = array(		// default options
 	// span for select list/input field update
 	$selector = "<span id='_{$name}_sel'>".$selector."</span>\n";
 
+	// if selectable or editable list is used - add select button
+	if ($select_submit != false /* || $search_button */) {
+
+	// button class selects form reload/ajax selector update
+		$selector .= sprintf(SELECT_BUTTON, $disabled, user_theme(),
+			(fallback_mode() ? '' : 'display:none;'),
+			 '_'.$name.'_update')."\n";
+	}
+
 // ------ make combo ----------
 	$edit_entry = '';
 	if ($search_box != false) {
@@ -369,17 +378,6 @@ $opts = array(		// default options
     			'" style="vertical-align:middle;width:12px;height:12px;border:0;" onclick="javascript:lookupWindow(&quot;'.
     			$link.'&quot;, &quot;&quot;);" title="' . $img_title . '" style="cursor:pointer;" />';
   		}
-	}
-
-	// if selectable or editable list is used - add select button
-	if ($select_submit != false
-        || (strpos($class, "mbselect") !== false && $link != "")
-        /* || $search_button */) {
-
-	// button class selects form reload/ajax selector update
-		$selector .= sprintf(SELECT_BUTTON, $disabled, user_theme(),
-			(fallback_mode() ? '' : 'display:none;'),
-			 '_'.$name.'_update')."\n";
 	}
 
 	if ($opts['editlink'])
