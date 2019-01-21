@@ -58,8 +58,10 @@ $refline_placeholders = array(
 	'MM' => 'date',
 	'YY' => 'date',
 	'YYYY' => 'date',
-	'FF' => 'date', // fiscal year
+	'FF' => 'date', // fiscal year begin
 	'FFFF' => 'date',
+	'EE' => 'date', // fiscal year end
+	'EEEE' => 'date',
 	'UU' => 'user',
  	'P' => 'pos',
 //	 FIXME:  for placeholders below all the code should work, but as the ref length is variable,
@@ -130,6 +132,11 @@ class references
 							list($day, $month, $year) = explode_date_to_dmy(get_fiscalyear_begin_for_date($context['date']));
 							$out .= $ph == 'FF' ? sprintf('%02d', $year%100): sprintf('%04d', $year);
 							break;
+						case 'EE':
+						case 'EEEE':
+							list($day, $month, $year) = explode_date_to_dmy(get_fiscalyear_end_for_date($context['date']));
+							$out .= $ph == 'EE' ? sprintf('%02d', $year%100): sprintf('%04d', $year);
+							break;
 						case 'C':
 							$out .= sprintf('%d', $context['customer']);
 							break;
@@ -183,7 +190,6 @@ class references
 				." WHERE ISNULL(v.id)"
 				.($type_fld ? " AND tbl.`$type_fld`=$type" : '')
 				." AND `$ref_fld` REGEXP ".db_escape('^'.preg_quote($prefix).'[0-9]*'.preg_quote($postfix).'$');
-// display_notification($sql);
 		$result = db_query($sql, 'cannot retrieve last reference');
 		$result = db_fetch_row($result);
 
@@ -220,7 +226,6 @@ class references
 		} else {
 			$sql .= " AND tbl.`$tno_fld`=".db_escape($trans_no);
 		}
-// display_notification($sql);
 
 		$result = db_query($sql, "could not test for unique reference");
 		if (!$result)
@@ -300,6 +305,9 @@ class references
 			$f_year = explode("-", date2sql(get_fiscalyear_begin_for_date($context['date'])));
 			$f_year2 = substr($f_year[0], 2);
 			$f_year4 = $f_year[0];
+			$e_year = explode("-", date2sql(get_fiscalyear_end_for_date($context['date'])));
+			$e_year2 = substr($e_year[0], 2);
+			$e_year4 = $e_year[0];
 		} else
 		{
 			$month = '\d{2,}';
@@ -307,16 +315,15 @@ class references
 			$year4 = '\d{4,}';
 			$f_year2 = '\d{2,}';
 			$f_year4 = '\d{4,}';
+			$e_year2 = '\d{2,}';
+			$e_year4 = '\d{4,}';
 		}
 		$cust = @$context['customer'] ? $context['customer'] : '\d+';
 		$supp = @$context['supplier'] ? $context['supplier'] : '\d+';
 		$branch = @$context['branch'] ? $context['branch'] : '\d+';
 		$location = @$context['location'] ? $context['location'] : '[a-z0-9]+';
  		$pos = @$context['pos'] ? $context['pos'] : '\d+';
-
-        // allow any user to edit another user transaction
-		// $user = sprintf("%02d", $_SESSION['wa_current_user']->user);
-        $user = '\d{2,}';
+		$user = sprintf("%02d", $_SESSION['wa_current_user']->user);
 
 		$regex = preg_replace(
 			array(
@@ -327,6 +334,8 @@ class references
 				'/\{YYYY\}/',
 				'/\{FF\}/',
 				'/\{FFFF\}/',
+				'/\{EE\}/',
+				'/\{EEEE\}/',
 				'/\{C\}/',
 				'/\{B\}/',
 				'/\{S\}/',
@@ -343,6 +352,8 @@ class references
 				$year4,
 				$f_year2,
 				$f_year4,
+				$e_year2,
+				$e_year4,
 				$cust,
 				$branch,
 				$supp,

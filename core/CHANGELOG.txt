@@ -1,3 +1,85 @@
+2019-01-16 Joe Hunt
+Removed all double semicolon line endings in code files
+M	admin\attachments.php
+M	fixed_assets\includes\fa_classes_db.inc
+M	gl\includes\db\gl_db_trans.inc
+M	inventory\view\view_transfer.php
+M	js\behaviour.js
+M	manufacturing\view\wo_issue_view.php
+M	purchasing\view\view_po.php
+M	reporting\rep451.php
+M	sales\customer_credit_invoice.php
+M	sales\includes\db\customers_db.inc
+M	taxes\tax_groups.php
+
+2019-01-16 Joe Hunt
+@boxygen: Placeholders now allowed for Dimensions
+M	includes/references.inc
+
+2019-01-14 Joe Hunt
+@notrinos: wrong command symbol in ui_list.inc fixed
+M	includes/ui/ui_lists.inc
+
+2019-01-11 Joe Hunt
+@notrinos: Update Material Cost Function - rollback and rerun
+M	manufacturing/includes/db/work_order_costing_db.inc
+
+2019-01-10 Janusz Dobrowolski
+Fixed get_post() support for numeric fields.
+M	admin/display_prefs.php (jointly fixed in earlier commit)
+M	includes/ui/ui_controls.inc
+
+2019-01-10 Janusz Dobrowolski
+Quick Entries: fixed false warning.
+M	gl/manage/gl_quick_entries.php
+
+2019-01-10 Janusz Dobrowolski
+Fixed allocation date for customer payments entry, additional fixes for strict sql mode.
+M	includes/db/audit_trail_db.inc
+M	sales/customer_payments.php
+
+2019-01-10 Janusz Dobrowolski
+Activated strict SQL mode, minor SQL injection fix, fixed _vl() debug helper.
+M	admin/display_prefs.php
+M	includes/date_functions.inc
+M	includes/db/class.reflines_db.inc
+M	includes/db/connect_db_mysql.inc
+M	includes/db/connect_db_mysqli.inc
+M	includes/ui/class.crud_view.inc
+M	includes/ui/class.reflines_crud.inc
+M	includes/ui/ui_input.inc
+M	includes/ui/ui_view.inc
+M	inventory/includes/db/items_db.inc
+M	inventory/manage/items.php
+M	inventory/manage/locations.php
+M	purchasing/manage/suppliers.php
+M	sales/includes/cart_class.inc
+
+2019-01-08 Joe Hunt
+Password reset mail big delay fix using From: email in header.
+M	includes/current_user.inc
+
+2019-01-08 Joe Hunt
+@braathwaate bug 4817: g/l account inquiry can timeout due to slow sql.
+M	gl/includes/db/gl_db_trans.inc
+M	gl/inquiry/gl_account_inquiry.php
+
+2019-01-08 Janusz Dobrowolski
+New transaction reference formats {FF}/{FFFF} for fiscal years starting on other than January 1st.
+M	includes/references.inc
+
+2019-01-07 Joe Hunt
+@apmuthu: Optimized function get_trans_tax_details()
+M	gl/includes/db/gl_db_trans.inc
+
+2019-01-05 Joe Hunt
+@kvvaradha: Date Picker to close when clicked outside of the datepicker.
+M	includes/ui/ui_view.inc
+
+2019-01-02 Joe Hunt
+@notrinos: Supplier Transaction Inquiry for GRN did not filter on date - fixed.
+M	purchasing/includes/db/supp_trans_db.inc
+
 2018-12-24 Joe Hunt
 FA 2.4.6
 M	version.php

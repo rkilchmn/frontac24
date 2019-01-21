@@ -1507,6 +1507,14 @@ function changeCCYear(change) {
 function changeCCMonth(change) {
   cC.changeMonth(change);
 }
+window.addEventListener('click', function(e) {
+  if (document.getElementById('CC').contains(e.target)){} else {
+    if (cC.visible()) {
+      cC.hide();
+    }
+  }
+});
+
 document.write(\"<iframe id='CCIframe' src='javascript:false;' frameBorder='0' scrolling='no'></iframe>\");
 document.write(\"<div id='CC'></div>\");";
 
@@ -1541,7 +1549,7 @@ if (!function_exists('_vd'))
 
 function _vl($mixed, $title = '', $exit = false)
 {
-	error_log((!empty($title) ? ($title .':') : '') . var_export($mixed, true));
+	error_log((!empty($title) ? ($title .':') : '') . print_r($mixed, true));
 	if ($exit)
 		exit;
 }
