@@ -23,12 +23,16 @@ function add_wo_costing($workorder_id, $cost_type, $trans_type, $trans_no, $fact
 
 function get_wo_costing($workorder_id)
 {
-	$sql="SELECT * 
+	$wo = get_work_order($workorder_id);
+
+	$sql="SELECT cost.*, j.*, gl.account
 		FROM ".TB_PREF."wo_costing cost,
-			".TB_PREF."journal gl
+			".TB_PREF."journal j,
+			".TB_PREF."gl_trans gl
 		WHERE
-			cost.trans_type=gl.type AND cost.trans_no=gl.trans_no
-			AND workorder_id=".db_escape($workorder_id);
+			cost.trans_type=j.type AND cost.trans_no=j.trans_no
+			AND workorder_id=".db_escape($workorder_id)."
+			AND gl.type=j.type AND gl.type_no=j.trans_no AND gl.account != ".db_escape($wo['wip_account']);
 
 	return db_query($sql, "could not get work order costing");
 }
@@ -103,12 +107,8 @@ function update_material_cost($stock_id, $qty, $unit_cost, $date)
 		write_journal_entries($cart);
 	}
 
-	if ($qty > 0 && ($qoh != -$qty)) {
-		if ($qoh == 0 && $avg_cost != 0)
-			$avg_cost = ($avg_cost + ($unit_cost*$qty_new)/$qty)/2;
-		else
-			$avg_cost = ($avg_cost*($qoh+$qty_delayed)+$unit_cost*$qty_new)/($qoh+$qty);
-	}
+	if ($qty > 0 && ($qoh != -$qty))
+        $avg_cost = ($avg_cost*($qoh+$qty_delayed)+$unit_cost*$qty_new)/($qoh+$qty);
 
 	$sql = "UPDATE ".TB_PREF."stock_master SET material_cost=".db_escape($avg_cost)."
 		    WHERE stock_id=".db_escape($stock_id);
@@ -132,8 +132,9 @@ function add_wo_costs_journal($wo_id, $amount, $cost_type, $cr_acc, $date, $dim1
 
     if (!$ref) $ref = $Refs->get_next(ST_JOURNAL, null, $date);
 
+    // FA does not dimension payments but BA does
 	add_gl_trans_std_cost(ST_JOURNAL, $journal_id, $date, $cr_acc,
-		0, 0, $wo_cost_types[$cost_type], -$amount);
+		$dim1, $dim2, $item['description'], -$amount);
 
 	$is_bank_to = is_bank_account($cr_acc);
 	if ($is_bank_to)
@@ -145,7 +146,7 @@ function add_wo_costs_journal($wo_id, $amount, $cost_type, $cr_acc, $date, $dim1
 	add_journal(ST_JOURNAL, $journal_id, $amount, $date, get_company_currency(), $ref, '', 1, $date, $date);
 
 	add_gl_trans_std_cost(ST_JOURNAL, $journal_id, $date, $wo['wip_account'],
-		$dim1, $dim2,  $wo_cost_types[$cost_type], $amount);
+		$dim1, $dim2,  $item['description'], $amount);
 
 	$wo = get_work_order($wo_id);
 	$wip = $wo['wip_account'];
