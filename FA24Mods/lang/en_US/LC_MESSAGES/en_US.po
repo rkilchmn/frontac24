@@ -25,6 +25,11 @@ msgstr "Checking Account"
 msgid "Cheque"
 msgstr "Check"
 
+#: core/sales/manage/customers.php
+#: core/purchasing/manage/suppliers.php
+msgid "GSTNo:"
+msgstr "Tax ID:"
+
 #: reporting/rep107.php:285 reporting/rep109.php:212 reporting/rep111.php:209
 msgid "TOTAL ORDER VAT INCL."
 msgstr "TOTAL ORDER INCL. TAX"
