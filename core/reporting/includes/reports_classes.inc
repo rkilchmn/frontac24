@@ -80,7 +80,11 @@ class BoxReports
 
 			$style = $class_id==$cur_class ? '' : "style='display:none'";
 			$st_reports .= "<table class='repclass' id='TAB_" . $class_id ."' $style cellpadding='0' cellspacing='0' border='0' width='100%'><tr><td><b>" . _("Reports For Class: ") . "&nbsp;$name</b></td></tr>\n";
-			foreach($this->ar_reports[$class_id] as $rep_id => $report)
+            $sort_report = Array();
+			foreach($this->ar_reports[$class_id] as $report)
+                $sort_report[str_replace("&", "", $report->name)] = $report;
+            ksort($sort_report);
+			foreach($sort_report as $report)
 			{
 				$acc = access_string($report->name);
 				$st_reports .= "<tr><td><a class='repopts_link'"
