@@ -87,6 +87,67 @@ function send_scripts()
     echo $js;
 }
 
+function send_xml($title)
+{
+    global $SysPrefs, $path_to_root;
+
+    if (@$SysPrefs->config_xml) {
+        $theme = user_theme();
+        $css_file = $path_to_root . "/themes/$theme/xonomy.css";
+		echo "<link href='$css_file' rel='stylesheet' type='text/css'> \n";
+
+        $xml_lib = array("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", "../../js/xonomy.js");
+        foreach($xml_lib as $jsfile)
+        {
+            $js .= '<script language="javascript" type="text/javascript" src="'.
+                $jsfile . '"></script>' . "\n";
+        }
+        echo $js;
+
+        $xml=simplexml_load_string($SysPrefs->config_xml);
+
+        foreach ($xml->page as $page) {
+            if ($page->title == $title) {
+	  	        echo '<script language="javascript" type="text/javascript">
+                function xml_start() {
+                    var name = "' . $page->field . '";
+                    var docSpec = ' . $page->schema . ';
+                    elms=document.getElementsByName(name);
+                    if (elms != null) {
+                        var elm=elms[0];
+                        var div = document.createElement("DIV");
+                        div.setAttribute("id","editor");
+                        // elm.parentNode.insertBefore(div, elm.nextSibling);
+                        elm.parentNode.insertBefore(div, elm);
+                        elm.style.visibility = "hidden";
+                        var xml=elm.value;
+                        if (xml == "")
+                            xml="<list></list>";
+                        else if (xml.substring(0,1) != "<")
+                            xml="<list><text=\'" + xml + "\'></list>";
+                        var editor=document.getElementById("editor");
+                        Xonomy.setMode("laic");
+                        Xonomy.render(xml, editor, docSpec);
+                    }
+                }
+                function xml_save(xml) {
+                    var name = "' . $page->field . '";
+                    var docSpec = ' . $page->schema . ';
+                    elms=document.getElementsByName(name);
+                    if (elms != null) {
+                        var elm=elms[0];
+                        elm.innerHTML = xml;
+                    }
+                }
+	  	        </script>
+                ';
+                break;
+            }
+        }
+    }
+}
+
+
 function page_header($title, $no_menu=false, $is_index=false, $onload="", $js="", $css='', $no_cache = false)
 {
 	// titles and screen header
@@ -153,6 +214,8 @@ function page_header($title, $no_menu=false, $is_index=false, $onload="", $js=""
 	send_css($css);
 
 	send_scripts();
+
+    send_xml($title);
 
 	echo "</head> \n";
 	if ($onload == "")
