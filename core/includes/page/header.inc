@@ -97,6 +97,7 @@ function send_xml($title)
 		echo "<link href='$css_file' rel='stylesheet' type='text/css'> \n";
 
         $xml_lib = array("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", "../../js/xonomy.js");
+        $js ='';
         foreach($xml_lib as $jsfile)
         {
             $js .= '<script language="javascript" type="text/javascript" src="'.
