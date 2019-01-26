@@ -169,8 +169,6 @@ specified in Setup.
 
 ## g/l list description first to enable search by description
 
-## BUG FIX: supplier inquiry GRN items filter by date
-
 ## FEATURE: use ajax for numeric calculations (part 1: purchasing)
 
 FA is not a very responsive calculator or spreadsheet,
@@ -728,3 +726,5 @@ unchanged in the order even if the customer branch address is changed.
 
 Display and allow search on the gl account transaction memo as well as
 the bank transaction memo.
+
+## add g/l category search to g/l popup search
