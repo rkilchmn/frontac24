@@ -53,9 +53,9 @@ function getTaxTransactions($from, $to)
 		LEFT JOIN ".TB_PREF."debtors_master as debt ON dtrans.debtor_no=debt.debtor_no
 		LEFT JOIN ".TB_PREF."cust_branch as branch ON dtrans.branch_code=branch.branch_code
 		WHERE (taxrec.amount <> 0 OR taxrec.net_amount <> 0)
-			AND !ISNULL(taxrec.reg_type)
 			AND taxrec.tran_date >= '$fromdate'
 			AND taxrec.tran_date <= '$todate'
+        GROUP BY taxrec.id
 		ORDER BY taxrec.trans_type, taxrec.tran_date, taxrec.trans_no, taxrec.ex_rate";
 
     return db_query($sql,"No transactions were returned");
@@ -173,7 +173,7 @@ function print_tax_report()
 		elseif (in_array($trans['trans_type'], array(ST_BANKDEPOSIT,ST_SALESINVOICE,ST_CUSTCREDIT))) {
 			$taxes[$tax_type]['taxout'] += $trans['amount'];
 			$taxes[$tax_type]['out'] += $trans['net_amount'];
-		} elseif ($trans['reg_type'] !== NULL) {
+		} elseif ($trans['reg_type'] !== NULL || $trans['trans_type'] == ST_SUPPINVOICE) {
 			$taxes[$tax_type]['taxin'] += $trans['amount'];
 			$taxes[$tax_type]['in'] += $trans['net_amount'];
 		}

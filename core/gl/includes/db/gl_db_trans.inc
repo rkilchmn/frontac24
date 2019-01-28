@@ -532,12 +532,12 @@ function get_tax_summary($from, $to, $also_zero_purchases=false)
 					), amount*ex_rate,0)) payable,
 
 				SUM(IF(trans_type IN(".ST_SUPPCREDIT."),-1,1)*
-				IF(reg_type=".TR_INPUT
+				IF((reg_type=".TR_INPUT." OR trans_type =".ST_SUPPINVOICE.")"
 					. ($also_zero_purchases ? '': " AND tax_type_id AND taxrec.rate")
 					.", net_amount*ex_rate, 0)) net_input,
 
 				SUM(IF(trans_type IN(".ST_SUPPCREDIT."),-1,1)*
-				IF(reg_type=".TR_INPUT
+				IF((reg_type=".TR_INPUT." OR trans_type =".ST_SUPPINVOICE.")"
 					. ($also_zero_purchases ? '': " AND tax_type_id AND taxrec.rate ") 
 					.", amount*ex_rate, 0)) collectible,
 				taxrec.rate,
