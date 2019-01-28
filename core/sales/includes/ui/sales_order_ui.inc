@@ -236,6 +236,10 @@ function display_order_summary($title, &$order, $editable_items=false)
 		display_note(_("Marked items have insufficient quantities in stock as on day of delivery."), 0, 1, "class='stockmankofg'");
 
     div_end();
+
+    if(list_updated('stock_id')) //added by faisal phuong
+        set_focus('stock_id');
+
 }
 
 // ------------------------------------------------------------------------------
@@ -265,6 +269,8 @@ function display_order_header(&$order, $editable, $date_text)
 	else
 	{
 		customer_list_row(_("Customer:"), 'customer_id', null, _("New Customer"), true, false, true);
+        If (isset($_GET['InvoiceNo']))
+            hidden('InvoiceNo', $_GET['InvoiceNo']); //Added by Faisal for Invoice Edit
 
         if (get_post('customer_id') == 0) {
             label_row("", menu_link('sales/manage/customers.php', 'Create New Customer'));

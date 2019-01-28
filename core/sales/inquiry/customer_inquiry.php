@@ -85,8 +85,15 @@ function edit_link($row)
 	if ($page_nested)
 		return '';
 
-	return $row['type'] == ST_CUSTCREDIT && $row['order_'] ? '' : 	// allow  only free hand credit notes edition
-			trans_editor_link($row['type'], $row['trans_no']);
+    switch($row['type']) {
+        case ST_SALESINVOICE:
+            $str = "/sales/sales_order_entry.php?NewInvoice=".$row['order_']."&InvoiceNo=".$row['trans_no'];
+            return pager_link(_('Edit'), $str, ICON_EDIT);
+            break;
+        default:
+            return $row['type'] == ST_CUSTCREDIT && $row['order_'] ? '' : 	// allow  only free hand credit notes edition
+                trans_editor_link($row['type'], $row['trans_no']);
+    }
 }
 
 function delete_link($row)
@@ -107,17 +114,6 @@ function prt_link($row)
 		return '';
  	else
  		return print_document_link($row['trans_no']."-".$row['type'], _("Print"), true, $row['type'], ICON_PRINT);
-}
-
-function reissue_link($row)
-{
-	global $page_nested;
-
-	$str = '';
-	if ($page_nested
-        || $row['type'] != ST_SALESINVOICE)
-		return '';
-        return pager_link(_("Reissue"), "/admin/reissue_invoice.php?trans_no=" . $row['trans_no'], ICON_REISSUE);
 }
 
 //------------------------------------------------------------------------------------------------
@@ -234,7 +230,6 @@ $cols = array(
 		array('insert'=>true, 'fun'=>'prt_link'),
 		array('insert'=>true, 'fun'=>'credit_link'),
 		array('insert'=>true, 'fun'=>'edit_link'),
-		array('insert'=>true, 'fun'=>'reissue_link'),
 		array('insert'=>true, 'fun'=>'delete_link')
 	);
 

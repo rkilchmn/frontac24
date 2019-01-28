@@ -422,21 +422,17 @@ the order or simply change the supplier.
 
 FA offers very limited editing of customer invoices, just the invoice date.
 
-BF retains the FA editor (in case the user just wants to change the date),
-but also adds a Reissue function icon to the
-customer transactions page.
-The reissue function
-voids the invoice and delivery and opens a series of editors
-to recreate the invoice: sales order modification; delivery; and invoice.
-Thus the user can make any possible change, addition, deletion
-to the invoice and still retain the old invoice number.
+The "Invoice Editable" extensions by boxygen
+http://frontaccounting.com/punbb/viewtopic.php?id=7029
+created an extension to allow full editing of invoices
+created by Direct Invoice.
+BF incorporates this technique into its core.
 
-Although an FA user could accomplish the same thing by
-manually performing the voids and navigating to the same pages,
-the BF Reissue process requires only clicking on a single icon
-to initiate the process.
+Note that a FA user could accomplish the same thing by
+manually performing a void of the invoice and editing the sales order,
+followed by delivery and reinvoice.
 
-Note that a void of an auto generated delivery in FA clears all quantities
+However, a void of an auto generated delivery in FA clears all quantities
 in the sales order whereas BF retains the order quantities,
 which is consistent with a void of a manually created delivery.
 

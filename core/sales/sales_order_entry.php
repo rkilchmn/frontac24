@@ -474,6 +474,9 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 	$modified = ($_POST['Items']->trans_no != 0);
 	$so_type = $_POST['Items']->so_type;
 
+    if (get_post('InvoiceNo')>0) //Added by Faisal to enable invoice Edit
+            void_transaction (ST_SALESINVOICE, get_post('InvoiceNo'), Today(), 'Document Reissued');
+
 	$ret = $_POST['Items']->write(1);
 	if ($ret == -1)
 	{
@@ -683,13 +686,19 @@ function create_cart($type, $trans_no)
 		$doc = new Cart(ST_SALESORDER, array($trans_no));
 		$doc->trans_type = $type;
 		$doc->trans_no = 0;
-		$doc->document_date = new_doc_date();
+        if (!isset($_GET['InvoiceNo'])) //Block added by faisal for Invoice Edit
+                $doc->document_date = new_doc_date();
+
 		if ($type == ST_SALESINVOICE) {
 			$doc->due_date = get_invoice_duedate($doc->payment, $doc->document_date);
 			$doc->pos = get_sales_point(user_pos());
 		} else
 			$doc->due_date = $doc->document_date;
-		$doc->reference = $Refs->get_next($doc->trans_type, null, array('date' => Today()));
+        if (isset($_GET['InvoiceNo'])) //Block added by faisal for Invoice Edit
+            $doc->reference = get_inv_reference ($_GET['InvoiceNo']);//$Refs->get_next($doc->trans_type, null, array('date' => Today()));
+        else
+
+                $doc->reference = $Refs->get_next($doc->trans_type, null, array('date' => Today()));
 		//$doc->Comments='';
 		foreach($doc->line_items as $line_no => $line) {
 			$doc->line_items[$line_no]->qty_done = 0;
@@ -698,6 +707,21 @@ function create_cart($type, $trans_no)
 	} else
 		$_POST['Items'] = new Cart($type, array($trans_no));
 	copy_from_cart();
+}
+
+//Function added by faisal for Invoice Edit feature
+function get_inv_reference($invoice_no)
+{
+
+    $sql = "SELECT Reference
+    FROM
+    ".TB_PREF."debtor_trans invoice
+    WHERE
+    invoice.trans_no=".db_escape($invoice_no);
+
+    $res = db_query ($sql, 'cannot find');
+    $ref = db_fetch($res);
+    return $ref[0];
 }
 
 //--------------------------------------------------------------------------------
