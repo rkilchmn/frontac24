@@ -23,8 +23,12 @@ include_once($path_to_root . "/gl/includes/gl_db.inc");
 $js = "";
 if (user_use_date_picker())
 	$js = get_js_date_picker();
+$fields = array("TransFromDate", "TransToDate", "Dimension", "Dimension2", "AccGrp");
+$js .= get_js_history($fields);
 
 page(_($help_context = "Balance Sheet Drilldown"), false, false, "", $js);
+
+set_posts($fields);
 
 //----------------------------------------------------------------------------------------------------
 // Ajax updates
@@ -33,17 +37,6 @@ if (get_post('Show'))
 {
 	$Ajax->activate('balance_tbl');
 }
-
-if (isset($_GET["TransFromDate"]))
-	$_POST["TransFromDate"] = $_GET["TransFromDate"];	
-if (isset($_GET["TransToDate"]))
-	$_POST["TransToDate"] = $_GET["TransToDate"];
-if (isset($_GET["Dimension"]))
-	$_POST["Dimension"] = $_GET["Dimension"];
-if (isset($_GET["Dimension2"]))
-	$_POST["Dimension2"] = $_GET["Dimension2"];
-if (isset($_GET["AccGrp"]))
-	$_POST["AccGrp"] = $_GET["AccGrp"];	
 
 //----------------------------------------------------------------------------------------------------
 
@@ -138,8 +131,11 @@ function display_balance_sheet()
 {
 	global $path_to_root;
 	
-	$from = begin_fiscalyear();
 	$to = $_POST['TransToDate'];
+    if (is_date_in_fiscalyear($to, true))
+        $from = begin_fiscalyear();
+    else
+        $from = add_days(add_years($to, -1), 1);
 	
 	if (!isset($_POST['Dimension']))
 		$_POST['Dimension'] = 0;
