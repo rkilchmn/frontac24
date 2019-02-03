@@ -117,7 +117,7 @@ function edit_link($row)
 
 function delete_link($row)
 {
-        return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['id'] . "&filterType=". ST_WORKORDER, ICON_DELETE);
+        return is_closed_trans(ST_WORKORDER, $row['id']) ? "--" : pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['id'] . "&filterType=". ST_WORKORDER, ICON_DELETE);
 }
 
 

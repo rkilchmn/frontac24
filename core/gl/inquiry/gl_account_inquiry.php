@@ -135,7 +135,7 @@ function edit_link($row)
 
 function delete_link($row)
 {
-        return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['type_no'] . "&filterType=". $row['type'], ICON_DELETE);
+        return is_closed_trans($row['type'], $row['type_no']) ? "--" : pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['type_no'] . "&filterType=". $row['type'], ICON_DELETE);
 }
 
 function ok_link($row)

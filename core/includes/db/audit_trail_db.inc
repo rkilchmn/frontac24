@@ -77,7 +77,7 @@ function close_transactions($todate) {
 	$result = db_query($sql, "Cannot select transactions for closing");
 
 	if (db_num_rows($result)) {
-		$last_year = 0;
+		$last_year = -1;    // fiscal year can be zero if transactions were imported w/o FA fiscal year
 
 		while ($row = db_fetch($result)) {
 			if ($row['fiscal_year'] == null) {
