@@ -53,7 +53,7 @@ function getTaxTransactions($from, $to)
 		LEFT JOIN ".TB_PREF."debtors_master as debt ON dtrans.debtor_no=debt.debtor_no
 		LEFT JOIN ".TB_PREF."cust_branch as branch ON dtrans.branch_code=branch.branch_code
 		WHERE (taxrec.amount <> 0 OR taxrec.net_amount <> 0)
-            AND (!ISNULL(taxrec.reg_type) OR taxrec.trans_type=".ST_SUPPINVOICE.")
+            AND taxrec.trans_type <> ".ST_CUSTDELIVERY."
 			AND taxrec.tran_date >= '$fromdate'
 			AND taxrec.tran_date <= '$todate'
         GROUP BY taxrec.id
