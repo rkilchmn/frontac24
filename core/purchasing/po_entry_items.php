@@ -66,6 +66,8 @@ if (isset($_GET['ModifyOrderNumber']) && is_numeric($_GET['ModifyOrderNumber']))
 		$_SESSION['page_title'] = _($help_context = "Direct Purchase Invoice Entry");
 }
 
+set_posts(array('OrderDate'));
+
 page($_SESSION['page_title'], false, false, "", $js);
 
 if (isset($_GET['ModifyOrderNumber']))
@@ -95,7 +97,7 @@ if (isset($_GET['AddedID']))
 	hyperlink_params($path_to_root . "/purchasing/po_receive_items.php", _("&Receive Items on this Purchase Order"), "PONumber=$order_no");
 
   // TODO, for fixed asset
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another Purchase Order"), "NewOrder=yes");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another Purchase Order"), "NewOrder=yes&OrderDate=".$_POST['OrderDate']);
 	
 	hyperlink_no_params($path_to_root."/purchasing/inquiry/po_search.php", _("Select An &Outstanding Purchase Order"));
 	
@@ -120,7 +122,7 @@ if (isset($_GET['AddedID']))
 	hyperlink_params("$path_to_root/admin/attachments.php", _("Add an Attachment"), 
 		"filterType=$trans_type&trans_no=$trans_no");
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another GRN"), "NewGRN=Yes");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another GRN"), "NewGRN=Yes&OrderDate=".$_POST['OrderDate']);
 	
 	display_footer_exit();	
 
@@ -141,7 +143,7 @@ if (isset($_GET['AddedID']))
 	hyperlink_params("$path_to_root/admin/attachments.php", _("Add an Attachment"), 
 		"filterType=$trans_type&trans_no=$trans_no");
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another Direct Invoice"), "NewInvoice=Yes");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another Direct Invoice"), "NewInvoice=Yes&OrderDate=".$_POST['OrderDate']);
 	
 	display_footer_exit();	
 }
@@ -438,11 +440,11 @@ function handle_commit_order()
 			if ($trans_no) {
 				unset($_POST['PO']);
 				if ($cart->trans_type == ST_PURCHORDER)
-	 				meta_forward_self("AddedID=$trans_no");
+	 				meta_forward_self("AddedID=$trans_no&OrderDate=".$_POST['OrderDate']);
 				elseif ($cart->trans_type == ST_SUPPRECEIVE)
-					meta_forward_self("AddedGRN=$trans_no");
+					meta_forward_self("AddedGRN=$trans_no&OrderDate=".$_POST['OrderDate']);
 				else
-					meta_forward_self("AddedPI=$trans_no");
+					meta_forward_self("AddedPI=$trans_no&OrderDate=".$_POST['OrderDate']);
 			}
 		} else { // order modification
 			$order_no = update_po($cart);
