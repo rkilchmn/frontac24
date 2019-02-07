@@ -35,9 +35,10 @@ function getTaxTransactions($from, $to)
 
 	$sql = "SELECT tt.name as taxname, taxrec.*, taxrec.amount*ex_rate AS amount,
 	            taxrec.net_amount*ex_rate AS net_amount,
-				IF(taxrec.trans_type=".ST_BANKPAYMENT." OR taxrec.trans_type=".ST_BANKDEPOSIT.", 
-					IF(gl.person_type_id<>".PT_MISC.", gl.memo_, gl.person_id), 
-					IF(ISNULL(supp.supp_name), debt.name, supp.supp_name)) as name,
+                IF(ISNULL(supp.supp_name),
+                    IF(ISNULL(debt.name),
+                        IF(gl.person_type_id<>".PT_MISC.", gl.memo_, gl.person_id), debt.name),
+                        supp.supp_name) as name,
 				branch.br_name
 		FROM ".TB_PREF."trans_tax_details taxrec
 		LEFT JOIN ".TB_PREF."tax_types tt
