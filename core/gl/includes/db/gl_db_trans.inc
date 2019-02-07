@@ -522,22 +522,22 @@ function get_tax_summary($from, $to, $also_zero_purchases=false)
 	$sql = "SELECT 
 				SUM(IF(trans_type=".ST_CUSTCREDIT.",-1,1)*
 				IF((reg_type=".TR_OUTPUT.")"
-					." || ((trans_type IN(".ST_SALESINVOICE.",".ST_CUSTCREDIT.") OR (trans_type=".ST_JOURNAL." AND reg_type=".TR_INPUT."))
+					." || ((trans_type IN(".ST_SALESINVOICE.",".ST_CUSTCREDIT.",".ST_BANKDEPOSIT.") OR (trans_type=".ST_JOURNAL." AND reg_type=".TR_INPUT."))
 					), net_amount*ex_rate,0)
 				) net_output,
 
 				SUM(IF(trans_type=".ST_CUSTCREDIT.",-1,1)*
 				IF((reg_type=".TR_OUTPUT.")"
-					." || ((trans_type IN(".ST_SALESINVOICE.",".ST_CUSTCREDIT.") OR (trans_type=".ST_JOURNAL." AND reg_type=".TR_INPUT."))
+					." || ((trans_type IN(".ST_SALESINVOICE.",".ST_CUSTCREDIT.",".ST_BANKDEPOSIT.") OR (trans_type=".ST_JOURNAL." AND reg_type=".TR_INPUT."))
 					), amount*ex_rate,0)) payable,
 
-				SUM(IF(trans_type IN(".ST_SUPPCREDIT."),-1,1)*
-				IF((reg_type=".TR_INPUT." OR trans_type =".ST_SUPPINVOICE.")"
+				SUM(IF(trans_type IN(".ST_SUPPCREDIT.",".ST_BANKPAYMENT."),-1,1)*
+				IF((reg_type=".TR_INPUT." OR trans_type IN (".ST_SUPPINVOICE.",".ST_BANKPAYMENT."))"
 					. ($also_zero_purchases ? '': " AND tax_type_id AND taxrec.rate")
 					.", net_amount*ex_rate, 0)) net_input,
 
-				SUM(IF(trans_type IN(".ST_SUPPCREDIT."),-1,1)*
-				IF((reg_type=".TR_INPUT." OR trans_type =".ST_SUPPINVOICE.")"
+				SUM(IF(trans_type IN(".ST_SUPPCREDIT.",".ST_BANKPAYMENT."),-1,1)*
+				IF((reg_type=".TR_INPUT." OR trans_type IN (".ST_SUPPINVOICE.",".ST_BANKPAYMENT."))"
 					. ($also_zero_purchases ? '': " AND tax_type_id AND taxrec.rate ") 
 					.", amount*ex_rate, 0)) collectible,
 				taxrec.rate,
@@ -545,7 +545,7 @@ function get_tax_summary($from, $to, $also_zero_purchases=false)
 				ttype.name
 		FROM ".TB_PREF."trans_tax_details taxrec LEFT JOIN ".TB_PREF."tax_types ttype ON taxrec.tax_type_id=ttype.id
 		WHERE taxrec.trans_type IN (".implode(',',
-			array(ST_SALESINVOICE, ST_CUSTCREDIT, ST_SUPPINVOICE, ST_SUPPCREDIT, ST_JOURNAL)).")
+			array(ST_SALESINVOICE, ST_CUSTCREDIT, ST_SUPPINVOICE, ST_SUPPCREDIT, ST_JOURNAL, ST_BANKDEPOSIT, ST_BANKPAYMENT)).")
 			AND taxrec.tran_date >= '$fromdate'
 			AND taxrec.tran_date <= '$todate'
 		GROUP BY ttype.id";
