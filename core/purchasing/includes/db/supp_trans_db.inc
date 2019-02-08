@@ -207,9 +207,13 @@ function get_sql_for_supplier_inquiry($filter, $after_date, $to_date, $supplier_
 		'' AS Allocated,
 		0 as OverDue,
     	1 as Settled
-    	FROM ".TB_PREF."grn_batch as trans, ".TB_PREF."suppliers as supplier, ".TB_PREF."purch_orders as po
-    	WHERE supplier.supplier_id = trans.supplier_id
-    	AND trans.purch_order_no = po.order_no";
+    	FROM ".TB_PREF."grn_batch as trans
+            LEFT JOIN ".TB_PREF."suppliers as supplier ON supplier.supplier_id = trans.supplier_id
+            LEFT JOIN ".TB_PREF."purch_orders as po ON trans.purch_order_no = po.order_no
+            LEFT JOIN ".TB_PREF."voided as v
+                ON trans.id=v.id AND v.type=" . ST_SUPPRECEIVE . "
+        WHERE supplier.supplier_id = trans.supplier_id
+        AND ISNULL(v.date_)"; // exclude voided transactions
 
 	if ($filter == '2')
 		$sql .= " AND ABS(trans.ov_amount + trans.ov_gst + trans.ov_discount) - trans.alloc>".FLOAT_COMP_DELTA;

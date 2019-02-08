@@ -724,3 +724,5 @@ Display and allow search on the gl account transaction memo as well as
 the bank transaction memo.
 
 ## add g/l category search to g/l popup search
+## retain date on successive supplier entry
+## filter out voided transactions in supplier and customer inquiry
