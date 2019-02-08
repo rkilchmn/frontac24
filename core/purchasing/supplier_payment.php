@@ -30,10 +30,7 @@ add_js_file('payalloc.js');
 
 page(_($help_context = "Supplier Payment Entry"), false, false, "", $js);
 
-if (isset($_GET['supplier_id']))
-{
-	$_POST['supplier_id'] = $_GET['supplier_id'];
-}
+set_posts(array('supplier_id', 'DatePaid'));
 
 //----------------------------------------------------------------------------------------
 
@@ -101,7 +98,7 @@ if (isset($_GET['AddedID'])) {
 	submenu_view(_("View this Payment"), ST_SUPPAYMENT, $payment_id);
     display_note(get_gl_view_str(ST_SUPPAYMENT, $payment_id, _("View the GL &Journal Entries for this Payment")), 0, 1);
 
-	submenu_option(_("Enter another supplier &payment"), "/purchasing/supplier_payment.php?supplier_id=".$_POST['supplier_id']);
+	submenu_option(_("Enter another supplier &payment"), "/purchasing/supplier_payment.php?supplier_id=".$_POST['supplier_id']."&DatePaid=".$_POST['DatePaid']);
 	submenu_option(_("Enter Other &Payment"), "/gl/gl_bank.php?NewPayment=Yes");
 	submenu_option(_("Enter &Customer Payment"), "/sales/customer_payments.php");
 	submenu_option(_("Enter Other &Deposit"), "/gl/gl_bank.php?NewDeposit=Yes");
@@ -231,14 +228,13 @@ function handle_add_payment()
 	$_SESSION['alloc']->write();
 
    	unset($_POST['bank_account']);
-   	unset($_POST['DatePaid']);
    	unset($_POST['currency']);
    	unset($_POST['memo_']);
    	unset($_POST['amount']);
    	unset($_POST['discount']);
    	unset($_POST['ProcessSuppPayment']);
 
-	meta_forward_self("AddedID=$payment_id&supplier_id=".$_POST['supplier_id']);
+	meta_forward_self("AddedID=$payment_id&supplier_id=".$_POST['supplier_id']."&DatePaid=".$_POST['DatePaid']);
 }
 
 //----------------------------------------------------------------------------------------
