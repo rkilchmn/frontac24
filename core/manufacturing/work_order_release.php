@@ -87,6 +87,9 @@ start_form();
 
 $myrow = get_work_order($selected_id);
 
+if (!isset($_POST['released_date']))
+    $_POST['released_date'] = sql2date($myrow['date_']);
+
 $_POST['released'] = $myrow["released"];
 $_POST['memo_'] = "";
 

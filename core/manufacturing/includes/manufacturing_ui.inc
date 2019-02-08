@@ -285,6 +285,9 @@ function display_wo_details($woid, $suppress_view_link=false)
     	exit;
     }
 
+    if (!isset($_POST['date_']))
+        $_POST['date_'] = sql2date($myrow['date_']);
+
    	start_table(TABLESTYLE, "width='80%'");
 
 	if ($myrow["released"] == true)

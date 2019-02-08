@@ -726,3 +726,4 @@ the bank transaction memo.
 ## add g/l category search to g/l popup search
 ## retain date on successive supplier entry
 ## filter out voided transactions in supplier and customer inquiry
+## make release date the default date for advanced manufacturing
