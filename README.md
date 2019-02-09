@@ -727,3 +727,4 @@ the bank transaction memo.
 ## retain date on successive supplier entry
 ## filter out voided transactions in supplier and customer inquiry
 ## make release date the default date for advanced manufacturing
+## do not grey out item type and units when item has foreign codes

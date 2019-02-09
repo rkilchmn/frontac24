@@ -156,7 +156,7 @@ function get_items($fixed_asset = 0)
 	return db_query($sql,"items could not be retreived");
 }
 
-function item_in_foreign_codes($stock_id)
+function item_used($stock_id)
 {
 	$sqls=  array(
 	"SELECT COUNT(*) FROM "
@@ -183,6 +183,12 @@ function item_in_foreign_codes($stock_id)
 			$msg = $err; break;
 		}
 	}
+    return $msg;
+}
+
+function item_in_foreign_codes($stock_id)
+{
+    $msg = item_used($stock_id);
 	if ($msg == '') {
 
 		$kits = get_where_used($stock_id);

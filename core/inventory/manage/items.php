@@ -406,7 +406,7 @@ function item_settings(&$stock_id, $new_item)
 
 	}
 	$fresh_item = !isset($_POST['NewStockID']) || $new_item 
-		|| check_usage($_POST['stock_id'],false);
+		|| item_used($_POST['stock_id']) == "";
 
 	// show inactive item tax type in selector only if already set.
   item_tax_types_list_row(_("Item Tax Type:"), 'tax_type_id', null, !$new_item && item_type_inactive(get_post('tax_type_id')));
