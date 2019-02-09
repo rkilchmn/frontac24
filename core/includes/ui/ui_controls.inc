@@ -185,7 +185,8 @@ function meta_forward_self($params_in="", $timeout=0, $return=false)
 {
     $referer = "";
     $params = "";
-    if (!isset($_POST['referer']) || strpos($_POST['referer'], "inquiry") === false)
+    if (!isset($_POST['referer'])
+        || (strpos($_POST['referer'], "inquiry") === false && strpos($_POST['referer'], "search") === false))
         $referer=$_SERVER['PHP_SELF'];
     else {
         $referer=parse_url($_POST['referer'], PHP_URL_PATH);
