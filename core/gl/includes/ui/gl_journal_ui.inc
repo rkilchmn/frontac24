@@ -258,6 +258,10 @@ function gl_edit_item_controls(&$order, $dim, $sub_accounts, $Index=null)
 		if ($dim > 1)
 			dimensions_list_cells(null, 'dimension2_id', null, true, " ", false, 2);
 		$_POST['LineMemo'] = "";			
+        if ($order->gl_items_total() < 0)
+            $_POST['AmountDebit'] = -$order->gl_items_total();
+        else
+            $_POST['AmountCredit'] = $order->gl_items_total();
 	}
 
 	if (get_post('_code_id_update'))

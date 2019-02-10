@@ -728,3 +728,4 @@ the bank transaction memo.
 ## filter out voided transactions in supplier and customer inquiry
 ## make release date the default date for advanced manufacturing
 ## do not grey out item type and units when item has foreign codes
+## auto calculate g/j difference to make g/j entry faster
