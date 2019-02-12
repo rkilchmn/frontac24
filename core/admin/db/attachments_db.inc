@@ -97,10 +97,16 @@ function has_attachment($type, $id)
 		return $myrow['id'];
 }
 
-function get_sql_for_attached_documents($type)
+function get_sql_for_attached_documents($type, $trans_no)
 {
-	return "SELECT trans_no, description, filename, filesize, filetype, tran_date, id, type_no FROM ".TB_PREF."attachments WHERE type_no=".db_escape($type)
-	." ORDER BY trans_no DESC";
+	$sql = "SELECT trans_no, description, filename, filesize, filetype, tran_date, id, type_no FROM ".TB_PREF."attachments a
+        WHERE type_no=".db_escape($type);
+
+    if ($trans_no != null)
+        $sql .= " AND trans_no=".db_escape($trans_no);
+
+    $sql .= " ORDER BY trans_no DESC";
+    return $sql;
 }
 
 function move_trans_attachments($type, $trans_from, $trans_to)

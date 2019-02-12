@@ -706,3 +706,15 @@ the bank transaction memo.
 ## make release date the default date for advanced manufacturing
 ## do not grey out item type and units when item has foreign codes
 ## auto calculate g/j difference to make g/j entry faster
+
+## improve adding and downloading attachments 
+BF makes the following improvemnts:
+* BF adds an attachment icon on inquiry pages to make adding attachments easier.
+* The attachment filename on viewing or download is the same as the name used
+to store the attachment and an appropriate filename extension is generated based
+on the MIME type.
+* When adding an attachment through the inquiry page or the data entry subpage,
+only the attachments for that document are shown,
+resulting in less clutter.
+* The attachment page is more compact.
+

@@ -321,5 +321,6 @@ defined('ICON_ESCAPE') || define('ICON_ESCAPE', 'escape.png');
 defined('ICON_ALLOC') || define('ICON_ALLOC', 'alloc.png');
 defined('ICON_CLOSED') || define('ICON_CLOSED', 'closed.png');
 defined('ICON_REISSUE') || define('ICON_REISSUE', 'menu_system.png');
+defined('ICON_ATTACH')	|| define('ICON_ATTACH', 'add.png');
 
 

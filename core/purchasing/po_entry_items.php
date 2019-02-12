@@ -216,13 +216,8 @@ function handle_cancel_po()
 	$_POST['PO']->clear_items();
 	$_POST['PO'] = new purch_order;
 
-	display_notification(_("This purchase order has been cancelled."));
-
-	hyperlink_params($path_to_root . "/purchasing/po_entry_items.php", _("Enter a new purchase order"), "NewOrder=Yes");
-	echo "<br>";
-
-	end_page();
-	exit;
+    // edit/cancel is always called from purchase order inquiry, so return to it
+    meta_forward_self("message=" . _("This purchase order has been cancelled."));
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -515,7 +510,7 @@ if ($_POST['PO']->order_has_items())
 		submit_center_first('Commit', $update_txt, '', 'default');
 	else
 		submit_center_first('Commit', $process_txt, '', 'default');
-	submit_center_last('CancelOrder', $cancel_txt); 	
+	submit_center_last('CancelOrder', $cancel_txt, '', 'default'); 	
 }
 else
 	submit_center('CancelOrder', $cancel_txt, true, false, 'cancel');

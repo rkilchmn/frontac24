@@ -22,7 +22,9 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history(array('supplier_id', 'OrdersAfterDate', 'OrdersToDate'));
 page(_($help_context = "Search Purchase Orders"), false, false, "", $js);
+set_posts(array('supplier_id', 'OrdersAfterDate', 'OrdersToDate'));
 
 //---------------------------------------------------------------------------------------------
 function trans_view($trans)
@@ -36,6 +38,14 @@ function edit_link($row)
 
 	return $page_nested || !$row['isopen'] ? '' :
 		trans_editor_link(ST_PURCHORDER, $row["order_no"]);
+}
+
+function attach_link($row)
+{
+    global $page_nested;
+
+    return $page_nested || !$row['isopen'] ? '' :
+        pager_link(_("Add an Attachment"), "/admin/attachments.php?trans_no=" . $row['order_no'] . "&filterType=". ST_PURCHORDER, ICON_ATTACH);
 }
 
 function prt_link($row)
@@ -121,6 +131,7 @@ $cols = array(
 		_("Currency") => array('align'=>'center'), 
 		_("Order Total") => 'amount',
 		array('insert'=>true, 'fun'=>'edit_link'),
+		array('insert'=>true, 'fun'=>'attach_link'),
 		array('insert'=>true, 'fun'=>'prt_link'),
 );
 

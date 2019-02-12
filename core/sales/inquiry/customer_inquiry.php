@@ -96,6 +96,16 @@ function edit_link($row)
     }
 }
 
+function attach_link($row)
+{
+	global $page_nested;
+
+	$str = '';
+	if ($page_nested)
+		return '';
+    return is_closed_trans($row['type'], $row['trans_no']) ? "--" : pager_link(_("Add an Attachment"), "/admin/attachments.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_ATTACH);
+}
+
 function delete_link($row)
 {
 	global $page_nested;
@@ -230,6 +240,7 @@ $cols = array(
 		array('insert'=>true, 'fun'=>'prt_link'),
 		array('insert'=>true, 'fun'=>'credit_link'),
 		array('insert'=>true, 'fun'=>'edit_link'),
+		array('insert'=>true, 'fun'=>'attach_link'),
 		array('insert'=>true, 'fun'=>'delete_link')
 	);
 
