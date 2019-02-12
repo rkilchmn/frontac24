@@ -127,10 +127,6 @@ function add_grn(&$po)
 			   	/*Need to get the standard cost as it is now so we can process GL jorunals later*/
 			   	$order_line->standard_cost = get_unit_cost($order_line->stock_id);
 			}
-			// Update the purchase data table
-			add_or_update_purchase_data($po->supplier_id, $order_line->stock_id, $order_line->price, 
-				$order_line->item_description); 
-
 			/*Need to insert a grn item */ // also need to check for over-receive.(within allowance)
 			if ($order_line->receive_qty + $order_line->qty_received > $order_line->quantity)
 				$order_line->quantity = $order_line->receive_qty + $order_line->qty_received;

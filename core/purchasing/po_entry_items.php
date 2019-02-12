@@ -329,8 +329,8 @@ function handle_add_new_item()
 					get_post('stock_id_text'), //$myrow["description"], 
 					input_num('price'), '', // $myrow["units"], (retrived in cart)
 					$_POST['PO']->trans_type == ST_PURCHORDER ? $_POST['req_del_date'] : '', 0, 0);
-                                if ($_POST['reprice'] != 0)
-                                    $_POST['PO']->reprice_order($_POST['reprice'], $line_no);
+                    if ($_POST['reprice'] != 0)
+                        $_POST['PO']->reprice_order($_POST['reprice'], $line_no);
 
 				unset_form_variables();
 				$_POST['stock_id']	= "";

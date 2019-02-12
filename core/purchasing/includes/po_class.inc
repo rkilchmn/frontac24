@@ -71,6 +71,7 @@ class purch_order
 			$this->line_items[$line_no] = new po_line_details($line_no, $stock_id, $item_descr, $qty, $price, $uom, 
 				$req_del_date, $qty_inv, $qty_recd);
 			$this->lines_on_order++;
+            add_or_update_purchase_data($this->supplier_id, $stock_id, $price, $item_descr);
 			return 1;
 		}
 		return 0;
@@ -78,12 +79,11 @@ class purch_order
 
 	function update_order_item($line_no, $qty, $price, $req_del_date, $description="")
 	{
-		if ($description != "")
-			$this->line_items[$line_no]->item_description = $description;
 		$this->line_items[$line_no]->quantity = $qty;
 		$this->line_items[$line_no]->price = $price;
 		$this->line_items[$line_no]->req_del_date = $req_del_date;
 		$this->line_items[$line_no]->item_description = $description;
+        add_or_update_purchase_data($this->supplier_id, $this->line_items[$line_no]->stock_id, $price, $description);
 	}
 
 	function remove_from_order($line_no)

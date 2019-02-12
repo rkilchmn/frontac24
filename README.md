@@ -43,8 +43,28 @@ because the POS setup is restricted to cash accounts.
 
 POS systems often allow direct deposit into bank accounts,
 so BF does not restrict the POS "cash sale" to cash accounts
+
 ## apportion service items; bug fixes
-This mod gives the user the option on a PO to apportion service items (freight, setup charges, discounts, etc) into prices of non-service items on the PO without changing the PO order total. By apportioning these costs into item prices, they are accounted for in inventory and thus accounted for in COGS only when then items are sold. Three methods of apportionment are provided: by item quantity, line item, and line total.
+According to Steven Bragg in his "GAAP Guidebook",
+"In general, inventory is to be accounted for at cost,
+which is considered to be the sum of those expenditures required to bring an inventory item to its present condition and location." 
+
+This mod gives the user the option to apportion service costs
+(e.g. freight, setup charges, discounts, etc) on the PO
+into prices of inventory items.
+By apportioning these costs into item prices, they are then accounted for in inventory
+and thus accounted for in COGS only when then items are sold, as per GAAP.
+Three methods of apportionment are provided: by item quantity, line item, and line total.
+
+Note: This does not easily support apportioning costs from multiple suppliers into
+item prices.  For example, if shipping is paid outside of the invoice,
+it is difficult to incorporate the shipping into the item prices.
+See, http://frontaccounting.com/punbb/viewtopic.php?pid=31220#p31220.  
+
+Note: To prevent COGS costs from changing the item purchase price in the purch_data table,
+update of this table was moved from the invoice/grn commit code
+to the purchase order entry code,
+so that the table can be updated before COGS costs are added to the purchase price.
 
 additional bug fixes:
 
