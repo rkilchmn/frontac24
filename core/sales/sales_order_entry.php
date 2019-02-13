@@ -620,7 +620,7 @@ function  handle_cancel_order()
 {
 	global $path_to_root, $Ajax;
 
-
+	processing_end();
 	if ($_POST['Items']->trans_type == ST_CUSTDELIVERY) {
 		display_notification(_("Direct delivery entry has been cancelled as requested."), 1);
 		submenu_option(_("Enter a New Sales Delivery"),	"/sales/sales_order_entry.php?NewDelivery=1&OrderDate=".$_POST['OrderDate']);
@@ -654,12 +654,10 @@ function  handle_cancel_order()
             }
             meta_forward($referer, $params);
 		} else {
-			processing_end();
             // Note: new sales orders never have referer
             meta_forward($path_to_root.'/index.php','application=orders');
         }
 	}
-	processing_end();
 	display_footer_exit();
 }
 
