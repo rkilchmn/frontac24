@@ -717,4 +717,4 @@ on the MIME type.
 only the attachments for that document are shown,
 resulting in less clutter.
 * The attachment page is more compact.
-
+## do not show voided customer deliveries
