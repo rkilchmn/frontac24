@@ -37,7 +37,7 @@ function getTaxTransactions($from, $to)
 	            taxrec.net_amount*ex_rate AS net_amount,
                 IF(ISNULL(supp.supp_name),
                     IF(ISNULL(debt.name),
-                        IF(gl.person_type_id<>".PT_MISC.", gl.memo_, gl.person_id), debt.name),
+                        IF(gl.person_type_id<>".PT_MISC.", gl.memo_, bt.person_id), debt.name),
                         supp.supp_name) as name,
 				branch.br_name
 		FROM ".TB_PREF."trans_tax_details taxrec
@@ -53,6 +53,7 @@ function getTaxTransactions($from, $to)
 			ON taxrec.trans_no=dtrans.trans_no AND taxrec.trans_type=dtrans.type
 		LEFT JOIN ".TB_PREF."debtors_master as debt ON dtrans.debtor_no=debt.debtor_no
 		LEFT JOIN ".TB_PREF."cust_branch as branch ON dtrans.branch_code=branch.branch_code
+		LEFT JOIN ".TB_PREF."bank_trans as bt ON taxrec.trans_type=bt.type AND taxrec.trans_no=bt.trans_no
 		WHERE (taxrec.amount <> 0 OR taxrec.net_amount <> 0)
             AND taxrec.trans_type <> ".ST_CUSTDELIVERY."
 			AND taxrec.tran_date >= '$fromdate'
