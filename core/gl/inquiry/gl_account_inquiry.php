@@ -140,7 +140,7 @@ function delete_link($row)
 
 function ok_link($row)
 {
-        return pager_link_absolute(_("OK"), preg_replace('/&account=.*/','',htmlspecialchars_decode($_POST['referer'])) . "&account=".$_POST['account'] . "&amount=". $row['amount'] . "&memo=".$row['memo_'], ICON_OK);
+        return pager_link_absolute(_("OK"), preg_replace('/&select=.*/','',htmlspecialchars_decode($_POST['referer'])) . "&select=".get_post('select') . "&amount=". $row['amount'] . "&memo=".$row['memo_'], ICON_OK);
 }
 
 //----------------------------------------------------------------------------------------------------

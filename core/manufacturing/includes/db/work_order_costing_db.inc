@@ -134,7 +134,7 @@ function add_wo_costs_journal($wo_id, $amount, $cost_type, $cr_acc, $date, $dim1
 
     // FA does not dimension payments but BA does
 	add_gl_trans_std_cost(ST_JOURNAL, $journal_id, $date, $cr_acc,
-		$dim1, $dim2, $item['description'], -$amount);
+		$dim1, $dim2, $wo['StockItemName'], -$amount);
 
 	$is_bank_to = is_bank_account($cr_acc);
 	if ($is_bank_to)
@@ -146,7 +146,7 @@ function add_wo_costs_journal($wo_id, $amount, $cost_type, $cr_acc, $date, $dim1
 	add_journal(ST_JOURNAL, $journal_id, $amount, $date, get_company_currency(), $ref, '', 1, $date, $date);
 
 	add_gl_trans_std_cost(ST_JOURNAL, $journal_id, $date, $wo['wip_account'],
-		$dim1, $dim2,  $item['description'], $amount);
+		$dim1, $dim2,  $wo['StockItemName'], $amount);
 
 	$wo = get_work_order($wo_id);
 	$wip = $wo['wip_account'];
