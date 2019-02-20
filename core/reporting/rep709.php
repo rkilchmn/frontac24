@@ -39,7 +39,9 @@ function getTaxTransactions($from, $to)
                     IF(ISNULL(debt.name),
                         IF(gl.person_type_id<>".PT_MISC.", gl.memo_, bt.person_id), debt.name),
                         supp.supp_name) as name,
-				branch.br_name
+				branch.br_name,
+                bt.bank_act,
+                gl.memo_ as gl_memo
 		FROM ".TB_PREF."trans_tax_details taxrec
 		LEFT JOIN ".TB_PREF."tax_types tt
 			ON taxrec.tax_type_id=tt.id
@@ -143,9 +145,7 @@ function print_tax_report()
 		if (!$summaryOnly)
 		{
 			$rep->TextCol(0, 1, $systypes_array[$trans['trans_type']]);
-			if ($trans['memo'] == '')
-				$trans['memo'] = get_reference($trans['trans_type'], $trans['trans_no']);
-			$rep->TextCol(1, 2,	$trans['memo']);
+            $rep->TextCol(1, 2,	get_reference($trans['trans_type'], $trans['trans_no']));
 			$rep->DateCol(2, 3,	$trans['tran_date'], true);
 			$rep->TextCol(3, 4,	$trans['name']);
 			$rep->TextCol(4, 5,	$trans['br_name']);
@@ -157,6 +157,12 @@ function print_tax_report()
 			$rep->TextCol(9, 10, $trans['taxname']);
 
 			$rep->NewLine();
+            if (in_array($trans['trans_type'], array(ST_BANKPAYMENT, ST_BANKDEPOSIT))) {
+                $rep->TextCol(1, 3,	get_bank_account($trans['bank_act'])['bank_account_name']);
+                $rep->TextCol(3, 4,	$trans['memo']);
+                $rep->TextCol(4, 8,	$trans['gl_memo']);
+                $rep->NewLine();
+            }
 
 			if ($rep->row < $rep->bottomMargin + $rep->lineHeight)
 			{
