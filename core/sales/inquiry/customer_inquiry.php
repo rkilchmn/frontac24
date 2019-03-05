@@ -191,7 +191,8 @@ if ($_POST['filterType'] != '2')
         date_cells(_("To:"), 'TransToDate', '', null, 0, 2);
     }
 }
-check_cells(_("Zero values"), 'show_voided', 1);
+$_POST['show_voided'] = 1;
+check_cells(_("Zero values"), 'show_voided');
 
 submit_cells('RefreshInquiry', _("Search"),'',_('Refresh Inquiry'), 'default');
 end_row();
