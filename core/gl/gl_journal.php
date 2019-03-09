@@ -59,6 +59,7 @@ if (isset($_GET['AddedID']))
     display_note(get_gl_view_str($trans_type, $trans_no, _("&View this Journal Entry")));
 
 	reset_focus();
+	hyperlink_params($_SERVER['PHP_SELF'], _("Edit Journal Entry"), "ModifyGL=Yes&trans_type=0&trans_no=$trans_no");
 	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &New Journal Entry"), "NewJournal=Yes");
 
 	hyperlink_params("$path_to_root/admin/attachments.php", _("Add an Attachment"), "filterType=$trans_type&trans_no=$trans_no");
@@ -73,6 +74,7 @@ if (isset($_GET['AddedID']))
 
     display_note(get_gl_view_str($trans_type, $trans_no, _("&View this Journal Entry")));
 
+	hyperlink_params($_SERVER['PHP_SELF'], _("Edit Journal Entry"), "ModifyGL=Yes&trans_type=0&trans_no=$trans_no");
    	hyperlink_no_params($path_to_root."/gl/inquiry/journal_inquiry.php", _("Return to Journal &Inquiry"));
 
 	display_footer_exit();
@@ -326,6 +328,7 @@ if (isset($_POST['Process']))
 	} else
 		$cart->tax_info = false;
 	$trans_no = write_journal_entries($cart);
+    if ($trans_no !== false) {
 
         // retain the reconciled status if desired by user
         if (isset($_POST['reconciled'])
@@ -343,6 +346,7 @@ if (isset($_POST['Process']))
 		meta_forward_self("AddedID=$trans_no");
 	else
 		meta_forward_self("UpdatedID=$trans_no");
+    }
 }
 
 //-----------------------------------------------------------------------------------------------

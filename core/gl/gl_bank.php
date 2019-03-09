@@ -89,6 +89,7 @@ if (isset($_GET['AddedID']))
 
 	display_note(get_gl_view_str($trans_type, $trans_no, _("&View the GL Postings for this Payment")));
 
+	hyperlink_params($_SERVER['PHP_SELF'], _("Edit This &Payment"), "ModifyPayment=yes&trans_type=$trans_type&trans_no=$trans_no");
 	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another &Payment"), "NewPayment=yes&date_=".$_GET['date_']."&bank_account=".$_POST['bank_account']);
 
 	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A &Deposit"), "NewDeposit=yes&date_=".$_GET['date_']."&bank_account=".$_POST['bank_account']);
@@ -107,6 +108,7 @@ if (isset($_GET['UpdatedID']))
 
 	display_note(get_gl_view_str($trans_type, $trans_no, _("&View the GL Postings for this Payment")));
 
+	hyperlink_params($_SERVER['PHP_SELF'], _("Edit This &Payment"), "ModifyPayment=yes&trans_type=$trans_type&trans_no=$trans_no");
 	hyperlink_params($_SERVER['PHP_SELF'], _("Enter Another &Payment"), "NewPayment=yes");
 
 	hyperlink_params($_SERVER['PHP_SELF'], _("Enter A &Deposit"), "NewDeposit=yes");
@@ -309,6 +311,10 @@ if (isset($_POST['Process']) && !check_trans())
 		$_POST['PayType'], $_POST['person_id'], get_post('PersonDetailID'),
 		$_POST['ref'], $_POST['memo_'], true, input_num('settled_amount', null));
 
+	commit_transaction();
+
+    if ($trans != false) {
+
 	$trans_type = $trans[0];
    	$trans_no = $trans[1];
 
@@ -326,8 +332,6 @@ if (isset($_POST['Process']) && !check_trans())
 	$_POST['pay_items']->clear_items();
 	unset($_POST['pay_items']);
 
-	commit_transaction();
-
     $params = "";
     if ($new) {
         $params .= ($trans_type==ST_BANKPAYMENT ?  "AddedID=" : "AddedDep=");
@@ -336,6 +340,7 @@ if (isset($_POST['Process']) && !check_trans())
         $params .= ($trans_type==ST_BANKPAYMENT ?
             "UpdatedID=$trans_no" : "UpdatedDep=$trans_no");
     meta_forward_self($params);
+    }
 
 }
 
