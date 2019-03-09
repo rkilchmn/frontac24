@@ -259,9 +259,9 @@ function gl_edit_item_controls(&$order, $dim, $sub_accounts, $Index=null)
 			dimensions_list_cells(null, 'dimension2_id', null, true, " ", false, 2);
 		$_POST['LineMemo'] = "";			
         if ($order->gl_items_total() < 0)
-            $_POST['AmountDebit'] = -$order->gl_items_total();
+            $_POST['AmountDebit'] = round2(-$order->gl_items_total(), user_price_dec());
         else
-            $_POST['AmountCredit'] = $order->gl_items_total();
+            $_POST['AmountCredit'] = round2($order->gl_items_total(), user_price_dec());
 	}
 
 	if (get_post('_code_id_update'))
