@@ -16,7 +16,7 @@ include_once($path_to_root . "/admin/db/attachments_db.inc");
 
 function read_supplier_details_to_trans(&$supp_trans, $supplier_id)
 {
-	$sql = "SELECT supp.supp_name, terms.terms, terms.days_before_due,
+	$sql = "SELECT supp.supp_name, terms.terms, terms.days_before_due, supp.dimension_id, supp.dimension2_id,
 		terms.day_in_following_month, supp.tax_included,
 		supp.tax_group_id, tax_group.name AS tax_group_name,
 		supp.credit_limit - Sum(IFNULL(IF(trans.type=".ST_SUPPCREDIT.", -1, 1) 
@@ -55,6 +55,8 @@ function read_supplier_details_to_trans(&$supp_trans, $supplier_id)
 
 	$supp_trans->tax_description = $myrow['tax_group_name'];
 	$supp_trans->tax_group_id = $myrow['tax_group_id'];
+	$supp_trans->dimension = $myrow['dimension_id'];
+	$supp_trans->dimension2 = $myrow['dimension2_id'];
 
 }
 
@@ -221,7 +223,7 @@ function add_supp_invoice(&$supp_trans)
 		$net_diff = -$net_diff;
 
     /* Now the AP account */
-    $total += add_gl_trans_supplier($trans_type, $invoice_id, $date_, $supplier["payable_account"], 0, 0,
+    $total += add_gl_trans_supplier($trans_type, $invoice_id, $date_, $supplier["payable_account"], $dim, $dim2,
 		-($invoice_items_total +  $item_added_tax + $supp_trans->ov_discount),
 		$supp_trans->supplier_id,
 		"The general ledger transaction for the control total could not be added");
@@ -452,7 +454,7 @@ function get_tax_overrides($trans_type, $trans_no)
 
 function read_supp_invoice($trans_no, $trans_type, &$supp_trans)
 {
-	$sql = "SELECT trans.*, supp_name 
+	$sql = "SELECT trans.*, supp_name, dimension_id, dimension2_id
 		FROM ".TB_PREF."supp_trans trans,"
 			.TB_PREF."suppliers sup
 		WHERE trans_no = ".db_escape($trans_no)." AND type = ".db_escape($trans_type)."
@@ -475,6 +477,8 @@ function read_supp_invoice($trans_no, $trans_type, &$supp_trans)
 		$supp_trans->ov_discount = $trans_row["ov_discount"];
 		$supp_trans->ov_gst = $trans_row["ov_gst"];
 		$supp_trans->tax_included = $trans_row["tax_included"];
+		$supp_trans->dimension = $trans_row["dimension_id"];
+		$supp_trans->dimension2 = $trans_row["dimension2_id"];
 
 		$id = $trans_row["trans_no"];
 
