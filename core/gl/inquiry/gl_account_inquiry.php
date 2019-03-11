@@ -122,15 +122,22 @@ function gl_inquiry_controls()
 
 function edit_link($row)
 {
+    global $page_nested;
 
-        $ok = true;
-        if ($row['type'] == ST_SALESINVOICE)
-        {
-                $myrow = get_customer_trans($row["type_no"], $row["type"]);
-                if ($myrow['alloc'] != 0 || get_voided_entry(ST_SALESINVOICE, $row["type_no"]) !== false)
-                        $ok = false;
-        }
-        return $ok ? trans_editor_link( $row["type"], $row["type_no"]) : '';
+    $str = '';
+    if ($page_nested)
+        return '';
+
+    switch($row['type']) {
+        case ST_SALESINVOICE:
+            $myrow = get_customer_trans($row["type_no"], $row["type"]);
+            $str = "/sales/sales_order_entry.php?NewInvoice=".$myrow['order_']."&InvoiceNo=".$row['type_no'];
+            return pager_link(_('Edit'), $str, ICON_EDIT);
+            break;
+        default:
+            return $row['type'] == ST_CUSTCREDIT && $row['order_'] ? '' :   // allow  only free hand credit notes edition
+                trans_editor_link($row['type'], $row['type_no']);
+    }
 }
 
 function delete_link($row)

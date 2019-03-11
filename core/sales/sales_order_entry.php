@@ -389,6 +389,13 @@ function can_process() {
 		set_focus('AddItem');
 		return false;
 	}
+
+    // Need to void old invoice before stock check
+    // This means that it is possible to lose it without creating a new one if there is an error
+
+    if (get_post('InvoiceNo')>0) //Added by Faisal to enable invoice Edit
+            void_transaction (ST_SALESINVOICE, get_post('InvoiceNo'), Today(), 'Document Reissued');
+
 	if (!$SysPrefs->allow_negative_stock() && ($low_stock = $_POST['Items']->check_qoh()))
 	{
 		display_error(_("This document cannot be processed because there is insufficient quantity for items marked."));
@@ -473,9 +480,6 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 
 	$modified = ($_POST['Items']->trans_no != 0);
 	$so_type = $_POST['Items']->so_type;
-
-    if (get_post('InvoiceNo')>0) //Added by Faisal to enable invoice Edit
-            void_transaction (ST_SALESINVOICE, get_post('InvoiceNo'), Today(), 'Document Reissued');
 
 	$ret = $_POST['Items']->write(1);
 	if ($ret == -1)
