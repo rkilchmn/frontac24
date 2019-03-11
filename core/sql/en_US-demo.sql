@@ -2174,6 +2174,7 @@ INSERT INTO `0_sys_prefs` VALUES ('print_invoice_no','glsetup.sales', 'tinyint',
 INSERT INTO `0_sys_prefs` VALUES ('allow_negative_prices','glsetup.inventory', 'tinyint', 1, '1');
 INSERT INTO `0_sys_prefs` VALUES ('print_item_images_on_quote','glsetup.inventory', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('suppress_tax_rates','setup.company', 'tinyint', 1, '0');
+INSERT INTO `0_sys_prefs` VALUES ('tax_bank_payments','setup.company', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('company_logo_report','setup.company', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('barcodes_on_stock','setup.company', 'tinyint', 1, '0');
 INSERT INTO `0_sys_prefs` VALUES ('print_dialog_direct','setup.company', 'tinyint', 1, '0');

@@ -57,8 +57,14 @@ function getTaxTransactions($from, $to)
 		LEFT JOIN ".TB_PREF."cust_branch as branch ON dtrans.branch_code=branch.branch_code
 		LEFT JOIN ".TB_PREF."bank_trans as bt ON taxrec.trans_type=bt.type AND taxrec.trans_no=bt.trans_no
 		WHERE (taxrec.amount <> 0 OR taxrec.net_amount <> 0)
-            AND taxrec.trans_type <> ".ST_CUSTDELIVERY."
-			AND taxrec.tran_date >= '$fromdate'
+            AND taxrec.trans_type <> ".ST_CUSTDELIVERY;
+
+        // display of bank payments/deposits in tax history is optional in FA
+        if (!get_company_pref("tax_bank_payments"))
+            $sql .= " AND taxrec.trans_type <> ".ST_BANKPAYMENT."
+                AND taxrec.trans_type <> ".ST_BANKDEPOSIT;
+
+        $sql .= " AND taxrec.tran_date >= '$fromdate'
 			AND taxrec.tran_date <= '$todate'
         GROUP BY taxrec.id
 		ORDER BY taxrec.trans_type, taxrec.tran_date, taxrec.trans_no, taxrec.ex_rate";

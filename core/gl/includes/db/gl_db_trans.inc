@@ -544,8 +544,10 @@ function get_tax_summary($from, $to, $also_zero_purchases=false)
 				ttype.id,
 				ttype.name
 		FROM ".TB_PREF."trans_tax_details taxrec LEFT JOIN ".TB_PREF."tax_types ttype ON taxrec.tax_type_id=ttype.id
-		WHERE taxrec.trans_type IN (".implode(',',
-			array(ST_SALESINVOICE, ST_CUSTCREDIT, ST_SUPPINVOICE, ST_SUPPCREDIT, ST_JOURNAL, ST_BANKDEPOSIT, ST_BANKPAYMENT)).")
+		WHERE taxrec.trans_type IN (".  implode(',',
+            get_company_pref("tax_bank_payments") ?
+                array(ST_SALESINVOICE, ST_CUSTCREDIT, ST_SUPPINVOICE, ST_SUPPCREDIT, ST_JOURNAL, ST_BANKDEPOSIT, ST_BANKPAYMENT) :
+                array(ST_SALESINVOICE, ST_CUSTCREDIT, ST_SUPPINVOICE, ST_SUPPCREDIT, ST_JOURNAL)).")
 			AND taxrec.tran_date >= '$fromdate'
 			AND taxrec.tran_date <= '$todate'
 		GROUP BY ttype.id";
