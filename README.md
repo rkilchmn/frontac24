@@ -718,3 +718,30 @@ only the attachments for that document are shown,
 resulting in less clutter.
 * The attachment page is more compact.
 ## do not show voided customer deliveries
+## Add start date/end date to customer statement/aged customer analysis
+The customer statement and aged customer analysis reports in FA
+have an option "Show Also Allocated" that shows transactions that have
+not been fully allocated and all transactions.
+To get accurate balances
+(for example, see http://frontaccounting.com/punbb/viewtopic.php?pid=20867#p20867,
+the option Show Also Allocated must be true.
+However, this will show every transaction from the start of time.
+Furthermore, the aged customer balance table will often not be correct because
+the code does not analyze transation aging dynamically (for example, see
+http://frontaccounting.com/punbb/viewtopic.php?id=7522).
+
+The BF solution is to remove the "Show Also Allocated" option from these reports
+and show all transactions
+(as if Show Also Allocated was true)
+and add start/end dates to these reports
+to limit the transactions display.
+This is how the FA Customer Balances report works and makes these reports consistent.
+
+Finally, the customer balance table is constructed using allocations
+(as if Show Also Allocated was false).
+This means that in order to get a correct customer balance table,
+all transactions must be properly allocated.
+
+BF also correctly handles allocated journal entries.
+This is the only core charge; the BF reports are extensions.
+

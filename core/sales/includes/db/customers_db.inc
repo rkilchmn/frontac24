@@ -77,8 +77,8 @@ function get_customer_details($customer_id, $to=null, $all=true)
 	if ($all)
     	$value = "IFNULL($sign*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount),0)";
     else		
-    	$value = "IFNULL($sign*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount - 
-    		trans.alloc),0)";
+    	$value = "IFNULL($sign*(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount + 
+    		IF(`type` = ".ST_JOURNAL.",trans.alloc,-trans.alloc)),0)";
 	$due = "IF (trans.type=".ST_SALESINVOICE.", trans.due_date, trans.tran_date)";
     $sql = "SELECT debtor.name, debtor.curr_code, terms.terms, debtor.credit_limit,
     			credit_status.dissallow_invoices, credit_status.reason_description,
@@ -98,7 +98,7 @@ function get_customer_details($customer_id, $to=null, $all=true)
 
 
 	if (!$all)
-		$sql .= " AND trans.type != ".ST_JOURNAL." AND ABS(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount - trans.alloc) > ".FLOAT_COMP_DELTA;
+		$sql .= " AND ABS(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount - trans.alloc) > ".FLOAT_COMP_DELTA;
 	$sql .= " GROUP BY
 			  	debtor.name,
 			  	terms.terms,
