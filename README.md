@@ -15,7 +15,7 @@ to make data entry and search faster and less error prone
 although there are also bug fixes and feature enhancements.
 
 BF (Braathwaate Fork) does require some database changes (see below).
-If desired, both BF and FA can run properly used the same database.
+If desired, both BF and FA can run properly using the same database.
 Following is a list of modifications.
 
 ## wwh customizations
@@ -126,10 +126,13 @@ Deleting transaction becomes as simple as clicking the red X
 rather than having to navigate to Setup->Void.
 
 ## Add dimension to payments
-FA does not dimension payments,
-which causes a problem for cash basis accounting.
+FA does not dimension payments, A/R or A/P.
+In cash basis accounting,
+these accounts are income/expenditure accounts
+rather than balance sheet accounts.
+Thus the P/L for cash basis by dimension will not be correct.
 
-BF properly dimensions payments.
+BF dimensions payments, A/R, and A/P.
 
 ## allow negative quantity and amount on invoices
 FA does not support invoices or payments
@@ -346,7 +349,7 @@ wraps it automatically on space boundaries and reduces the font size accordingly
 These changes accomodate longer legal text than is possible in FA.
 
 This feature required a database change by adding a legal text field to the payment_terms table.
-You will need to add this field if you want to use BA code instead of FA code.
+You will need to add this field if you want to use BF instead of FA.
 ```
 ALTER TABLE `0_payment_terms` ADD COLUMN `legal_text` varchar(4096);
 ```
@@ -456,6 +459,15 @@ is set to the new customer.
 ## FEATURE: remember last bank account transfer
 ## BUGFIX:  0004594: Tax group still showing when inactive
 ## FEATURE: tax groups can be sales or purchases only
+BF tax groups can be designated for suppliers or customers only.
+This simply removes them from the list of tax groups when adding or modifying
+suppliers or customers.
+This can help prevent assignment of the incorrect tax group
+to a supplier or customer.
+
+    mysql alter table 0_tax_groups add no_sale tinyint not null;
+    mysql alter table 0_tax_groups add no_purchase tinyint not null;
+
 ## BUGFIX:  0004606: Cannot add a zero price to an item with a purchase price in inventory adjustment
 ## BUGFIX:  0004614: Allocated journal entry payment shows in red (overdue) on customer transactions"
 ## FEATURE: manufacturing pick list costs from g/l accounts
@@ -744,4 +756,7 @@ all transactions must be properly allocated.
 
 BF also correctly handles allocated journal entries.
 This is the only core charge; the BF reports are extensions.
+
+## select amount text with click
+See, http://frontaccounting.com/punbb/viewtopic.php?pid=34388#p34388.
 

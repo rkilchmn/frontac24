@@ -820,7 +820,7 @@ function amount_cells_ex($label, $name, $size, $max=null, $init=null, $params=nu
 		echo "<td>";
 	else
 		echo "<td align='right'>";
-	echo "<input class='amount' style=background-color:$background_color type=\"text\" name=\"$name\" size=\"$size\" maxlength=\"$max\" dec=\"$dec\" value=\"" . $_POST[$name] . "\"";
+	echo "<input onClick='this.select();' class='amount' style=background-color:$background_color type=\"text\" name=\"$name\" size=\"$size\" maxlength=\"$max\" dec=\"$dec\" value=\"" . $_POST[$name] . "\"";
 
      if ($submit_on_blur === true)
          echo " onblur='JsHttpRequest.request(\"_{$name}_update\", this.form);'";
