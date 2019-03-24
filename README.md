@@ -760,3 +760,5 @@ This is the only core charge; the BF reports are extensions.
 ## select amount text with click
 See, http://frontaccounting.com/punbb/viewtopic.php?pid=34388#p34388.
 
+## g/l inquiry search on Miscellaneous names
+

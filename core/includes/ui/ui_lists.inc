@@ -2016,11 +2016,14 @@ function bank_account_types_list_row($label, $name, $selected_id=null)
 }
 
 //------------------------------------------------------------------------------------------------
-function payment_person_types_list($name, $selected_id=null, $submit_on_change=false)
+function payment_person_types_list($name, $selected_id=null, $submit_on_change=false, $all=false)
 {
 	global $payment_person_types;
 
 	$items = array();
+    if ($all)
+        $items[''] = _("All");
+
 	foreach ($payment_person_types as $key=>$type)
 	{
 		if ($key != PT_WORKORDER)
@@ -2031,19 +2034,19 @@ function payment_person_types_list($name, $selected_id=null, $submit_on_change=f
 		array( 'select_submit'=> $submit_on_change ) );
 }
 
-function payment_person_types_list_cells($label, $name, $selected_id=null, $related=null)
+function payment_person_types_list_cells($label, $name, $selected_id=null, $related=null, $all=false)
 {
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo "<td>";
-	echo payment_person_types_list($name, $selected_id, $related);
+	echo payment_person_types_list($name, $selected_id, $related, $all);
 	echo "</td>\n";
 }
 
-function payment_person_types_list_row($label, $name, $selected_id=null, $related=null)
+function payment_person_types_list_row($label, $name, $selected_id=null, $related=null, $all=false)
 {
 	echo "<tr><td class='label'>$label</td>";
-	payment_person_types_list_cells(null, $name, $selected_id, $related);
+	payment_person_types_list_cells(null, $name, $selected_id, $related, $all);
 	echo "</tr>\n";
 }
 

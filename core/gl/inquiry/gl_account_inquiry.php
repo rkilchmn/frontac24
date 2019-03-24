@@ -36,7 +36,10 @@ page(_($help_context = "General Ledger Inquiry"), false, false, '', $js, false, 
 //----------------------------------------------------------------------------------------------------
 // Ajax updates
 //
-if (get_post('Show')) 
+if (get_post('Show')
+    || list_updated('account')
+    || list_updated('person_type')
+    || list_updated('person_id'))
 {
 	$Ajax->activate('trans_tbl');
 }
@@ -88,17 +91,23 @@ function gl_inquiry_controls()
 	small_amount_cells(_("Amount min:"), 'amount_min', null, " ");
 	small_amount_cells(_("Amount max:"), 'amount_max', null, " ");
 
-    if (!isset($_POST['person_type']))
-        $_POST['person_type'] = PT_MISC;
-    payment_person_types_list_cells( _("Person Type:"), 'person_type', $_POST['person_type'], true);
-    if (list_updated('person_type'))
+    if (!isset($_POST['person_type'])) 
+        $_POST['person_type'] = '';
+
+    payment_person_types_list_cells( _("Person Type:"), 'person_type', $_POST['person_type'], true, true);
+    if (list_updated('person_type')) {
+        unset($_POST['person_id']);
         $Ajax->activate('header');
+    }
 
     switch ($_POST['person_type'])
     {
-        case PT_MISC :
+        case '' :
             unset($_POST['person_id']);
             hidden('person_id');
+            break;
+        case PT_MISC :
+            text_cells_ex(_("Name:"), 'person_id', 40, 50);
             break;
         case PT_SUPPLIER :
             supplier_list_cells(_("Supplier:"), 'person_id', null, false, true, false, true);
@@ -220,6 +229,9 @@ function show_results()
 		$begin = add_days($begin, -1);
 	}
 
+    if ($_POST["account"] != null)
+    	$colspan--;
+
 	$bfw = 0;
 	if ($show_balances) {
 	    $bfw = get_gl_balance_from_to($begin, $_POST['TransFromDate'], $_POST["account"], $_POST['Dimension'], $_POST['Dimension2']);
@@ -234,6 +246,14 @@ function show_results()
 	$running_total = $bfw;
 	$j = 1;
 	$k = 0; //row colour counter
+
+    // TEMPORARY: this needs to be converted to db_pager to prevent ajax timeouts
+    if (db_num_rows($result) > 5000) {
+        db_seek($result, db_num_rows($result) - 5000);
+    	alt_table_row_color($k);
+        label_cell("Earlier data is not shown for performance reasons.  Adjust search criteria to reduce number of rows.", "align=center colspan=100%");
+        end_row();
+    }
 
 	while ($myrow = db_fetch($result))
 	{
@@ -300,8 +320,9 @@ gl_inquiry_controls();
 div_start('trans_tbl');
 
 if (get_post('Show')
-    || get_post('account')
-    || get_post('person_id'))
+    || list_updated('account')
+    || list_updated('person_type')
+    || list_updated('person_id'))
     show_results();
 
 div_end();
