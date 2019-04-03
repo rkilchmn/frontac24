@@ -155,7 +155,7 @@ function display_bank_header(&$order)
             $row = db_fetch($result);
             if ($row
                 && $row['reconciled'] != "") {
-                check_row(_('Reconciled:'), 'reconciled', 1, true);
+                check_row(_('Reconciled:'), 'reconciled', 1, false);
                 hidden('reconciled_date', $row['reconciled']);
             }
         }

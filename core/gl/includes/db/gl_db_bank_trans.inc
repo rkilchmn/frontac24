@@ -16,7 +16,7 @@
 // $date_ is display date (non-sql)
 
 function add_bank_trans($type, $trans_no, $bank_act, $ref, $date_,
-	$amount, $person_type_id, $person_id, $currency="", $err_msg="", $rate=0)
+	$amount, $person_type_id, $person_id, $currency="", $err_msg="", $rate=0, $reconciled=null)
 {
 	$sqlDate = date2sql($date_);
 
@@ -34,12 +34,21 @@ function add_bank_trans($type, $trans_no, $bank_act, $ref, $date_,
 		$amount_bank = $amount;
 	$amount_bank = round2($amount_bank, user_price_dec());	
 
-	$sql = "INSERT INTO ".TB_PREF."bank_trans (type, trans_no, bank_act, ref,
-		trans_date, amount, person_type_id, person_id) ";
+    if (is_null($reconciled)) {
+        $sql = "INSERT INTO ".TB_PREF."bank_trans (type, trans_no, bank_act, ref,
+            trans_date, amount, person_type_id, person_id) ";
 
-	$sql .= "VALUES ($type, $trans_no, '$bank_act', ".db_escape($ref).", '$sqlDate',
-		".db_escape($amount_bank).", ".db_escape($person_type_id)
-		.", ". db_escape($person_id).")";
+        $sql .= "VALUES ($type, $trans_no, '$bank_act', ".db_escape($ref).", '$sqlDate',
+            ".db_escape($amount_bank).", ".db_escape($person_type_id)
+            .", ". db_escape($person_id) .")";
+    } else  {
+        $sql = "INSERT INTO ".TB_PREF."bank_trans (type, trans_no, bank_act, ref,
+            trans_date, amount, person_type_id, person_id, reconciled) ";
+
+        $sql .= "VALUES ($type, $trans_no, '$bank_act', ".db_escape($ref).", '$sqlDate',
+            ".db_escape($amount_bank).", ".db_escape($person_type_id)
+            .", ". db_escape($person_id). ", ". db_escape($reconciled) .")";
+    }
 
 	if ($err_msg == "")
 		$err_msg = "The bank transaction could not be inserted";
