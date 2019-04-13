@@ -89,9 +89,10 @@ $opts = array(		// default options
 	}
 	$disabled = $opts['disabled'] ? "disabled" : '';
 	$multi = $opts['multi'];
-    if(@$SysPrefs->auto_select_box && !$multi
-        && ($search_box == "" || $search_submit == ""))
-            $class .=' mbselect';
+    $mbclass = $class;
+    if(@$SysPrefs->auto_select_box && !$multi)
+        // && ($search_box == "" || $search_submit == ""))
+            $mbclass .=' mbselect';
 	
 	if(!count($opts['search'])) {
 		$opts['search'] = array($by_id ? $valfield : $namefield);
@@ -113,7 +114,7 @@ $opts = array(		// default options
 		$selected_id = array((string)$selected_id); // code is generalized for multiple selection support
 
 	$txt = get_post($search_box);
-//display_notification($search_box . ":" . $txt);
+// display_notification($search_box . ":" . $txt . ":" . $opts['search_submit']);
 	$rel = '';
 	$limit = '';
 	if (isset($_POST['_'.$name.'_update'])) { // select list or search box change
@@ -259,12 +260,12 @@ $opts = array(		// default options
         if ($SysPrefs->use_popup_search)
 		$selector = "<select id='$name' autocomplete='off' ".($multi ? "multiple" : '')
 		. ($opts['height']!==false ? ' size="'.$opts['height'].'"' : '')
-		. "$disabled name='$name".($multi ? '[]':'')."' class='$class' title='"
+		. "$disabled name='$name".($multi ? '[]':'')."' class='$mbclass' title='"
 		. $opts['sel_hint']."' $rel>".$selector."</select>\n";
         else
 		$selector = "<select autocomplete='off' ".($multi ? "multiple" : '')
 		. ($opts['height']!==false ? ' size="'.$opts['height'].'"' : '')
-		. "$disabled name='$name".($multi ? '[]':'')."' class='$class' title='"
+		. "$disabled name='$name".($multi ? '[]':'')."' class='$mbclass' title='"
 		. $opts['sel_hint']."' $rel>".$selector."</select>\n";
 
     if (isset($_POST[$search_box])
@@ -479,7 +480,6 @@ $opts = array(		// default options
 		$selected_id = array($first_id);
 	}
 	$_POST[$name] = $multi ? $selected_id : $selected_id[0];
-    if(@$SysPrefs->auto_select_box&&!$multi)$class ='combo mbselect';else $class='combo';
 
 	$selector = "<select autocomplete='off' ".($multi  ? "multiple" : '')
 		. ($opts['height']!==false ? ' size="'.$opts['height'].'"' : '')

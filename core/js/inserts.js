@@ -84,6 +84,12 @@ function mbselect(elm)
 	typer.setAttribute("autocomplete","off");
 	typer.className = "typer";
 	typer.setAttribute("name",elm.getAttribute("name")+"mselect");
+	var box_name =elm.getAttribute("rel");
+    if (box_name != null) {
+        typer.setAttribute("rel",box_name);
+        var box = document.getElementsByName(elm.getAttribute('rel'))[0];
+        box.setAttribute("rel",elm.getAttribute("name")+"mselect");
+    }
 	typer.setAttribute("style","display:inline-block;width:"+iw+"px");
 	typer.style.display = 'inline-block';
 	typer.setAttribute("style","width:"+iw+"px");
@@ -401,6 +407,17 @@ function mbselect(elm)
 			return false;
 		}
 
+		    key = event.keyCode||event.which;
+		    var box = document.getElementsByName(this.getAttribute('rel'))[0];
+//alert(box.className + ":" + box.name);
+            // spacebar or ctrl-B (used for barcode reader) activates search
+		    if (box && (key == 32 || (key == 66 && event.ctrlKey)) ) {
+                this.style.display = 'none';
+                box.style.display = 'inline';
+                box.value='';
+                setFocus(box);
+			    return false;
+            }
 	}
 	typer.onkeypress = function (event) {
 		event = event || window.event;
