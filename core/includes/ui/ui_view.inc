@@ -965,15 +965,32 @@ function get_js_set_combo_item() {
 	   		element.add(option, 0);
 			element.selectedIndex = 0;
 	        element.onchange();
-	    } else {
-			var stock_element = doc.getElementsByName('stock_id');
-	    	if( stock_element.length > 0) {
-				stock_element[0].value = value;	
-				var stock_id = doc.getElementById('_stock_id_edit'); 
-				stock_id.value=value;
-				stock_id.onblur();					
-			}
- 		}
+		} else {			
+            var element = doc.getElementsByName(client_id);
+            if (element[0] != null) {
+                element[0].value=value;
+                var sname = '_'+client_id+'_update';
+                var update = doc.getElementsByName(sname)[0];
+                if(update) {
+                    window.opener.JsHttpRequest.request(update);
+                } else {
+                    var element = doc.getElementsByName(client_id+'mselect');
+                    if (element[0] != null) {
+                            element[0].setvalue(value);
+                            // element[0].value=value;
+                    }
+                }
+            } else {
+
+                var stock_element = doc.getElementsByName('stock_id');
+                if( stock_element.length > 0) {
+                    stock_element.value = value;	
+                    var stock_id = doc.getElementById('_stock_id_edit'); 
+                    stock_id.value=value;
+                    stock_id.onblur();		
+                }
+            }
+		}			
 		window.close();
 	}";
 	return $js;

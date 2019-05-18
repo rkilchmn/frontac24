@@ -114,6 +114,7 @@ $opts = array(		// default options
 		$selected_id = array((string)$selected_id); // code is generalized for multiple selection support
 
 	$txt = get_post($search_box);
+
 // display_notification($search_box . ":" . $txt . ":" . $opts['search_submit']);
 	$rel = '';
 	$limit = '';
@@ -194,9 +195,6 @@ $opts = array(		// default options
 
 //display_notification($search_box . ":" . get_post($search_box));
 
- 		 	if (get_post($search_box) && $txt != '')
-                $selected_id[0] = $txt;
-//display_notification(print_r($selected_id, true));
 
 	if (($type === "customer" || $type === "supplier") && !empty($SysPrefs->prefs['shortname_name_in_list']))
 		$pname = true;
@@ -206,9 +204,11 @@ $opts = array(		// default options
 			$descr = $opts['format']==null ?  $contact_row[1] :
 				call_user_func($opts['format'], $contact_row, $pname);
 			$sel = '';
-            if (in_array((string)$value, $selected_id, true)) {
+            if (($found === false && get_post($search_box) && $txt != '')
+                || in_array((string)$value, $selected_id, true)) {
 				$sel = 'selected';
 				$found = $value;
+                $selected_id = array($found);
 				$edit = $opts['editable'] && $contact_row['editable'] 
 //					&& (@$_POST[$search_box] == $value)
 					? $contact_row[1] : false; // get non-formatted description
@@ -303,7 +303,7 @@ $opts = array(		// default options
 	if ($search_box != false) {
 		$edit_entry = "<input $disabled type='text' name='$search_box' id='$search_box' size='".
 			$opts['size']."' maxlength='".$opts['max'].
-			"' value='$txt' class='$class' rel='$name' autocomplete='off' title='"
+			"' class='$class' rel='$name' autocomplete='off' title='"
 			.$opts['box_hint']."'"
 			.(!fallback_mode() && !$by_id ? " style=display:none;":'')
 			.">\n";

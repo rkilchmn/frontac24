@@ -89,6 +89,7 @@ function mbselect(elm)
         typer.setAttribute("rel",box_name);
         var box = document.getElementsByName(elm.getAttribute('rel'))[0];
         box.setAttribute("rel",elm.getAttribute("name")+"mselect");
+        box.value='';
     }
 	typer.setAttribute("style","display:inline-block;width:"+iw+"px");
 	typer.style.display = 'inline-block';
@@ -410,8 +411,8 @@ function mbselect(elm)
 		    key = event.keyCode||event.which;
 		    var box = document.getElementsByName(this.getAttribute('rel'))[0];
 //alert(box.className + ":" + box.name);
-            // spacebar or ctrl-B (used for barcode reader) activates search
-		    if (box && (key == 32 || (key == 66 && event.ctrlKey)) ) {
+            // F1 or ctrl-B (used for barcode reader) activates search
+		    if (box && (key == 112 || (key == 66 && event.ctrlKey)) ) {
                 this.style.display = 'none';
                 box.style.display = 'inline';
                 box.value='';
@@ -668,8 +669,8 @@ function _set_combo_select(e) {
 				event.returnValue = false;
   			  	return false;
   			}
-            // spacebar or ctrl-B (used for barcode reader) activates search
-		    if (box && (key == 32 || (key == 66 && event.ctrlKey)) ) {
+            // F1 or ctrl-B (used for barcode reader) activates search
+		    if (box && (key == 112 || (key == 66 && event.ctrlKey)) ) {
                 this.style.display = 'none';
                 box.style.display = 'inline';
                 box.value='';

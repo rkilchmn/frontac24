@@ -101,10 +101,14 @@ the user can make just one click to select the search item.
 The original feature did not work with the popup search.
 BF enables the popup search for these lists.
 
-The original feature disabled itself if any of the list
+The original feature disabled itself if any of the search box
 checkboxes were checked in Company Setup.
 BF allows both features to be used.
 The stock item checkbox is necessary for barcode scanning to work.
+However,
+the F1 or CONTROL-B keys now activates the search box
+instead of the space key because space is a valid search character
+for the autocomplete function.
 
 For stock items,
 the BF autocomplete option searches by item code or description.
