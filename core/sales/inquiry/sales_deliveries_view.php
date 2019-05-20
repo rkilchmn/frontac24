@@ -145,7 +145,7 @@ function attach_link($row)
     $str = '';
     if ($page_nested)
         return '';
-    return is_closed_trans($row['type'], $row['trans_no']) ? "--" : pager_link(_("Add an Attachment"), "/admin/attachments.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_ATTACH);
+    return is_closed_trans(ST_CUSTDELIVERY, $row['trans_no']) ? "--" : pager_link(_("Add an Attachment"), "/admin/attachments.php?trans_no=" . $row['trans_no'] . "&filterType=". ST_CUSTDELIVERY, ICON_ATTACH);
 }
 
 function edit_link($row)

@@ -248,13 +248,12 @@ calculating the tax after adding another item.
 
 BF colors the tax fields to indicate override.
 
-## Enter key fix
+## Enable Enter key on pop-up search
 FA ignores the Enter key.
 
 BF retains the Enter key.
 This means that data can be submitted with the Enter key
 (as the user would expect)
-and is particularly useful on the magnifying glass search popup,
 because the user only needs to type the search clause
 and hit enter, without having to move the mouse and click on "Search".
 

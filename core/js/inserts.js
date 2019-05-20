@@ -797,11 +797,9 @@ var inserts = {
   					ev = ev||window.event;
   					key = ev.keyCode||ev.which;
  	  				if(key == 13 && e.className != 'typer') {
-						if(e.className == 'searchbox') {
+						if(e.className == 'searchbox')
                             e.onblur();
-    						return false;
-                        }
-                        e.form.submit();
+                        return false;
 					}
                     return true;
 	  			}
