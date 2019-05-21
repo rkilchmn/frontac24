@@ -55,7 +55,7 @@ function rec_checkbox($row)
 	$value = $row['reconciled'] != '';
 
 // save also in hidden field for testing during 'Reconcile'
-	return is_closed_trans($row['type'], $row['trans_no']) ? "--" : checkbox(null, $name, $value, true, _('Reconcile this transaction'))
+	return is_closed_trans($row['type'], $row['trans_no']) ? ($value ? '-X-' : '---') : checkbox(null, $name, $value, true, _('Reconcile this transaction'))
  		. hidden($hidden, $value, false);
 }
 
