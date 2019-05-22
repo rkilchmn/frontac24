@@ -182,11 +182,8 @@ function update_parent_line($doc_type, $line_id, $qty_dispatched, $auto=false)
 		{
 			$sql = "UPDATE ".TB_PREF."sales_order_details
 				SET qty_sent = qty_sent + $qty_dispatched";
-// Why is voiding a auto sales delivery any different from
-// a manual delivery?  Both should leave the sales order items alone,
-// which were manually entered by the user.
-//			if ($auto)
-//				$sql .= ", quantity = quantity + $qty_dispatched";
+			if ($auto)
+				$sql .= ", quantity = quantity + $qty_dispatched";
 			$sql .= " WHERE id=".db_escape($line_id);
 		}
 		else

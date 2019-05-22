@@ -428,17 +428,24 @@ created by Direct Invoice.
 BF incorporates this technique into its core.
 
 Note that a FA user could accomplish the same thing by
-manually performing a void of the invoice and editing the sales order,
+manually performing a void of the invoice
+and editing the remaining sales order,
 followed by delivery and reinvoice.
+However, a void of an auto generated delivery in FA zeroes all quantities
+in the sales order, so this isn't a practical solution for direct invoices.
 
-However, a void of an auto generated delivery in FA clears all quantities
-in the sales order whereas BF retains the order quantities,
-which is consistent with a void of a manually created delivery.
+The order quantities could be be retained in the sales order,
+but if the user does not realize that the deletion
+of a sales invoice leaves the sales order intact,
+and then creates another direct invoice,
+the old sales order creates additional inventory demand
+when none exists.
+This is likely why FA zeroes the quantities in the sales order.
+BF cancels the sales order rather leaving zeroed quantities in
+an open sales order.
 
-I am also not keen on FA voiding an auto generated delivery
-from a void of direct invoice, because a void of a manual invoice
-does not void the deliveries, creating confusion for the user.
-However, I left BF unchanged on this point.
+The differing behavior of invoice deletion creates confusion
+for a user who creates both standard and direct invoices.
 Ideally there should be a popup on a void of an invoice asking
 if the deliveries and sales orders should be voided or left as is.
 
