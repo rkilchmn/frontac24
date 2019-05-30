@@ -284,7 +284,7 @@ function bank_transfer_handle_submit()
 {
 	$trans_no = array_key_exists('_trans_no', $_POST) ?  $_POST['_trans_no'] : null;
 	if ($trans_no) {
-        if ($_POST['reconciled'] == 0) {
+        if (isset($_POST['reconciled']) && $_POST['reconciled'] == 0) {
             unset ($_POST['from_reconciled']);
             unset ($_POST['to_reconciled']);
         }
