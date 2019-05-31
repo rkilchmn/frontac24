@@ -269,8 +269,8 @@ function display_order_header(&$order, $editable, $date_text)
 	else
 	{
 		customer_list_row(_("Customer:"), 'customer_id', null, _("New Customer"), true, false, true);
-        If (isset($_GET['InvoiceNo']))
-            hidden('InvoiceNo', $_GET['InvoiceNo']); //Added by Faisal for Invoice Edit
+        If (isset($_POST['InvoiceNo']))
+            hidden('InvoiceNo', $_POST['InvoiceNo']); //Added by Faisal for Invoice Edit
 
         if (get_post('customer_id') == 0) {
             label_row("", menu_link('sales/manage/customers.php', 'Create New Customer'));
@@ -404,6 +404,7 @@ function display_order_header(&$order, $editable, $date_text)
 			$Ajax->activate('items_table');
 			$Ajax->activate('delivery');
 		}
+
 		$paymcat = !$order->pos['cash_sale'] ? PM_CREDIT : 
 			(!$order->pos['credit_sale'] ? PM_CASH : PM_ANY);
 		// all terms are available for SO

@@ -425,7 +425,10 @@ The "Invoice Editable" extensions by boxygen
 http://frontaccounting.com/punbb/viewtopic.php?id=7029
 created an extension to allow full editing of invoices
 created by Direct Invoice.
-BF incorporates this technique into its core.
+BF incorporates this technique into its core with these bug fixes:
+1. move "void invoice" to before stock check to prevent stock check failure
+2. change of customer did not void old invoice
+3. do not create payments when editing invoice
 
 Note that a FA user could accomplish the same thing by
 manually performing a void of the invoice

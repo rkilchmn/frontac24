@@ -102,7 +102,7 @@ if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 	create_cart(ST_SALESQUOTE, $_GET['NewQuoteToSalesOrder']);
 }
 
-set_posts(array('DirectInvoice', 'OrderDate'));
+set_posts(array('DirectInvoice', 'OrderDate', 'InvoiceNo'));
 
 page($_SESSION['page_title'], false, false, "", $js);
 
@@ -688,7 +688,7 @@ function create_cart($type, $trans_no)
 		$doc = new Cart(ST_SALESORDER, array($trans_no));
 		$doc->trans_type = $type;
 		$doc->trans_no = 0;
-        if (!isset($_GET['InvoiceNo'])) //Block added by faisal for Invoice Edit
+        if (!isset($_POST['InvoiceNo'])) //Block added by faisal for Invoice Edit
                 $doc->document_date = new_doc_date();
 
 		if ($type == ST_SALESINVOICE) {
@@ -696,8 +696,8 @@ function create_cart($type, $trans_no)
 			$doc->pos = get_sales_point(user_pos());
 		} else
 			$doc->due_date = $doc->document_date;
-        if (isset($_GET['InvoiceNo'])) //Block added by faisal for Invoice Edit
-            $doc->reference = get_inv_reference ($_GET['InvoiceNo']);//$Refs->get_next($doc->trans_type, null, array('date' => Today()));
+        if (isset($_POST['InvoiceNo'])) //Block added by faisal for Invoice Edit
+            $doc->reference = get_inv_reference ($_POST['InvoiceNo']);//$Refs->get_next($doc->trans_type, null, array('date' => Today()));
         else
 
                 $doc->reference = $Refs->get_next($doc->trans_type, null, array('date' => Today()));
