@@ -487,7 +487,7 @@ function add_trans_tax_details($trans_type, $trans_no, $tax_id, $rate, $included
 
 function get_trans_tax_details($trans_type, $trans_no)
 {
-    $sql = "SELECT tax_details.*, tax_type.name AS tax_type_name, tax_type.rate AS rate
+    $sql = "SELECT tax_details.*, tax_type.name AS tax_type_name, tax_details.rate AS rate
         FROM ".TB_PREF."trans_tax_details tax_details INNER JOIN 
         ".TB_PREF."tax_types tax_type ON tax_type.id = tax_details.tax_type_id
         WHERE 
