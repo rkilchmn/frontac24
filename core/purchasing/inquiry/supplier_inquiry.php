@@ -134,7 +134,11 @@ function delete_link($row)
 	if ($page_nested
         || get_voided_entry($row['type'], $row['trans_no']))
 		return '';
-    return is_closed_trans($row['type'], $row['trans_no']) ? "--" : pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_DELETE);
+
+    // FIXME: purchase order deliveries are voided using their original transaction date
+    // because the qoh algorithm in void_transaction may prevent it being voided on a later date
+
+    return is_closed_trans($row['type'], $row['trans_no']) ? "--" : pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'] . "&date_=" . sql2date($row['tran_date']), ICON_DELETE);
 }
 
 //------------------------------------------------------------------------------------------------
