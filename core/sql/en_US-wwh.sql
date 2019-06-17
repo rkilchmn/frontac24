@@ -1651,7 +1651,7 @@ CREATE TABLE IF NOT EXISTS `0_stock_master` (
   `category_id` int(11) NOT NULL default '0',
   `tax_type_id` int(11) NOT NULL default '0',
   `description` varchar(200) NOT NULL default '',
-  `long_description` tinytext NOT NULL,
+  `long_description` text NOT NULL,
   `units` varchar(20) NOT NULL default 'each',
   `mb_flag` char(1) NOT NULL default 'B',
   `sales_account` varchar(15) NOT NULL default '',

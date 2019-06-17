@@ -1364,7 +1364,7 @@ CREATE TABLE `0_stock_master` (
   `category_id` int(11) NOT NULL DEFAULT '0',
   `tax_type_id` int(11) NOT NULL DEFAULT '0',
   `description` varchar(200) NOT NULL DEFAULT '',
-  `long_description` tinytext NOT NULL,
+  `long_description` text NOT NULL,
   `units` varchar(20) NOT NULL DEFAULT 'each',
   `mb_flag` char(1) NOT NULL DEFAULT 'B',
   `sales_account` varchar(15) NOT NULL DEFAULT '',
