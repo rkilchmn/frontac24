@@ -467,9 +467,9 @@ function can_process() {
 		return false;
 	}
 
-	if ($_SESSION['Items']->payment_terms['cash_sale'] && 
-		($_SESSION['Items']->trans_type == ST_CUSTDELIVERY || $_SESSION['Items']->trans_type == ST_SALESINVOICE)) 
-		$_SESSION['Items']->due_date = $_SESSION['Items']->document_date;
+	if ($_POST['Items']->payment_terms['cash_sale'] && 
+		($_POST['Items']->trans_type == ST_CUSTDELIVERY || $_POST['Items']->trans_type == ST_SALESINVOICE)) 
+		$_POST['Items']->due_date = $_POST['Items']->document_date;
 	return true;
 }
 

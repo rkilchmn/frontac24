@@ -147,9 +147,13 @@ function get_customer_trans($trans_id, $trans_type, $customer_id=null)
 		."branch.*, "
 		."cust.discount, "
 		.TB_PREF."tax_groups.name AS tax_group_name, "
-		.TB_PREF."tax_groups.id AS tax_group_id, "
-        ."sorder.delivery_address ";
+		.TB_PREF."tax_groups.id AS tax_group_id ";
 	}
+
+	if ($trans_type == ST_CUSTCREDIT)
+        $sql .= ", branch.br_address as delivery_address ";
+    else
+        $sql .= ", sorder.delivery_address ";
 
 	if ($trans_type == ST_JOURNAL) {
 		$sql .= ", branch.*";
@@ -169,10 +173,11 @@ function get_customer_trans($trans_id, $trans_type, $customer_id=null)
 		// it's an invoice so also get the shipper, salestypes
 		$sql .= ", ".TB_PREF."sales_types, "
 		.TB_PREF."cust_branch branch, "
-		.TB_PREF."tax_groups, "
-        .TB_PREF."sales_orders sorder ";
+		.TB_PREF."tax_groups ";
 	}
-
+	if ($trans_type == ST_SALESINVOICE || $trans_type == ST_CUSTDELIVERY) {
+        $sql .= ", ".TB_PREF."sales_orders sorder ";
+    }
 	if ($trans_type == ST_JOURNAL) {
 		$sql .= ", ".TB_PREF."cust_branch branch ";
 	}
@@ -195,9 +200,11 @@ function get_customer_trans($trans_id, $trans_type, $customer_id=null)
 		// it's an invoice so also get the shipper
 		$sql .= " AND ".TB_PREF."sales_types.id = trans.tpe
 			AND branch.branch_code = trans.branch_code
-			AND branch.tax_group_id = ".TB_PREF."tax_groups.id
-			AND sorder.order_no = trans.order_ ";
+			AND branch.tax_group_id = ".TB_PREF."tax_groups.id ";
 	}
+	if ($trans_type == ST_SALESINVOICE || $trans_type == ST_CUSTDELIVERY) {
+			$sql .= " AND sorder.order_no = trans.order_ ";
+    }
 	if ($trans_type == ST_JOURNAL) {
 		$sql .= " AND branch.branch_code = trans.branch_code ";
 	}
