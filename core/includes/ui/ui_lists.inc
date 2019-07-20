@@ -933,7 +933,7 @@ echo "</td>";
 // Select item via foreign code.
 //
 function sales_items_list($name, $selected_id=null, $all_option=false, 
-	$submit_on_change=false, $type='', $opts=array())
+	$submit_on_change=false, $type='', $opts=array(), $sales_type=null)
 {
     global $SysPrefs;
 
@@ -941,21 +941,30 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
 	$sql = "SELECT i.item_code, i.description, c.description, count(*)>1 as kit,
 			 i.inactive, if(count(*)>1, '0', s.editable) as editable
 			FROM
-			".TB_PREF."stock_master s,
-			".TB_PREF."item_codes i
+			".TB_PREF."stock_master s ";
+
+    if ($sales_type != null) {
+        $sql .= "LEFT JOIN ".TB_PREF."prices p
+            ON p.stock_id=s.stock_id ";
+    }
+
+    $sql .= ", ".TB_PREF."item_codes i
 			LEFT JOIN
 			".TB_PREF."stock_category c
-			ON i.category_id=c.category_id
-			WHERE i.stock_id=s.stock_id
-      AND mb_flag != 'F'";
-
-	
-    $sql .=	" AND !i.is_foreign"; // exclude foreign codes
+			ON i.category_id=c.category_id 
+            WHERE i.stock_id=s.stock_id
+            AND mb_flag != 'F'
+            AND !i.is_foreign"; // exclude foreign codes
 
 	if ($type == 'kits') { // sales kits
 		$sql .=	" AND i.item_code!=i.stock_id";
 	}
 	$sql .= " AND !i.inactive AND !s.inactive AND !s.no_sale";
+
+    if ($sales_type != null) {
+        $sql .= " AND p.sales_type_id = " . db_escape($sales_type);
+    }
+
 	$sql .= " GROUP BY i.item_code";
 
     $sort_opts = array(
@@ -982,7 +991,7 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
 		  ), $sort_opts, $opts), $type == 'kits' ? $type : "stock_sales" );
 }
 
-function sales_items_list_cells($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false, $editkey=false)
+function sales_items_list_cells($label, $name, $selected_id=null, $all_option=false, $submit_on_change=false, $editkey=false, $sales_type=null)
 {
 	if ($editkey)
 		set_editor('item', $name, $editkey);
@@ -990,7 +999,7 @@ function sales_items_list_cells($label, $name, $selected_id=null, $all_option=fa
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo sales_items_list($name, $selected_id, $all_option, $submit_on_change,
-		'', array('cells'=>true));
+		'', array('cells'=>true), $sales_type);
 }
 
 function sales_kits_list($name, $selected_id=null, $all_option=false, $submit_on_change=false)

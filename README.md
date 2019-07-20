@@ -775,3 +775,22 @@ See, http://frontaccounting.com/punbb/viewtopic.php?pid=34388#p34388.
 
 ## g/l inquiry search on Miscellaneous names
 
+## filter sales items using sales_type
+
+When a sales invoice item is entered in FA, if a price is not defined for a given
+sales type, FA picks whatever price it finds,
+without any alert to the user.
+So if a user is entering wholesale invoices, perhaps retail prices
+may appear, causing incorrect billing.
+Even if the user catches the mistake,
+the user might just override the price during invoice entry
+rather than bothering to update the item,
+leaving the same problem for the next user.
+
+In BF, only those sales items that have a price for the given sales type
+are able to be picked from the menu, making incorrect billing impossible.
+It forces the user to update the item with the correct price in order
+for the invoice to be created.
+
+
+

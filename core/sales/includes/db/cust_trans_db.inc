@@ -152,7 +152,7 @@ function get_customer_trans($trans_id, $trans_type, $customer_id=null)
 
 	if ($trans_type == ST_CUSTCREDIT)
         $sql .= ", branch.br_address as delivery_address ";
-    else
+    else if ($trans_type == ST_SALESINVOICE || $trans_type == ST_CUSTDELIVERY)
         $sql .= ", sorder.delivery_address ";
 
 	if ($trans_type == ST_JOURNAL) {

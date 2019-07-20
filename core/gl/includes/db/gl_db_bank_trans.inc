@@ -66,7 +66,7 @@ function last_bank_trans($field, $person_type=null, $person_id=null)
     if ($person_type != null) {
         $sql .= " WHERE person_type_id = ".db_escape($person_type);
         if ($person_id != null)
-            $sql . " AND person_id = " . db_escape($person_id);
+            $sql .= " AND person_id = " . db_escape($person_id);
     }
     $sql .= " ORDER BY id DESC LIMIT 1";
 
