@@ -62,6 +62,8 @@ if (user_use_date_picker()) {
 	$js .= get_js_date_picker();
 }
 
+set_posts(array('OrderDate', 'InvoiceNo'));
+
 if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 
 	$_SESSION['page_title'] = _($help_context = "Direct Sales Delivery");
@@ -101,8 +103,6 @@ if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 	$_SESSION['page_title'] = _($help_context = "Sales Order Entry");
 	create_cart(ST_SALESQUOTE, $_GET['NewQuoteToSalesOrder']);
 }
-
-set_posts(array('DirectInvoice', 'OrderDate', 'InvoiceNo'));
 
 page($_SESSION['page_title'], false, false, "", $js);
 
@@ -508,11 +508,6 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 		new_doc_date($_POST['Items']->document_date);
 		processing_end();
 
-        if (get_post('DirectInvoice') == 1) {
-            $params="OrderNumber=".$trans_no."&DirectInvoice=1";
-            meta_forward($path_to_root . "/sales/customer_delivery.php", $params);
-        }
-
         if ($modified) {
             if ($trans_type == ST_SALESQUOTE)
                 $params = "UpdatedQU=$trans_no";
@@ -700,10 +695,13 @@ function create_cart($type, $trans_no)
 			$doc->pos = get_sales_point(user_pos());
 		} else
 			$doc->due_date = $doc->document_date;
-        if (isset($_POST['InvoiceNo'])) //Block added by faisal for Invoice Edit
+        if (isset($_POST['InvoiceNo'])) { //Block added by faisal for Invoice Edit
             $doc->reference = get_inv_reference ($_POST['InvoiceNo']);//$Refs->get_next($doc->trans_type, null, array('date' => Today()));
-        else
-
+            // sales order does not have dimensions so read them out of the invoice
+            $myrow = get_customer_trans($_POST['InvoiceNo'],$type);
+            $doc->dimension_id = $myrow['dimension_id'];
+            $doc->dimension2_id = $myrow['dimension2_id'];
+        } else
                 $doc->reference = $Refs->get_next($doc->trans_type, null, array('date' => Today()));
 		//$doc->Comments='';
 		foreach($doc->line_items as $line_no => $line) {
@@ -787,7 +785,6 @@ if ($_POST['Items']->trans_type == ST_SALESINVOICE) {
 start_form();
 
 hidden('cart_id');
-hidden('DirectInvoice');
 
 $customer_error = display_order_header($_POST['Items'], !$_POST['Items']->is_started(), $idate);
 
