@@ -272,8 +272,8 @@ function display_order_header(&$order, $editable, $date_text)
         If (isset($_POST['InvoiceNo']))
             hidden('InvoiceNo', $_POST['InvoiceNo']); //Added by Faisal for Invoice Edit
 
+        label_row("", menu_link('sales/manage/customers.php', 'Create New Customer'));
         if (get_post('customer_id') == 0) {
-            label_row("", menu_link('sales/manage/customers.php', 'Create New Customer'));
             hidden('Items', htmlentities(serialize($order)));
 
         } else {
