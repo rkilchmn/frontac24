@@ -238,7 +238,7 @@ function void_sales_delivery($type, $type_no, $transactions=true)
 		}
         // BF deletes an auto sales order and FA leaves it with cleared quantities
         if ($auto)
-            delete_sales_order($type_no, ST_SALESORDER);
+            delete_sales_order($order, ST_SALESORDER);
 	}
 
 	// clear details after they've been reversed in the sales order
