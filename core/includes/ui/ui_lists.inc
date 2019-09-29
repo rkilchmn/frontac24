@@ -153,7 +153,7 @@ $opts = array(		// default options
 			}
 			else
 */
-				if ($txt != '*') {
+				if ($txt != '*' && $txt != '') {
 					foreach($opts['search'] as $i=> $s)
 						$opts['search'][$i] = $s . " LIKE "
 							.db_escape(($class=='combo3' ? '' : '%').$txt.'%')
@@ -210,7 +210,9 @@ $opts = array(		// default options
 				$found = $value;
                 $selected_id = array($found);
 				$edit = $opts['editable'] && $contact_row['editable'] 
-//					&& (@$_POST[$search_box] == $value)
+//TBD: mbselect needs to put selected item in $search box
+// in order for editable fields to work
+					&& (@$_POST[$search_box] == $value)
 					? $contact_row[1] : false; // get non-formatted description
 
 				if ($edit)
@@ -655,14 +657,19 @@ function customer_list_row($label, $name, $selected_id=null, $all_option = false
 function customer_branches_list($customer_id, $name, $selected_id=null,
 	$spec_option = true, $enabled=true, $submit_on_change=false, $editkey = false)
 {
-
-	$sql = "SELECT branch_code, branch_ref FROM ".TB_PREF."cust_branch
-		WHERE debtor_no=" . db_escape($customer_id)." ";
+    if ($customer_id != null)
+        $sql = "SELECT branch_code, branch_ref FROM ".TB_PREF."cust_branch cb
+            WHERE debtor_no=" . db_escape($customer_id)." ";
+    else
+        $sql = "SELECT branch_code, IF(debtor_ref = branch_ref, branch_ref, CONCAT(debtor_ref, ' ', branch_ref)) AS branch_ref
+            FROM ".TB_PREF."cust_branch cb
+            LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no = cb.debtor_no
+            WHERE cb.branch_ref != ''";
 
 	if ($editkey)
 		set_editor('branch', $name, $editkey);
 
-	$where = $enabled ? array("inactive = 0") : array();
+	$where = $enabled ? array("cb.inactive = 0") : array();
 	$ret = combo_input($name, $selected_id, $sql, 'branch_code', 'branch_ref',
 	array(
 		'where' => $where,

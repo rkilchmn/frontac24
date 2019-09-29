@@ -827,3 +827,14 @@ Seeing all accounts of the transaction is what one expects to see
 when "All Accounts" is specified.
 This is particularly useful in the Quick Report extension
 that shows all accounts of the transaction on a single line.
+
+## expand the use of customer branch in reporting
+FA features a two tier system of customers: the customer and customer branches.
+Yet there is very limited or no support for display, searching or sorting by branch.
+Many of the reports display only by customer with no breakdown by branch.
+(Perhaps sage advice in vanilla FA is to use only one branch per customer
+to avoid difficulty.)
+
+BF seeks to remedy this deficiency.  The Sales Summary Report (rep114) is updated to separate
+sales by customer branch.  The Inventory Sales Report (rep304) allows filtering by branch.
+

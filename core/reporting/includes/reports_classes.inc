@@ -309,6 +309,13 @@ class BoxReports
 					else
 						return customer_list($name);
 
+				case 'CUSTOMER_BRANCHES_NO_FILTER':
+				case 'CUSTOMER_BRANCHES':
+					if ($type == 'CUSTOMER_BRANCHES_NO_FILTER')
+						return customer_branches_list(null, $name, null, _("No Branch Filter"));
+					else
+						return customer_branches_list(null, $name);
+
 				case 'SUPPLIERS_NO_FILTER':
 				case 'SUPPLIERS':
 					if ($type == 'SUPPLIERS_NO_FILTER')

@@ -33,7 +33,7 @@ function getTaxTransactions($from, $to, $fromcust, $tax_id, $daily)
 	$fromdate = date2sql($from);
 	$todate = date2sql($to);
 
-	$sql = "SELECT d.debtor_no, d.name AS cust_name, d.tax_id, t.name AS tax_group, dt.type, dt.trans_no,  dt.tran_date,
+	$sql = "SELECT br.branch_code, br.br_name, d.debtor_no, d.name AS cust_name, d.tax_id, t.name AS tax_group, dt.type, dt.trans_no,  dt.tran_date,
 			CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ov_amount+ov_freight+ov_discount)*-1 
 			ELSE (ov_amount+ov_freight+ov_discount) END *dt.rate AS total,
 			CASE WHEN dt.type=".ST_CUSTCREDIT." THEN (ov_amount+ov_discount)*-1 
@@ -42,24 +42,29 @@ function getTaxTransactions($from, $to, $fromcust, $tax_id, $daily)
 			LEFT JOIN ".TB_PREF."debtors_master d ON d.debtor_no=dt.debtor_no
 			LEFT JOIN ".TB_PREF."cust_branch br ON br.branch_code=dt.branch_code
 			LEFT JOIN ".TB_PREF."tax_groups t ON br.tax_group_id=t.id
+            LEFT JOIN ".TB_PREF."voided as v
+                ON dt.trans_no=v.id AND dt.type=v.type
+
 		WHERE (dt.type=".ST_SALESINVOICE." OR dt.type=".ST_CUSTCREDIT.") ";
 	if ($fromcust)
 		$sql .= "AND dt.debtor_no=".db_escape($fromcust);
 	if ($tax_id)
 		$sql .= "AND tax_id<>'' ";
-	$sql .= "AND dt.tran_date >=".db_escape($fromdate)." AND dt.tran_date<=".db_escape($todate);
+	$sql .= "AND dt.tran_date >=".db_escape($fromdate).
+            " AND dt.tran_date<=".db_escape($todate).
+            " AND ISNULL(v.date_)"; // exclude voided transactions
 
         // Add in any journaled gl sales transactions
         // from default sales account without customers
 
         $sales_account = db_escape(get_company_pref('default_sales_act'));
-        $sql .= " UNION ALL SELECT '-1' AS debtor_no, CONCAT($sales_account, ' ', account_name) AS cust_name, '' as tax_id, '{Default Sales Account Journaled Transactions}' AS tax_group, '0' AS type, '0' AS trans_no, tran_date, -amount AS total, -amount AS nf
+        $sql .= " UNION ALL SELECT '-1' AS branch_code, '' AS br_name, '-1' AS debtor_no, CONCAT($sales_account, ' ', account_name) AS cust_name, '' as tax_id, '{Default Sales Account Journaled Transactions}' AS tax_group, '0' AS type, '0' AS trans_no, tran_date, -amount AS total, -amount AS nf
             FROM ".TB_PREF."gl_trans gl
             LEFT JOIN ".TB_PREF."chart_master cm on account_code=$sales_account
             WHERE account = $sales_account
 	    AND tran_date >=".db_escape($fromdate)." AND tran_date<=".db_escape($todate)
             ." AND !(type =".ST_SALESINVOICE." OR type=".ST_CUSTCREDIT.") ";
-        $sql .= " ORDER BY tax_group, cust_name"; 
+        $sql .= " ORDER BY tax_group, cust_name, br_name"; 
         if ($daily)
 		$sql .= ", tran_date";
 
@@ -133,7 +138,7 @@ function print_sales_summary_report()
 	$rep->TextCol(0, 4, _('Balances in Home Currency'));
 	$rep->NewLine(2);
 	
-	$custno = 0;
+	$branch_code = 0;
 	$tax = $total = $nf = 0;
 	$custname = $tax_id = "";
     $tax_group = "";
@@ -163,11 +168,14 @@ function print_sales_summary_report()
 
         if (($tax_group != ""
             && $tax_group != $trans['tax_group'])
-		    || ($custno != $trans['debtor_no'])) {
+		    || ($branch_code != $trans['branch_code'])) {
 
-			if ($custno != 0)
+			if ($branch_code != 0)
 			{
-				$rep->TextCol(0, 1, $custname);
+                if ($custname == $br_name)
+                    $rep->TextCol(0, 1, $custname);
+                else
+                    $rep->TextCol(0, 1, $br_name . " " . $custname);
 				$rep->TextCol(1, 2,	$tax_id);
 				$rep->AmountCol(2, 3, $nf, $dec);
 				$rep->AmountCol(3, 4, $total, $dec);
@@ -187,8 +195,9 @@ function print_sales_summary_report()
 					$rep->NewPage();
 				}
 			}
-			$custno = $trans['debtor_no'];
+			$branch_code = $trans['branch_code'];
 			$custname = $trans['cust_name'];
+			$br_name = $trans['br_name'];
 			$tax_id = $trans['tax_id'];
 
             if ($tax_group != ""
@@ -217,15 +226,21 @@ function print_sales_summary_report()
 		{
 			if ($taxes['included_in_price'])
 				$trans['total'] -= $taxes['tax'];
+// jrb: Total ex Freight includes taxes
+            else
+                $nf += $taxes['tax'];
 			$tax += $taxes['tax'];
 		}	
 		$total += $trans['total']; 
 		$nf += $trans['nf']; 
 
 	}
-	if ($custno != 0)
+	if ($branch_code != 0)
 	{
-		$rep->TextCol(0, 1, $custname);
+        if ($custname == $br_name)
+            $rep->TextCol(0, 1, $custname);
+        else
+            $rep->TextCol(0, 1, $br_name . " " . $custname);
 		$rep->TextCol(1, 2,	$tax_id);
 		$rep->AmountCol(2, 3, $nf, $dec);
 		$rep->AmountCol(2, 4, $total, $dec);
