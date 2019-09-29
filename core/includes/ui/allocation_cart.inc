@@ -29,6 +29,7 @@ class allocation
 	var $currency;
 
 	var $allocs; /*array of transactions allocated to */
+    var $default_branch;
 
 	function __construct($type, $trans_no, $person_id = null, $person_type_id=null)
 	{
@@ -147,6 +148,9 @@ class allocation
 		 		$trans_items = get_allocatable_to_cust_transactions($this->person_id);
 			while ($myrow = db_fetch($trans_items))
 			{
+                // default branch is first alloc
+                if (!isset($this->default_branch) && isset($myrow['branch_code']))
+                    $this->default_branch = $myrow['branch_code'];
 				$this->add_item($myrow["type"], $myrow["trans_no"],
 					sql2date($myrow["tran_date"]),
 					sql2date($myrow["due_date"]),

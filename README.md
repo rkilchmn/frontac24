@@ -776,7 +776,6 @@ See, http://frontaccounting.com/punbb/viewtopic.php?pid=34388#p34388.
 ## g/l inquiry search on Miscellaneous names
 
 ## filter sales items using sales_type
-
 When a sales invoice item is entered in FA, if a price is not defined for a given
 sales type, FA picks whatever price it finds,
 without any alert to the user.
@@ -792,5 +791,21 @@ are able to be picked from the menu, making incorrect billing impossible.
 It forces the user to update the item with the correct price in order
 for the invoice to be created.
 
+## default customer payment branch to first allocation
+In FA, when entering a customer payment for a customer that has multiple branches,
+a branch must also be chosen for the customer.
+This is a step easily missed.
 
+BF defaults the branch to the first item in the allocation list, because usually
+the payment is for this particular item.  (It would be preferable to default the
+branch to the allocation item actually selected, but this is more difficult to code,
+and still does not make any sense if the payment was for allocations to different
+branches).
+
+Note: it is unclear to me why payments have the customer branch anyway.  The payment
+is allocated correctly regardless if the payment branch and the invoice branch
+do not match.  I think it would be better if the branch selection was removed
+from the customer payment screen, but this would affect other areas of FA
+(customer statements?) that display or use the customer branch,
+and that would have to be researched.
 

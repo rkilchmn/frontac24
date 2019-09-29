@@ -83,6 +83,7 @@ if (list_updated('BranchID')) {
 	$br = get_branch(get_post('BranchID'));
 	$_POST['customer_id'] = $br['debtor_no'];
 	$_SESSION['alloc']->person_id = $br['debtor_no'];
+	$_SESSION['alloc']->default_branch = null;
 	$Ajax->activate('customer_id');
 }
 
@@ -324,7 +325,7 @@ else {
 }
 
 if (db_customer_has_branches($_POST['customer_id'])) {
-	customer_branches_list_row(_("Branch:"), $_POST['customer_id'], 'BranchID', null, false, true, true);
+	customer_branches_list_row(_("Branch:"), $_POST['customer_id'], 'BranchID', $_SESSION['alloc']->default_branch, false, true, true);
 } else {
 	hidden('BranchID', ANY_NUMERIC);
 }
