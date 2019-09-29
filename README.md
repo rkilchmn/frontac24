@@ -809,3 +809,21 @@ from the customer payment screen, but this would affect other areas of FA
 (customer statements?) that display or use the customer branch,
 and that would have to be researched.
 
+## show all accounts of gl transaction during gl search
+GL Inquiry lists transactions in two different ways.
+If a G/L account is not specified (e.g. all accounts),
+all accounts of the gl transactions are displayed.
+If a G/L account is specified, only the matching account of the transaction
+is shown, and balances are shown.
+
+In FA, if search criteria are used,
+and a G/L account is not specified,
+only one account of the matching transaction is shown
+In BF, all accounts of the matching transaction are shown
+if a G/L account is not specified,
+regardless of whether search criteria are used.
+
+Seeing all accounts of the transaction is what one expects to see
+when "All Accounts" is specified.
+This is particularly useful in the Quick Report extension
+that shows all accounts of the transaction on a single line.

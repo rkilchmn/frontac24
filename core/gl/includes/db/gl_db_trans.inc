@@ -112,64 +112,71 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
     $from = date2sql($from_date);
     $to = date2sql($to_date);
 
-    $sql = "SELECT gl.*, j.event_date, j.doc_date, a.gl_seq, u.user_id, st.supp_reference, gl.person_id subcode,
+    if ($account == null)
+        $sql = "SELECT gl2.*";
+    else
+        $sql = "SELECT gl1.*";
+    $sql .= ", j.event_date, j.doc_date, a.gl_seq, u.user_id, st.supp_reference,
             IFNULL(IFNULL(sup.supp_name, debt.name), bt.person_id) as person_name, 
-            IFNULL(gl.person_id, IFNULL(sup.supplier_id, IFNULL(debt.debtor_no, bt.person_id))) as person_id,
-            IF(gl.person_id, gl.person_type_id, IF(sup.supplier_id,".  PT_SUPPLIER . "," .  "IF(debt.debtor_no," . PT_CUSTOMER . "," . 
+            IFNULL(gl1.person_id, IFNULL(sup.supplier_id, IFNULL(debt.debtor_no, bt.person_id))) as person_id,
+            IF(gl1.person_id, gl1.person_type_id, IF(sup.supplier_id,".  PT_SUPPLIER . "," .  "IF(debt.debtor_no," . PT_CUSTOMER . "," . 
             "IF(bt.person_id != '' AND !ISNULL(bt.person_id), bt.person_type_id, -1)))) as person_type_id,
-            IFNULL(st.tran_date, IFNULL(dt.tran_date, IFNULL(bt.trans_date, IFNULL(grn.delivery_date, gl.tran_date)))) as doc_date,
-            coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl.memo_, CONCAT(gl.memo_,' ',c.memo_)) AS memo
+            IFNULL(st.tran_date, IFNULL(dt.tran_date, IFNULL(bt.trans_date, IFNULL(grn.delivery_date, gl1.tran_date)))) as doc_date,
+            coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl1.memo_, CONCAT(gl1.memo_,' ',c.memo_)) AS memo
              FROM "
-            .TB_PREF."gl_trans gl
-            LEFT JOIN ".TB_PREF."voided v ON gl.type_no=v.id AND v.type=gl.type
+            .TB_PREF."gl_trans AS gl1
+            LEFT JOIN ".TB_PREF."voided v ON gl1.type_no=v.id AND v.type=gl1.type
 
-            LEFT JOIN ".TB_PREF."supp_trans st ON gl.type_no=st.trans_no AND st.type=gl.type AND (gl.type!=".ST_JOURNAL." OR gl.person_id=st.supplier_id)
-            LEFT JOIN ".TB_PREF."grn_batch grn ON grn.id=gl.type_no AND gl.type=".ST_SUPPRECEIVE."
-            LEFT JOIN ".TB_PREF."debtor_trans dt ON gl.type_no=dt.trans_no AND dt.type=gl.type AND (gl.type!=".ST_JOURNAL." OR gl.person_id=dt.debtor_no)
+            LEFT JOIN ".TB_PREF."supp_trans st ON gl1.type_no=st.trans_no AND st.type=gl1.type AND (gl1.type!=".ST_JOURNAL." OR gl1.person_id=st.supplier_id)
+            LEFT JOIN ".TB_PREF."grn_batch grn ON grn.id=gl1.type_no AND gl1.type=".ST_SUPPRECEIVE."
+            LEFT JOIN ".TB_PREF."debtor_trans dt ON gl1.type_no=dt.trans_no AND dt.type=gl1.type AND (gl1.type!=".ST_JOURNAL." OR gl1.person_id=dt.debtor_no)
 
             LEFT JOIN ".TB_PREF."suppliers sup ON st.supplier_id=sup.supplier_id
             LEFT JOIN ".TB_PREF."cust_branch branch ON dt.branch_code=branch.branch_code
             LEFT JOIN ".TB_PREF."debtors_master debt ON dt.debtor_no=debt.debtor_no
 
-            LEFT JOIN ".TB_PREF."bank_trans bt ON bt.type=gl.type AND bt.trans_no=gl.type_no AND bt.amount!=0
+            LEFT JOIN ".TB_PREF."bank_trans bt ON bt.type=gl1.type AND bt.trans_no=gl1.type_no AND bt.amount!=0
                  AND (bt.person_id != '' AND !ISNULL(bt.person_id))
 
-            LEFT JOIN ".TB_PREF."journal j ON j.type=gl.type AND j.trans_no=gl.type_no
-            LEFT JOIN ".TB_PREF."audit_trail a ON a.type=gl.type AND a.trans_no=gl.type_no AND NOT ISNULL(gl_seq)
+            LEFT JOIN ".TB_PREF."journal j ON j.type=gl1.type AND j.trans_no=gl1.type_no
+            LEFT JOIN ".TB_PREF."audit_trail a ON a.type=gl1.type AND a.trans_no=gl1.type_no AND NOT ISNULL(gl_seq)
             LEFT JOIN ".TB_PREF."users u ON a.user=u.id
-            LEFT JOIN ".TB_PREF."comments c ON c.id=gl.type_no AND c.type=gl.type
+            LEFT JOIN ".TB_PREF."comments c ON c.id=gl1.type_no AND c.type=gl1.type
+            LEFT JOIN ".TB_PREF."refs ref ON ref.type=gl1.type AND ref.id=gl1.type_no";
 
-            LEFT JOIN ".TB_PREF."refs ref ON ref.type=gl.type AND ref.id=gl.type_no,"
-        .TB_PREF."chart_master coa
-        WHERE coa.account_code=gl.account
+    if ($account == null)
+        $sql .= " JOIN ".TB_PREF."gl_trans AS gl2 ON (gl1.type=gl2.type and gl1.type_no=gl2.type_no)";
+
+    $sql .= ", " .TB_PREF."chart_master coa
+        WHERE coa.account_code=gl1.account
         AND ISNULL(v.date_)
-        AND gl.tran_date >= '$from'
-        AND gl.tran_date <= '$to'
-        AND gl.amount <> 0"; 
+        AND gl1.tran_date >= '$from'
+        AND gl1.tran_date <= '$to'
+        AND gl1.amount <> 0"; 
 
     if ($trans_no > 0)
-        $sql .= " AND gl.type_no LIKE ".db_escape('%'.$trans_no);
+        $sql .= " AND gl1.type_no LIKE ".db_escape('%'.$trans_no);
 
     if ($account != null)
-        $sql .= " AND gl.account = ".db_escape($account);
+        $sql .= " AND gl1.account = ".db_escape($account);
 
     if ($dimension != 0)
-        $sql .= " AND gl.dimension_id = ".($dimension<0 ? 0 : db_escape($dimension));
+        $sql .= " AND gl1.dimension_id = ".($dimension<0 ? 0 : db_escape($dimension));
 
     if ($dimension2 != 0)
-        $sql .= " AND gl.dimension2_id = ".($dimension2<0 ? 0 : db_escape($dimension2));
+        $sql .= " AND gl1.dimension2_id = ".($dimension2<0 ? 0 : db_escape($dimension2));
 
     if ($filter_type != null)
-        $sql .= " AND gl.type IN (" . $filter_type .")";
+        $sql .= " AND gl1.type IN (" . $filter_type .")";
 
     if ($amount_min != null)
-        $sql .= " AND ABS(gl.amount) >= ABS(".db_escape($amount_min).")";
+        $sql .= " AND ABS(gl1.amount) >= ABS(".db_escape($amount_min).")";
     
     if ($amount_max != null)
-        $sql .= " AND ABS(gl.amount) <= ABS(".db_escape($amount_max).")";
+        $sql .= " AND ABS(gl1.amount) <= ABS(".db_escape($amount_max).")";
 
     if ($memo)
-        $sql .= " AND (gl.memo_ LIKE ". db_escape("%$memo%") . " OR c.memo_ LIKE " . db_escape("%$memo%") . ")";
+        $sql .= " AND (gl1.memo_ LIKE ". db_escape("%$memo%") . " OR c.memo_ LIKE " . db_escape("%$memo%") . ")";
 
     $sql .= " GROUP BY counter";
 
