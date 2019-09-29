@@ -258,11 +258,14 @@ function mbselect(elm)
 
 							//JsHttpRequest.request(hidden);
 							//_update_box(hidden);
-							var sname = '_' + hidden.name + '_update';
-							var update = document.getElementsByName(sname)[0];
-							if (update) {
-								JsHttpRequest.request(update);
-							}
+
+                            if (validate(hidden)) {
+                                var sname = '_' + hidden.name + '_update';
+                                var update = document.getElementsByName(sname)[0];
+                                if (update) {
+                                    JsHttpRequest.request(update);
+                                }
+                            }
 							return false;
 
 						};
@@ -432,11 +435,13 @@ function mbselect(elm)
 			popcl();
 			//JsHttpRequest.request(hidden );
 			//_update_box(hidden);
-			var sname = '_'+hidden.name+'_update';
-			var update = document.getElementsByName(sname)[0];
-			if(update) {
-				JsHttpRequest.request(update);
-			}
+            if (validate(hidden)) {
+                var sname = '_'+hidden.name+'_update';
+                var update = document.getElementsByName(sname)[0];
+                if(update) {
+                    JsHttpRequest.request(update);
+                }
+            }
 			return false;
 		}
 	};

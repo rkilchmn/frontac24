@@ -269,6 +269,9 @@ function display_order_header(&$order, $editable, $date_text)
 	else
 	{
 		customer_list_row(_("Customer:"), 'customer_id', null, _("New Customer"), true, false, true);
+        if (count($order->line_items) != 0)
+            submit_js_confirm('customer_id', _("Do you want to reprice the order based on the new customer?"));
+
         If (isset($_POST['InvoiceNo']))
             hidden('InvoiceNo', $_POST['InvoiceNo']); //Added by Faisal for Invoice Edit
 

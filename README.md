@@ -405,18 +405,22 @@ the bank account from that payment will be recalled.
 BF removes the Process Button while payment items are being added or edited;
 Otherwise, if the user neglects to confirm, the work is lost unexpectantly.
 
-## FEATURE: confirm price changes on invoice entry when changing suppliers
-During invoice entry, FA automatically changes prices (and the supplier reference)
-if the supplier is changed.
-This allows one to compare prices between suppliers,
-if the suppliers have up-to-date price information.
+## FEATURE: confirm price changes on invoice entry when changing suppliers/customers
+During invoice entry, FA automatically changes prices
+(and related fields, including supplier reference)
+if the supplier/customer is changed.
+This allows one to compare prices between suppliers
+or change prices for another customer who may have a differing price list.
+This assumes that the item price information is up-to-date.
 
-However, often the user is doing simple purchase order entry and
-may have forgotten to set the correct supplier beforehand.
-Changing the supplier name afterwards results in lost work.
+However, often the user is doing simple data entry and
+may have forgotten to set the correct supplier/customer beforehand.
+Changing the name afterwards loses the data entry
+and can result in erroneous pricing.
 
 BF provides a pop-up confirmation whether the user wants to reprice
-the order or simply change the supplier.
+the order or simply change the supplier/customer without
+any additional update of the order.
 
 ## FEATURE: reissue customer invoice
 FA offers very limited editing of customer invoices, just the invoice date.
