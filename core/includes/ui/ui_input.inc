@@ -370,12 +370,22 @@ function checkbox($label, $name, $value=null, $submit_on_change=false, $title=fa
 			$submit_on_change = 
 				"JsHttpRequest.request(\"_{$name}_update\", this.form);";
 	}
-	if ($value === null)
-		$value = get_post($name,0);
+
+    $checked = false;
+    if (substr($name, -2) == "[]") {
+        if (isset($_POST[substr($name,0, -2)]))
+            $checked = in_array($value, $_POST[substr($name,0, -2)]);
+    } else {
+        if ($value === null)
+            $checked = get_post($name,0);
+        else if ($value == 1)
+            $checked = true;
+        $value = 1;
+    }
 
 	$str .= "<input"
-	    .($value == 1 ? ' checked':'')
-	    ." type='checkbox' name='$name' value='1'"
+	    .($checked ? ' checked':'')
+	    ." type='checkbox' name='$name' value='" . $value ."'"
 	    .($submit_on_change ? " onclick='$submit_on_change'" : '')
 	    .($title ? " title='$title'" : '')
 	    ." >\n";
