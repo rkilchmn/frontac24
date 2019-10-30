@@ -48,6 +48,16 @@ function attach_link($row)
         pager_link(_("Add an Attachment"), "/admin/attachments.php?trans_no=" . $row['order_no'] . "&filterType=". ST_PURCHORDER, ICON_ATTACH);
 }
 
+function receive_link($row) 
+{
+	global $page_nested;
+	
+	return $page_nested || !$row['OverDue'] ? '' :
+		pager_link( _("Receive"),
+			"/purchasing/po_receive_items.php?PONumber=" . $row["order_no"], ICON_RECEIVE);
+}
+
+
 function prt_link($row)
 {
 	return print_document_link($row['order_no'], _("Print"), true, ST_PURCHORDER, ICON_PRINT);
@@ -132,7 +142,8 @@ $cols = array(
 		_("Order Total") => 'amount',
 		array('insert'=>true, 'fun'=>'edit_link'),
 		array('insert'=>true, 'fun'=>'attach_link'),
-		array('insert'=>true, 'fun'=>'prt_link'),
+		array('insert'=>true, 'fun'=>'receive_link'),
+		array('insert'=>true, 'fun'=>'prt_link')
 );
 
 if (get_post('StockLocation') != ALL_TEXT) {

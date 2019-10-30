@@ -392,7 +392,7 @@ $opts = array(		// default options
             $str = "<td></td><td>$edit_entry$selector$img</td>";
         else
 */
-            $str = ($edit_entry!='' ? "<td>$edit_entry</td>" : '')."<td>$selector$img</td>";
+		$str = ($edit_entry!='' ? "<td>$edit_entry</td>" : '')."<td nowrap>$selector$img</td>";
 	} else
 		$str = $edit_entry.$selector.$img;
 	return $str;
@@ -1006,7 +1006,7 @@ function sales_items_list_cells($label, $name, $selected_id=null, $all_option=fa
 	if ($label != null)
 		echo "<td>$label</td>\n";
 	echo sales_items_list($name, $selected_id, $all_option, $submit_on_change,
-		'', array('cells'=>true), $sales_type);
+		'', array('cells'=>true, 'max'=>50), $sales_type);
 }
 
 function sales_kits_list($name, $selected_id=null, $all_option=false, $submit_on_change=false)

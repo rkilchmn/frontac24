@@ -128,14 +128,19 @@ function attach_link($row)
 
 function dispatch_link($row)
 {
-	global $trans_type;
+	global $trans_type, $page_nested;
 
 	if ($row['ord_payments'] + $row['inv_payments'] < $row['prep_amount'])
  		return '';
 
 	if ($trans_type == ST_SALESORDER)
-  		return pager_link( _("Dispatch"),
-			"/sales/customer_delivery.php?OrderNumber=" .$row['order_no'], ICON_DOC);
+	{
+		if ($row['TotDelivered'] < $row['TotQuantity'] && !$page_nested)
+			return pager_link( _("Dispatch"),
+				"/sales/customer_delivery.php?OrderNumber=" .$row['order_no'], ICON_DOC);
+		else
+			return '';
+	}		
 	else
   		return pager_link( _("Sales Order"),
 			"/sales/sales_order_entry.php?OrderNumber=" .$row['order_no'], ICON_DOC);
@@ -296,8 +301,9 @@ else
 	);
 if ($_POST['order_view_mode'] == 'OutstandingOnly') {
 	array_append($cols, array(
+		array('insert'=>true, 'fun'=>'edit_link'),
 		array('insert'=>true, 'fun'=>'dispatch_link'),
-		array('insert'=>true, 'fun'=>'edit_link')));
+		array('insert'=>true, 'fun'=>'prt_link')));
 
 } elseif ($_POST['order_view_mode'] == 'InvoiceTemplates') {
 	array_substitute($cols, 4, 1, _("Description"));
@@ -323,6 +329,7 @@ if ($_POST['order_view_mode'] == 'OutstandingOnly') {
 			_("Tmpl") => array('insert'=>true, 'fun'=>'tmpl_checkbox'),
 					array('insert'=>true, 'fun'=>'edit_link'),
 					array('insert'=>true, 'fun'=>'attach_link'),
+					array('insert'=>true, 'fun'=>'dispatch_link'),
 					array('insert'=>true, 'fun'=>'prt_link')));
 };
 

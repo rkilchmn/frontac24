@@ -224,7 +224,8 @@ function display_po_header(&$order)
 
 	table_section(2);
 
-  	text_row(_("Supplier's Reference:"), 'supp_ref', next_ref($order->supplier_id), 16, 15);
+  	text_row(_("Supplier's Reference:"), 'supp_ref', next_ref($order->supplier_id), 20, 60);
+
 
 	if (get_company_pref('use_dimension'))
 		dimensions_list_row(_('Dimension').':', 'dimension', null, true, _('Default'), false, 1);

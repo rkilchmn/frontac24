@@ -76,6 +76,7 @@ set_posts(array('filterType', 'trans_no'));
 
 if ($Mode == 'ADD_ITEM' || $Mode == 'UPDATE_ITEM')
 {
+	
 	if (!transaction_exists($_POST['filterType'], $_POST['trans_no']))
 		display_error(_("Selected transaction does not exists."));
 	elseif ($Mode == 'ADD_ITEM' && !isset($_FILES['filename']))
@@ -167,6 +168,12 @@ function viewing_controls()
 	if (list_updated('filterType'))
 		$selected_id = -1;
 
+	if(get_post('filterType') == ST_CUSTOMER ){
+		customer_list_cells(_("Select a customer: "), 'trans_no', null, false, true, true);
+	} elseif(get_post('filterType') == ST_SUPPLIER){
+		supplier_list_cells(_("Select a supplier: "), 'trans_no', null,  false, true,true);
+	}
+
 	end_row();
     end_table(1);
 
@@ -227,7 +234,7 @@ function display_rows($type, $trans_no)
 {
 	$sql = get_sql_for_attached_documents($type, $trans_no);
 	$cols = array(
-		_("#") => array('fun'=>'trans_view', 'ord'=>''),
+		_("#") => $type == ST_SUPPLIER || $type == ST_CUSTOMER? 'skip' : array('fun'=>'trans_view', 'ord'=>''),
 	    _("Description") => array('name'=>'description'),
 	    _("Filename") => array('name'=>'filename'),
 	    _("Size") => array('name'=>'filesize'),
@@ -238,12 +245,13 @@ function display_rows($type, $trans_no)
 	    	array('insert'=>true, 'fun'=>'download_link'),
 	    	array('insert'=>true, 'fun'=>'delete_link')
 	    );	
-		$table =& new_db_pager('trans_tbl', $sql, $cols);
 
-		$table->width = "60%";
+	$table =& new_db_pager('trans_tbl', $sql, $cols);
+
+	$table->width = "60%";
         $table->set_footer("add_edit");
 
-		display_db_pager($table);
+	display_db_pager($table);
 }
 
 function mime2ext($mime) {
@@ -432,12 +440,19 @@ function mime2ext($mime) {
     }
 
 //----------------------------------------------------------------------------------------
+if (list_updated('filterType') || list_updated('trans_no'))
+	$Ajax->activate('_page_body');
 
 start_form(true);
 
 viewing_controls();
 
-display_rows($_POST['filterType'], @$_POST['trans_no']);
+$type = get_post('filterType');
+
+display_rows($type, get_post('trans_no'));
+
+
+}
 
 end_form();
 end_page(true);
