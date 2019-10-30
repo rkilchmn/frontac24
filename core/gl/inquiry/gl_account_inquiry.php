@@ -269,7 +269,7 @@ function show_results()
 		label_cell(get_trans_view_str($myrow["type"],$myrow["type_no"],$myrow['reference']));
     	label_cell($trandate);
     	
-    	if ($_POST["account"] == null)
+    	if ($_POST["account"] != null)
     	    label_cell($myrow["account"] . ' ' . get_gl_account_name($myrow["account"]));
     	
 		if ($dim >= 1)
