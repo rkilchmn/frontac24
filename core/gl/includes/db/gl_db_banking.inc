@@ -369,13 +369,28 @@ function update_bank_transfer(
 	$amount, $ref, $memo_, $charge=0, $target_amount=0, $from_reconciled="", $to_reconciled="")
 {
 	begin_transaction();
-	delete_comments(ST_BANKTRANSFER, $trans_no);
-	void_transaction(ST_BANKTRANSFER, $trans_no, Today(), _("Document reentered."));
-	void_gl_trans(ST_BANKTRANSFER, $trans_no, true);
+
+    // Add the new bank transfer first in case the new transfer
+    // would allow the void balance check to succeed
+
 	$new_trans_no = add_bank_transfer(
 		$from_account, $to_account, $date_, $amount,
 		$ref, $memo_, $charge, $target_amount, $from_reconciled, $to_reconciled
 	);
+
+    // Delete the old bank transfer
+
+	delete_comments(ST_BANKTRANSFER, $trans_no);
+	$result = void_transaction(ST_BANKTRANSFER, $trans_no, Today(), _("Document reentered."));
+    if ($result !== false) {
+        display_error($result);
+        delete_comments(ST_BANKTRANSFER, $new_trans_no);
+        void_transaction(ST_BANKTRANSFER, $new_trans_no, Today(), _("Document reentered."));
+        void_gl_trans(ST_BANKTRANSFER, $new_trans_no, true);
+        return 0;
+    }
+
+	void_gl_trans(ST_BANKTRANSFER, $trans_no, true);
 	commit_transaction();
 	return $new_trans_no;
 }
