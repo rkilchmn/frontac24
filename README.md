@@ -842,3 +842,12 @@ to avoid difficulty.)
 BF seeks to remedy this deficiency.  The Sales Summary Report (rep114) is updated to separate
 sales by customer branch.  The Inventory Sales Report (rep304) allows filtering by branch.
 
+## do not clear customer payment allocation table/memo when updating bank account on single currency systems
+On the Customer Payment Entry screen, if the bank account is updated, the allocations
+table is refreshed and other data is cleared.
+FA does this because the bank account currency could change which would affect
+the display of this table.
+
+However, on single currency installations, this is unnecessary, because the currency does not change.
+BF does not refresh in this case.
+

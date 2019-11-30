@@ -339,7 +339,7 @@ if (list_updated('customer_id') || ($new && list_updated('bank_account'))) {
 	$Ajax->activate('_page_body');
 }
 
-bank_accounts_list_row(_("Into Bank Account:"), 'bank_account', null, true);
+bank_accounts_list_row(_("Into Bank Account:"), 'bank_account', null, db_num_rows(get_currencies()) > 1);
 
 read_customer_data();
 
