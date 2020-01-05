@@ -708,8 +708,9 @@ function create_cart($type, $trans_no)
 			$doc->line_items[$line_no]->qty_done = 0;
 		}
 		$_POST['Items'] = $doc;
-	} else
-		$_POST['Items'] = new Cart($type, array($trans_no));
+	} else {
+		$_POST['Items'] = new Cart($type, array($trans_no), false, @$_POST['OrderDate']);
+}
 	copy_from_cart();
 }
 

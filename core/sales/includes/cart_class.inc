@@ -90,7 +90,7 @@ class Cart
 	//  $trans_no!=0 && $prepare_child==true => prepare for child doc entry
 	//	$prepare_child is set to ST_SALESINVOICE for prepayment invoices
 	//
-	function __construct($type, $trans_no=0, $prepare_child=false) {
+	function __construct($type, $trans_no=0, $prepare_child=false, $doc_date=null) {
 		/*Constructor function initialises a new shopping cart */
 		$this->line_items = array();
 		$this->sales_type = "";
@@ -101,7 +101,7 @@ class Cart
 		$this->dimension_id = 0;
 		$this->dimension2_id = 0;
 		$this->pos = get_sales_point(user_pos());
-		$this->read($type, $trans_no, $prepare_child);
+		$this->read($type, $trans_no, $prepare_child, $doc_date);
 		$this->cart_id = uniqid('');
 	}
 
@@ -207,7 +207,7 @@ class Cart
 	//-------------------------------------------------------------------------
 	// Reading document into cart
 	//
-	function read($type, $trans_no=0, $prepare_child=false) {
+	function read($type, $trans_no=0, $prepare_child=false, $doc_date=null) {
 
 		global $SysPrefs, $Refs;
 
@@ -249,7 +249,7 @@ class Cart
 			  $this->customer_id = get_global_customer();
 			else
 			  $this->customer_id = '';
-			$this->document_date = new_doc_date();
+			$this->document_date = ($doc_date != null ? $doc_date : new_doc_date());
 			if (!is_date_in_fiscalyear($this->document_date))
 				$this->document_date = end_fiscalyear();
 			$this->reference = $Refs->get_next($this->trans_type, null, array('date' => Today(),
