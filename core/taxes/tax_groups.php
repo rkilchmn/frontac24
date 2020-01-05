@@ -78,15 +78,15 @@ function can_delete($selected_id)
 {
 	if ($selected_id == -1)
 		return false;
-	if (key_in_foreign_table($selected_id, 'cust_branch', 'tax_group_id'))	
+	if ($count = key_in_foreign_table($selected_id, 'cust_branch', 'tax_group_id'))	
 	{
-		display_error(_("Cannot delete this tax group because customer branches been created referring to it."));
+		display_error(_("Cannot delete this tax group because $count customer branches been created referring to it."));
 		return false;
 	}
 
-	if (key_in_foreign_table($selected_id, 'suppliers', 'tax_group_id'))
+	if ($count = key_in_foreign_table($selected_id, 'suppliers', 'tax_group_id'))
 	{
-		display_error(_("Cannot delete this tax group because suppliers been created referring to it."));
+		display_error(_("Cannot delete this tax group because $count suppliers been created referring to it."));
 		return false;
 	}
 
