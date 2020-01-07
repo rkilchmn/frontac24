@@ -851,3 +851,5 @@ the display of this table.
 However, on single currency installations, this is unnecessary, because the currency does not change.
 BF does not refresh in this case.
 
+## display memo on inventory adjustments, delete link, and display inquiry on inventory tab
+

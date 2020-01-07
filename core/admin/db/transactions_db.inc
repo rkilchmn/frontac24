@@ -33,10 +33,12 @@ function get_sql_for_view_transactions($filtertype, $from, $to, &$trans_ref)
 		$sql .= ", r.reference as ref";
 	if ($trans_date)
 		$sql .= ",t.$trans_date as trans_date";
+    $sql .= ",com.memo_";
  	if ($type_name)
 		$sql .= ", t.$type_name as type";
 	$sql .= " FROM $table_name t LEFT JOIN ".TB_PREF."voided v ON"
 		." t.$trans_no_name=v.id AND v.type=".db_escape($filtertype);
+    $sql .= " LEFT JOIN ".TB_PREF."comments com ON com.type=".db_escape($filtertype)." AND com.id=t.$trans_no_name ";
 
 	$sql .= " WHERE ISNULL(v.`memo_`)";
 	if ($from != null && $to != null)

@@ -25,6 +25,7 @@ $js = "";
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 page(_($help_context = "View or Print Transactions"), false, false, "", $js);
+set_posts(array('filterType'));
 
 //----------------------------------------------------------------------------------------
 function view_link($trans)
@@ -45,6 +46,13 @@ function prt_link($row)
 		return print_document_link($row['trans_no']."-".$row['type'], _("Print"), true, $row['type'], ICON_PRINT);
 }
 
+function delete_link($row)
+{
+        return pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_DELETE);
+}
+
+
+
 function gl_view($row)
 {
 	if (!isset($row['type']))
@@ -60,6 +68,11 @@ function date_view($row)
 function ref_view($row)
 {
 	return $row['ref'];
+}
+
+function memo_view($row)
+{
+	return $row['memo_'];
 }
 
 function viewing_controls()
@@ -126,11 +139,13 @@ function handle_search()
 			_("#") => array('insert'=>true, 'fun'=>'view_link'), 
 			_("Reference") => array('fun'=>'ref_view'), 
 			_("Date") => array('type'=>'date', 'fun'=>'date_view'),
+			_("Comments") => array('fun'=>'memo_view'),
 			_("Print") => array('insert'=>true, 'fun'=>'prt_link'), 
-			_("GL") => array('insert'=>true, 'fun'=>'gl_view')
+			_("GL") => array('insert'=>true, 'fun'=>'gl_view'),
+			_("X") => array('insert'=>true, 'fun'=>'delete_link')
 		);
 		if(!$print_out) {
-			array_remove($cols, 3);
+			array_remove($cols, 4);
 		}
 		if(!$trans_ref) {
 			array_remove($cols, 1);
