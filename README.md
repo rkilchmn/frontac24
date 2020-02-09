@@ -902,3 +902,5 @@ in app code.
 I will close the report for now, however if we will find complete solution we
 will integrate it in the codebase. 
 
+## reload page on ajax failure
+See, https://frontaccounting.com/punbb/viewtopic.php?id=8672.
