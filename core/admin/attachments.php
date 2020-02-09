@@ -451,9 +451,6 @@ $type = get_post('filterType');
 
 display_rows($type, get_post('trans_no'));
 
-
-}
-
 end_form();
 end_page(true);
 
