@@ -856,3 +856,49 @@ BF does not refresh in this case.
 ## BUGFIX: Manufacturing Values Off By Small Amounts
 See https://frontaccounting.com/punbb/viewtopic.php?id=8662
 
+## Restore dies with php memory error
+Restore of a large database returned this error:
+
+Allowed memory size of 134217728 bytes exhausted (tried to allocate 94 bytes) in
+core/admin/db/maintenance_db.inc on line 325
+
+I would hope that the restore function could be rewritten as not to consume an
+enormous amount of memory.
+
+The workaround was to increase the php memory_limit but this is just a bandaid.
+====================================================================== 
+
+---------------------------------------------------------------------- 
+ (0018225) janusz (administrator) - 2019-06-12 15:18
+ http://mantis.frontaccounting.com/view.php?id=4745#c18225 
+---------------------------------------------------------------------- 
+Enormous file upload consumes enormous memory. Do you have any preposition how
+to address this issue for arbitrary file size?
+
+Workaround of uploading backup via other tools like cmndline mmyslq client
+should work to some extent. 
+
+---------------------------------------------------------------------- 
+ (0018756) braathwaate (reporter) - 2019-12-02 23:05
+ http://mantis.frontaccounting.com/view.php?id=4745#c18756 
+---------------------------------------------------------------------- 
+Reading the file line by line rather than reading the entire file into memory
+can cuts memory consumption for standard restore in half.
+This code change is not a complete solution but is a step in the right direction.
+
+---------------------------------------------------------------------- 
+ (0018921) janusz (administrator) - 2020-01-24 21:31
+ http://mantis.frontaccounting.com/view.php?id=4745#c18921 
+---------------------------------------------------------------------- 
+This is not enough to solve the limitation. db_import stores all queries from
+file in temporary tables, to preserve right order in import. Also sql compressed
+files could not be processed line by line. 
+
+The php memory limit can be safely increased for small servers, and where it is
+not possible, there is always another way to import backup file like phpmyadmin
+or in mysql client, so I think it is not worth the effort to fix this limitation
+in app code.
+
+I will close the report for now, however if we will find complete solution we
+will integrate it in the codebase. 
+

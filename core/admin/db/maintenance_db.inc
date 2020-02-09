@@ -322,14 +322,14 @@ function db_import($filename, $connection, $force=true, $init=true, $protect=fal
 		$check_line_len = true;
 	} elseif (strpos($filename, ".zip") || strpos($filename, ".ZIP"))
 		$lines = db_unzip("lines", $filename);
-	else
-		$lines = file("". $filename);
+    else
+        $lines = fopen($filename, "r");
 
 	// parse input file
 	$query_table = '';
 	$delimiter = ';';
 
-	foreach($lines as $line_no => $line)
+    for ($line_no = 0; ($line = db_getline($lines, $line_no)) !== false; $line_no++)
 	{
 		$gzfile_bug = $check_line_len && (strlen($line) == 8190); // there is a bug in php (at least 4.1.1-5.5.9) gzfile which limits line length to 8190 bytes!
 
@@ -995,4 +995,20 @@ function update_config_var($file, $variable, $value, $comment='')
 	return file_put_contents($file, $content)!=false;
 }
 
+function db_getline($lines, $line_no)
+{
+    if (is_array($lines)) {
+        if ($line_no == sizeof($lines))
+            return false;
+        return $lines[$line_no];
+    }
 
+    if ($lines) {
+        $line = fgets($lines);
+        if ($line !== false)
+            return $line;
+        fclose($lines);
+    }
+
+    return false;
+}
