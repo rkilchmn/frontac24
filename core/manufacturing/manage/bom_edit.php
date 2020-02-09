@@ -165,14 +165,6 @@ if (list_updated('new_stock_id')) {
 	display_notification(_("BOM copied to ") . $item['description']);
 }
 
-if (list_updated('new_stock_id')) {
-    copy_bom_items($_POST['stock_id'], $_POST['new_stock_id']);
-    $item = get_item($_POST['new_stock_id']);
-    $_POST['stock_id'] = $_POST['new_stock_id'];
-    $Ajax->activate('_page_body');
-    display_notification("BOM copied to " . $item['description']);
-}
-
 start_form();
 
 start_form(false, true);
