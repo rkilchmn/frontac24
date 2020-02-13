@@ -2212,6 +2212,31 @@ function journal_types_list_cells($label, $name, $value=null, $submit_on_change=
 	echo "</td>\n";
 }
 
+function bank_types_list_cells($label, $name, $value=null, $submit_on_change=false)
+{
+	global $systypes_array;
+
+	if ($label != null)
+		echo "<td>$label</td>\n";
+	echo "<td>";
+
+	$items = $systypes_array;
+
+    foreach ($items as $type => $item)
+        if (!in_array($type, array(ST_JOURNAL, ST_BANKPAYMENT, ST_BANKDEPOSIT, ST_BANKTRANSFER)))
+			unset($items[$type]);
+
+	echo array_selector($name, $value, $items, 
+		array( 
+			'spec_option'=> _("-- Add New Transaction --"),
+			'spec_id' => -1,
+			'select_submit'=> $submit_on_change,
+			'async' => false
+			)
+	);
+	echo "</td>\n";
+}
+
 function cust_allocations_list_cells($label, $name, $selected=null, $submit_on_change=false)
 {
 

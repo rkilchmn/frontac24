@@ -39,7 +39,28 @@ if (get_post('Show'))
 	$Ajax->activate('trans_tbl');
 }
 
-set_posts(array('bank_account', 'TransAfterDate', 'TransToDate'));
+if (isset($_POST['bank_type'])) {
+    $bank_type = $_POST['bank_type'];
+    switch ($bank_type) {
+        case ST_JOURNAL :
+            meta_forward("$path_to_root/gl/gl_journal.php", "NewJournal=Yes&bank_account=".$_POST['bank_account']."&date_=" . @$_POST['date_']);
+        case ST_BANKTRANSFER :
+            meta_forward("$path_to_root/gl/bank_transfer.php", "bank_account=".$_POST['bank_account']."&date_=" . @$_POST['date_']);
+        case ST_BANKPAYMENT :
+            meta_forward("$path_to_root/gl/gl_bank.php", "NewPayment=yes&bank_account=".$_POST['bank_account']."&date_=" . @$_POST['date_']);
+        case ST_BANKDEPOSIT :
+            meta_forward("$path_to_root/gl/gl_bank.php", "NewDeposit=yes&bank_account=".$_POST['bank_account']."&date_=" . @$_POST['date_']);
+    }
+}
+        
+set_posts(array('bank_account','TransAfterDate', 'TransToDate', 'ID', 'date_'));
+if (isset($_GET['AddedID']))
+    $id = $_GET['AddedID'];
+else if (isset($_GET['UpdatedID']))
+    $id = $_GET['UpdatedID'];
+else
+    $id = @$_POST['ID'];
+
 //------------------------------------------------------------------------------------------------
 
 start_form();
@@ -56,6 +77,9 @@ if ($days >= 0) {
 }
 
 submit_cells('Show',_("Show"),'','', 'default');
+hidden('ID', $id);
+hidden('date_', (isset($_POST['date_']) ? null : Today()));
+bank_types_list_cells(null, "bank_type", null, true);
 end_row();
 end_table();
 end_form();
@@ -97,7 +121,7 @@ $k = 0; //row colour counter
 while ($myrow = db_fetch($result))
 {
 
-	alt_table_row_color($k);
+    alt_table_row_color($k, ($id == $myrow['trans_no'] ? "redfg" : null));
 
 	$running_total += $myrow["amount"];
 
@@ -137,8 +161,6 @@ amount_cell($debit);
 amount_cell(-$credit);
 //display_debit_or_credit_cells($running_total);
 amount_cell($debit+$credit);
-hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter Another &Payment"), "NewPayment=yes&bank_account=".$_POST['bank_account']);
-hyperlink_params_td("$path_to_root/gl/gl_bank.php", _("Enter A &Deposit"), "NewDeposit=yes&bank_account=".$_POST['bank_account']);
 
 label_cell("", "colspan=3");
 end_row();

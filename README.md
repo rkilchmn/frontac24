@@ -258,10 +258,10 @@ because the user only needs to type the search clause
 and hit enter, without having to move the mouse and click on "Search".
 
 ## Support for Enter payment on bank inquiry page
-BF adds a link at the bottom of the bank inquiry page
-to enter another payment.
+BF adds a pulldown menu at the top of bank inquiry page
+to enter another payment, deposit, bank transfer or general journal transaction.
 Often a user will keep the bank inquiry page open
-and continually add payments from there, rather than navigating
+and continually add transactions from there, rather than navigating
 around through FA's pages of links.
 
 ## add total equities line to balance sheet report

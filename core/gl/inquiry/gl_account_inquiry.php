@@ -143,9 +143,12 @@ function edit_link($row)
             $str = "/sales/sales_order_entry.php?NewInvoice=".$myrow['order_']."&InvoiceNo=".$row['type_no'];
             return pager_link(_('Edit'), $str, ICON_EDIT);
             break;
-        default:
-            return $row['type'] == ST_CUSTCREDIT && $row['order_'] ? '' :   // allow  only free hand credit notes edition
+        case ST_CUSTCREDIT:
+            $myrow = get_customer_trans($row["type_no"], $row["type"]);
+            return $myrow['order_'] ? '' :   // allow  only free hand credit notes edition
                 trans_editor_link($row['type'], $row['type_no']);
+        default:
+            return trans_editor_link($row['type'], $row['type_no']);
     }
 }
 
@@ -180,7 +183,7 @@ function show_results()
     	$_POST["account"], $_POST['Dimension'], $_POST['Dimension2'], null,
     	input_num('amount_min'), input_num('amount_max'), get_post('person_type'), get_post('person_id'), $_POST['Memo']);
 
-	$colspan = ($dim == 2 ? "7" : ($dim == 1 ? "6" : "5"));
+	$colspan = ($dim == 2 ? "8" : ($dim == 1 ? "7" : "6"));
 
 	if ($_POST["account"] != null)
 		display_heading($_POST["account"]. "&nbsp;&nbsp;&nbsp;".$act_name);
@@ -320,9 +323,9 @@ gl_inquiry_controls();
 div_start('trans_tbl');
 
 if (get_post('Show')
-    || list_updated('account')
-    || list_updated('person_type')
-    || list_updated('person_id'))
+    || get_post('account')
+    || get_post('person_type')
+    || get_post('person_id'))
     show_results();
 
 div_end();
