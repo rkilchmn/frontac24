@@ -904,3 +904,6 @@ will integrate it in the codebase.
 
 ## reload page on ajax failure
 See, https://frontaccounting.com/punbb/viewtopic.php?id=8672.
+
+## 0005081: Editing a customer payment which is not allocated to an invoice and using the allocation table changes the payment amount
+BF automatically fills in allocation amounts.
