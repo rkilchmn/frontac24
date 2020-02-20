@@ -228,7 +228,7 @@ function get_allocatable_to_cust_transactions($customer_id = null, $trans_no=nul
 	$orders = get_allocatable_sales_orders($customer_id, $trans_no, $type);
 	$sql = "($sql ORDER BY trans_no) \nUNION \n($orders)";
 
-	return db_query($sql, "Cannot retreive alloc to transactions");
+	return db_query($sql." ORDER BY due_date", "Cannot retreive alloc to transactions");
 }
 
 //-------------------------------------------------------------------------------------------------------------

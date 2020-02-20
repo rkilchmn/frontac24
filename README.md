@@ -466,7 +466,7 @@ creating the customer,
 closing the popup,
 and selecting the newly created customer in the customer list.
 
-BA retains this feature but also adds "New Customer" to the customer list
+BF retains this feature but also adds "New Customer" to the customer list
 and a "Create New Customer" link whenever "New Customer" is selected.
 This requires only one additional click to create the customer
 and after the customer is created, the order entry screen
@@ -546,7 +546,7 @@ and do not guess that the reason is because the item was marked inactive.
 
 ## do not show bank deposits when invoice filter is selected in supplier inquiry
 ## add viewport for improved mobile device support
-BA adds declares a viewport to size the FA view to the device size.
+BF adds declares a viewport to size the FA view to the device size.
 This should have no effect on the desktop, but makes it
 easier to use FA on a mobile device.
 While this is far from creating a truly mobile FA,
@@ -907,3 +907,14 @@ See, https://frontaccounting.com/punbb/viewtopic.php?id=8672.
 
 ## 0005081: Editing a customer payment which is not allocated to an invoice and using the allocation table changes the payment amount
 BF automatically fills in allocation amounts.
+## Order customer allocation invoices by due date rather than transaction number
+FA orders the list of invoices to be allocated to a customer payment
+by transaction number.
+Transaction number is meaningless to the user because it is just a database file index
+and invoice dates could have changed or been voided and readded
+causing the list of invoices to be out of date order.
+
+BF orders the invoices by due date, because usually an incoming payment
+is allocated to the earliest invoices.
+This makes it consistent with supplier application invoices,
+which are already ordered by due date in FA.
