@@ -66,6 +66,7 @@ else
 start_form();
 start_table(TABLESTYLE_NOBORDER);
 start_row();
+bank_types_list_cells(null, "bank_type", null, true);
 bank_accounts_list_cells(_("Account:"), 'bank_account', null, true);
 
 $days = user_transaction_days();
@@ -79,7 +80,6 @@ if ($days >= 0) {
 submit_cells('Show',_("Show"),'','', 'default');
 hidden('ID', $id);
 hidden('date_', (isset($_POST['date_']) ? null : Today()));
-bank_types_list_cells(null, "bank_type", null, true);
 end_row();
 end_table();
 end_form();
