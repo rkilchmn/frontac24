@@ -371,7 +371,7 @@ class FrontReport extends Cpdf
 		$this->Font('italic');
 		if ($this->headers2 != null)
 		{
-			$count = count($this->headers2);
+			$count = count_array($this->headers2);
 			for ($i = 0; $i < $count; $i++)
 				$this->TextCol2($i, $i + 1,	$this->headers2[$i]);
 			$this->NewLine();
@@ -389,7 +389,7 @@ class FrontReport extends Cpdf
 	*/
 	function SetCommonData($myrow, $branch, $sales_order, $bankaccount, $doctype, $contacts)
 	{
-
+		$this->pageNumber = 0;
 		$this->formData = array();
 		$datnames = array( 
 		'myrow' => array('ord_date', 'date_', 'tran_date', 

@@ -334,9 +334,9 @@ function show_allocatable($show_totals) {
 	    		$un_allocated = round(($alloc_item->amount - $alloc_item->amount_allocated), 6);
 	    		amount_cell($un_allocated, false,'', 'maxval'.$id);
     			amount_cells(null, "amount" . $id);//, input_num('amount' . $id));
-				label_cell("<a href='#' name=Alloc$id onclick='allocate_all(this.name.substr(5));return true;'>"
+				label_cell("<a href='javascript:void(0)' name=Alloc$id onclick='allocate_all(this.name.substr(5));return true;'>"
 					 . _("All") . "</a>");
-				label_cell("<a href='#' name=DeAll$id onclick='allocate_none(this.name.substr(5));return true;'>"
+				label_cell("<a href='javascript:void(0)' name=DeAll$id onclick='allocate_none(this.name.substr(5));return true;'>"
 					 . _("None") . "</a>".hidden("un_allocated" . $id, 
 					 price_format($un_allocated), false));
 				end_row();
@@ -400,9 +400,29 @@ function check_allocations()
 			return false;
 		 }
 
-		 $_SESSION['alloc']->allocs[$counter]->current_allocated = input_num('amount' . $counter);
+		if ($_SESSION['alloc']->person_type == PT_CUSTOMER) {
+			if ($_SESSION['alloc']->allocs[$counter]->type == ST_SALESORDER)
+				$trans = get_sales_order_header($_SESSION['alloc']->allocs[$counter]->type_no, $_SESSION['alloc']->allocs[$counter]->type);
+			else
+				$trans = get_customer_trans($_SESSION['alloc']->allocs[$counter]->type_no, $_SESSION['alloc']->allocs[$counter]->type);
 
-		 $total_allocated += input_num('amount' . $counter);
+			if ($trans['debtor_no'] != $_SESSION['alloc']->person_id) {
+				display_error(_("Allocated transaction allocated is not related to company selected."));
+				set_focus('amount'.$counter);
+				return false;
+			}
+		} elseif ($_SESSION['alloc']->person_type == PT_SUPPLIER) {
+			$trans = get_supp_trans($_SESSION['alloc']->allocs[$counter]->type_no, $_SESSION['alloc']->allocs[$counter]->type);
+			if ($trans['supplier_id'] != $_SESSION['alloc']->person_id) {
+				display_error(_("Allocated transaction allocated is not related to company selected."));
+				set_focus('amount'.$counter);
+				return false;
+			}
+		}
+
+		$_SESSION['alloc']->allocs[$counter]->current_allocated = input_num('amount' . $counter);
+
+		$total_allocated += input_num('amount' . $counter);
 	}
 
 	$amount = abs($_SESSION['alloc']->amount);
