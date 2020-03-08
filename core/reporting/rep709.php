@@ -67,7 +67,7 @@ function getTaxTransactions($from, $to)
         $sql .= " AND taxrec.tran_date >= '$fromdate'
 			AND taxrec.tran_date <= '$todate'
         GROUP BY taxrec.id
-		ORDER BY taxrec.trans_type, taxrec.tran_date, taxrec.trans_no, taxrec.ex_rate";
+		ORDER BY taxrec.tran_date, taxrec.trans_type, taxrec.trans_no, taxrec.ex_rate";
 
     return db_query($sql,"No transactions were returned");
 }
