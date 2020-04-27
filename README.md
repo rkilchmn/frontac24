@@ -907,6 +907,7 @@ See, https://frontaccounting.com/punbb/viewtopic.php?id=8672.
 
 ## 0005081: Editing a customer payment which is not allocated to an invoice and using the allocation table changes the payment amount
 BF automatically fills in allocation amounts.
+
 ## Order customer allocation invoices by due date rather than transaction number
 FA orders the list of invoices to be allocated to a customer payment
 by transaction number.
@@ -918,3 +919,5 @@ BF orders the invoices by due date, because usually an incoming payment
 is allocated to the earliest invoices.
 This makes it consistent with supplier application invoices,
 which are already ordered by due date in FA.
+
+## Order customer transactions by transaction date and filter out deliveries for All Types
