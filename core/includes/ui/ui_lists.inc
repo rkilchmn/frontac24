@@ -1334,7 +1334,7 @@ function shippers_list($name, $selected_id=null)
 {
 	$sql = "SELECT shipper_id, shipper_name, inactive FROM ".TB_PREF."shippers";
 	return combo_input($name, $selected_id, $sql, 'shipper_id', 'shipper_name', 
-		array('order'=>array('shipper_name')));
+		array('order'=>array('shipper_id')));
 }
 
 function shippers_list_cells($label, $name, $selected_id=null)

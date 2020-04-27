@@ -921,3 +921,13 @@ This makes it consistent with supplier application invoices,
 which are already ordered by due date in FA.
 
 ## Order customer transactions by transaction date and filter out deliveries for All Types
+
+## Default Shipping Company
+FA orders the list of shippers by name.
+While alphabetic order is pleasing, especially if there are alot of shippers,
+the default shipper becomes the first shipper in the alphabetic list, which is probably not desired.
+
+FA makes the default shipper the first shipper as as shown in Setup->Shipping Company.
+(The correct way to define the default shipper would be in Setup->System and General GL Setup,
+but this would require more code changes, so I leave this feature request to the development team).
+
