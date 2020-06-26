@@ -1329,12 +1329,19 @@ function item_tax_types_list_row($label, $name, $selected_id=null, $show_inactiv
 }
 
 //------------------------------------------------------------------------------------
+include_once($path_to_root . "/admin/db/shipping_db.inc");
 
 function shippers_list($name, $selected_id=null)
 {
+    if ($selected_id==null) {
+        $result = get_shippers(false);
+        $row = db_fetch($result);
+        if ($row)
+            $selected_id=$row['shipper_id'];
+    }
 	$sql = "SELECT shipper_id, shipper_name, inactive FROM ".TB_PREF."shippers";
 	return combo_input($name, $selected_id, $sql, 'shipper_id', 'shipper_name', 
-		array('order'=>array('shipper_id')));
+		array('order'=>array('shipper_name')));
 }
 
 function shippers_list_cells($label, $name, $selected_id=null)
