@@ -54,3 +54,7 @@ msgstr "Your Tax Id."
 msgid "Our VAT No."
 msgstr "Our Tax Id."
 
+#:
+msgid "Mailing Address:"
+msgstr "Physical/Delivery Address:"
+
