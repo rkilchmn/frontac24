@@ -931,3 +931,13 @@ FA makes the default shipper the first shipper as as shown in Setup->Shipping Co
 (The correct way to define the default shipper would be in Setup->System and General GL Setup,
 but this would require more code changes, so I leave this feature request to the development team).
 
+## Allow deletion of items that have foreign codes or are used in kits
+If an item has a foreign code or is used in a kit, FA prevents deletion of the item.
+This makes it time-consuming to delete items because the codes must be manually
+deleted before the item can be deleted.
+
+BF changes the error to a warning and deletes the item as well as the foreign codes.
+It also moves the message code out of the db include file into the calling code
+because no other file called that function and the message code was not database code
+but user-interface code.
+

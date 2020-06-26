@@ -280,13 +280,38 @@ if (get_post('clone')) {
 
 //------------------------------------------------------------------------------------
 
+function item_in_foreign_codes($stock_id)
+{
+    $msg = item_used($stock_id);
+    if ($msg == '') {
+
+        $kits = get_where_used($stock_id);
+        $num_kits = db_num_rows($kits);
+        if ($num_kits) {
+            $msg = _("This item had some code aliases or foreign codes
+                or was used in a kit as a component")
+                .':<br>';
+
+            while($num_kits--) {
+                $kit = db_fetch($kits);
+                $msg .= "'".$kit[0]."'";
+                if ($num_kits) $msg .= ',';
+            }
+
+        }
+    }
+    return $msg;
+}
+
+//------------------------------------------------------------------------------------
+
 function check_usage($stock_id, $dispmsg=true)
 {
 	$msg = item_in_foreign_codes($stock_id);
 
 	if ($msg != '')	{
-		if($dispmsg) display_error($msg);
-		return false;
+		if($dispmsg) display_warning($msg);
+		return true;
 	}
 	return true;
 }
