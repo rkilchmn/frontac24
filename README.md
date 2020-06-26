@@ -941,3 +941,6 @@ It also moves the message code out of the db include file into the calling code
 because no other file called that function and the message code was not database code
 but user-interface code.
 
+## BUGFIX:  Different Service Item Description From Same Vendor
+See, https://frontaccounting.com/punbb/viewtopic.php?id=8754
+

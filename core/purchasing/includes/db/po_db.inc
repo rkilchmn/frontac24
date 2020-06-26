@@ -208,7 +208,11 @@ function read_po_items($order_no, &$order, $open_items_only=false)
 {
 	/*now populate the line po array with the purchase order details records */
 
-	$sql = "SELECT poline.*, units
+	$sql = "SELECT poline.*, units,
+            (SELECT COUNT(*) 
+                FROM ".TB_PREF."purch_order_details poline2
+                WHERE poline.item_code = poline2.item_code
+                    AND poline.description != poline2.description) AS dup
 		FROM ".TB_PREF."purch_order_details poline
 			LEFT JOIN ".TB_PREF."stock_master item	ON poline.item_code=item.stock_id
 		WHERE order_no =".db_escape($order_no);
@@ -224,12 +228,14 @@ function read_po_items($order_no, &$order, $open_items_only=false)
     {
 		while ($myrow = db_fetch($result))
         {
-        	$data = get_purchase_data($order->supplier_id, $myrow['item_code']);
-        	if ($data !== false)
-        	{
-        		if ($data['supplier_description'] != "")
-        			$myrow['description'] = $data['supplier_description'];
-        	}		
+            if ($myrow['dup'] == 0) {
+                $data = get_purchase_data($order->supplier_id, $myrow['item_code']);
+                if ($data !== false)
+                {
+                    if ($data['supplier_description'] != "")
+                        $myrow['description'] = $data['supplier_description'];
+                }		
+            }
             if (is_null($myrow["units"]))
             {
 		       	$units = "";
