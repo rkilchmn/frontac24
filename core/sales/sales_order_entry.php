@@ -28,6 +28,8 @@ include_once($path_to_root . "/sales/includes/sales_db.inc");
 include_once($path_to_root . "/sales/includes/db/sales_types_db.inc");
 include_once($path_to_root . "/reporting/includes/reporting.inc");
 
+
+
 if (isset($_POST['Items']))
     $_POST['Items'] = unserialize(html_entity_decode($_POST['Items']));
 
@@ -722,7 +724,9 @@ function get_inv_reference($invoice_no)
     FROM
     ".TB_PREF."debtor_trans invoice
     WHERE
-    invoice.trans_no=".db_escape($invoice_no);
+    invoice.trans_no=".db_escape($invoice_no)."
+    AND
+    invoice.type='".ST_SALESINVOICE."'";
 
     $res = db_query ($sql, 'cannot find');
     $ref = db_fetch($res);
