@@ -186,6 +186,26 @@ function item_used($stock_id)
     return $msg;
 }
 
+function item_in_foreign_codes($stock_id)
+{
+    if ($msg == '') {
+        $kits = get_where_used($stock_id);
+        $num_kits = db_num_rows($kits);
+        if ($num_kits) {
+            $msg = _("This item had some code aliases or foreign codes
+                or was used in a kit as a component")
+                .':<br>';
+
+            while($num_kits--) {
+                $kit = db_fetch($kits);
+                $msg .= "'".$kit[0]."'";
+                if ($num_kits) $msg .= ',';
+            }
+        }
+    }
+    return $msg;
+}
+
 function get_items_search_sql($description, $type)
 {
 	global $SysPrefs;
