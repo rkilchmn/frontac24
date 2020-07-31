@@ -20,6 +20,7 @@
 $path_to_root = "..";
 $page_security = 'SA_SALESORDER';
 
+include($path_to_root . "/includes/ui/allocation_cart.inc");
 include_once($path_to_root . "/sales/includes/cart_class.inc");
 include_once($path_to_root . "/includes/session.inc");
 include_once($path_to_root . "/sales/includes/sales_ui.inc");
@@ -27,6 +28,7 @@ include_once($path_to_root . "/sales/includes/ui/sales_order_ui.inc");
 include_once($path_to_root . "/sales/includes/sales_db.inc");
 include_once($path_to_root . "/sales/includes/db/sales_types_db.inc");
 include_once($path_to_root . "/reporting/includes/reporting.inc");
+
 
 
 
@@ -392,13 +394,18 @@ function can_process() {
 		return false;
 	}
 
-    // Need to void old invoice before stock check
-    // This means that it is possible to lose it without creating a new one if there is an error
+    // TBD: When editing an invoice, the stock check
+    // needs consider that the existing invoice quantities
+    // would be returned to stock.  This could be done by voiding
+    // the invoice before the stock check, but then if the stock check fails
+    // (or anything else), the old invoice would be deleted and the new one
+    // might not be created.
 
-    if (get_post('InvoiceNo')>0) //Added by Faisal to enable invoice Edit
-            void_transaction (ST_SALESINVOICE, get_post('InvoiceNo'), Today(), 'Document Reissued');
+    // For now, skip the stock check on editing old invoices.
 
-	if (!$SysPrefs->allow_negative_stock() && ($low_stock = $_POST['Items']->check_qoh()))
+	if (!$SysPrefs->allow_negative_stock()
+        && get_post('InvoiceNo') == 0
+        && ($low_stock = $_POST['Items']->check_qoh()))
 	{
 		display_error(_("This document cannot be processed because there is insufficient quantity for items marked."));
 		return false;
@@ -406,7 +413,7 @@ function can_process() {
 	if ($_POST['Items']->payment_terms['cash_sale'] == 0) {
 		if (!$_POST['Items']->is_started() && ($_POST['Items']->payment_terms['days_before_due'] == -1) && ((input_num('prep_amount')<=0) ||
 			input_num('prep_amount')>$_POST['Items']->get_trans_total())) {
-			display_error(_("Pre-payment required have to be positive and less than total amount."));
+			display_error(_("'Pre-Payment Required' must be positive and less than or equal to total amount."));
 			set_focus('prep_amount');
 			return false;
 		}
@@ -487,6 +494,14 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 	$modified = ($_POST['Items']->trans_no != 0);
 	$so_type = $_POST['Items']->so_type;
 
+    // Need to void old invoice before stock check
+    // This means that it is possible to lose it without creating a new one if there is an error
+
+    if (get_post('InvoiceNo')>0) { //Added by Faisal to enable invoice Edit
+        $oldalloc = db_fetch(get_allocatable_from_cust_transactions(null, get_post('InvoiceNo'), ST_SALESINVOICE));
+        void_transaction (ST_SALESINVOICE, get_post('InvoiceNo'), Today(), 'Document Reissued');
+    }
+
 	$ret = $_POST['Items']->write(1);
 	if ($ret == -1)
 	{
@@ -509,6 +524,39 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 		$trans_type = $_POST['Items']->trans_type;
 		new_doc_date($_POST['Items']->document_date);
 		processing_end();
+
+        if (get_post('InvoiceNo')>0 && $oldalloc !== false) {
+            // payment is unallocated because of void
+            $_SESSION['alloc'] = new allocation($oldalloc['type'], $oldalloc['trans_no'], get_post('customer_id'), PT_CUSTOMER);
+
+            // Find the new invoice and allocate the payment to it
+            // This code handles a single alloc where the payment is equal to the invoice amount
+            // Otherwise, the allocations were cleared by the void and must be readded manually
+
+// display_notification(print_r($_SESSION['alloc'], true));
+
+            $realloc = false;
+            foreach ($_SESSION['alloc']->allocs as $alloc) {
+                $alloc->current_allocated = 0;  // clear suggested allocs
+
+                if ($alloc->type == $trans_type
+                    && $alloc->type_no == $trans_no
+                    && $_SESSION['alloc']->amount == $alloc->amount) {
+                    $alloc->current_allocated = $alloc->amount;
+                    $realloc = true;
+                }
+            }
+
+// display_notification(print_r($_SESSION['alloc'], true));
+            if ($realloc) {
+                if (check_allocations()) {
+                    $_SESSION['alloc']->write();
+                } else {
+                    display_error("Cannot write allocation");
+                    die();
+                }
+            }
+        } // had an alloc
 
         if ($modified) {
             if ($trans_type == ST_SALESQUOTE)
