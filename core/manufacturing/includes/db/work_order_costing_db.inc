@@ -234,9 +234,9 @@ function void_wo_costing($wo_id)
 
 	while($row = db_fetch($res))
 	{
-        $is_bank_to = is_bank_account($row['account']);
-        if ($is_bank_to)
-            void_bank_trans($row['trans_type'], $row['trans_no']);
+		$is_bank_to = is_bank_account($row['account']);
+		if ($is_bank_to)
+			void_bank_trans($row['trans_type'], $row['trans_no']);
 
 		// void any related gl trans
 		$date = Today();

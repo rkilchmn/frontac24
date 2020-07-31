@@ -1611,6 +1611,8 @@ INSERT INTO `0_sys_prefs` VALUES
 ('default_loss_on_asset_disposal_act', 'glsetup.items', 'varchar', '15', '5660'),
 ('depreciation_period', 'glsetup.company', 'tinyint', '1', '1'),
 ('use_manufacturing','setup.company', 'tinyint', 1, '1'),
+('dim_on_recurrent_invoice','setup.company', 'tinyint', 1, '0'),
+('long_description_invoice','setup.company', 'tinyint', 1, '0'),
 ('default_sales_type', 'glsetup.sales', 'tinyint', 1, '1'),
 ('default_sales_area', 'glsetup.sales', 'tinyint', 1, '1'),
 ('default_tax_group', 'glsetup.sales', 'tinyint', 1, '1'),
