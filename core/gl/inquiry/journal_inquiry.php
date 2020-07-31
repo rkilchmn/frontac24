@@ -80,7 +80,7 @@ function systype_name($dummy, $type)
 
 function person_link($row) 
 {
-    return payment_person_name($row["person_type_id"],$row["person_id"]);
+    return payment_person_name_link($row["person_type_id"],$row["person_id"]);
 }
 
 function view_link($row) 
