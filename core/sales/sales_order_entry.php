@@ -541,8 +541,8 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
 
                 if ($alloc->type == $trans_type
                     && $alloc->type_no == $trans_no
-                    && $_SESSION['alloc']->amount == $alloc->amount) {
-                    $alloc->current_allocated = $alloc->amount;
+                    && $_SESSION['alloc']->amount == round($alloc->amount,2)) {
+                    $alloc->current_allocated = $_SESSION['alloc']->amount;
                     $realloc = true;
                 }
             }
