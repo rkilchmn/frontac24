@@ -202,24 +202,6 @@ class allocation
 				}
 			}
 		}
-
-    /* Finally, if there any unallocated money remaining, assign the unallocated portion to
-        the earliest transactions.  This makes the javascript All/None keys consistent
-        with the transaction amount. */
-
-        if ($amount > 0)
-            foreach ($this->allocs as $alloc_item) {
-                $allocatable = $alloc_item->amount - $alloc_item->amount_allocated;
-                if ($allocatable > 0) {
-                    if ($amount >= $allocatable) {
-                        $alloc_item->current_allocated = $allocatable;
-                        $amount -= $allocatable;
-                    } else {
-                        $alloc_item->current_allocated += $amount;
-                        break;
-                    }
-                }
-            }
 	}
 	//
 	//	Update allocations in database.
