@@ -1,3 +1,27 @@
+2020-08-04 Joe Hunt
+PHP 7.4 fixes and rerun
+M	gl/gl_journal.php
+M	gl/includes/db/gl_db_accounts.inc
+M	includes/references.inc
+M	includes/ui/items_cart.inc
+M	purchasing/includes/db/grn_db.inc
+M	sales/includes/db/sales_order_db.inc
+M	sales/includes/sales_db.inc
+M	sales/includes/ui/sales_order_ui.inc
+
+2020-08-02 Joe Hunt
+Journal Inquiry - Counter Party column not showing on invoice. Fixed.
+M	gl/includes/db/gl_db_trans.inc
+
+2020-07-31 Joe Hunt
+Bug in Supplier Credit Note Edit, Fixed.
+M	purchasing/includes/supp_trans_class.inc
+M	purchasing/supplier_credit.php
+
+2020-07-31 Joe Hunt
+Negative Inventory Adjustments not working anymore (2.4.8). Fixed
+M	inventory/includes/db/items_adjust_db.inc
+
 2020-07-13 Janusz Dobrowolski
 Install/Update Languages: fixed directory traversal issue
 M	admin/inst_lang.php
