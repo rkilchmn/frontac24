@@ -78,11 +78,12 @@ function get_bank_account($id)
 
 function get_bank_accounts($show_inactive=false)
 {
-	$sql = "SELECT account.*, gl_account.account_name
+	$sql = "SELECT account.*, gl_account.account_name, gl_account.inactive as gl_inactive
 		FROM ".TB_PREF."bank_accounts account, ".TB_PREF."chart_master gl_account
 		WHERE account.account_code = gl_account.account_code";
 	if (!$show_inactive) $sql .= " AND !account.inactive";
-	$sql .= " ORDER BY account_code, bank_curr_code";
+	// $sql .= " ORDER BY account_code, bank_curr_code";
+	$sql .= " ORDER BY bank_account_name, account_code, bank_curr_code";
 
 	return db_query($sql,"could not get bank accounts");
 }
