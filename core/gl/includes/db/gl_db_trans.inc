@@ -109,9 +109,6 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
 {
     global $SysPrefs;
 
-    $from = date2sql($from_date);
-    $to = date2sql($to_date);
-
     if ($account == null)
         $sql = "SELECT gl2.*";
     else
@@ -122,7 +119,8 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             IF(gl1.person_id, gl1.person_type_id, IF(sup.supplier_id,".  PT_SUPPLIER . "," .  "IF(debt.debtor_no," . PT_CUSTOMER . "," . 
             "IF(bt.person_id != '' AND !ISNULL(bt.person_id), bt.person_type_id, -1)))) as person_type_id,
             IFNULL(st.tran_date, IFNULL(dt.tran_date, IFNULL(bt.trans_date, IFNULL(grn.delivery_date, gl1.tran_date)))) as doc_date,
-            coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl1.memo_, CONCAT(gl1.memo_,' ',c.memo_)) AS memo
+            coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl1.memo_, CONCAT(gl1.memo_,' ',c.memo_)) AS memo,
+            MAX(bt.reconciled) as reconciled
              FROM "
             .TB_PREF."gl_trans AS gl1
             LEFT JOIN ".TB_PREF."voided v ON gl1.type_no=v.id AND v.type=gl1.type
@@ -136,7 +134,6 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             LEFT JOIN ".TB_PREF."debtors_master debt ON dt.debtor_no=debt.debtor_no
 
             LEFT JOIN ".TB_PREF."bank_trans bt ON bt.type=gl1.type AND bt.trans_no=gl1.type_no AND bt.amount!=0
-                 AND (bt.person_id != '' AND !ISNULL(bt.person_id))
 
             LEFT JOIN ".TB_PREF."journal j ON j.type=gl1.type AND j.trans_no=gl1.type_no
             LEFT JOIN ".TB_PREF."audit_trail a ON a.type=gl1.type AND a.trans_no=gl1.type_no AND NOT ISNULL(gl_seq)
@@ -145,14 +142,24 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             LEFT JOIN ".TB_PREF."refs ref ON ref.type=gl1.type AND ref.id=gl1.type_no";
 
     if ($account == null)
-        $sql .= " JOIN ".TB_PREF."gl_trans AS gl2 ON (gl1.type=gl2.type and gl1.type_no=gl2.type_no)";
+        $sql .= " JOIN ".TB_PREF."gl_trans AS gl2 ON (gl1.type=gl2.type and gl1.type_no=gl2.type_no)
+            LEFT JOIN ".TB_PREF."voided v2 ON gl2.type_no=v2.id AND v2.type=gl2.type";
 
     $sql .= ", " .TB_PREF."chart_master coa
         WHERE coa.account_code=gl1.account
         AND ISNULL(v.date_)
-        AND gl1.tran_date >= '$from'
-        AND gl1.tran_date <= '$to'
         AND gl1.amount <> 0"; 
+
+    if ($account == null)
+        $sql .= " AND ISNULL(v2.date_)
+            AND gl2.amount <> 0"; 
+
+    if ($from_date != null) {
+        $from = date2sql($from_date);
+        $to = date2sql($to_date);
+        $sql .= " AND gl1.tran_date >= '$from'
+            AND gl1.tran_date <= '$to'";
+    }
 
     if ($trans_no > 0)
         $sql .= " AND gl1.type_no LIKE ".db_escape('%'.$trans_no);
