@@ -209,8 +209,7 @@ function print_sales_orders()
 
 		$DisplayTotal = number_format2($myrow["freight_cost"] + $SubTotal, $dec);
 		$rep->Font('bold');
-		// $rep->TextCol(3, 6, _("TOTAL ORDER VAT INCL."), - 2);
-		$rep->TextCol(3, 6, _("TOTAL ORDER"), - 2);
+		$rep->TextCol(3, 6, _("TOTAL ORDER VAT INCL."), - 2);
 		$rep->TextCol(6, 7,	$DisplayTotal, -2);
 		$words = price_in_words($myrow["freight_cost"] + $SubTotal, ST_SALESORDER);
 		if ($words != "")
