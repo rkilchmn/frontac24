@@ -947,3 +947,5 @@ FA does not allow making a G/L account inactive if it is a bank account.
 BF allows making a bank G/L account inactive if the bank account is inactive.
 It prevents making an inactive bank account active if the G/L account is inactive.
 
+## FEATURE: Retain date on successive bank payment/deposit entry
+

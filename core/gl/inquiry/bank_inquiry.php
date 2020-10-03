@@ -43,17 +43,17 @@ if (isset($_POST['bank_type'])) {
     $bank_type = $_POST['bank_type'];
     switch ($bank_type) {
         case ST_JOURNAL :
-            meta_forward("$path_to_root/gl/gl_journal.php", "NewJournal=Yes&bank_account=".$_POST['bank_account']."&date_=" . @$_POST['date_']);
+            meta_forward("$path_to_root/gl/gl_journal.php", "NewJournal=Yes&bank_account=".$_POST['bank_account']."&date_=".sql2date(last_bank_trans('trans_date')));
         case ST_BANKTRANSFER :
-            meta_forward("$path_to_root/gl/bank_transfer.php", "bank_account=".$_POST['bank_account']."&date_=" . @$_POST['date_']);
+            meta_forward("$path_to_root/gl/bank_transfer.php", "bank_account=".$_POST['bank_account']);
         case ST_BANKPAYMENT :
-            meta_forward("$path_to_root/gl/gl_bank.php", "NewPayment=yes&bank_account=".$_POST['bank_account']."&date_=" . @$_POST['date_']);
+            meta_forward("$path_to_root/gl/gl_bank.php", "NewPayment=yes&bank_account=".$_POST['bank_account']);
         case ST_BANKDEPOSIT :
-            meta_forward("$path_to_root/gl/gl_bank.php", "NewDeposit=yes&bank_account=".$_POST['bank_account']."&date_=" . @$_POST['date_']);
+            meta_forward("$path_to_root/gl/gl_bank.php", "NewDeposit=yes&bank_account=".$_POST['bank_account']);
     }
 }
         
-set_posts(array('bank_account','TransAfterDate', 'TransToDate', 'ID', 'date_'));
+set_posts(array('bank_account','TransAfterDate', 'TransToDate', 'ID'));
 if (isset($_GET['AddedID']))
     $id = $_GET['AddedID'];
 else if (isset($_GET['UpdatedID']))
@@ -79,7 +79,6 @@ if ($days >= 0) {
 
 submit_cells('Show',_("Show"),'','', 'default');
 hidden('ID', $id);
-hidden('date_', (isset($_POST['date_']) ? null : Today()));
 end_row();
 end_table();
 end_form();
