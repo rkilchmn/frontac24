@@ -941,3 +941,9 @@ See also, "do not grey out item type and units when item has foreign codes"
 ## BUGFIX:  Different Service Item Description From Same Vendor
 See, https://frontaccounting.com/punbb/viewtopic.php?id=8754
 
+## FEATURE: Allow inactive G/L accounts that are bank accounts
+FA does not allow making a G/L account inactive if it is a bank account.
+
+BF allows making a bank G/L account inactive if the bank account is inactive.
+It prevents making an inactive bank account active if the G/L account is inactive.
+
