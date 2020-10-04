@@ -188,10 +188,13 @@ function show_results()
 	if ($_POST["account"] != null)
 		display_heading($_POST["account"]. "&nbsp;&nbsp;&nbsp;".$act_name);
 
-	// Only show balances if an account is specified AND we're not filtering by amounts
-	$show_balances = $_POST["account"] != null && 
-                     input_num("amount_min") == 0 && 
-                     input_num("amount_max") == 0;
+	// Only show balances if an account is specified AND we're not filtering
+	$show_balances =
+        $_POST["account"] != null && 
+        input_num("amount_min") == 0 && 
+        input_num("amount_max") == 0 &&
+        empty($_POST["person_id"]) &&
+        empty($_POST["Memo"]);
 		
 	start_table(TABLESTYLE);
 	
