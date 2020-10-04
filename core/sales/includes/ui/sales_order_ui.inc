@@ -125,7 +125,7 @@ function get_customer_details_to_order(&$order, $customer_id, $branch_id)
 		$order->due_date = add_days($order->document_date, $SysPrefs->default_quote_valid_days());
 
 	if($order->payment_terms['cash_sale']) {
-		$order->set_location($order->pos["pos_location"], $order->pos["location_name"]);
+		$order->set_location(@$order->pos["pos_location"], @$order->pos["location_name"]);
 	} else
 		$order->set_location($myrow["default_location"], $myrow["location_name"]);
 
@@ -170,7 +170,7 @@ function display_order_summary($title, &$order, $editable_items=false)
 		$qoh_msg = '';
 		if (!$editable_items || $id != $line_no)
 		{
-			if (in_array($stock_item->stock_id, $low_stock))
+			if (array_key_exists($stock_item->stock_id, $low_stock))
 				start_row("class='stockmankobg'");	// notice low stock status
 			else 
 				alt_table_row_color($k);
@@ -230,6 +230,7 @@ function display_order_summary($title, &$order, $editable_items=false)
 	submit_cells('update', _("Update"), "colspan=2 align='center'", _("Refresh"), true);
 // hack: FA seems to insert and remove carriage returns and this breaks serialize/unserialize
     $order->delivery_address = str_replace(chr(13), '', $order->delivery_address);
+    $order->Comments = str_replace(chr(13), '', $order->Comments);
     hidden('Items', htmlentities(serialize($order)));
 	end_row();
 
@@ -282,6 +283,7 @@ function display_order_header(&$order, $editable, $date_text)
         if (get_post('customer_id') == 0) {
 // hack: FA seems to insert and remove carriage returns and this breaks serialize/unserialize
              $order->delivery_address = str_replace(chr(13), '', $order->delivery_address);
+             $order->Comments = str_replace(chr(13), '', $order->Comments);
             hidden('Items', htmlentities(serialize($order)));
         } else {
 
@@ -397,7 +399,7 @@ function display_order_header(&$order, $editable, $date_text)
 
 	table_section(3);
 	start_row();
-	if (($order->pos['cash_sale'] || $order->pos['credit_sale']) 
+	if ((@$order->pos['cash_sale'] || @$order->pos['credit_sale']) 
 		&& !$order->is_started()) {
 		 // editable payment type 
         if (isset($_POST['payment']) && $_POST['payment'] !== $order->payment) {
@@ -604,7 +606,7 @@ function display_delivery_details(&$order)
 		locations_list_row(_("Deliver from Location:"), 'Location', null, false, true);
  		if (list_updated('Location'))
  			$Ajax->activate('items_table');
-		label_row(_("Cash account:"), $order->pos['bank_account_name']);
+		label_row(_("Cash account:"), @$order->pos['bank_account_name']);
 		textarea_row(_("Comments:"), "Comments", $order->Comments, 31, 5);
 		end_table();
 		hidden('delivery_date', $order->due_date);

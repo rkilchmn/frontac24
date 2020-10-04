@@ -948,4 +948,5 @@ BF allows making a bank G/L account inactive if the bank account is inactive.
 It prevents making an inactive bank account active if the G/L account is inactive.
 
 ## FEATURE: Retain date on successive bank payment/deposit entry
+## FEATURE: Return quantity needed on low stock check
 

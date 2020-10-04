@@ -360,8 +360,8 @@ class Cart
 		$this->cash_discount = $cdiscount;
 
 		if ($this->payment_terms['cash_sale']) {
-			$this->Location = $this->pos['pos_location'];
-			$this->location_name = $this->pos['location_name'];
+			$this->Location = @$this->pos['pos_location'];
+			$this->location_name = @$this->pos['location_name'];
 		}
 		$this->credit = get_current_cust_credit($customer_id);
 	}
@@ -604,8 +604,9 @@ class Cart
 
 		foreach($qtys as $stock_id => $sum)
 		{
-			if (check_negative_stock($stock_id, -$sum['qty'], $location ? $location : $this->Location, $date ? $date : $this->document_date))
-				$low_stock[] = $stock_id;
+			$qty = check_negative_stock($stock_id, -$sum['qty'], $location ? $location : $this->Location, $date ? $date : $this->document_date);
+			if ($qty)
+				$low_stock[$stock_id] = $qty['qty'] + $qty['delta'];
 		}
 
 		return $low_stock;
