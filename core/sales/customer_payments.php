@@ -175,8 +175,8 @@ function can_process()
 		return false;
 	}
 
-	if (!check_num('amount', 0)) {
-		display_error(_("The entered amount is invalid or negative and cannot be processed."));
+	if (!check_num('amount')) {
+		display_error(_("The entered amount is invalid and cannot be processed."));
 		set_focus('amount');
 		return false;
 	}
@@ -206,7 +206,7 @@ function can_process()
 		return false;
 	}
 
-	if (input_num('amount') <= 0) {
+	if (input_num('amount') == 0) {
 		display_error(_("The balance of the amount and discount is zero or negative. Please enter valid amounts."));
 		set_focus('discount');
 		return false;

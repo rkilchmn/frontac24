@@ -211,7 +211,7 @@ function get_allocatable_to_cust_transactions($customer_id = null, $trans_no=nul
 		$sql .= "
 				 AND (
 					trans.type='".ST_SALESINVOICE."'
-					AND round(IF(prep_amount, prep_amount, ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount)-alloc,6) > 0
+					AND round(IF(prep_amount, prep_amount, ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount)-alloc,6) != 0
 					OR
 					trans.type='". ST_CUSTCREDIT."'
 					AND round(-IF(prep_amount, prep_amount, ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount)-alloc,6) > 0
