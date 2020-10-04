@@ -857,7 +857,10 @@ function stock_items_list($name, $selected_id=null, $all_option=false,
 {
     global $SysPrefs;
 	$sql = "SELECT s.stock_id, s.description, c.description, s.inactive, s.editable
-			FROM ".TB_PREF."stock_master s LEFT JOIN ".TB_PREF."stock_category c ON s.category_id=c.category_id LEFT JOIN ".TB_PREF."item_codes i ON is_foreign AND s.stock_id=i.stock_id WHERE";
+			FROM ".TB_PREF."stock_master s LEFT JOIN ".TB_PREF."stock_category c ON s.category_id=c.category_id";
+    if (!@$SysPrefs->sort_item_list_desc)
+        $sql .= " LEFT JOIN ".TB_PREF."item_codes i ON is_foreign AND s.stock_id=i.stock_id ";
+    $sql .= " WHERE";
 
 	if (isset($opts['fixed_asset']) && $opts['fixed_asset'])
 		$sql .= " mb_flag='F'";
@@ -1591,6 +1594,7 @@ function bank_reconciliation_list($account, $name, $selected_id=null, $submit_on
 		GROUP BY reconciled";
 	return combo_input($name, $selected_id, $sql, 'id', 'reconciled',
 		array(
+			'order' => 'reconciled DESC',
 			'spec_option' => $special_option,
 			'format' => '_format_date',
 			'spec_id' => '',
