@@ -133,17 +133,7 @@ function handle_submit(&$selected_id)
 
         set_global_customer($_POST['customer_id']);
 
-        if (isset($_POST['referer'])) {
-            $referer=parse_url($_POST['referer'], PHP_URL_PATH);
-            $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
-            $params = preg_replace('/[&]*message.*/', '', $params);
-            if (!empty($params))
-                $params .= "&";
-            $params .= "message=";
-            $params .= _("A new customer has been added.");
-            meta_forward($referer, $params);
-        }
-
+        meta_forward_referer(_("A new customer has been added."));
 		display_notification(_("A new customer has been added."));
 
 		if (isset($SysPrefs->auto_create_branch) && $SysPrefs->auto_create_branch == 1)
@@ -278,6 +268,7 @@ function customer_settings($selected_id)
 		email_row(_("E-mail:"), 'email', null, 35, 55);
 		text_row(_("Bank Account Number:"), 'bank_account', null, 30, 60);
 		sales_persons_list_row( _("Sales Person:"), 'salesman', null);
+        hidden('inactive', false);
 	}
 	table_section(2);
 

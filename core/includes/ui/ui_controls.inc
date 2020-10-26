@@ -201,6 +201,21 @@ function meta_forward_self($params_in="", $timeout=0, $return=false)
     meta_forward($referer, $params . $params_in, $timeout, $return);
 }
 
+function meta_forward_referer($message)
+{
+    if (!isset($_POST['referer']))
+        return;
+
+    $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+    $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
+    $params = preg_replace('/[&]*message.*/', '', $params);
+    if (!empty($params))
+        $params .= "&";
+    $params .= "message=$message";
+
+    meta_forward($referer, $params);
+}
+
 //-----------------------------------------------------------------------------------
 // Find and replace hotkey marker.
 // if $clean == true marker is removed and clean label is returned 
