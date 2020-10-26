@@ -962,3 +962,5 @@ I believe that this approach is superior for several reasons:
 * visual feedback to the user that the order was correctly entered (i.e. date/customer/amount)
 * the text page is additional unnecessary duplicate code
 
+## FEATURE: Default the last wo costing account rather than the last bank account in mfg
+

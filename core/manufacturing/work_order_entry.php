@@ -433,11 +433,11 @@ else
     date_row(_("Date") . ":", 'date_', '', true);
 	hidden('RequDate', '');
 
-    $bank_act = get_default_bank_account();
+    $last_acct = last_wo_costing_account();
     if (!isset($_POST['cr_acc']))
-        $_POST['cr_acc'] = $bank_act['account_code'];
+        $_POST['cr_acc'] = $last_acct['account'];
     if (!isset($_POST['cr_lab_acc']))
-        $_POST['cr_lab_acc'] = $bank_act['account_code'];
+        $_POST['cr_lab_acc'] = $last_acct['account'];
 
 	if (!isset($_POST['Labour']) || list_updated('stock_id') || list_updated('type'))
 	{

@@ -252,3 +252,20 @@ function void_wo_costing($wo_id)
 	$sql = "DELETE FROM ".TB_PREF."wo_costing WHERE workorder_id=".db_escape($wo_id);
 	db_query($sql, "could not delete work order costing");
 }
+
+function last_wo_costing_account()
+{
+	$sql="SELECT gl.account
+		FROM ".TB_PREF."wo_costing cost,
+			".TB_PREF."workorders wo,
+			".TB_PREF."stock_master s,
+			".TB_PREF."gl_trans gl
+		WHERE wo.id = cost.workorder_id AND
+            wo.stock_id = s.stock_id AND
+			gl.type=cost.trans_type AND gl.type_no=cost.trans_no AND gl.account != s.wip_account
+        ORDER BY cost.id LIMIT 1";
+
+	$res = db_query($sql, "could not get work order costing");
+    return $res == false ? false : db_fetch($res);
+}
+
