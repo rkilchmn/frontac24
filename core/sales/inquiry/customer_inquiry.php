@@ -132,6 +132,16 @@ function prt_link($row)
  		return print_document_link($row['trans_no']."-".$row['type'], _("Print"), true, $row['type'], ICON_PRINT);
 }
 
+function email_link($row)
+{
+  	if ($row['type'] == ST_CUSTPAYMENT || $row['type'] == ST_BANKDEPOSIT) 
+		return print_document_link($row['trans_no']."-".$row['type'], _("Print Receipt"), true, ST_CUSTPAYMENT, ICON_DOC);
+  	elseif ($row['type'] == ST_BANKPAYMENT) // bank payment printout not defined yet.
+		return '';
+ 	else
+ 		return print_document_link($row['trans_no']."-".$row['type'], _("Email"), true, $row['type'], ICON_DOC, '', '', 1);
+}
+
 //------------------------------------------------------------------------------------------------
 
 function display_customer_summary($customer_record)
@@ -201,6 +211,10 @@ $_POST['show_voided'] = 1;
 check_cells(_("Zero values"), 'show_voided');
 
 submit_cells('RefreshInquiry', _("Search"),'',_('Refresh Inquiry'), 'default');
+
+end_row();
+start_row();
+label_row("", menu_link('sales/sales_order_entry.php?NewInvoice=0', 'Create Direct Invoice'));
 end_row();
 end_table();
 
@@ -245,6 +259,7 @@ $cols = array(
 	_("Balance") => array('align'=>'right', 'type'=>'amount'),
 		array('insert'=>true, 'fun'=>'gl_view'),
 		array('insert'=>true, 'fun'=>'prt_link'),
+		array('insert'=>true, 'fun'=>'email_link'),
 		array('insert'=>true, 'fun'=>'credit_link'),
 		array('insert'=>true, 'fun'=>'edit_link'),
 		array('insert'=>true, 'fun'=>'attach_link'),
