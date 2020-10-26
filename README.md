@@ -949,4 +949,16 @@ It prevents making an inactive bank account active if the G/L account is inactiv
 
 ## FEATURE: Retain date on successive bank payment/deposit entry
 ## FEATURE: Return quantity needed on low stock check
+## FEATURE: Add links to customer transaction inquiry to create or email customer invoice
+## FEATURE: Replace FA landing page after order entry with inquiry page
+The common design of FA is to display a landing page after
+order entry with text hyperlinks of where to go next.
+
+Experimentally, BF replaces the landing page with the appropriate inquiry page
+with the just-entered order displayed.
+I believe that this approach is superior for several reasons:
+* the inquiry page displays the same options in familiar icon format
+* text is hard to follow; each text page is different
+* visual feedback to the user that the order was correctly entered (i.e. date/customer/amount)
+* the text page is additional unnecessary duplicate code
 
