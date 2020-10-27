@@ -963,4 +963,5 @@ I believe that this approach is superior for several reasons:
 * the text page is additional unnecessary duplicate code
 
 ## FEATURE: Default the last wo costing account rather than the last bank account in mfg
+## BUGFIX: Email using Dear <first name> rather than Dear <last name>
 
