@@ -962,6 +962,7 @@ function get_js_select_combo_item() {
 function get_js_set_combo_item() {
 	$js = "function setComboItem(doc, client_id, value, text){
     	var element = doc.getElementById(client_id);
+    	var search = doc.getElementById('_'+client_id+'_edit');
   		if(typeof(element) != 'undefined' && element != null && element.tagName === 'SELECT') {
 	 		var options = element.options;
 	 		options.length = 0;
@@ -970,6 +971,7 @@ function get_js_set_combo_item() {
 			option.text = text;
 	   		element.add(option, 0);
 			element.selectedIndex = 0;
+			search.value = '';
 	        element.onchange();
 		} else {			
             var element = doc.getElementsByName(client_id);

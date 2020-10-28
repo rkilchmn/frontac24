@@ -468,18 +468,17 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
         $Ajax->activate('line_total');
         $Ajax->activate('reprice');
 
-        $item_info = get_item_edit_info($_POST['stock_id']);
-		$_POST['units'] = $item_info["units"];
-   		$dec = $item_info["decimals"];
-        $qty_rcvd = '';
-
-		if (list_updated('stock_id')) {
-            $_POST['qty'] =	number_format2(get_purchase_conversion_factor ($order->supplier_id, $_POST['stock_id']), $dec);
-            $_POST['price'] = price_decimal_format(get_purchase_price ($order->supplier_id, $_POST['stock_id']), $dec2);
-            if ($order->trans_type == ST_PURCHORDER)
-                    $_POST['req_del_date'] = add_days(Today(), $SysPrefs->default_receival_required_by());
-		}
-
+		$dec = 0; $_POST['units'] = '';
+    	$item_info = get_item_edit_info($_POST['stock_id']);
+    	if ($item_info) {
+			$_POST['units'] = $item_info["units"];
+	   		$dec = $item_info["decimals"];
+	   	}
+   		$_POST['qty'] =	number_format2(get_purchase_conversion_factor ($order->supplier_id, $_POST['stock_id']), $dec);
+		$_POST['price'] = price_decimal_format(get_purchase_price ($order->supplier_id, $_POST['stock_id']), $dec2);
+		if ($order->trans_type == ST_PURCHORDER)
+			$_POST['req_del_date'] = add_days(Today(), $SysPrefs->default_receival_required_by());
+		$qty_rcvd = '';
 	}
 
 	$line_total = round(input_num('qty') * input_num('price'),  user_price_dec());

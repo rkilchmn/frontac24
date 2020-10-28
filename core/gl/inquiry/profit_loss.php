@@ -313,7 +313,8 @@ function display_profit_and_loss($compare)
 	}
 		
 
-	end_table(1); // outer table
+	end_table(); // outer table
+	hyperlink_params($_SERVER['PHP_SELF'], _("Back"), "TransFromDate=". $from . "&TransToDate=" . $to . "&Dimension=" . $dimension . "&Dimension2=" . $dimension2);
 	div_end();
 }
 
@@ -327,5 +328,5 @@ display_profit_and_loss(get_post('Compare'));
 
 end_form();
 
-end_page();
+end_page(false, true);
 

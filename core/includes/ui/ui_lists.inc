@@ -159,7 +159,7 @@ $opts = array(		// default options
 							.db_escape(($class=='combo3' ? '' : '%').$txt.'%')
                             . " OR " . db_escape($txt) . " REGEXP $s ";
  ;
-					$opts['where'][] = '('. implode($opts['search'], ' OR ') . ')';
+					$opts['where'][] = '('. implode(' OR ', $opts['search']) . ')';
 				}
 		}
 	}

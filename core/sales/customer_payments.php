@@ -384,7 +384,6 @@ if ($dim > 1)
 else
     hidden('dimension2_id', 0);
 
-
 end_outer_table(1);
 
 div_start('alloc_tbl');

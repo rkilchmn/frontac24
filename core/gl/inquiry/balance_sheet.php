@@ -132,11 +132,8 @@ function display_balance_sheet()
 	global $path_to_root;
 	
 	$to = $_POST['TransToDate'];
-    if (is_date_in_fiscalyear($to, true))
-        $from = begin_fiscalyear();
-    else
-        $from = add_days(add_years($to, -1), 1);
-	
+	$from = get_fiscalyear_begin_for_date($to);
+
 	if (!isset($_POST['Dimension']))
 		$_POST['Dimension'] = 0;
 	if (!isset($_POST['Dimension2']))
@@ -248,7 +245,8 @@ function display_balance_sheet()
 			$convert, $dimension, $dimension2, $drilldown);
 	}
 	
-	end_table(1); // outer table
+	end_table(); // outer table
+	hyperlink_params($_SERVER['PHP_SELF'], _("Back"), "TransFromDate=". $from . "&TransToDate=" . $to . "&Dimension=" . $dimension . "&Dimension2=" . $dimension2);
 	div_end();
 }
 
@@ -262,5 +260,5 @@ display_balance_sheet();
 
 end_form();
 
-end_page();
+end_page(false, true);
 

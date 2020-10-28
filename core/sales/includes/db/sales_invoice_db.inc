@@ -177,7 +177,7 @@ function write_sales_invoice(&$invoice)
 				$taxitem['rate'], $invoice->tax_included, $prepaid_factor*$taxitem['Value'],
 				 $taxitem['Net'], $ex_rate, $date_, $invoice->reference, TR_OUTPUT);
 			if (isset($taxitem['sales_gl_code']) && !empty($taxitem['sales_gl_code']) && $taxitem['Value'] != 0)
-				$total += add_gl_trans_customer(ST_SALESINVOICE, $invoice_no, $date_, $taxitem['sales_gl_code'],$invoice->dimension_id , $invoice->dimension2_id,
+				$total += add_gl_trans_customer(ST_SALESINVOICE, $invoice_no, $date_, $taxitem['sales_gl_code'], $invoice->dimension_id, $invoice->dimension2_id,
 					(-$taxitem['Value'])*$prepaid_factor, $invoice->customer_id,
 					"A tax GL posting could not be inserted");
 		}
@@ -198,9 +198,15 @@ function write_sales_invoice(&$invoice)
 				// extend invoice entry page with final amount after discount 
 				// and change line below.
 				$discount = 0; // $invoice->cash_discount*$amount;
+<<<<<<< HEAD
             $payment_info = $invoice->pos['pos_name'].' #'.$invoice_no;
             if (!empty($invoice->payment_info))
                 $payment_info .= ' ' . $invoice->payment_info;
+=======
+				$payment_info = $invoice->pos['pos_name'].' #'.$invoice_no;
+				if (!empty($invoice->payment_info))
+					$payment_info .= ' ' . $invoice->payment_info;
+>>>>>>> upstream/master
 				$pmtno = write_customer_payment(0, $invoice->customer_id, 
 					$invoice->Branch, $invoice->pos['pos_account'], $date_,
 					$Refs->get_next(ST_CUSTPAYMENT, null, array('customer' => $invoice->customer_id,
