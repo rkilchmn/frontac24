@@ -70,8 +70,6 @@ function line_start_focus() {
   	global 	$Ajax;
 
     unset($_POST['amount']);
-    unset($_POST['dimension_id']);
-    unset($_POST['dimension2_id']);
     unset($_POST['LineMemo']);
   	$Ajax->activate('items_table');
   	$Ajax->activate('footer');
@@ -410,9 +408,10 @@ if (isset($_POST['CancelItemChanges']) || isset($_POST['Index']))
 
 if (isset($_POST['go']))
 {
-	display_quick_entries($_POST['pay_items'], $_POST['person_id'], input_num('totamount'), 
-		$_POST['pay_items']->trans_type==ST_BANKPAYMENT ? QE_PAYMENT : QE_DEPOSIT);
-	$_POST['totamount'] = price_format(0); $Ajax->activate('totamount');
+    if ($_POST['PayType'] == PT_QUICKENTRY)
+        display_quick_entries($_POST['pay_items'], $_POST['person_id'], input_num('totamount'), 
+            $_POST['pay_items']->trans_type==ST_BANKPAYMENT ? QE_PAYMENT : QE_DEPOSIT);
+	$Ajax->activate('totamount');
 	line_start_focus();
 }
 //-----------------------------------------------------------------------------------------------

@@ -964,4 +964,13 @@ I believe that this approach is superior for several reasons:
 
 ## FEATURE: Default the last wo costing account rather than the last bank account in mfg
 ## BUGFIX: Email using Dear <first name> rather than Dear <last name>
+## FEATURE: Running total for bank payments/deposits
+In FA, one enters each line item in a bank payment/deposit and FA sums up
+the lines and the result is the total of the bank payment/deposit.
 
+In BF, one enters the total of the bank payment/deposit and as each new line item
+is entered, the remaining amount to complete the payment/deposit is shown.
+This is preferred because usually the total amount of the payment/deposit
+is known but multiple line item amounts may not be known in advance, so BF
+helps calculate them out as the line items are entered (such as allocating
+the payment between two dimensions, for example).
