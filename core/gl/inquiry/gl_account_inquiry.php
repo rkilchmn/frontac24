@@ -305,13 +305,16 @@ function show_results()
 	}
 	//end of while loop
 
+    start_row("class='inquirybg'");
 	if ($show_balances) {
-    	start_row("class='inquirybg'");
     	label_cell("<b>" . _("Ending Balance") ." - ".$_POST['TransToDate']. "</b>", "colspan=$colspan");
         display_debit_or_credit_cells($running_total-$bfw, true);
     	amount_cell($running_total, true);
-    	end_row();
-	}
+	} else {
+        label_cell("<b>" . _("Total") ." - ".$_POST['TransToDate']. "</b>", "colspan=$colspan");
+        display_debit_or_credit_cells($running_total-$bfw, true);
+    }
+    end_row();
 
 	end_table();
 	if (db_num_rows($result) == 0)
