@@ -54,8 +54,7 @@ if (!isset($_POST['bank_account'])) { // first page call
 	if (isset($_GET['SInvoice'])) {
 		//  get date and supplier
 		$inv = get_customer_trans($_GET['SInvoice'], ST_SALESINVOICE);
-		$dflt_act = get_default_bank_account($inv['curr_code']);
-		$_POST['bank_account'] = $dflt_act['id'];
+		set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
 		if ($inv) {
 			$_POST['customer_id'] = $inv['debtor_no'];
 			$_SESSION['alloc']->set_person($inv['debtor_no'], PT_CUSTOMER);
@@ -91,8 +90,7 @@ if (!isset($_POST['customer_id'])) {
 	$_POST['customer_id'] = get_global_customer(false);
 	$_SESSION['alloc']->set_person($_POST['customer_id'], PT_CUSTOMER);
 	$_SESSION['alloc']->read();
-	$dflt_act = get_default_bank_account($_SESSION['alloc']->person_curr);
-	$_POST['bank_account'] = $dflt_act['id'];
+    set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
 }
 if (!isset($_POST['DateBanked'])) {
 	$_POST['DateBanked'] = new_doc_date();

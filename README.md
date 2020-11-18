@@ -974,3 +974,13 @@ This is preferred because usually the total amount of the payment/deposit
 is known but multiple line item amounts may not be known in advance, so BF
 helps calculate them out as the line items are entered (such as allocating
 the payment between two dimensions, for example).
+
+## FEATURE: Make query variables (particularly date ranges) session-wide
+FA resets query variables on inquiry pages each time the page is re-entered.
+This is frustrating for a user who is examining data across multiple pages using
+the same query variables.  This is particularly frustrating when the user sets
+a specific date range, just to see it reset on the next inquiry page.
+
+BF retains query variables as session variables, making the defaults the same
+across the browser.
+

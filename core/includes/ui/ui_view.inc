@@ -1688,7 +1688,16 @@ function get_js_history($vars)
 
 function set_posts($vars)
 {
-    foreach ( $vars as $var )
+    foreach ( $vars as $var ) {
         if (isset($_GET[$var]))
             $_POST[$var] = $_GET[$var];
+        else if (isset($_POST[$var]))
+            $_SESSION[$var] = $_POST[$var];
+        else if (isset($_SESSION[$var]))
+            $_POST[$var] = $_SESSION[$var];
+/*
+        if (isset($_SESSION[$var]))
+            display_notification($var . ":" . $_SESSION[$var]);
+*/
+    }
 }

@@ -26,8 +26,8 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array('bank_account', 'TransAfterDate', 'TransToDate'));
-page(_($help_context = "Bank Account Inquiry"), isset($_GET['bank_account']) && !isset($_GET['TransAfterDate']), false, "", $js, false, "", true);
+$js .= get_js_history(array('bank_account', 'TransFromDate', 'TransToDate'));
+page(_($help_context = "Bank Account Inquiry"), isset($_GET['bank_account']) && !isset($_GET['TransFromDate']), false, "", $js, false, "", true);
 
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
 
@@ -53,7 +53,7 @@ if (isset($_POST['bank_type'])) {
     }
 }
         
-set_posts(array('bank_account','TransAfterDate', 'TransToDate', 'ID'));
+set_posts(array('bank_account','TransFromDate', 'TransToDate', 'ID'));
 if (isset($_GET['AddedID']))
     $id = $_GET['AddedID'];
 else if (isset($_GET['UpdatedID']))
@@ -70,7 +70,7 @@ bank_types_list_cells(null, "bank_type", null, true);
 bank_accounts_list_cells(_("Account:"), 'bank_account', null, true);
 
 $days = user_transaction_days();
-date_cells(_("From:"), 'TransAfterDate', '', null, -abs($days));
+date_cells(_("From:"), 'TransFromDate', '', null, -abs($days));
 if ($days >= 0) {
     date_cells(_("To:"), 'TransToDate');
 } else {
@@ -88,7 +88,7 @@ end_form();
 if (!isset($_POST['bank_account']))
 	$_POST['bank_account'] = "";
 
-$result = get_bank_trans_for_bank_account($_POST['bank_account'], $_POST['TransAfterDate'], $_POST['TransToDate']);	
+$result = get_bank_trans_for_bank_account($_POST['bank_account'], $_POST['TransFromDate'], $_POST['TransToDate']);	
 
 $act = get_bank_account($_POST["bank_account"]);
 display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
@@ -100,11 +100,11 @@ $th = array(_("Type"), _("#"), _("Reference"), _("Date"),
 	_("Debit"), _("Credit"), _("Balance"), _("Person/Item"), _("Memo"), "", "", "");
 table_header($th);
 
-$bfw = get_balance_before_for_bank_account($_POST['bank_account'], $_POST['TransAfterDate']);
+$bfw = get_balance_before_for_bank_account($_POST['bank_account'], $_POST['TransFromDate']);
 
 $credit = $debit = 0;
 start_row("class='inquirybg' style='font-weight:bold'");
-label_cell(_("Opening Balance")." - ".$_POST['TransAfterDate'], "colspan=4");
+label_cell(_("Opening Balance")." - ".$_POST['TransFromDate'], "colspan=4");
 display_debit_or_credit_cells($bfw);
 label_cell("");
 label_cell("", "colspan=4");
@@ -132,7 +132,7 @@ while ($myrow = db_fetch($result))
 	display_debit_or_credit_cells($myrow["amount"]);
 	amount_cell($running_total);
 
-	label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, get_post("TransAfterDate"),get_post("TransToDate")));
+	label_cell(payment_person_name_link($myrow["person_type_id"],$myrow["person_id"], true, get_post("TransFromDate"),get_post("TransToDate")));
 
 	label_cell(get_comments_string($myrow["type"], $myrow["trans_no"]));
 	label_cell(get_gl_view_str($myrow["type"], $myrow["trans_no"]));

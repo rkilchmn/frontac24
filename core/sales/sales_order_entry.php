@@ -569,7 +569,7 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
             $params="AddedQU=$trans_no";
         } elseif ($trans_type == ST_SALESINVOICE) {
             // $params="AddedDI=$trans_no&Type=$so_type";
-            meta_forward($path_to_root.'/sales/inquiry/customer_inquiry.php', 'customer_id='.get_post('customer_id')."&TransAfterDate=".$_POST['OrderDate']."&TransToDate=".$_POST['OrderDate']."&message=".sprintf(_("Direct Invoice %d has been entered."), $trans_no));
+            meta_forward($path_to_root.'/sales/inquiry/customer_inquiry.php', 'customer_id='.get_post('customer_id')."&TransFromDate=".$_POST['OrderDate']."&TransToDate=".$_POST['OrderDate']."&message=".sprintf(_("Direct Invoice %d has been entered."), $trans_no));
         } else {
             $params="AddedDN=$trans_no&Type=$so_type";
         }

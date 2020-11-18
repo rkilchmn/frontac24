@@ -24,10 +24,8 @@ if (user_use_date_picker())
 	$js .= get_js_date_picker();
 page(_($help_context = "Search Outstanding Purchase Orders"), false, false, "", $js);
 
-if (isset($_GET['order_number']))
-{
-	$_POST['order_number'] = $_GET['order_number'];
-}
+set_posts(array('order_number', 'OrdersAfterDate', 'OrdersToDate'));
+
 //-----------------------------------------------------------------------------------
 // Ajax updates
 //

@@ -128,24 +128,12 @@ function display_bank_header(&$order)
 
 	table_section(3, "33%");
 
-    // For new payments that are not called from another form that sets the bank account,
-    // and if the user has not manually changed the bank account list,
-    // get the bank account from the last used transaction for the person id.
-
-    // This is useful when entering occasional transactions into FA.  Yet if the user is entering
-    // a batch of receipts (sorted by bank account), then this function is disabled
-    // after the first receipt is entered, because bank_account is then set on the url
-    // for subsequent transactions.
-
-    if (isset($_GET['bank_account'])
-        || list_updated('bank_account'))
-        $_POST['override_bank_account'] = 1;
-
-    if ($new && get_post('override_bank_account') != 1)
-            set_post_last_used_bank_account($_POST['PayType'], $_POST['person_id']);
+    if (!$order->order_id && !get_post('bank_account'))
+    {
+        set_post_last_used_bank_account($_POST['PayType'], $_POST['person_id']);
+    }
 
     bank_accounts_list_row( $payment ? _("From:") : _("Into:"), 'bank_account', null, true);
-    hidden('override_bank_account', get_post('override_bank_account'));
     if ($payment)
 		bank_balance_row($_POST['bank_account']);
 

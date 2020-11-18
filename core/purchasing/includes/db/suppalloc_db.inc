@@ -260,7 +260,7 @@ function get_allocatable_from_supp_transactions($supplier_id, $trans_no=null, $t
 
 function get_sql_for_supplier_allocation_inquiry()
 {
- 	$date_after = date2sql($_POST['TransAfterDate']);
+ 	$date_after = date2sql($_POST['TransFromDate']);
  	$date_to = date2sql($_POST['TransToDate']);
 
     $sql = "SELECT 

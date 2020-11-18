@@ -22,10 +22,10 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array('supplier_id', 'filterType', 'TransAfterDate', 'TransToDate'));
+$js .= get_js_history(array('supplier_id', 'filterType', 'TransFromDate', 'TransToDate'));
 page(_($help_context = "Supplier Inquiry"), isset($_GET['supplier_id']) && !isset($_GET['TransToDate']), false, "", $js);
 
-set_posts(array('supplier_id', 'filterType', 'TransAfterDate', 'TransToDate'));
+set_posts(array('supplier_id', 'filterType', 'TransFromDate', 'TransToDate'));
 
 //------------------------------------------------------------------------------------------------
 
@@ -159,7 +159,7 @@ supp_transactions_list_cell("filterType", null, true);
 if ($_POST['filterType'] != '2')
 {
     $days = user_transaction_days();
-    date_cells(_("From:"), 'TransAfterDate', '', null, -abs($days));
+    date_cells(_("From:"), 'TransFromDate', '', null, -abs($days));
     if ($days >= 0) {
         date_cells(_("To:"), 'TransToDate');
     } else {
@@ -190,7 +190,7 @@ if (get_post('RefreshInquiry') || list_updated('filterType'))
 
 //------------------------------------------------------------------------------------------------
 
-$sql = get_sql_for_supplier_inquiry(get_post('filterType'), get_post('TransAfterDate'), get_post('TransToDate'), get_post('supplier_id'));
+$sql = get_sql_for_supplier_inquiry(get_post('filterType'), get_post('TransFromDate'), get_post('TransToDate'), get_post('supplier_id'));
 
 $cols = array(
 			_("Type") => array('fun'=>'systype_name', 'ord'=>''), 

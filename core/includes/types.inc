@@ -153,14 +153,14 @@ function payment_person_name_link($type, $person_id, $full=true, $from_date="", 
             $link = pager_link(payment_person_name($type, $person_id, $full), 
 			    "/sales/manage/customers.php?customer_id=$person_id");
             $img_title = "Customer Search";
-            $date_field="TransAfterDate";
+            $date_field="TransFromDate";
             break;
 		case PT_SUPPLIER :
 			$search_link = "/purchasing/inquiry/supplier_inquiry.php?supplier_id=$person_id";
             $link = pager_link(payment_person_name($type, $person_id, $full), 
 			    "/purchasing/manage/suppliers.php?supplier_id=$person_id");
             $img_title = "Supplier Search";
-            $date_field="TransAfterDate";
+            $date_field="TransFromDate";
             break;
 		case PT_QUICKENTRY :
 			$search_link = "/gl/inquiry/gl_account_inquiry.php?person_type=$type&person_id=$person_id";

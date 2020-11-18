@@ -23,9 +23,9 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-$js .= get_js_history(array("customer_id", "type_group_id", "TransAfterDate", "TransToDate", "filterType"));
+$js .= get_js_history(array("customer_id", "type_group_id", "TransFromDate", "TransToDate", "filterType"));
 
-page(_($help_context = "Customer Transactions"), isset($_GET['customer_id']) && !isset($_GET['TransAfterDate']), false, "", $js);
+page(_($help_context = "Customer Transactions"), isset($_GET['customer_id']) && !isset($_GET['TransFromDate']), false, "", $js);
 
 //------------------------------------------------------------------------------------------------
 
@@ -175,7 +175,7 @@ function display_customer_summary($customer_record)
 	end_table();
 }
 
-set_posts(array("customer_id", "tax_group_id", "TransAfterDate", "TransToDate", "filterType"));
+set_posts(array("customer_id", "tax_group_id", "TransFromDate", "TransToDate", "filterType"));
 
 //------------------------------------------------------------------------------------------------
 
@@ -200,7 +200,7 @@ cust_allocations_list_cells(null, 'filterType', null, true, true);
 if ($_POST['filterType'] != '2')
 {
     $days = user_transaction_days();
-    date_cells(_("From:"), 'TransAfterDate', '', null, -abs($days));
+    date_cells(_("From:"), 'TransFromDate', '', null, -abs($days));
     if ($days >= 0) {
         date_cells(_("To:"), 'TransToDate');
     } else {
@@ -239,7 +239,7 @@ if (get_post('RefreshInquiry') || list_updated('filterType'))
 $tax_group_id = get_post('tax_group_id');
 if ($tax_group_id == -1)
     $tax_group_id=null;
-$sql = get_sql_for_customer_inquiry(get_post('TransAfterDate'), get_post('TransToDate'),
+$sql = get_sql_for_customer_inquiry(get_post('TransFromDate'), get_post('TransToDate'),
 	get_post('customer_id'), $tax_group_id, get_post('filterType'), check_value('show_voided'));
 
 //------------------------------------------------------------------------------------------------
