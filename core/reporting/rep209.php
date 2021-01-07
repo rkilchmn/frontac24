@@ -53,7 +53,8 @@ function get_po_details($order_no)
             (SELECT COUNT(*)
                 FROM ".TB_PREF."purch_order_details poline2
                 WHERE poline.item_code = poline2.item_code
-                    AND poline.description != poline2.description) AS dup
+                    AND poline.description != poline2.description
+		            AND order_no =".db_escape($order_no).") AS dup
 		FROM ".TB_PREF."purch_order_details poline
 			LEFT JOIN ".TB_PREF."stock_master item ON poline.item_code=item.stock_id
 		WHERE order_no =".db_escape($order_no)." ";
@@ -122,6 +123,11 @@ function print_po()
 		$items = $prices = array();
 		while ($myrow2=db_fetch($result))
 		{
+			$DisplayQty = number_format2($myrow2["quantity_ordered"],get_qty_dec($myrow2['item_code']));
+			$Net = round2(($myrow2["unit_price"] * $myrow2["quantity_ordered"]), user_price_dec());
+            $dec2 = 0;
+			$DisplayPrice = price_decimal_format($myrow2["unit_price"],$dec2);
+
             if ($myrow2['dup'] == 0) {
                 $data = get_purchase_data($myrow['supplier_id'], $myrow2['item_code']);
                 if ($data !== false)
@@ -132,18 +138,16 @@ function print_po()
                         $myrow2['units'] = $data['suppliers_uom'];
                     if ($data['conversion_factor'] != 1)
                     {
-                        $myrow2['unit_price'] = round2($myrow2['unit_price'] * $data['conversion_factor'], user_price_dec());
-                        $myrow2['quantity_ordered'] = round2($myrow2['quantity_ordered'] / $data['conversion_factor'], user_qty_dec());
+                        $dec2 = 0;
+                        $DisplayPrice = price_decimal_format($myrow2['unit_price'] * $data['conversion_factor'], $dec2);
+                        // do not round supplier quantity using get_qty_dec() because units differ
+                        $DisplayQty = $myrow2['quantity_ordered'] / $data['conversion_factor'];
                     }
                 }
             }
-			$Net = round2(($myrow2["unit_price"] * $myrow2["quantity_ordered"]), user_price_dec());
 			$prices[] = $Net;
 			$items[] = $myrow2['item_code'];
 			$SubTotal += $Net;
-			$dec2 = 0;
-			$DisplayPrice = price_decimal_format($myrow2["unit_price"],$dec2);
-			$DisplayQty = number_format2($myrow2["quantity_ordered"],get_qty_dec($myrow2['item_code']));
 			$DisplayNet = number_format2($Net,$dec);
 			if ($SysPrefs->show_po_item_codes()) {
 				$rep->TextCol(0, 1,	$myrow2['item_code'], -2);
