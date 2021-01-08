@@ -404,3 +404,24 @@ function get_sql_for_po_search($from, $to, $supplier_id=ALL_TEXT, $location=ALL_
 	return $sql;
 }
 
+/*
+        This function returns the next suppliers ref
+        To work correctly, references should be numeric or end in a numeric.
+*/
+function next_supplier_ref($supplier_id) {
+$sql = "SELECT MAX(CONVERT(supp_reference, UNSIGNED)) FROM ".TB_PREF."supp_trans WHERE supplier_id="
+                .db_escape($supplier_id)
+                . " AND ov_amount!=0"; // ignore voided invoice references
+    $result = db_query($sql, "Can not find max supp_reference");
+    $row = db_fetch_row($result);
+    if (!$row[0]) return 1;
+    $offset= numeric_offset($row[0]);
+    $num=substr($row[0], $offset);
+    if (!is_numeric($num))
+        return null;
+    $num += 1;
+    return substr($row[0], 0, $offset) . $num;
+}
+
+
+

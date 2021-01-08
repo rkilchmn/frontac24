@@ -13,26 +13,6 @@ include_once($path_to_root . "/purchasing/includes/purchasing_db.inc");
 
 //--------------------------------------------------------------------------------------------------
 
-/*
-        This function returns the next suppliers ref
-        To work correctly, references should be numeric or end in a numeric.
-*/
-function next_ref($supplier_id) {
-$sql = "SELECT max(supp_reference) FROM ".TB_PREF."supp_trans WHERE supplier_id="
-                .db_escape($supplier_id)
-                . " AND ov_amount!=0"; // ignore voided invoice references
-
-    $result = db_query($sql, "Can not find max supp_reference");
-    $row = db_fetch_row($result);
-    if (!$row[0]) return 1;
-    $offset= numeric_offset($row[0]);
-    $num=substr($row[0], $offset);
-    if (!is_numeric($num))
-        return null;
-    $num += 1;
-    return substr($row[0], 0, $offset) . $num;
-}
-
 function numeric_offset($text) {
     preg_match('/\d/', $text, $m, PREG_OFFSET_CAPTURE);
     if (sizeof($m))
@@ -99,7 +79,10 @@ function service_alg_list($name, $selected_id=null, $submit_on_change=false)
         $items['2'] =  _("By Line Item");
         $items['3'] =  _("By Line Total");
 
-        return array_selector($name, $selected_id, $items,
+        if ($name == null)
+            print $selected_id == null ? _("No") : $items[$selected_id];
+        else
+            return array_selector($name, $selected_id, $items,
                 array(
                         'select_submit'=> $submit_on_change,
                         'async' => false ) ); // FIX?
@@ -224,7 +207,7 @@ function display_po_header(&$order)
 
 	table_section(2);
 
-  	text_row(_("Supplier's Reference:"), 'supp_ref', next_ref($order->supplier_id), 20, 60);
+  	text_row(_("Supplier's Reference:"), 'supp_ref', next_supplier_ref($order->supplier_id), 20, 60);
 
 
 	if (get_company_pref('use_dimension'))
@@ -307,7 +290,7 @@ function display_po_items(&$order, $editable=true)
         	    label_cell($po_line->req_del_date);
     		amount_decimal_cell($po_line->price);
             amount_cell($line_total);
-            label_cell("");
+            service_alg_list_cells(null, null, $po_line->cogs);
 
 			if ($editable)
 			{
@@ -438,6 +421,7 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
 
 		$_POST['units'] = $order->line_items[$id]->units;
 		$_POST['item_description'] = $order->line_items[$id]->item_description;
+		$_POST['cogs'] = $order->line_items[$id]->cogs;
 
 		hidden('stock_id', $_POST['stock_id']);
 		label_cell($_POST['stock_id']);
@@ -466,7 +450,6 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
         $Ajax->activate('qty');
         $Ajax->activate('req_del_date');
         $Ajax->activate('line_total');
-        $Ajax->activate('reprice');
 
 		$dec = 0; $_POST['units'] = '';
     	$item_info = get_item_edit_info($_POST['stock_id']);
@@ -510,10 +493,10 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
 	    $Ajax->activate('items_table');
     }
     if (is_service(get_mb_flag($_POST['stock_id'])))
-        service_alg_list_cells(null, 'reprice');
+        service_alg_list_cells(null, 'cogs', $_POST['cogs']);
     else {
         label_cell("");
-        hidden('reprice', 0);
+        hidden('cogs', 0);
     }
 
 	if ($id!=-1)

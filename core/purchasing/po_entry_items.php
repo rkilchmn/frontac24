@@ -33,6 +33,8 @@ set_page_security( @$_POST['PO']->trans_type,
 			'AddedPI' => 'SA_SUPPLIERINVOICE')
 );
 
+set_posts(array('supplier_id', 'OrderDate'));
+
 $js = '';
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
@@ -65,8 +67,6 @@ if (isset($_GET['ModifyOrderNumber']) && is_numeric($_GET['ModifyOrderNumber']))
 	} else
 		$_SESSION['page_title'] = _($help_context = "Direct Purchase Invoice Entry");
 }
-
-set_posts(array('OrderDate'));
 
 page($_SESSION['page_title'], false, false, "", $js);
 
@@ -245,7 +245,7 @@ function check_data()
     // zeroed out anyway.
 
     if (!check_num('price', 0)
-        && !($_POST['reprice'] != 0 && is_service(get_mb_flag($_POST['stock_id']))))
+        && !($_POST['cogs'] != 0 && is_service(get_mb_flag($_POST['stock_id']))))
     {
 	   	display_error(_("The price entered must be numeric and not less than zero."));
 	   	display_error(_("HINT: To enter a supplier discount using a service item, change the 'COGS' option from 'No'. Then a negative price will discount the other items on the order."));
@@ -279,9 +279,7 @@ function handle_update_item()
 		}
 	
 		$_POST['PO']->update_order_item($_POST['line_no'], input_num('qty'), input_num('price'),
-  			@$_POST['req_del_date'], $_POST['item_description'] );
-                if ($_POST['reprice'] != 0)
-                    $_POST['PO']->reprice_order($_POST['reprice'], $_POST['line_no']);
+  			@$_POST['req_del_date'], $_POST['item_description'], $_POST['cogs'] );
 		unset_form_variables();
 	}	
     line_start_focus();
@@ -323,9 +321,7 @@ function handle_add_new_item()
 				$_POST['PO']->add_to_order ($line_no, $_POST['stock_id'], input_num('qty'), 
 					get_post('stock_id_text'), //$myrow["description"], 
 					input_num('price'), '', // $myrow["units"], (retrived in cart)
-					$_POST['PO']->trans_type == ST_PURCHORDER ? $_POST['req_del_date'] : '', 0, 0);
-                    if ($_POST['reprice'] != 0)
-                        $_POST['PO']->reprice_order($_POST['reprice'], $line_no);
+					$_POST['PO']->trans_type == ST_PURCHORDER ? $_POST['req_del_date'] : '', 0, 0, get_post('cogs'));
 
 				unset_form_variables();
 				$_POST['stock_id']	= "";
@@ -431,6 +427,7 @@ function handle_commit_order()
 		copy_to_cart();
 		new_doc_date($cart->orig_order_date);
 		if ($cart->order_no == 0) { // new po/grn/invoice
+            $cart->reprice_order();
 			$trans_no = add_direct_supp_trans($cart);
 			if ($trans_no) {
 				unset($_POST['PO']);
