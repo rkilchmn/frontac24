@@ -97,7 +97,7 @@ if (isset($_GET['AddedID']))
 	hyperlink_params($path_to_root . "/purchasing/po_receive_items.php", _("&Receive Items on this Purchase Order"), "PONumber=$order_no");
 
   // TODO, for fixed asset
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another Purchase Order"), "NewOrder=yes&OrderDate=".$_POST['OrderDate']);
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another Purchase Order"), "NewOrder=yes");
 	
 	hyperlink_no_params($path_to_root."/purchasing/inquiry/po_search.php", _("Select An &Outstanding Purchase Order"));
 	
@@ -122,7 +122,7 @@ if (isset($_GET['AddedID']))
 	hyperlink_params("$path_to_root/admin/attachments.php", _("Add an Attachment"), 
 		"filterType=$trans_type&trans_no=$trans_no");
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another GRN"), "NewGRN=Yes&OrderDate=".$_POST['OrderDate']);
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another GRN"), "NewGRN=Yes");
 	
 	display_footer_exit();	
 
@@ -143,7 +143,7 @@ if (isset($_GET['AddedID']))
 	hyperlink_params("$path_to_root/admin/attachments.php", _("Add an Attachment"), 
 		"filterType=$trans_type&trans_no=$trans_no");
 
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another Direct Invoice"), "NewInvoice=Yes&OrderDate=".$_POST['OrderDate']);
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &Another Direct Invoice"), "NewInvoice=Yes");
 	
 	display_footer_exit();	
 }
@@ -432,11 +432,11 @@ function handle_commit_order()
 			if ($trans_no) {
 				unset($_POST['PO']);
 				if ($cart->trans_type == ST_PURCHORDER)
-	 				meta_forward_self("AddedID=$trans_no&OrderDate=".$_POST['OrderDate']);
+	 				meta_forward_self("AddedID=$trans_no");
 				elseif ($cart->trans_type == ST_SUPPRECEIVE)
-					meta_forward_self("AddedGRN=$trans_no&OrderDate=".$_POST['OrderDate']);
+					meta_forward_self("AddedGRN=$trans_no");
 				else
-					meta_forward_self("AddedPI=$trans_no&OrderDate=".$_POST['OrderDate']);
+					meta_forward_self("AddedPI=$trans_no");
 			}
 		} else { // order modification
 			$order_no = update_po($cart);

@@ -115,7 +115,8 @@ function create_new_po($trans_type, $trans_no)
 		unset ($_POST['PO']->line_items, $_POST['PO']);
 
 	$cart = new purch_order;
-	$_POST['OrderDate'] = new_doc_date();
+    if (!isset($_POST['OrderDate']))
+        $_POST['OrderDate'] = new_doc_date();
 	if (!is_date_in_fiscalyear($_POST['OrderDate']))
 		$_POST['OrderDate'] = end_fiscalyear();
 	$cart->due_date = $cart->orig_order_date = $_POST['OrderDate'];
@@ -129,7 +130,7 @@ function create_new_po($trans_type, $trans_no)
 	} else
 		$cart->reference = $Refs->get_next($trans_type, null,
 			array('supplier_id' => $cart->supplier_id, 'date' => get_post('OrderDate')));
-	$_POST['PO'] = &$cart;
+    $_POST['PO'] = &$cart;
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -207,7 +208,7 @@ function display_po_header(&$order)
 
 	table_section(2);
 
-  	text_row(_("Supplier's Reference:"), 'supp_ref', next_supplier_ref($order->supplier_id), 20, 60);
+  	text_row(_("Supplier's Reference:"), 'supp_ref', isset($_POST['supp_ref']) ? null : next_supplier_ref($order->supplier_id), 20, 60);
 
 
 	if (get_company_pref('use_dimension'))

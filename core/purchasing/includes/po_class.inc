@@ -56,6 +56,8 @@ class purch_order
             get_supplier_details_to_order($this, $_POST['supplier_id']);
             get_duedate_from_terms($this);
             $this->supp_ref = next_supplier_ref($this->supplier_id);
+            $this->dimension = $_POST['dimension'];
+            $this->dimension2 = $_POST['dimension2'];
         }
 	}
 	
