@@ -631,7 +631,8 @@ div.note_msg {
 	padding: 3px;
 	border: 1px solid #33cc00;
 	background-color: #ccffcc;
-	color: #007700;
+	// color: #007700;
+	color: #000000;
 	text-align: center;
 }
 
