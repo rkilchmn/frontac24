@@ -23,7 +23,11 @@ include_once($path_to_root . "/gl/includes/gl_db.inc");
 $js = "";
 if (user_use_date_picker())
 	$js = get_js_date_picker();
-$fields = array("TransFromDate", "TransToDate", "Dimension", "Dimension2", "AccGrp");
+
+$fields = array("TransToDate", "Dimension", "Dimension2");
+if (isset($_GET["AccGrp"]))
+    $fields[] = "AccGrp";
+
 $js .= get_js_history($fields);
 
 page(_($help_context = "Balance Sheet Drilldown"), false, false, "", $js);
@@ -123,7 +127,6 @@ function inquiry_controls()
 	submit_cells('Show',_("Show"),'','', 'default');
     end_table();
 
-	hidden('TransFromDate');
 	hidden('AccGrp');
 }
 
