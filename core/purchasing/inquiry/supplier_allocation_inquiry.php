@@ -40,6 +40,7 @@ supplier_list_cells(_("Select a supplier: "), 'supplier_id', $_POST['supplier_id
 date_cells(_("From:"), 'TransFromDate', '', null, -abs(user_transaction_days()));
 date_cells(_("To:"), 'TransToDate', '', null, 1);
 
+unset ($_SESSION['filterType']);
 supp_allocations_list_cell("filterType", null);
 
 check_cells(_("show settled:"), 'showSettled', null);

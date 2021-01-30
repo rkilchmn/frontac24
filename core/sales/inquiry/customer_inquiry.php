@@ -175,6 +175,7 @@ function display_customer_summary($customer_record)
 	end_table();
 }
 
+unset($_SESSION['filterType']);
 set_posts(array("customer_id", "tax_group_id", "TransFromDate", "TransToDate", "filterType"));
 
 //------------------------------------------------------------------------------------------------

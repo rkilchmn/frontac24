@@ -26,6 +26,7 @@ $js .= get_js_history(array("customer_id", "TransFromDate", "TransToDate", "filt
 
 page(_($help_context = "Customer Allocation Inquiry"), false, false, "", $js);
 
+unset ($_SESSION['filterType']);
 set_posts(array("customer_id", "TransFromDate", "TransToDate", "filterType"));
 
 //------------------------------------------------------------------------------------------------
