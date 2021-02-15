@@ -209,7 +209,8 @@ function display_db_pager(&$pager) {
 
   div_end();
 //  breaks suppliers/customers->Transactions/Orders with objDiv is null
-  scroll_down("_{$pager->name}_span");
+//  scroll_down("_{$pager->name}_span");
+
   return true;
 }
 
