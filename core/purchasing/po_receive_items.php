@@ -86,7 +86,7 @@ function display_po_receive_items()
     	    	$ln_itm->receive_qty = $qty_outstanding;
     		}
 
-    		$line_total = price_format($ln_itm->receive_qty * $ln_itm->price);
+    		$line_total = ($ln_itm->receive_qty * $ln_itm->price);
     		$total += $line_total;
 
 			label_cell($ln_itm->stock_id);
