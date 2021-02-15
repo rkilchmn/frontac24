@@ -20,7 +20,7 @@ include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/manufacturing/includes/manufacturing_db.inc");
 include_once($path_to_root . "/manufacturing/includes/manufacturing_ui.inc");
 
-$posts=array('stock_id', 'quantity', 'date_', 'Labour', 'Costs', 'cr_lab_acc', 'cr_acc');
+$posts=array('type', 'stock_id', 'quantity', 'date_', 'Labour', 'Costs', 'cr_lab_acc', 'cr_acc');
 $js = "";
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
