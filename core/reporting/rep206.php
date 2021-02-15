@@ -30,6 +30,7 @@ print_supplier_balances();
 
 function get_open_balance($supplier_id, $to)
 {
+    global $SysPrefs;
     if($to)
         $to = date2sql($to);
 
@@ -48,6 +49,8 @@ function get_open_balance($supplier_id, $to)
         WHERE t.supplier_id = ".db_escape($supplier_id);
     if ($to)
         $sql .= " AND t.tran_date < '$to'";
+    if ($SysPrefs->simplified_supplier_aging)
+        $sql .= " AND t.type IN (".ST_SUPPINVOICE.",".ST_SUPPCREDIT.",".ST_SUPPAYMENT.")";
     $sql .= " GROUP BY supplier_id";
 
     $result = db_query($sql,"No transactions were returned");
@@ -56,6 +59,7 @@ function get_open_balance($supplier_id, $to)
 
 function getTransactions($supplier_id, $from, $to)
 {
+    global $SysPrefs;
     $from = date2sql($from);
     $to = date2sql($to);
 	//memo added by faisal
@@ -67,8 +71,10 @@ function getTransactions($supplier_id, $from, $to)
         FROM ".TB_PREF."supp_trans
         LEFT JOIN ".TB_PREF."comments comments ON ".TB_PREF."supp_trans.type=comments.type AND ".TB_PREF."supp_trans.trans_no=comments.id
         WHERE ".TB_PREF."supp_trans.tran_date >= '$from' AND ".TB_PREF."supp_trans.tran_date <= '$to'
-        AND ".TB_PREF."supp_trans.supplier_id = '$supplier_id' AND ".TB_PREF."supp_trans.ov_amount!=0
-        ORDER BY ".TB_PREF."supp_trans.tran_date";
+        AND ".TB_PREF."supp_trans.supplier_id = '$supplier_id' AND ".TB_PREF."supp_trans.ov_amount!=0";
+    if ($SysPrefs->simplified_supplier_aging)
+        $sql .= " AND ".TB_PREF."supp_trans.type IN (".ST_SUPPINVOICE.",".ST_SUPPCREDIT.",".ST_SUPPAYMENT.")";
+    $sql .= " ORDER BY ".TB_PREF."supp_trans.tran_date";
 
     return db_query($sql,"No transactions were returned");
 }
@@ -149,9 +155,12 @@ function print_supplier_balances()
         $rate = $convert ? get_exchange_rate_from_home_currency($myrow['curr_code'], Today()) : 1;
         $bal = get_open_balance($myrow['supplier_id'], $from);
         $init[0] = $init[1] = 0.0;
-        $init[0] = round2(abs($bal['charges']*$rate), $dec);
-        $init[1] = round2(Abs($bal['credits']*$rate), $dec);
-        $init[2] = round2($bal['Allocated']*$rate, $dec);
+
+        if ($bal != false) {
+            $init[0] = round2(abs($bal['charges']*$rate), $dec);
+            $init[1] = round2(Abs($bal['credits']*$rate), $dec);
+            $init[2] = round2($bal['Allocated']*$rate, $dec);
+        }
 
         $init[3] = $init[1] - $init[0];
         $accumulate += $init[3];

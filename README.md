@@ -984,3 +984,34 @@ a specific date range, just to see it reset on the next inquiry page.
 BF retains query variables as session variables, making the defaults the same
 across the browser.
 
+## FEATURE: Simplified supplier aging
+FA assumes that a supplier is invoiced so that payments can be applied to that invoice.
+While FA allows a supplier to be paid without an invoice, the supplier account will
+go negative, making it appear that the supplier is overpaid.
+Data entry staff must aware when a supplier should be paid by a supplier payment
+or by a bank payment.
+
+FA does not distinguish between a supplier payment and a bank payment.
+Both can be allocated to an invoice.
+The database updates are the same,
+given that the bank payment is made to invoiced accounts payable G/L account.
+But it is a likely error to allocate a bank payment to an invoice
+with differing G/L accounts.
+FA also does not currently allow a supplier payment to be edited.
+
+BF offers a simplified supplier aging feature that changes how supplier accounts are aged.
+This feature is enabled with the config.php option "simplified_supplier_again=true".
+Simplified aging is based only on Supplier Invoices, Payments and Credits.
+Only supplier payments and credits can be allocated to supplier invoices.
+Bank Payments/Deposits/General Journal Entries are not allowed and not calculated
+in any balances.
+
+If a need arises to adjust a suppliers account,
+it cannot be done directly with a general journal entry.  Instead, a dummy invoice or
+credit would have to be generated.
+
+Note that an argument could be made to simplify customer aging as well.
+But there seems to be less confusion among data entry staff
+because checks almost always come from invoiced customers
+and are always entered
+as customer payments instead of bank deposits.

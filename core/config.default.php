@@ -229,6 +229,13 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 	$auto_select_box = false;
 
 /*
+    Simplified Supplier Aging
+    Aging based only supplier invoices, supplier payments and credits
+    (ignore journal entries, bank payments, deposits)
+*/
+	$simplified_supplier_aging = false;
+
+/*
     XML enabled fields
 */
 /*
