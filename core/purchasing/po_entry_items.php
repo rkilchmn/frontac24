@@ -240,12 +240,7 @@ function check_data()
 	   	return false;
     }
 
-    // Note: if the item is a service and the user wants to reprice
-    // the order, allow negative input, as the service item will
-    // zeroed out anyway.
-
-    if (!check_num('price', 0)
-        && !($_POST['cogs'] != 0 && is_service(get_mb_flag($_POST['stock_id']))))
+    if (!check_num('price', 0))
     {
 	   	display_error(_("The price entered must be numeric and not less than zero."));
 	   	display_error(_("HINT: To enter a supplier discount using a service item, change the 'COGS' option from 'No'. Then a negative price will discount the other items on the order."));
