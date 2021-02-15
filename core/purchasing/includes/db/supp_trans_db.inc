@@ -216,11 +216,12 @@ function get_sql_for_supplier_inquiry($filter, $after_date, $to_date, $supplier_
     $date_after = date2sql($after_date);
     $date_to = date2sql($to_date);
 
+
     $sql = "SELECT trans.type, 
 		trans.trans_no,
 		trans.reference, 
 		supplier.supp_name, 
-		trans.supp_reference,
+        IF (trans.supp_reference='', c.memo_, trans.supp_reference) as supp_reference,
     	trans.tran_date, 
 		trans.due_date,
 		supplier.curr_code, 
@@ -232,7 +233,8 @@ function get_sql_for_supplier_inquiry($filter, $after_date, $to_date, $supplier_
 		trans.alloc AS Allocated,
 		((trans.type = ".ST_SUPPINVOICE." OR trans.type = ".ST_SUPPCREDIT.") AND trans.due_date < '" . date2sql(Today()) . "') AS OverDue,
     	(ABS(trans.ov_amount + trans.ov_gst  + trans.ov_discount) - trans.alloc <= ".FLOAT_COMP_DELTA.") AS Settled
-    	FROM ".TB_PREF."supp_trans as trans, ".TB_PREF."suppliers as supplier
+    	FROM ".TB_PREF."supp_trans as trans
+        LEFT JOIN ".TB_PREF."comments as c ON c.type = trans.type AND c.id = trans.trans_no, ".TB_PREF."suppliers as supplier
     	WHERE supplier.supplier_id = trans.supplier_id
 		AND trans.ov_amount != 0";	// exclude voided transactions
 
