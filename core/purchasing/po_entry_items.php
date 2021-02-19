@@ -230,12 +230,23 @@ function check_data()
 		return false;
 	}
 
+/*
+    Allow negative GRN quantity to reverse bad GRNs when voiding
+    is not an option (closed fiscal year)
+
 	$dec = get_qty_dec($_POST['stock_id']);
 	$min = 1 / pow(10, $dec);
     if (!check_num('qty',$min))
     {
     	$min = number_format2($min, $dec);
 	   	display_error(_("The quantity of the order item must be numeric and not less than ").$min);
+		set_focus('qty');
+	   	return false;
+    }
+*/
+    if (!check_num('qty'))
+    {
+	   	display_error(_("The quantity of the order item must be numeric."));
 		set_focus('qty');
 	   	return false;
     }
@@ -403,7 +414,8 @@ function can_commit()
      	display_error (_("The order cannot be placed because there are no lines entered on this order."));
      	return false;
 	}
-	if (floatcmp(input_num('prep_amount'), $_POST['PO']->get_trans_total()) > 0)
+	if (input_num('prep_amount') > 0
+        && floatcmp(input_num('prep_amount'), $_POST['PO']->get_trans_total()) > 0)
 	{
 		display_error(_("Required prepayment is greater than total invoice value."));
 		set_focus('prep_amount');

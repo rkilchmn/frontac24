@@ -1387,6 +1387,7 @@ function CC() {
       }
       table += \"</tr>\";
     }
+    table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href=\\\"javascript:setCCDate(\"+getCurrentYear()+\",\"+getCurrentMonth()+\",\"+getCurrentDay()+\")\\\">Today</a></td></tr>\";
     if (toDate) {
         table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href=\\\"javascript:setCCDate(\"+thisYear+\",\"+12+\",\"+31+\")\\\">\"+\"$yearend</a></td></tr>\";
         table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href=\\\"javascript:setCCDate(\"+lastYear+\",\"+12+\",\"+31+\")\\\">\"+\"$lastyearend</a></td></tr>\";
