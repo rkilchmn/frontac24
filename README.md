@@ -1015,3 +1015,5 @@ But there seems to be less confusion among data entry staff
 because checks almost always come from invoiced customers
 and are always entered
 as customer payments instead of bank deposits.
+
+## FEATURE: retain reconciled status when editing customer payments
