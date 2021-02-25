@@ -58,3 +58,15 @@ msgstr "Our Tax Id."
 msgid "Mailing Address:"
 msgstr "Physical/Delivery Address:"
 
+#:
+msgid "Debit"
+msgstr "Increase"
+msgid "Credit"
+msgstr "Decrease"
+msgid "Kindest regards"
+msgstr "Thanks"
+msgid "Dear"
+msgstr "Hi"
+msgid "Attached you will find "
+msgstr "Attached is "
+
