@@ -70,3 +70,7 @@ msgstr "Hi"
 msgid "Attached you will find "
 msgstr "Attached is "
 
+#:
+msgid "&Payments to Suppliers"
+msgstr "Supplier &Payments and Refunds"
+

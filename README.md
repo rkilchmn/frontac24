@@ -994,26 +994,42 @@ or by a bank payment.
 FA does not distinguish between a supplier payment and a bank payment.
 Both can be allocated to an invoice.
 The database updates are the same,
-given that the bank payment is made to invoiced accounts payable G/L account.
-But it is a likely error to allocate a bank payment to an invoice
-with differing G/L accounts.
+given that the bank payment is made to the supplier Accounts Payable G/L account.
+
+But it is a likely error to allocate a bank payment or deposit to
+an invoiced supplier with a G/L account other than Accounts Payable.
+The supplier will appear to be paid in full,
+but Accounts Payable will not reconcile and the G/L account that
+was used will not be correct.
 FA also does not currently allow a supplier payment to be edited.
 
-BF offers a simplified supplier aging feature that changes how supplier accounts are aged.
+BF offers a simplified supplier aging feature
+that changes how supplier accounts are aged.
 This feature is enabled with the config.php option "simplified_supplier_again=true".
 Simplified aging is based only on Supplier Invoices, Payments and Credits.
 Only supplier payments and credits can be allocated to supplier invoices.
 Bank Payments/Deposits/General Journal Entries are not allowed and not calculated
 in any balances.
 
-If a need arises to adjust a suppliers account,
-it cannot be done directly with a general journal entry.  Instead, a dummy invoice or
-credit would have to be generated.
+If a need arises to increase the balance due of a suppliers account,
+it cannot be done directly with a general journal entry
+or bank payment.
+Instead, a supplier invoice or supplier payment would be necessary.
+
+If a need arises to decrease the balance due of a suppliers account,
+it cannot be done directly with a general journal entry
+or a bank deposit.
+Instead, a supplier credit (merchandise return)
+or refund would have to be generated.
+A refund can only be issued through the customer payment page
+if the account has been overpaid.
+This creates a negative supplier payment
+against Accounts Payable that can be allocated to
+the supplier invoice.
 
 Note that an argument could be made to simplify customer aging as well.
 But there seems to be less confusion among data entry staff
-because checks almost always come from invoiced customers
-and are always entered
-as customer payments instead of bank deposits.
+if customers are always invoiced and payments
+and are always entered as customer payments instead of bank deposits.
 
 ## FEATURE: retain reconciled status when editing customer payments

@@ -57,10 +57,13 @@ function display_supplier_summary($supplier_record)
     end_table(1);
 }
 //------------------------------------------------------------------------------------------------
-function systype_name($dummy, $type)
+function systype_name($trans, $type)
 {
 	global $systypes_array;
-	return $systypes_array[$type];
+    if ($type == ST_SUPPAYMENT && $trans['TotalAmount'] > 0)
+        return "Supplier Refund";
+    else
+        return $systypes_array[$type];
 }
 
 function trans_view($trans)
@@ -181,7 +184,8 @@ div_start('totals_tbl');
 if ($_POST['supplier_id'] != "" && $_POST['supplier_id'] != ALL_TEXT)
 {
 	$supplier_record = get_supplier_details(get_post('supplier_id'), get_post('TransToDate'));
-    display_supplier_summary($supplier_record);
+    if ($supplier_record != false)
+        display_supplier_summary($supplier_record);
 }
 div_end();
 

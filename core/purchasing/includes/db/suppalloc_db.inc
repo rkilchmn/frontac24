@@ -215,11 +215,11 @@ function get_allocatable_to_supp_transactions($supplier_id=null, $trans_no=null,
 	}
 	else
 	{
-		$sql .= " AND round(ov_amount+ov_gst+ov_discount-alloc,6) > 0
-			AND trans.type NOT IN (".implode(',',
-        $SysPrefs->simplified_supplier_aging ?
-            array(ST_SUPPAYMENT, ST_BANKPAYMENT, ST_BANKDEPOSIT) :
-            array(ST_SUPPAYMENT, ST_BANKPAYMENT)).")";
+        $sql .= " AND round(ov_amount+ov_gst+ov_discount-alloc,6) > 0";
+        if ($SysPrefs->simplified_supplier_aging)
+            $sql .= " AND trans.type NOT IN (".implode(',',array(ST_BANKPAYMENT, ST_BANKDEPOSIT, ST_JOURNAL)).")";
+        else
+            $sql .= " AND trans.type NOT IN (".implode(',',array(ST_SUPPAYMENT, ST_BANKPAYMENT)).")";
 		$sql .= " GROUP BY type, trans_no";
 	}
 
