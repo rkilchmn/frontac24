@@ -70,8 +70,8 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		$rep->TextCol(1, 2,	$account['account_name']);
 
 		$rep->AmountCol(2, 3, $per_balance * $convert, $dec);
-		$rep->AmountCol(3, 4, $acc_balance * $convert, $dec);
-		$rep->AmountCol(4, 5, Achieve($per_balance, $acc_balance), $pdec);
+		// $rep->AmountCol(3, 4, $acc_balance * $convert, $dec);
+		// $rep->AmountCol(4, 5, Achieve($per_balance, $acc_balance), $pdec);
 
 		$rep->NewLine();
 
@@ -114,8 +114,10 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		$rep->NewLine();
 		$rep->TextCol(0, 2,	_('Total') . " " . $typename);
 		$rep->AmountCol(2, 3, ($code_per_balance + $per_balance_total) * $convert, $dec);
-		$rep->AmountCol(3, 4, ($code_acc_balance + $acc_balance_total) * $convert, $dec);
-		$rep->AmountCol(4, 5, Achieve(($code_per_balance + $per_balance_total), ($code_acc_balance + $acc_balance_total)), $pdec);		
+        if ($compare != 3) {
+            $rep->AmountCol(3, 4, ($code_acc_balance + $acc_balance_total) * $convert, $dec);
+            $rep->AmountCol(4, 5, Achieve(($code_per_balance + $per_balance_total), ($code_acc_balance + $acc_balance_total)), $pdec);
+        }
 		if ($graphics)
 		{
 			$pg->x[] = $typename;
@@ -207,7 +209,10 @@ function print_profit_and_loss_statement()
 	$cols = array(0, 60, 200, 350, 425,	500);
 	//------------0--1---2----3----4----5--
 
-	$headers = array(_('Account'), _('Account Name'), _('Period'), _('Accumulated'), _('Achieved %'));
+	if ($compare == 3)
+        $headers = array(_('Account'), _('Account Name'), _('Period'));
+    else
+        $headers = array(_('Account'), _('Account Name'), _('Period'), _('Accumulated'), _('Achieved %'));
 
 	$aligns = array('left',	'left',	'right', 'right', 'right');
 
@@ -255,7 +260,9 @@ function print_profit_and_loss_statement()
 		if (date_comp($to, end_month($to)) == 0) // compensate for leap years. If to-date equal end month 
 			$end = end_month($end);				 // then the year-1 should also be end month	
 		$headers[3] = _('Period Y-1');
-	}
+	} else
+        $begin = $end = null;
+    
 
 	$rep = new FrontReport(_('Profit and Loss Statement'), "ProfitAndLoss", user_pagesize(), 9, $orientation);
     if ($orientation == 'L')
@@ -298,8 +305,10 @@ function print_profit_and_loss_statement()
 		$rep->Font('bold');
 		$rep->TextCol(0, 2,	_('Total') . " " . $class["class_name"]);
 		$rep->AmountCol(2, 3, $class_per_total * $convert, $dec);
-		$rep->AmountCol(3, 4, $class_acc_total * $convert, $dec);
-		$rep->AmountCol(4, 5, Achieve($class_per_total, $class_acc_total), $pdec);
+        if ($compare != 3) {
+            $rep->AmountCol(3, 4, $class_acc_total * $convert, $dec);
+            $rep->AmountCol(4, 5, Achieve($class_per_total, $class_acc_total), $pdec);
+        }
 		$rep->Font();
 		$rep->NewLine(2);	
 
@@ -310,8 +319,10 @@ function print_profit_and_loss_statement()
 	$rep->Font('bold');	
 	$rep->TextCol(0, 2,	_('Calculated Return'));
 	$rep->AmountCol(2, 3, $salesper *-1, $dec); // always convert
-	$rep->AmountCol(3, 4, $salesacc * -1, $dec);
-	$rep->AmountCol(4, 5, Achieve($salesper, $salesacc), $pdec);
+    if ($compare != 3) {
+        $rep->AmountCol(3, 4, $salesacc * -1, $dec);
+        $rep->AmountCol(4, 5, Achieve($salesper, $salesacc), $pdec);
+    }
 	if ($graphics)
 	{
 		$pg->x[] = _('Calculated Return');
@@ -327,7 +338,7 @@ function print_profit_and_loss_statement()
 		$pg->axis_x    = _("Group");
 		$pg->axis_y    = _("Amount");
 		$pg->graphic_1 = $headers[2];
-		$pg->graphic_2 = $headers[3];
+		// $pg->graphic_2 = $headers[3];
 		$pg->type      = $graphics;
 		$pg->skin      = $SysPrefs->graph_skin;
 		$pg->built_in  = false;

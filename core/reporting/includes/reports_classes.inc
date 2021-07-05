@@ -251,7 +251,7 @@ class BoxReports
 					return array_selector($name, $def, $sel);
 
 				case 'COMPARE':
-					$sel = array(_("Accumulated"), _("Period Y-1"), _("Budget"));
+					$sel = array(_("Accumulated"), _("Period Y-1"), _("Budget"), _("None"));
 					return array_selector($name, null, $sel);
 
 				case 'GRAPHIC':
