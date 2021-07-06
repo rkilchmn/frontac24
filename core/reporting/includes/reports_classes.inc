@@ -174,7 +174,9 @@ class BoxReports
 	{
 		global $path_to_root, $SysPrefs,
 			$type_shortcuts;
-		$day_range = (isset($SysPrefs->max_days_in_docs) ? $SysPrefs->max_days_in_docs : 180);
+		$day_range = get_company_pref("max_days_in_docs");
+		if (!$day_range)
+			$day_range = 180;
 		$st = '';
 			switch ($type)
 			{
@@ -256,7 +258,7 @@ class BoxReports
 
 				case 'GRAPHIC':
 					$sel = array(_("No Graphics"), _("Vertical bars"), _("Horizontal bars"), 
-								_("Dots"), _("Lines"), _("Pie"), _("Donut"));
+								_("Dots"), _("Lines"), _("Pie"), _("Donut"), _("Half Donut"), _("Splines"));
 					return array_selector($name, null, $sel);
 
 				case 'SYS_TYPES':

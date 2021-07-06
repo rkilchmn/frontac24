@@ -2432,7 +2432,7 @@ function quick_entries_list($name, $selected_id=null, $type=null, $submit_on_cha
 
 }
 
-function quick_entries_list_cells($label, $name, $selected_id=null, $type, $submit_on_change=false, $all_option=false)
+function quick_entries_list_cells($label, $name, $selected_id, $type, $submit_on_change=false, $all_option=false)
 {
 	if ($label != null)
 		echo "<td>$label</td>\n";
@@ -2441,7 +2441,7 @@ function quick_entries_list_cells($label, $name, $selected_id=null, $type, $subm
 	echo "</td>";
 }
 
-function quick_entries_list_row($label, $name, $selected_id=null, $type, $submit_on_change=false, $all_option=false)
+function quick_entries_list_row($label, $name, $selected_id, $type, $submit_on_change=false, $all_option=false)
 {
 	echo "<tr><td class='label'>$label</td>";
 	quick_entries_list_cells(null, $name, $selected_id, $type, $submit_on_change, $all_option);

@@ -270,7 +270,7 @@ function check_ui_refresh($name=null)
 // When there is no exrate for today, 
 // gets it form ECB and stores in local database.
 //
-function exchange_rate_display($from_currency=null, $to_currency=null, $date_, $force_edit=false)
+function exchange_rate_display($from_currency, $to_currency, $date_, $force_edit=false)
 {
     global $Ajax, $SysPrefs;
 
@@ -947,7 +947,7 @@ function get_js_select_combo_item() {
 
                 var stock_element = doc.getElementsByName('stock_id');
                 if( stock_element.length > 0) {
-                    stock_element.value = value;	
+				stock_element[0].value = value;	
                     var stock_id = doc.getElementById('_stock_id_edit'); 
                     stock_id.value=value;
                     stock_id.onblur();		
