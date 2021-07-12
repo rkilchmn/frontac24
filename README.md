@@ -1005,7 +1005,7 @@ FA also does not currently allow a supplier payment to be edited.
 
 BF offers a simplified supplier aging feature
 that changes how supplier accounts are aged.
-This feature is enabled with the config.php option "simplified_supplier_again=true".
+This feature is enabled with the config.php option "simplified_supplier_aging=true".
 Simplified aging is based only on Supplier Invoices, Payments and Credits.
 Only supplier payments and credits can be allocated to supplier invoices.
 Bank Payments/Deposits/General Journal Entries are not allowed and not calculated

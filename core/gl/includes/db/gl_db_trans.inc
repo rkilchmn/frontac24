@@ -186,9 +186,12 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
         $sql .= " AND (gl1.memo_ LIKE ". db_escape("%$memo%") . " OR c.memo_ LIKE " . db_escape("%$memo%") . ")";
 
     if ($person_type == PT_SUPPLIER || $person_type == PT_CUSTOMER) {
-            $sql .= " AND gl1.person_type_id=".db_escape($person_type); 
-            if ($person_id != '')
-                $sql .= " AND gl1.person_id=".db_escape($person_id); 
+            if ($person_id != '') {
+                if ($person_type == PT_SUPPLIER)
+                    $sql .= " AND sup.supplier_id=".db_escape($person_id);
+                else
+                    $sql .= " AND debt.debtor_no=".db_escape($person_id);
+            }
     } else if ($person_type != '') {
         $sql .= " AND bt.person_type_id=".db_escape($person_type); 
         if (is_numeric($person_id))
