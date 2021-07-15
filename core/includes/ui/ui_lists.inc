@@ -972,7 +972,7 @@ function sales_items_list($name, $selected_id=null, $all_option=false,
 	$sql .= " AND !i.inactive AND !s.inactive AND !s.no_sale";
 
     if ($sales_type != null) {
-        $sql .= " AND p.sales_type_id = " . db_escape($sales_type);
+        $sql .= " AND (ISNULL(p.sales_type_id) OR p.sales_type_id = " . db_escape($sales_type) . ")";
     }
 
 	$sql .= " GROUP BY i.item_code";
