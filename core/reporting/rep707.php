@@ -26,7 +26,7 @@ include_once($path_to_root . "/admin/db/tags_db.inc");
 
 //----------------------------------------------------------------------------------------------------
 
-function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $convert, &$dec, &$pdec, &$rep, $dimension, $dimension2, $tags, &$pg, $graphics, &$labels, &$serie1, &$serie2)
+function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $convert, &$dec, &$pdec, &$rep, $dimension, $dimension2, $exclude_dim, $tags, $graphics, &$labels, &$serie1, &$serie2)
 {
 	$code_per_balance = 0;
 	$code_acc_balance = 0;
@@ -45,15 +45,23 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 			if (!is_record_in_tags($tags, TAG_ACCOUNT, $account['account_code']))
 				continue;
 		}	
-		$per_balance = get_gl_trans_from_to($from, $to, $account["account_code"], $dimension, $dimension2);
+		$per_balance = get_gl_trans_from_to($from, $to, $account["account_code"], $dimension, $dimension2, $exclude_dim);
 
-		if ($compare == 2)
-			$acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
-		else
-			$acc_balance = get_gl_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
-		if (!$per_balance && !$acc_balance)
+
+        if ($compare == 3)
+                $acc_balance = 0;
+        else if ($compare == 2)
+                $acc_balance = get_budget_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
+        else
+                $acc_balance = get_gl_trans_from_to($begin, $end, $account["account_code"], $dimension, $dimension2);
+		if (!round($per_balance, $dec) && !round($acc_balance, $dec))
 			continue;
-		
+
+        // omit year-end entry (does not work with dimensions)	
+        if ($account['account_code'] == 9990) {
+            continue;
+        }
+	
 		//Print Type Title if it has atleast one non-zero account	
 		if (!$printtitle)
 		{
@@ -86,8 +94,10 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		
 	//Get Account groups/types under this group/type
 	$result = get_account_types(false, false, $type);
+    $omit = false;
 	while ($accounttype=db_fetch($result))
 	{
+        $omit = true;
 		//Print Type Title if has sub types and not previously printed
 		if (!$printtitle)
 		{
@@ -100,7 +110,7 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
 		}
 
 		$totals_arr = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, $dec, 
-			$pdec, $rep, $dimension, $dimension2, $tags, $pg, $graphics, $labels, $serie1, $serie2);
+			$pdec, $rep, $dimension, $dimension2, $exclude_dim, $tags, $graphics, $labels, $serie1, $serie2);
 		$per_balance_total += $totals_arr[0];
 		$acc_balance_total += $totals_arr[1];
 	}
@@ -117,13 +127,14 @@ function display_type ($type, $typename, $from, $to, $begin, $end, $compare, $co
             $rep->AmountCol(3, 4, ($code_acc_balance + $acc_balance_total) * $convert, $dec);
             $rep->AmountCol(4, 5, Achieve(($code_per_balance + $per_balance_total), ($code_acc_balance + $acc_balance_total)), $pdec);
         }
-		if ($graphics)
+		$rep->NewLine();
+
+		if ($graphics && !$omit)
 		{
 			$labels[] = $typename;
 			$serie1[] = abs($code_per_balance + $per_balance_total);
 			$serie2[] = abs($code_acc_balance + $acc_balance_total);
 		}
-		$rep->NewLine();
 	}
 	
 	$totals_arr[0] = $code_per_balance + $per_balance_total;
@@ -163,22 +174,24 @@ function print_profit_and_loss_statement()
 	{
 		$dimension = $_POST['PARAM_3'];
 		$dimension2 = $_POST['PARAM_4'];
+		$exclude_dim = $_POST['PARAM_5'];
+		$tags = (isset($_POST['PARAM_6']) ? $_POST['PARAM_6'] : -1);
+		$decimals = $_POST['PARAM_7'];
+		$graphics = $_POST['PARAM_8'];
+		$comments = $_POST['PARAM_9'];
+		$orientation = $_POST['PARAM_10'];
+		$destination = $_POST['PARAM_11'];
+	}
+	elseif ($dim == 1)
+	{
+		$dimension = $_POST['PARAM_3'];
+		$exclude_dim = $_POST['PARAM_4'];
 		$tags = (isset($_POST['PARAM_5']) ? $_POST['PARAM_5'] : -1);
 		$decimals = $_POST['PARAM_6'];
 		$graphics = $_POST['PARAM_7'];
 		$comments = $_POST['PARAM_8'];
 		$orientation = $_POST['PARAM_9'];
 		$destination = $_POST['PARAM_10'];
-	}
-	elseif ($dim == 1)
-	{
-		$dimension = $_POST['PARAM_3'];
-		$tags = (isset($_POST['PARAM_4']) ? $_POST['PARAM_4'] : -1);
-		$decimals = $_POST['PARAM_5'];
-		$graphics = $_POST['PARAM_6'];
-		$comments = $_POST['PARAM_7'];
-		$orientation = $_POST['PARAM_8'];
-		$destination = $_POST['PARAM_9'];
 	}
 	else
 	{
@@ -194,13 +207,9 @@ function print_profit_and_loss_statement()
 	else
 		include_once($path_to_root . "/reporting/includes/pdf_report.inc");
 	$orientation = ($orientation ? 'L' : 'P');
-	$labels = array();
-	$serie1 = array();
-	$serie2 = array();
 	if ($graphics)
 	{
 		include_once($path_to_root . "/reporting/includes/class.graphic.inc");
-		$pg = new Chart($graphics);
 	}
 	if (!$decimals)
 		$dec = 0;
@@ -212,7 +221,7 @@ function print_profit_and_loss_statement()
 	//------------0--1---2----3----4----5--
 
 	if ($compare == 3)
-        $headers = array(_('Account'), _('Account Name'), _('Period'));
+        $headers = array(_('Account'), _('Account Name'), _('Period'), '');
     else
         $headers = array(_('Account'), _('Account Name'), _('Period'), _('Accumulated'), _('Achieved %'));
 
@@ -220,19 +229,21 @@ function print_profit_and_loss_statement()
 
     if ($dim == 2)
     {
+        $dimension_text = $exclude_dim ? _('Excluding Dimension') : _('Dimension');
     	$params =   array( 	0 => $comments,
     				    1 => array('text' => _('Period'),'from' => $from, 'to' => $to),
-                    	2 => array('text' => _('Dimension')." 1",
+                    	2 => array('text' => $dimension_text ." 1",
                             'from' => get_dimension_string($dimension), 'to' => ''),
-                    	3 => array('text' => _('Dimension')." 2",
+                    	3 => array('text' => $dimesion_text ." 2",
                             'from' => get_dimension_string($dimension2), 'to' => ''),
                         4 => array('text' => _('Tags'), 'from' => get_tag_names($tags), 'to' => ''));
     }
     elseif ($dim == 1)
     {
+        $dimension_text = $exclude_dim ? _('Excluding Dimension') : _('Dimension');
     	$params =   array( 	0 => $comments,
     				    1 => array('text' => _('Period'),'from' => $from, 'to' => $to),
-                    	2 => array('text' => _('Dimension'),
+                    	2 => array('text' => $dimension_text,
                             'from' => get_dimension_string($dimension), 'to' => ''),
                         3 => array('text' => _('Tags'), 'from' => get_tag_names($tags), 'to' => ''));
     }
@@ -292,12 +303,16 @@ function print_profit_and_loss_statement()
 		
 		//Get Account groups/types under this group/type with no parents
 		$typeresult = get_account_types(false, $class['cid'], -1);
+        $labels = array();
+        $serie1 = array();
+        $serie2 = array();
 		while ($accounttype=db_fetch($typeresult))
 		{
-			$classtotal = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, $dec, $pdec, $rep, $dimension, $dimension2, $tags, $pg, $graphics, $labels, $serie1, $serie2);
+			$classtotal = display_type($accounttype["id"], $accounttype["name"], $from, $to, $begin, $end, $compare, $convert, $dec, $pdec, $rep, $dimension, $dimension2, $exclude_dim, $tags, $graphics, $labels, $serie1, $serie2);
 			$class_per_total += $classtotal[0];
 			$class_acc_total += $classtotal[1];			
 		}
+        $data[] = array($class["class_name"], $labels, $serie1, $serie2);
 		
 		//Print Class Summary	
 		$rep->row += 6;
@@ -327,32 +342,36 @@ function print_profit_and_loss_statement()
 	$rep->Font();
 	$rep->NewLine();
 	$rep->Line($rep->row);
-	if ($graphics)
-	{
-		$labels[] = _('Calculated Return');
-		$serie1[] = abs($salesper);
-		$serie2[] = abs($salesacc);
-		$pg->setStream('png');
-		$pg->setLabels($labels);
-		$pg->addSerie($headers[2], $serie1);
-		$pg->addSerie($headers[3], $serie2);
-		$pg->setTitle($rep->title);
-		$pg->setXTitle(_("Group"));
-		$pg->setYTitle(_("Amount"));
-		$pg->setDTitle(number_format2(abs($salesper)));
-		$pg->setValues(true);
-		$pg->latin_notation = ($SysPrefs->decseps[user_dec_sep()] != ".");
-		$filename = company_path(). "/pdf_files/". random_id().".png";
-		$pg->display($filename, true);
-		$w = $pg->width / 1.5;
-		$h = $pg->height / 1.5;
-		$x = ($rep->pageWidth - $w) / 2;
-		$rep->NewLine(2);
-		if ($rep->row - $h < $rep->bottomMargin)
-			$rep->NewPage();
-		$rep->AddImage($filename, $x, $rep->row - $h, $w, $h);
-	}
 		
+    if ($graphics)
+    {
+        foreach ($data as $classdata) {
+            $labels = $classdata[1];
+            $serie1 = $classdata[2];
+            $serie2 = $classdata[3];
+            $pg = new Chart($graphics);
+            $pg->setStream('png');
+            $pg->setLabels($labels);
+            $pg->addSerie($headers[2], $serie1);
+            $pg->addSerie($headers[3], $serie2);
+            $pg->setTitle($classdata[0]);
+            $pg->setXTitle(_("Group"));
+            $pg->setYTitle(_("Amount"));
+            $pg->setDTitle(number_format2(abs($salesper)));
+            $pg->setValues(true);
+            $pg->latin_notation = ($SysPrefs->decseps[user_dec_sep()] != ".");
+            $filename = company_path(). "/pdf_files/". random_id().".png";
+            $pg->display($filename, true);
+            $w = $pg->width / 1.5;
+            $h = $pg->height / 1.5;
+            $x = ($rep->pageWidth - $w) / 2;
+            $rep->NewLine(2);
+            if ($rep->row - $h < $rep->bottomMargin)
+                $rep->NewPage();
+            $rep->AddImage($filename, $x, $rep->row - $h, $w, $h);
+            $rep->NewLine(20);
+        }
+    }
 	$rep->End();
 }
 
