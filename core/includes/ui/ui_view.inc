@@ -493,7 +493,7 @@ function display_edit_tax_items($taxes, $columns, $tax_included, $rightspan=0, $
                 $override="none";
 				if (isset($taxitem['Override'])) {
                         $Ajax->activate('mantax['.$taxitem['tax_type_id'].']');
-                        $amount = $_POST['mantax'][$taxitem['tax_type_id']];
+                        $amount = user_numeric($_POST['mantax'][$taxitem['tax_type_id']]);
                         $override="powderblue";
                 }
                 $_POST['mantax['.$taxitem['tax_type_id'].']'] = price_format($amount);
