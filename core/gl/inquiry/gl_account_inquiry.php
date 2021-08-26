@@ -139,13 +139,11 @@ function edit_link($row)
 
     switch($row['type']) {
         case ST_SALESINVOICE:
-            $myrow = get_customer_trans($row["type_no"], $row["type"]);
-            $str = "/sales/sales_order_entry.php?NewInvoice=".$myrow['order_']."&InvoiceNo=".$row['type_no'];
+            $str = "/sales/sales_order_entry.php?NewInvoice=".$row['order_']."&InvoiceNo=".$row['type_no'];
             return pager_link(_('Edit'), $str, ICON_EDIT);
             break;
         case ST_CUSTCREDIT:
-            $myrow = get_customer_trans($row["type_no"], $row["type"]);
-            return $myrow['order_'] ? '' :   // allow  only free hand credit notes edition
+            return $row['order_'] ? '' :   // allow  only free hand credit notes edition
                 trans_editor_link($row['type'], $row['type_no']);
         default:
             return trans_editor_link($row['type'], $row['type_no']);
@@ -263,7 +261,6 @@ function show_results()
 
 	while ($myrow = db_fetch($result))
 	{
-
     	alt_table_row_color($k);
 
     	$running_total += $myrow["amount"];

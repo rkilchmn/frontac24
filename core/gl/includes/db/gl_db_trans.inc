@@ -120,6 +120,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             "IF(bt.person_id != '' AND !ISNULL(bt.person_id), bt.person_type_id, -1)))) as person_type_id,
             IFNULL(st.tran_date, IFNULL(dt.tran_date, IFNULL(bt.trans_date, IFNULL(grn.delivery_date, gl1.tran_date)))) as doc_date,
             coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl1.memo_, CONCAT(gl1.memo_,' ',c.memo_)) AS memo,
+            dt.order_,
             MAX(bt.reconciled) as reconciled
              FROM "
             .TB_PREF."gl_trans AS gl1
@@ -141,18 +142,14 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             LEFT JOIN ".TB_PREF."comments c ON c.id=gl1.type_no AND c.type=gl1.type
             LEFT JOIN ".TB_PREF."refs ref ON ref.type=gl1.type AND ref.id=gl1.type_no";
 
+    // Retrieve the complete GL transaction, regardless of which side meets the search criteria
     if ($account == null)
-        $sql .= " JOIN ".TB_PREF."gl_trans AS gl2 ON (gl1.type=gl2.type and gl1.type_no=gl2.type_no)
-            LEFT JOIN ".TB_PREF."voided v2 ON gl2.type_no=v2.id AND v2.type=gl2.type";
+        $sql .= " INNER JOIN ".TB_PREF."gl_trans AS gl2 ON gl1.type=gl2.type AND gl1.type_no=gl2.type_no AND ISNULL(v.date_) AND gl1.amount <> 0";
 
     $sql .= ", " .TB_PREF."chart_master coa
         WHERE coa.account_code=gl1.account
         AND ISNULL(v.date_)
         AND gl1.amount <> 0"; 
-
-    if ($account == null)
-        $sql .= " AND ISNULL(v2.date_)
-            AND gl2.amount <> 0"; 
 
     if ($from_date != null) {
         $from = date2sql($from_date);
@@ -203,7 +200,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
     $sql .= " GROUP BY counter";
 
     $sql .= " ORDER BY tran_date, counter";
-//display_notification(str_replace('&TB_PREF&','1_',$sql));
+// display_notification(str_replace('&TB_PREF&','1_',$sql));
 
     return db_query($sql, "The transactions for could not be retrieved");
 }
@@ -318,7 +315,7 @@ function get_gl_balance_from_to($from_date, $to_date, $account, $dimension=0, $d
 
 //--------------------------------------------------------------------------------
 
-function get_gl_trans_from_to($from_date, $to_date, $account, $dimension=0, $dimension2=0)
+function get_gl_trans_from_to($from_date, $to_date, $account, $dimension=0, $dimension2=0, $exclude_dim=false)
 {
 	$from = date2sql($from_date);
 	$to = date2sql($to_date);
@@ -329,10 +326,17 @@ function get_gl_trans_from_to($from_date, $to_date, $account, $dimension=0, $dim
 		$sql .= " AND tran_date >= '$from'";
 	if ($to_date != "")
 		$sql .= " AND tran_date <= '$to'";
-	if ($dimension != 0)
-  		$sql .= " AND dimension_id = ".($dimension<0 ? 0 : db_escape($dimension));
-	if ($dimension2 != 0)
-  		$sql .= " AND dimension2_id = ".($dimension2<0 ? 0 : db_escape($dimension2));
+    if ($exclude_dim == false) {
+        if ($dimension != 0)
+            $sql .= " AND dimension_id = ".($dimension<0 ? 0 : db_escape($dimension));
+        if ($dimension2 != 0)
+            $sql .= " AND dimension2_id = ".($dimension2<0 ? 0 : db_escape($dimension2));
+    } else {
+        if ($dimension != 0)
+            $sql .= " AND dimension_id != ".($dimension<0 ? 0 : db_escape($dimension));
+        if ($dimension2 != 0)
+            $sql .= " AND dimension2_id != ".($dimension2<0 ? 0 : db_escape($dimension2));
+    }
 
 	$result = db_query($sql, "Transactions for account $account could not be calculated");
 
