@@ -93,9 +93,19 @@ function edit_link($row)
 
     switch($row['type']) {
         case ST_SALESINVOICE:
-            $str = "/sales/sales_order_entry.php?NewInvoice=".$row['order_']."&InvoiceNo=".$row['trans_no'];
-            return pager_link(_('Edit'), $str, ICON_EDIT);
-            break;
+
+            // Determine which editor can be used to edit the invoice
+            // Only direct invoices can be fully edited
+
+            $deliveries = get_sales_parent_numbers($row['type'], $row['trans_no']);
+
+            if ($deliveries !== 0
+                && count($deliveries) == 1
+                && get_reference(ST_CUSTDELIVERY, $deliveries[0]) == "auto") {
+                $str = "/sales/sales_order_entry.php?NewInvoice=".$row['order_']."&InvoiceNo=".$row['trans_no'];
+                return pager_link(_('Edit'), $str, ICON_EDIT);
+                break;
+            }
         default:
             return $row['type'] == ST_CUSTCREDIT && $row['order_'] ? '' : 	// allow  only free hand credit notes edition
                 trans_editor_link($row['type'], $row['trans_no']);
