@@ -118,7 +118,7 @@ function print_inventory_sales()
 	if ($frombr == '')
 		$fromc = _('All');
 	else
-		$fromc = get_customer_name($frombr);
+		$fromc = get_branch_name($frombr);
 	if ($show_service) $show_service_items = _('Yes');
 	else $show_service_items = _('No');
 
