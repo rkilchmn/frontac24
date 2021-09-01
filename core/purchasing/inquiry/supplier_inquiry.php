@@ -59,11 +59,7 @@ function display_supplier_summary($supplier_record)
 //------------------------------------------------------------------------------------------------
 function systype_name($trans, $type)
 {
-	global $systypes_array;
-    if ($type == ST_SUPPAYMENT && $trans['TotalAmount'] > 0)
-        return "Supplier Refund";
-    else
-        return $systypes_array[$type];
+    return get_systype_name($type, $trans['TotalAmount']);
 }
 
 function trans_view($trans)

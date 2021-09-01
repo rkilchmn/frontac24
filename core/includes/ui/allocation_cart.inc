@@ -301,8 +301,6 @@ class allocation_item
 
 function show_allocatable($show_totals) {
 
-	global $systypes_array;
-	
     $k = $total_allocated = 0;
 
 	$cart = $_SESSION['alloc'];
@@ -322,7 +320,7 @@ function show_allocatable($show_totals) {
 		    if (floatcmp($alloc_item->amount, $alloc_item->amount_allocated))
 		    {
 				alt_table_row_color($k);
-    			label_cell($systypes_array[$alloc_item->type]);
+    			label_cell(get_systype_name($alloc_item->type, $alloc_item->amount));
 	   			label_cell(get_trans_view_str($alloc_item->type, $alloc_item->type_no), "nowrap align='right'");
 		   		label_cell($alloc_item->ref);
     			label_cell($alloc_item->date_, "align=right");

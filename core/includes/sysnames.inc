@@ -75,6 +75,14 @@ $type_shortcuts = array(
 	ST_DIMENSION => _("Dim")
 );
 
+function get_systype_name($type, $amount)
+{
+    global $systypes_array;
+    if ($type == ST_SUPPAYMENT && $amount > 0)
+        return _("Supplier Refund");
+    else
+        return $systypes_array[$type];
+}
 
 //----------------------------------------------------------------------------------
 //		Bank transaction types
