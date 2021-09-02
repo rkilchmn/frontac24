@@ -75,6 +75,7 @@ $type_shortcuts = array(
 	ST_DIMENSION => _("Dim")
 );
 
+if (!function_exists("get_systype_name")) {
 function get_systype_name($type, $amount)
 {
     global $systypes_array;
@@ -82,6 +83,7 @@ function get_systype_name($type, $amount)
         return _("Supplier Refund");
     else
         return $systypes_array[$type];
+}
 }
 
 //----------------------------------------------------------------------------------
