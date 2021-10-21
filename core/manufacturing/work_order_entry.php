@@ -268,6 +268,17 @@ function get_bom_array()
 
 //-------------------------------------------------------------------------------------
 
+if (isset($_POST['ADD_COST1'])) {
+    end_page();
+    meta_forward("../gl/inquiry/gl_account_inquiry.php", "select=Labour&account=".$_POST['cr_lab_acc']);
+}
+if (isset($_POST['ADD_COST2'])) {
+    end_page();
+    meta_forward("../gl/inquiry/gl_account_inquiry.php", "select=Costs&account=".$_POST['cr_acc']);
+}
+
+//-------------------------------------------------------------------------------------
+
 if (isset($_POST['ADD_ITEM']) && can_process())
 {
 	if (!isset($_POST['cr_acc']))
@@ -448,18 +459,15 @@ else
 	}
 
     start_row();
-	gl_all_accounts_list_cells($wo_cost_types[WO_LABOUR] . " " ._("Account"), 'cr_lab_acc', null, false, false, false, true);
+	gl_all_accounts_list_cells(
+        submit('ADD_COST1', $wo_cost_types[WO_LABOUR] . " " . _("Account"), false, ('Cost Account 1'), 'default'), 'cr_lab_acc');
     end_row();
-	amount_row(
-        menu_link("gl/inquiry/gl_account_inquiry.php" . "?select=Labour&account=".$_POST['cr_lab_acc'], _("Add Cost")),
-        'Labour');
-
+	amount_row(_("Cost 1:"), 'Labour');
     start_row();
-	gl_all_accounts_list_cells($wo_cost_types[WO_OVERHEAD] . " " ._("Account"), 'cr_acc', null, false, false, false, true);
+	gl_all_accounts_list_cells(
+        submit('ADD_COST1', $wo_cost_types[WO_OVERHEAD] . " " . _("Account"), false, ('Cost Account 1'), 'default'), 'cr_acc');
     end_row();
-	amount_row(
-        menu_link("gl/inquiry/gl_account_inquiry.php" . "?select=Costs&account=".$_POST['cr_acc'], _("Add Cost")),
-        'Costs');
+	amount_row(_("Cost 2:"), 'Costs');
 
 }
 
@@ -524,4 +532,3 @@ else
 
 end_form();
 end_page();
-
