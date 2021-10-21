@@ -240,12 +240,31 @@ function print_sales_summary_report()
 			if ($taxes['included_in_price'])
 				$trans['total'] -= $taxes['tax'];
 			$tax += $taxes['tax'];
+            $withtax += $taxes['tax'];
 		}	
 		$total += $trans['total']; 
 		$nf += $trans['nf']; 
-        $withtax += $trans['total'] + $taxes['tax'];
+        $withtax += $trans['total'];
 
 	}
+
+    if ($daily) {
+        if ($tran_date != "") {
+            if ($prior_total != $total) {
+                $rep->TextCol(1, 2,	$tran_date);
+                $rep->AmountCol(2, 3, $nf-$prior_total, $dec);
+                $rep->AmountCol(3, 4, $total-$prior_total, $dec);
+                $rep->AmountCol(4, 5, $tax-$prior_tax, $dec);
+                $rep->AmountCol(5, 6, $withtax-$prior_withtax, $dec);
+                $rep->NewLine();
+                $prior_nf = $nf;
+                $prior_total = $total;
+                $prior_tax = $tax;
+                $prior_withtax = $total+$tax;
+            }
+        }
+    }
+
 	if ($branch_code != 0)
 	{
         if ($custname == $br_name)
