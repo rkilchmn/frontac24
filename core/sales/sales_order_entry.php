@@ -631,6 +631,8 @@ function check_item_data()
 
 function handle_update_item()
 {
+	processing_start();
+
 	if ($_POST['UpdateItem'] != '' && check_item_data()) {
 		$_POST['Items']->update_cart_item($_POST['LineNo'],
 		 input_num('qty'), input_num('price'),
@@ -644,6 +646,8 @@ function handle_update_item()
 
 function handle_delete_item($line_no)
 {
+	processing_start();
+
     if ($_POST['Items']->some_already_delivered($line_no) == 0) {
 	    $_POST['Items']->remove_from_cart($line_no);
     } else {
@@ -656,6 +660,7 @@ function handle_delete_item($line_no)
 
 function handle_new_item()
 {
+	processing_start();
 
 	if (!check_item_data()) {
 			return;
@@ -723,8 +728,6 @@ function create_cart($type, $trans_no)
 
 	if (!$SysPrefs->db_ok) // create_cart is called before page() where the check is done
 		return;
-
-	processing_start();
 
 	if (isset($_GET['NewQuoteToSalesOrder']))
 	{
