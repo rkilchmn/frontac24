@@ -313,6 +313,7 @@ if (isset($_GET['trans_no']) && $_GET['trans_no'] > 0 )
 		$_SESSION['alloc'] = new allocation(ST_CUSTPAYMENT, $_POST['trans_no']);
 		$Ajax->activate('alloc_tbl');
 	}
+	$_SESSION['alloc']->default_branch = null;
 }
 
 //----------------------------------------------------------------------------------------------
