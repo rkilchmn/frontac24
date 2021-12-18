@@ -98,7 +98,7 @@ function get_customer_details($customer_id, $to=null, $all=true)
 
 
 	if (!$all)
-		$sql .= " AND ABS(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount - trans.alloc) > ".FLOAT_COMP_DELTA;
+		$sql .= " AND ABS(trans.ov_amount) + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount - trans.alloc > ".FLOAT_COMP_DELTA;
 	$sql .= " GROUP BY
 			  	debtor.name,
 			  	terms.terms,
@@ -133,7 +133,7 @@ function get_customer_name($customer_id)
 
 	$row = db_fetch_row($result);
 
-	return $row[0];
+	return is_array($row) ? $row[0] : false;
 }
 
 function get_customer_habit($customer_id)
@@ -166,6 +166,8 @@ function get_current_cust_credit($customer_id)
 {
 	$custdet = get_customer_details($customer_id);
 
+	if (!is_array($custdet))
+		return 0;
 	return $custdet['credit_limit']-$custdet['Balance'];
 
 }

@@ -53,7 +53,9 @@ if (!isset($_POST['bank_account'])) { // first page call
 
 	if (isset($_GET['SInvoice'])) {
 		//  get date and supplier
-		$inv = get_customer_trans($_GET['SInvoice'], ST_SALESINVOICE);
+		$type = !isset($_GET['Type']) ? ST_SALESINVOICE : $_GET['Type'];
+		$cust = !isset($_GET['customer_id']) ? null : $_GET['customer_id'];
+		$inv = get_customer_trans($_GET['SInvoice'], $type,  $cust);
 		set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
 		if ($inv) {
 			$_POST['customer_id'] = $inv['debtor_no'];
@@ -62,7 +64,7 @@ if (!isset($_POST['bank_account'])) { // first page call
 			$_POST['BranchID'] = $inv['branch_code'];
 			$_POST['DateBanked'] = sql2date($inv['tran_date']);
 			foreach($_SESSION['alloc']->allocs as $line => $trans) {
-				if ($trans->type == ST_SALESINVOICE && $trans->type_no == $_GET['SInvoice']) {
+				if ($trans->type == $type && $trans->type_no == $_GET['SInvoice']) {
 					$un_allocated = $trans->amount - $trans->amount_allocated;
 					if ($un_allocated){
 						$_SESSION['alloc']->allocs[$line]->current_allocated = $un_allocated;

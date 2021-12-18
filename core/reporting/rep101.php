@@ -237,7 +237,7 @@ function print_customer_balances()
 			$item[0] = $item[1] = 0.0;
 			if ($trans['TotalAmount'] > 0.0)
 			{
-				$item[0] = round2(abs($trans['TotalAmount']) * $rate, $dec);
+				$item[0] = round2($trans['TotalAmount'] * $rate, $dec);
 				$rep->AmountCol(4, 5, $item[0], $dec);
 				$accumulate += $item[0];
 				$item[2] = round2($trans['Allocated'] * $rate, $dec);

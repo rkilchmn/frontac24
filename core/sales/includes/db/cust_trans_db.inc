@@ -256,7 +256,7 @@ function get_customer_trans_order($type, $type_no)
 
 	$row = db_fetch_row($result);
 
-	return $row[0];
+	return is_array($row) ? $row[0] : false;
 }
 
 //----------------------------------------------------------------------------------------
@@ -378,7 +378,7 @@ static $filterSql = array(
     	 	$sql .= " AND (trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount) != 0";
 
 	if ($filter == '2')
-		$sql .= " AND ABS(IF(prep_amount, prep_amount, trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount)-trans.alloc)>"
+		$sql .= " AND ABS(IF(prep_amount, prep_amount, ABS(trans.ov_amount) + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount)-trans.alloc)>"
 			.FLOAT_COMP_DELTA;
 	else {
 		$sql .= " AND trans.tran_date >= '$date_after'
@@ -393,14 +393,14 @@ static $filterSql = array(
     {
         $today =  date2sql(Today());
         $sql .= " AND trans.due_date < '$today'
-            AND (trans.ov_amount + trans.ov_gst + trans.ov_freight_tax + 
+				AND (ABS(trans.ov_amount) + trans.ov_gst + trans.ov_freight_tax + 
             trans.ov_freight + trans.ov_discount - trans.alloc > 0) ";
     }
 
     if ($tax_group_id != null)
         $sql .= " AND branch.tax_group_id = '$tax_group_id'";
 
-	$sql .= " GROUP BY trans.trans_no, trans.type";
+	$sql .= " GROUP BY trans.trans_no, trans.type, trans.debtor_no";
 	$sql .= " ORDER BY trans.tran_date DESC";
 
    	return $sql;

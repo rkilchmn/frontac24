@@ -61,8 +61,7 @@ function gl_view($row)
 function fmt_amount($row)
 {
 	$value =
-	    $row['type']==ST_CUSTCREDIT || $row['type']==ST_CUSTPAYMENT || $row['type']==ST_BANKDEPOSIT ?
-		-$row["TotalAmount"] : $row["TotalAmount"];
+	    $row['type']==ST_CUSTCREDIT || $row['type']==ST_CUSTPAYMENT || $row['type']==ST_BANKDEPOSIT ? -$row["TotalAmount"] : $row["TotalAmount"];
     return price_format($value);
 }
 

@@ -486,11 +486,11 @@ function add_gl_tax_details($gl_code, $trans_type, $trans_no, $amount, $ex_rate,
 //
 function add_trans_tax_details($trans_type, $trans_no, $tax_id, $rate, $included,
 	$amount, $net_amount, $ex_rate, $tran_date, $memo, $reg_type=null)
-{
+{	
 	// guess tax register if not set
 	if (!isset($reg_type))
-		$reg_type = in_array($trans_type, array(ST_SUPPINVOICE, ST_SUPPCREDIT)) ? TR_OUTPUT
-				: (in_array($trans_type, array(ST_SALESINVOICE, ST_CUSTCREDIT)) ? TR_INPUT : null);
+		$reg_type = in_array($trans_type, array(ST_SUPPINVOICE, ST_SUPPCREDIT)) ? TR_INPUT
+				: (in_array($trans_type, array(ST_SALESINVOICE, ST_CUSTCREDIT)) ? TR_OUTPUT : null);
 
 	$sql = "INSERT INTO ".TB_PREF."trans_tax_details 
 		(trans_type, trans_no, tran_date, tax_type_id, rate, ex_rate,
@@ -655,8 +655,8 @@ function get_sql_for_journal_inquiry($filter, $from, $to, $ref='', $memo='', $al
          LEFT JOIN ".TB_PREF."grn_batch grn ON grn.id=gl.type_no AND gl.type=".ST_SUPPRECEIVE."
          LEFT JOIN ".TB_PREF."bank_trans bt ON bt.type=gl.type AND bt.trans_no=gl.type_no AND bt.amount!=0
                  AND (bt.person_id != '' AND !ISNULL(bt.person_id))
-         LEFT JOIN ".TB_PREF."debtor_trans dt ON dt.type=gl.type AND gl.type_no=dt.trans_no AND (gl.type_no != 0 or gl.person_id=dt.debtor_no) AND gl.person_type_id=2
-         LEFT JOIN ".TB_PREF."supp_trans st ON st.type=gl.type AND gl.type_no=st.trans_no AND (gl.type !=0 or gl.person_id=st.supplier_id) AND gl.person_type_id=3
+         LEFT JOIN ".TB_PREF."debtor_trans dt ON dt.type=gl.type AND gl.type_no=dt.trans_no AND gl.person_id=dt.debtor_no AND gl.person_type_id=2
+         LEFT JOIN ".TB_PREF."supp_trans st ON st.type=gl.type AND gl.type_no=st.trans_no AND gl.person_id=st.supplier_id AND gl.person_type_id=3
          WHERE gl.tran_date >= '" . date2sql($from) . "'
         AND gl.tran_date <= '" . date2sql($to) . "'
         AND gl.amount!=0";

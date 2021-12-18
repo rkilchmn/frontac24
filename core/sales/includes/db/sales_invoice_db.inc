@@ -249,8 +249,9 @@ function void_sales_invoice($type, $type_no)
 		if ($deliveries !== 0) {
 			if ($type == ST_SALESINVOICE && count($deliveries) == 1 && get_reference(ST_CUSTDELIVERY, $deliveries[0]) == "auto")
 			{
+				$trans = get_customer_trans($deliveries[0], ST_CUSTDELIVERY);
 				void_sales_delivery(ST_CUSTDELIVERY, $deliveries[0], false);
-				$date_ = Today();
+				$date_ = sql2date($trans['tran_date']);
 				add_audit_trail(ST_CUSTDELIVERY, $deliveries[0], $date_, _("Voided."));
 				add_voided_entry(ST_CUSTDELIVERY, $deliveries[0], $date_, "");
 			}
@@ -258,7 +259,7 @@ function void_sales_invoice($type, $type_no)
 			{
 				$srcdetails = get_sales_parent_lines($type, $type_no);
 				while ($row = db_fetch($srcdetails)) {
-					update_parent_line($type, $row['id'], -$row['quantity']);
+					update_parent_line($type, $row['id'], -$row['qty_done']);
 				}
 			}
 		}
@@ -291,7 +292,7 @@ function get_cust_prepayment_invoice_factor($trans_no)
 		LEFT JOIN ".TB_PREF."sales_orders so ON so.trans_type=".ST_SALESORDER." AND so.order_no=dt.order_
 		 WHERE dt.type=".ST_SALESINVOICE." AND trans_no=".db_escape($trans_no);
 	$row = db_fetch(db_query($sql, 'cannot retrieve prepaid invoice factor'));
-	return $row[0];
+	return is_array($row) ? $row[0] : false;
 }
 
 /*
