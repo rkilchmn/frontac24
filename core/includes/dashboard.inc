@@ -82,7 +82,7 @@ function dashboard($sel_app)
 		display_dimension_topten();
 	elseif ($sel_app == "GL")
 		display_gl_info();
-	else	
+	elseif ($sel_app != "custom")
 		display_all();
 }
 
