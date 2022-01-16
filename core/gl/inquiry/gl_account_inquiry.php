@@ -116,7 +116,7 @@ function gl_inquiry_controls()
             customer_list_cells(_("Customer:"), 'person_id', null, false, true, false, true);
             break;
         case PT_QUICKENTRY :
-            quick_entries_list_cells(_("Type").":", 'person_id', null, null, true);
+            quick_entries_list_cells(_("Type").":", 'person_id', null, QE_INACTIVE."!", true);
     }
 
     hidden('select', get_post('select')); 
