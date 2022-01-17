@@ -66,8 +66,6 @@ if (user_use_date_picker()) {
 	$js .= get_js_date_picker();
 }
 
-set_posts(array('OrderDate', 'InvoiceNo'));
-
 if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 
 	$_SESSION['page_title'] = _($help_context = "Direct Sales Delivery");
@@ -107,6 +105,8 @@ if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 	$_SESSION['page_title'] = _($help_context = "Sales Order Entry");
 	create_cart(ST_SALESQUOTE, $_GET['NewQuoteToSalesOrder']);
 }
+
+set_posts(array('OrderDate', 'InvoiceNo', 'Items'));
 
 page($_SESSION['page_title'], false, false, "", $js);
 
