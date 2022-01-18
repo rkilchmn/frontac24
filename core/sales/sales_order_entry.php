@@ -847,7 +847,7 @@ $customer_error = display_order_header($_POST['Items'], !$_POST['Items']->is_sta
 
 if ($customer_error != "")
 	display_error($customer_error);
-else if (get_post('customer_id') != 0) {
+else if (!empty(get_post('customer_id'))) {
 	start_table(TABLESTYLE, "width='80%'", 10);
 	echo "<tr><td>";
 	display_order_summary($orderitems, $_POST['Items'], true);

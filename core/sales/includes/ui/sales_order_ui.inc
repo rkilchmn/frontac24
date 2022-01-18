@@ -280,7 +280,7 @@ function display_order_header(&$order, $editable, $date_text)
 
         label_row("", menu_link('sales/manage/customers.php', 'Create New Customer'));
 
-        if (get_post('customer_id') == 0) {
+        if (empty(get_post('customer_id'))) {
 // hack: FA seems to insert and remove carriage returns and this breaks serialize/unserialize
              $order->delivery_address = str_replace(chr(13), '', $order->delivery_address);
              $order->Comments = str_replace(chr(13), '', $order->Comments);
