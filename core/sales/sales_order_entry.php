@@ -66,6 +66,8 @@ if (user_use_date_picker()) {
 	$js .= get_js_date_picker();
 }
 
+set_posts(array('OrderDate', 'InvoiceNo'));
+
 if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 
 	$_SESSION['page_title'] = _($help_context = "Direct Sales Delivery");
@@ -105,8 +107,6 @@ if (isset($_GET['NewDelivery']) && is_numeric($_GET['NewDelivery'])) {
 	$_SESSION['page_title'] = _($help_context = "Sales Order Entry");
 	create_cart(ST_SALESQUOTE, $_GET['NewQuoteToSalesOrder']);
 }
-
-set_posts(array('OrderDate', 'InvoiceNo', 'Items'));
 
 page($_SESSION['page_title'], false, false, "", $js);
 
@@ -262,6 +262,19 @@ if (isset($_GET['AddedID'])) {
 } else
 	check_edit_conflicts(get_post('cart_id'));
 //-----------------------------------------------------------------------------
+
+function meta_referer($message)
+{
+    // Note: modified sales orders always have referer
+    $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+    $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
+    $params = preg_replace('/[&]*message.*/', '', $params);
+    if (!empty($params))
+        $params .= "&";
+    $params .= "message=" . $message;
+    meta_forward($referer, $params);
+}
+
 
 function copy_to_cart()
 {
@@ -569,7 +582,10 @@ if (isset($_POST['ProcessOrder']) && can_process()) {
             $params="AddedQU=$trans_no";
         } elseif ($trans_type == ST_SALESINVOICE) {
             // $params="AddedDI=$trans_no&Type=$so_type";
-            meta_forward($path_to_root.'/sales/inquiry/customer_inquiry.php', 'customer_id='.get_post('customer_id')."&TransFromDate=".$_POST['OrderDate']."&TransToDate=".$_POST['OrderDate']."&message=".sprintf(_("Direct Invoice %d has been entered."), $trans_no));
+            if ($_POST['Items']->trans_no != 0)
+                meta_referer(sprintf(_("Direct Invoice %d has been entered."), $trans_no));
+            else
+                meta_forward($path_to_root.'/sales/inquiry/customer_inquiry.php', 'customer_id='.get_post('customer_id')."&TransFromDate=".$_POST['OrderDate']."&TransToDate=".$_POST['OrderDate']."&message=".sprintf(_("Direct Invoice %d has been entered."), $trans_no));
         } else {
             $params="AddedDN=$trans_no&Type=$so_type";
         }
@@ -695,23 +711,16 @@ function  handle_cancel_order()
 	} else { // sales order
 		if ($_POST['Items']->trans_no != 0) {
 			$order_no = key($_POST['Items']->trans_no);
-            // Note: modified sales orders always have referer
-            $referer=parse_url($_POST['referer'], PHP_URL_PATH);
-            $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
-            $params = preg_replace('/[&]*message.*/', '', $params);
-            if (!empty($params))
-                $params .= "&";
-            $params .= "message=";
 			if (sales_order_has_deliveries($order_no))
 			{
 				close_sales_order($order_no);
-				$params .=_("Undelivered part of order has been cancelled");
+				$message .=_("Undelivered part of order has been cancelled");
 			} else {
 				delete_sales_order(key($_POST['Items']->trans_no), $_POST['Items']->trans_type);
 
-                $params .= _("Order canceled");
+                $message .= _("Order canceled");
             }
-            meta_forward($referer, $params);
+            meta_referer($message);
 		} else {
             // Note: new sales orders never have referer
             meta_forward($path_to_root.'/index.php','application=orders');
