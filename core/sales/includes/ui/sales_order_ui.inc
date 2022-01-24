@@ -275,9 +275,6 @@ function display_order_header(&$order, $editable, $date_text)
         if (count($order->line_items) != 0)
             submit_js_confirm('customer_id', _("Do you want to reprice the order based on the new customer?"));
 
-        If (isset($_POST['InvoiceNo']))
-            hidden('InvoiceNo', $_POST['InvoiceNo']); //Added by Faisal for Invoice Edit
-
         label_row("", menu_link('sales/manage/customers.php', 'Create New Customer'));
 
         if (empty(get_post('customer_id'))) {

@@ -232,10 +232,6 @@ class Cart
 				}
 			}
 
-            // Do not create payments for editted sales orders
-            if (isset($_POST['InvoiceNo']))
-                $this->payment_terms['cash_sale'] = false;
-
             // convert document into child and prepare qtys for entry
 			if ($prepare_child)
 				$this->prepare_child($prepare_child);
