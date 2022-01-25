@@ -716,11 +716,11 @@ function  handle_cancel_order()
 			if (sales_order_has_deliveries($order_no))
 			{
 				close_sales_order($order_no);
-				$message .=_("Undelivered part of order has been cancelled");
+				$message =_("Undelivered part of order has been cancelled");
 			} else {
 				delete_sales_order(key($_POST['Items']->trans_no), $_POST['Items']->trans_type);
 
-                $message .= _("Order canceled");
+                $message = _("Order canceled");
             }
             meta_referer($message);
 		} else {
