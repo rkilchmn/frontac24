@@ -205,7 +205,7 @@ function get_customer_trans($trans_id, $trans_type, $customer_id=null)
 			AND branch.tax_group_id = ".TB_PREF."tax_groups.id ";
 	}
 	if ($trans_type == ST_SALESINVOICE || $trans_type == ST_CUSTDELIVERY) {
-			$sql .= " AND sorder.order_no = trans.order_ ";
+			$sql .= " AND sorder.order_no = trans.order_ AND sorder.trans_type = ".ST_SALESORDER;
     }
 	if ($trans_type == ST_JOURNAL) {
 		$sql .= " AND branch.branch_code = trans.branch_code ";
