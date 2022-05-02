@@ -628,7 +628,8 @@ class Cart
 	*/
 	function is_started()
 	{
-		if ($this->trans_no==0)
+		if ($this->trans_no==0
+            || $this->trans_type == ST_SALESINVOICE)
 			return false;
 		$order_no = array_keys($this->trans_no);
 
