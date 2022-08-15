@@ -603,7 +603,7 @@ function void_gl_trans($type, $trans_id, $nested=false)
 	if (!$nested)
 		begin_transaction();
 
-	$sql = "UPDATE ".TB_PREF."gl_trans SET amount=0 WHERE type=".db_escape($type)
+	$sql = "UPDATE ".TB_PREF."gl_trans SET amount=0, account='' WHERE type=".db_escape($type)
 	." AND type_no=".db_escape($trans_id);
 
 	db_query($sql, "could not void gl transactions for type=$type and trans_no=$trans_id");
