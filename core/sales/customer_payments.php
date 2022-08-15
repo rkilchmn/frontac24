@@ -56,7 +56,7 @@ if (!isset($_POST['bank_account'])) { // first page call
 		$type = !isset($_GET['Type']) ? ST_SALESINVOICE : $_GET['Type'];
 		$cust = !isset($_GET['customer_id']) ? null : $_GET['customer_id'];
 		$inv = get_customer_trans($_GET['SInvoice'], $type,  $cust);
-		set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
+		// set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
 		if ($inv) {
 			$_POST['customer_id'] = $inv['debtor_no'];
 			$_SESSION['alloc']->set_person($inv['debtor_no'], PT_CUSTOMER);
@@ -92,7 +92,7 @@ if (!isset($_POST['customer_id'])) {
 	$_POST['customer_id'] = get_global_customer(false);
 	$_SESSION['alloc']->set_person($_POST['customer_id'], PT_CUSTOMER);
 	$_SESSION['alloc']->read();
-    set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
+    // set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
 }
 if (!isset($_POST['DateBanked'])) {
 	$_POST['DateBanked'] = new_doc_date();
@@ -345,8 +345,8 @@ if (list_updated('customer_id') || ($new && list_updated('bank_account'))) {
 	$_SESSION['alloc']->set_person($_POST['customer_id'], PT_CUSTOMER);
 	$_SESSION['alloc']->read();
 	$_POST['memo_'] = $_POST['amount'] = $_POST['discount'] = '';
-	if (list_updated('customer_id'))
-		set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
+	// if (list_updated('customer_id'))
+		// set_post_last_used_bank_account(PT_CUSTOMER, $_POST['customer_id']);
 	$Ajax->activate('_page_body');
 }
 
