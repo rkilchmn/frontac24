@@ -339,7 +339,7 @@ if (isset($_POST['delete']) && strlen($_POST['delete']) > 1)
 		$stock_id = $_POST['NewStockID'];
 		$_POST['stock_id'] = get_next_stock_id($stock_id);
 		delete_item($stock_id);
-		delete_image($stock_id);
+		del_image($stock_id);
 		display_notification(_("Selected item has been deleted."));
 		clear_data();
 		set_focus('stock_id');
@@ -715,7 +715,7 @@ function generateBarcode() {
 		$query = "SELECT stock_id FROM ".TB_PREF."stock_master WHERE stock_id='" . $tmpBarcodeID . "'";
 		$arr_stock = db_fetch(db_query($query));
   
-		if (  !$arr_stock['stock_id'] ) {
+		if (  !$arr_stock || !$arr_stock['stock_id'] ) {
 			return $tmpBarcodeID;
 		}
 		$tmpBarcodeID = "";	 

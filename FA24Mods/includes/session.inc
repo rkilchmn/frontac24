@@ -11,7 +11,7 @@
 ***********************************************************************/
 define('VARLIB_PATH', $path_to_root.'/tmp');
 define('VARLOG_PATH', $path_to_root.'/tmp');
-define('SECURE_ONLY', true);
+define('SECURE_ONLY', (parse_url($_SERVER['REQUEST_URI'], PHP_URL_SCHEME) == 'https'));
 
 class SessionManager
 {
@@ -592,8 +592,3 @@ if (!defined('FA_LOGOUT_PHP_FILE')){
 // POST vars cleanup needed for direct reuse.
 // We quote all values later with db_escape() before db update.
 $_POST = strip_quotes($_POST);
-
-# Make sure the auto select box is not causing any conflicts with other
-# features.
-include_once($path_to_root . "/includes/auto_select_box.inc");
-

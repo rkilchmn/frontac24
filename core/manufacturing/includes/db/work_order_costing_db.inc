@@ -85,7 +85,6 @@ function update_material_cost($stock_id, $qty, $unit_cost, $date)
 	{
 		// post	$qty_delayed*($avg_cost-$unit_cost)
 		$diff = $qty_delayed*($unit_cost-$avg_cost);
-		$item = get_item($stock_id);
 
 		$dec = user_price_dec();
 		$old_cost = -round2($avg_cost, $dec);
