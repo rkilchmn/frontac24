@@ -213,7 +213,7 @@ function add_bank_transfer($from_account, $to_account, $date_,
 	global $Refs, $SysPrefs;
 
 	begin_transaction();
-	$args = func_get_args(); for ($i = count($args); $i < 10; $i++) $args[] = 0;
+	$args = func_get_args(); for ($i = count($args); $i < 12; $i++) $args[] = 0;
 	$args = (object)array_combine(array('from_account', 'to_account', 'date_', 'amount',  
 		'ref', 'memo_', 'dimension_id', 'dimension2_id', 'charge', 'target_amount', 'from_reconciled', 'to_reconciled'), $args);
 	$args->trans_no = 0;
