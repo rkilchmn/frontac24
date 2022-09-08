@@ -304,7 +304,8 @@ function bank_transfer_handle_submit()
             unset ($_POST['from_reconciled']);
             unset ($_POST['to_reconciled']);
         }
-		$trans_no = update_bank_transfer($trans_no, $_POST['FromBankAccount'], $_POST['ToBankAccount'], $_POST['DatePaid'], input_num('amount'), $_POST['ref'], $_POST['memo_'], input_num('charge'), input_num('target_amount'), @$_POST['from_reconciled'], @$_POST['to_reconciled']);
+
+		$trans_no = update_bank_transfer($trans_no, $_POST['FromBankAccount'], $_POST['ToBankAccount'], $_POST['DatePaid'], input_num('amount'), $_POST['ref'], $_POST['memo_'], $_POST['dimension_id'], $_POST['dimension2_id'], input_num('charge'), input_num('target_amount'), @$_POST['from_reconciled'], @$_POST['to_reconciled']);
 	} else {
 		new_doc_date($_POST['DatePaid']);
 		$trans_no = add_bank_transfer($_POST['FromBankAccount'], $_POST['ToBankAccount'], $_POST['DatePaid'], input_num('amount'), $_POST['ref'], 

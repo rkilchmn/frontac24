@@ -360,8 +360,9 @@ function check_bank_transfer($trans_no, $from_account, $to_account, $date_,
 
 function update_bank_transfer(
 	$trans_no, $from_account, $to_account, $date_,
-	$amount, $ref, $memo_, $dim1, $dim2, $charge=0, $target_amount=0, $from_reconciled="", $to_reconciled="")
+	$amount, $ref, $memo_, $dim1, $dim2, $charge=0, $target_amount=0, $from_reconciled=null, $to_reconciled=null)
 {
+
 	begin_transaction();
 
     // Add the new bank transfer first in case the new transfer
