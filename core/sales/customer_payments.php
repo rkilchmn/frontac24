@@ -112,7 +112,7 @@ if (isset($_GET['AddedID'])) {
 
 	submenu_view(_("&View this Customer Payment"), ST_CUSTPAYMENT, $payment_no);
 
-	submenu_option(_("Enter Another &Customer Payment"), "/sales/customer_payments.php?DateBanked=" . $_GET['DateBanked']);
+	submenu_option(_("Enter Another &Customer Payment"), "/sales/customer_payments.php?DateBanked=" . $_POST['DateBanked']);
 	submenu_option(_("Enter Other &Deposit"), "/gl/gl_bank.php?NewDeposit=Yes");
 	submenu_option(_("Enter Payment to &Supplier"), "/purchasing/supplier_payment.php");
 	submenu_option(_("Enter Other &Payment"), "/gl/gl_bank.php?NewPayment=Yes");

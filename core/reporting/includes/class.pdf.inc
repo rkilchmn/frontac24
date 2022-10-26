@@ -108,7 +108,7 @@ class Cpdf extends FPDI {
 		$enc = $l['a_meta_charset'];
 		$uni = ($enc == 'UTF-8' || $enc == 'GB2312' ? true : false);
 		if ($uni)
-			ini_set("memory_limit", "48M");
+			ini_set("memory_limit", "512M");
 
 		$this->isunicode = $uni;
 		$this->setLanguageArray($l);

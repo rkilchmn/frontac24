@@ -229,8 +229,10 @@ function display_order_summary($title, &$order, $editable_items=false)
 	label_cells(_("Amount Total"), $display_total, "colspan=$colspan align=right","align=right");
 	submit_cells('update', _("Update"), "colspan=2 align='center'", _("Refresh"), true);
 // hack: FA seems to insert and remove carriage returns and this breaks serialize/unserialize
-    $order->delivery_address = str_replace(chr(13), '', $order->delivery_address);
-    $order->Comments = str_replace(chr(13), '', $order->Comments);
+    if (!empty($order->delivery_address))
+        $order->delivery_address = str_replace(chr(13), '', $order->delivery_address);
+    if (!empty($order->Comments))
+        $order->Comments = str_replace(chr(13), '', $order->Comments);
     hidden('Items', htmlentities(serialize($order)));
 	end_row();
 
@@ -279,7 +281,9 @@ function display_order_header(&$order, $editable, $date_text)
 
         if (empty(get_post('customer_id'))) {
 // hack: FA seems to insert and remove carriage returns and this breaks serialize/unserialize
-             $order->delivery_address = str_replace(chr(13), '', $order->delivery_address);
+            if (!empty($order->delivery_address))
+                 $order->delivery_address = str_replace(chr(13), '', $order->delivery_address);
+            if (!empty($order->Comments))
              $order->Comments = str_replace(chr(13), '', $order->Comments);
         } else {
 
