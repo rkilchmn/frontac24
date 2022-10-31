@@ -75,7 +75,7 @@ function get_customer_details($customer_id, $to=null, $all=true)
 
 	$sign = "IF(trans.type IN(".implode(',',  array(ST_CUSTCREDIT,ST_CUSTPAYMENT,ST_BANKDEPOSIT))."), -1, 1)";
 	$value = "$sign*(IF(trans.prep_amount, trans.prep_amount,
-		ABS(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount)) ".($all ? '' : "+IF(`type` = ".ST_JOURNAL.",trans.alloc,-trans.alloc)").")";
+		trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount) ".($all ? '' : "+IF(`type` = ".ST_JOURNAL.",trans.alloc,-trans.alloc)").")";
 
 	$due = "IF (trans.type=".ST_SALESINVOICE.", trans.due_date, trans.tran_date)";
 	$sql = "SELECT debtor.name, debtor.curr_code, terms.terms,
