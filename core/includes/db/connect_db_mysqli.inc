@@ -295,5 +295,9 @@ function db_set_charset($db, $charset)
 {
 	global $db;
 
-	return mysqli_set_charset($db, $charset);
+	// PHP 8.1 compatibility fix:
+	// caused Passing null to parameter #2 ($charset) of type string is deprecated in file: /usr/share/webapps/frontaccounting/includes/db/connect_db_mysqli.inc at line 298
+	if (!empty( $charset)) {
+		return mysqli_set_charset($db, $charset);
+	}
 }
