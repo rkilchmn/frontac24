@@ -5,5 +5,3 @@ core/company/*
 core/tmp/*
 core/lang/installed_languages.inc
 core/modules/*
-*.original
-*.modified
