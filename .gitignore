@@ -1,0 +1,9 @@
+core/installed_extensions.php
+core/config_db.php
+core/config.php
+core/company/*
+core/tmp/*
+core/lang/installed_languages.inc
+core/modules/*
+*.original
+*.modified
