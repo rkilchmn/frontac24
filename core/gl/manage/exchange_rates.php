@@ -129,7 +129,10 @@ function display_rate_edit()
 	}
 	else
 	{
-		$_POST['date_'] = Today();
+		if (isset($_POST['date_']) && ($_POST['date_'] != '')) {} 
+		else {
+			$_POST['date_'] = Today();
+		}
 		$_POST['BuyRate'] = '';
 		date_row(_("Date to Use From:"), 'date_');
 	}
