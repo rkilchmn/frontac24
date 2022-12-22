@@ -108,7 +108,9 @@ function write_journal_entries(&$cart)
 	hook_db_prewrite($cart, ST_JOURNAL);
 	if (!$new)
 	{
-		$msg = void_transaction($trans_type, $cart->order_id, Today(), _("Document reentered."));
+		// $msg = void_transaction($trans_type, $cart->order_id, Today(), _("Document reentered."));
+		// use provided date for voiding of original,modified journal
+		$msg = void_transaction($trans_type, $cart->order_id, $date_, _("Document reentered."));
 		if ($msg)
 		{
 			display_error($msg);
