@@ -255,11 +255,13 @@ function activate_hooks($ext, $comp, $on=true)
 	global $Hooks;
 
 	$hooks = @$Hooks[$ext];
+
 	if (!$hooks) {
 		$hookclass = 'hooks_'.$ext;
 		if (class_exists($hookclass))
 			$hooks = new $hookclass;
 		else
+			display_error("hook class $hookclass not found");
 			return true; // extension does not have hooks file
 	}
 	if (!$hooks)
