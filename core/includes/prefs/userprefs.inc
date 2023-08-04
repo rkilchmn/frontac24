@@ -11,6 +11,7 @@
 ***********************************************************************/
 class user_prefs 
 {
+	var $save_report_selections; //RK PHP 8.2 Creation of dynamic property is deprecated
 
 	var $language;
 

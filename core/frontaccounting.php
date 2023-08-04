@@ -24,6 +24,7 @@ if (!isset($path_to_root) || isset($_GET['path_to_root']) || isset($_POST['path_
 
 	class front_accounting
 	{
+		var $renderer; //RK PHP 8.2 Creation of dynamic property is deprecated
 		var $user;
 		var $settings;
 		var $applications;
