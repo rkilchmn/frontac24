@@ -1265,6 +1265,24 @@ class Spreadsheet_Excel_Writer_Validator
 class Spreadsheet_Excel_Writer_Format
 {
     /**
+     * @deprecated
+     * @var type
+     */
+    public $_BIFF_version;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_diag;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_diag_color;
+
+    /**
     * The index given by the workbook when creating a new format.
     * @var integer
     */
@@ -2327,6 +2345,18 @@ class Spreadsheet_Excel_Writer_Format
 
 class Spreadsheet_Excel_Writer_Parser
 {
+     /**
+     * @deprecated
+     * @var type
+     */
+    public $ptg;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_functions;
+
     /**
     * The index of the character we are currently looking at
     * @var integer
@@ -3822,6 +3852,108 @@ class Spreadsheet_Excel_Writer_Parser
 
 class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwriter
 {
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $activesheet;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $firstsheet;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $title_colmax;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_print_gridlines;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_screen_gridlines;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_print_headers;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_hbreaks;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_vbreaks;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_protect;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_password;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $col_sizes;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_row_sizes;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_zoom;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_print_scale;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_rtl;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $_dv;
+
+    /**
+     * @deprecated
+     * @var type
+     */
+    public $offset;
+
     /**
     * Name of the Worksheet
     * @var string
