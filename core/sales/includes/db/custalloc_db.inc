@@ -120,12 +120,12 @@ function get_allocatable_from_cust_sql($customer_id, $settled)
 	 	.TB_PREF."debtor_trans as trans, "
 		.TB_PREF."debtors_master as debtor"
 	." WHERE trans.debtor_no=debtor.debtor_no
-		AND (((type=".ST_CUSTPAYMENT." OR type=".ST_BANKDEPOSIT.") AND (trans.ov_amount > 0))
+		AND (((type=".ST_CUSTPAYMENT." OR type=".ST_BANKDEPOSIT.") AND (trans.ov_amount != 0))
 		 OR (type=".ST_CUSTCREDIT. " AND (ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount)>0)
 		 OR (type=".ST_JOURNAL. " AND (trans.ov_amount < 0)))";
 
 	if (!$settled)
-		$sql .= " AND round(abs(ov_amount+ov_gst)+ov_freight+ov_freight_tax+ov_discount-alloc, 6) > 0";
+		$sql .= " AND (round(abs(ov_amount+ov_gst)+ov_freight+ov_freight_tax+ov_discount-abs(alloc),6) > 0)";
 
 	if ($customer_id != null)
 		$sql .= " AND trans.debtor_no = ".db_escape($customer_id);
@@ -212,7 +212,7 @@ function get_allocatable_to_cust_transactions($customer_id = null, $trans_no=nul
 		$sql .= "
 				 AND (
 					trans.type='".ST_SALESINVOICE."'
-					AND round(IF(prep_amount, prep_amount, ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount)-alloc,6) > 0
+					AND round(IF(prep_amount, prep_amount, ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount)-alloc,6) != 0
 					OR
 					trans.type='". ST_CUSTCREDIT."'
 					AND round(-IF(prep_amount, prep_amount, ov_amount+ov_gst+ov_freight+ov_freight_tax+ov_discount)-alloc,6) > 0
@@ -229,7 +229,7 @@ function get_allocatable_to_cust_transactions($customer_id = null, $trans_no=nul
 	$orders = get_allocatable_sales_orders($customer_id, $trans_no, $type);
 	$sql = "($sql ORDER BY trans_no) \nUNION \n($orders)";
 
-	return db_query($sql, "Cannot retreive alloc to transactions");
+	return db_query($sql." ORDER BY due_date", "Cannot retreive alloc to transactions");
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ function get_sql_for_customer_allocation_inquiry($from, $to, $customer, $filterT
 
    	if (!$settled)
    	{
-   		$sql .= " AND (ROUND(IF(trans.prep_amount,trans.prep_amount, ABS(trans.ov_amount) + trans.ov_gst + "
+   		$sql .= " AND (ROUND(IF(trans.prep_amount,trans.prep_amount, ROUND(trans.ov_amount) + trans.ov_gst + "
 		."trans.ov_freight + trans.ov_freight_tax + "
 		."trans.ov_discount) - trans.alloc,6) != 0) ";
    	}

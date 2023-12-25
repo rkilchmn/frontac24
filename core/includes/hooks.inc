@@ -406,6 +406,13 @@ function hook_db_prevoid($type, $type_no)
 //
 //	Various hooks
 //
+//	Tax rate by address
+//
+function hook_retrieve_tax_rate($tax_group, $address)
+{
+	return hook_invoke_last('retrieve_tax_rate', $tax_group, $address);
+}
+//
 //	Alternative exchange rates feeds.
 //
 function hook_retrieve_exrate($currency, $date)

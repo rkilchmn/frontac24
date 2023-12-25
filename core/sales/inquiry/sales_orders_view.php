@@ -75,7 +75,11 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 600);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history(array("OrderNumber", "OrderReference", "OrdersAfterDate", "OrdersToDate", "StockLocation", "SelectStockFromList", "customer_id", "type"));
+
 page($_SESSION['page_title'], false, false, "", $js);
+
+set_posts(array("OrderNumber", "OrderReference", "OrdersAfterDate", "OrdersToDate", "StockLocation", "SelectStockFromList", "customer_id", "type"));
 //---------------------------------------------------------------------------------------------
 //	Query format functions
 //
@@ -110,6 +114,16 @@ function edit_link($row)
 		return '';
 
 	return $page_nested ? '' : trans_editor_link($row['trans_type'], $row['order_no']);
+}
+
+function attach_link($row)
+{
+    global $page_nested;
+
+    $str = '';
+    if ($page_nested)
+        return '';
+    return is_closed_trans($row['trans_type'], $row['order_no']) ? "--" : pager_link(_("Add an Attachment"), "/admin/attachments.php?trans_no=" . $row['order_no'] . "&filterType=". $row['trans_type'], ICON_ATTACH);
 }
 
 function dispatch_link($row)
@@ -234,8 +248,13 @@ ref_cells(_("#:"), 'OrderNumber', '',null, '', true);
 ref_cells(_("Ref"), 'OrderReference', '',null, '', true);
 if ($show_dates)
 {
-  	date_cells(_("from:"), 'OrdersAfterDate', '', null, -user_transaction_days());
-  	date_cells(_("to:"), 'OrdersToDate', '', null, 1);
+    $days = user_transaction_days();
+    date_cells(_("from:"), 'OrdersAfterDate', '', null, -abs($days));
+    if ($days >= 0) {
+        date_cells(_("to:"), 'OrdersToDate');
+    } else {
+        date_cells(_("to:"), 'OrdersToDate', '', null, 0, 2);
+    }
 }
 locations_list_cells(_("Location:"), 'StockLocation', null, true, true);
 
@@ -325,6 +344,7 @@ if ($_POST['order_view_mode'] == 'OutstandingOnly') {
 	 array_append($cols,array(
 			_("Tmpl") => array('insert'=>true, 'fun'=>'tmpl_checkbox'),
 					array('insert'=>true, 'fun'=>'edit_link'),
+					array('insert'=>true, 'fun'=>'attach_link'),
 					array('insert'=>true, 'fun'=>'dispatch_link'),
 					array('insert'=>true, 'fun'=>'prt_link')));
 };

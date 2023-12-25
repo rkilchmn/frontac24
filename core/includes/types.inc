@@ -145,6 +145,52 @@ function payment_person_name($type, $person_id, $full=true) {
 	}
 }
 
+function payment_person_name_link($type, $person_id, $full=true, $from_date="", $to_date="") {
+	global $payment_person_types;
+    global $path_to_root;
+
+	switch ($type)
+	{
+		case PT_CUSTOMER :
+			$search_link = "/sales/inquiry/customer_inquiry.php?customer_id=$person_id";
+            $link = pager_link(payment_person_name($type, $person_id, $full), 
+			    "/sales/manage/customers.php?customer_id=$person_id");
+            $img_title = "Customer Search";
+            $date_field="TransFromDate";
+            break;
+		case PT_SUPPLIER :
+			$search_link = "/purchasing/inquiry/supplier_inquiry.php?supplier_id=$person_id";
+            $link = pager_link(payment_person_name($type, $person_id, $full), 
+			    "/purchasing/manage/suppliers.php?supplier_id=$person_id");
+            $img_title = "Supplier Search";
+            $date_field="TransFromDate";
+            break;
+		case PT_QUICKENTRY :
+			$search_link = "/gl/inquiry/gl_account_inquiry.php?person_type=$type&person_id=$person_id";
+			$link = payment_person_name($type, $person_id, $full);
+            $img_title = "Quick Entry Search";
+            $date_field="TransFromDate";
+            break;
+		default :
+			return payment_person_name($type, $person_id, $full);
+	}
+
+    if ($from_date != "") {
+        $search_link .= "&$date_field=$from_date";
+        if ($to_date == "")
+            $to_date = Today();
+        $search_link .= "&TransToDate=$to_date";
+    }
+
+    $theme = user_theme();
+    $img = '<img src="'.$path_to_root.'/themes/'.$theme.'/images/'.ICON_VIEW.
+        '" style="vertical-align:middle;width:12px;height:12px;border:0;" onclick="javascript:lookupWindow(&quot;'.
+        $path_to_root.$search_link.'&quot;, &quot;&quot;);" title="' . $img_title . '" style="cursor:pointer;" />';
+
+    return $link . " " . $img;
+}
+
+
 function payment_person_has_items($type) {
 	switch ($type)
 	{
@@ -208,6 +254,7 @@ define('QE_PAYMENT', '1');
 define('QE_DEPOSIT', '2');
 define('QE_JOURNAL', '3');
 define('QE_SUPPINV', '4');
+define('QE_INACTIVE', '5');
 
 //----------------------------------------------------------------------------------
 //	Special option values for various list selectors.
@@ -278,4 +325,7 @@ defined('ICON_SUBMIT') || define('ICON_SUBMIT', 'ok.gif');
 defined('ICON_ESCAPE') || define('ICON_ESCAPE', 'escape.png');
 defined('ICON_ALLOC') || define('ICON_ALLOC', 'alloc.png');
 defined('ICON_CLOSED') || define('ICON_CLOSED', 'closed.png');
+defined('ICON_REISSUE') || define('ICON_REISSUE', 'menu_system.png');
+defined('ICON_ATTACH')	|| define('ICON_ATTACH', 'add.png');
+
 

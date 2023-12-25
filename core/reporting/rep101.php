@@ -214,18 +214,46 @@ function print_customer_balances()
                 if ($show_balance) {
                     if ($trans['TotalAmount'] == 0) continue;
                 } else {
-                    if (floatcmp(abs($trans['TotalAmount']), $trans['Allocated']) == 0) continue;
+                    if (floatcmp(($trans['type'] == ST_JOURNAL ? -$trans['TotalAmount'] : $trans['TotalAmount']), $trans['Allocated']) == 0) continue;
                 }
             }
+
+            if ($first) {
+                $first = false;
+
+                $rep->fontSize += 2;
+                $rep->TextCol(0, 2, $myrow['name']);
+                if ($convert)
+                    $rep->TextCol(2, 3,	$myrow['curr_code']);
+                $rep->fontSize -= 2;
+
+                $rep->NewLine(1, 2);
+                $rep->Line($rep->row + 4);
+                $total = array(0,0,0,0);
+
+                $rep->NewLine(1, 2);
+                $rep->TextCol(0, 1,	_("Open Balance"));
+                $rep->AmountCol(4, 5, $init[0], $dec);
+                $rep->AmountCol(5, 6, $init[1], $dec);
+                $rep->AmountCol(6, 7, $init[2], $dec);
+                $rep->AmountCol(7, 8, $init[3], $dec);
+                for ($i = 0; $i < 4; $i++)
+                {
+                    $total[$i] += $init[$i];
+                    $grandtotal[$i] += $init[$i];
+                }
+            }
+
 			$rep->NewLine(1, 2);
 			$rep->TextCol(0, 1, $systypes_array[$trans['type']]);
 			$rep->TextCol(1, 2,	$trans['reference']);
 			$rep->DateCol(2, 3,	$trans['tran_date'], true);
 			if ($trans['type'] == ST_SALESINVOICE)
 				$rep->DateCol(3, 4,	$trans['due_date'], true);
-			$item[0] = $item[1] = 0.0;
+
 			if ($trans['type'] == ST_CUSTCREDIT || $trans['type'] == ST_CUSTPAYMENT || $trans['type'] == ST_BANKDEPOSIT)
 				$trans['TotalAmount'] *= -1;
+			$item[0] = $item[1] = 0.0;
 			if ($trans['TotalAmount'] > 0.0)
 			{
 				$item[0] = round2($trans['TotalAmount'] * $rate, $dec);
@@ -257,13 +285,16 @@ function print_customer_balances()
 			if ($show_balance)
 				$total[3] = $total[0] - $total[1];
 		}
-		$rep->Line($rep->row - 8);
-		$rep->NewLine(2);
-		$rep->TextCol(0, 3, _('Total'));
-		for ($i = 0; $i < 4; $i++)
-			$rep->AmountCol($i + 4, $i + 5, $total[$i], $dec);
-   		$rep->Line($rep->row  - 4);
-   		$rep->NewLine(2);
+
+        if (!$first) {
+            $rep->Line($rep->row - 8);
+            $rep->NewLine(2);
+            $rep->TextCol(0, 3, _('Total'));
+            for ($i = 0; $i < 4; $i++)
+                $rep->AmountCol($i + 4, $i + 5, $total[$i], $dec);
+            $rep->Line($rep->row  - 4);
+            $rep->NewLine(2);
+        }
 	}
 	$rep->fontSize += 2;
 	$rep->TextCol(0, 3, _('Grand Total'));

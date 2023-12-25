@@ -16,6 +16,8 @@ include_once($path_to_root . "/admin/db/attachments_db.inc");
 
 function read_supplier_details_to_trans(&$supp_trans, $supplier_id)
 {
+    global $SysPrefs;
+
 	$sql = "SELECT supp.supp_name, terms.terms, terms.days_before_due, supp.dimension_id, supp.dimension2_id,
 		terms.day_in_following_month, supp.tax_included,
 		supp.tax_group_id, tax_group.name AS tax_group_name,
@@ -26,7 +28,12 @@ function read_supplier_details_to_trans(&$supp_trans, $supplier_id)
 			.TB_PREF."tax_groups tax_group
 		WHERE supp.tax_group_id = tax_group.id
 		AND supp.payment_terms=terms.terms_indicator
-		AND supp.supplier_id = ".db_escape($supplier_id)." GROUP BY supp.supp_name";
+		AND supp.supplier_id = ".db_escape($supplier_id);
+
+    if ($SysPrefs->simplified_supplier_aging)
+        $sql .= " AND trans.type IN (".ST_SUPPINVOICE.",".ST_SUPPAYMENT.",".ST_SUPPCREDIT.")";
+
+    $sql .= " GROUP BY supp.supp_name";
 
 	$result = db_query($sql, "The supplier record selected: " . $supplier_id . " cannot be retrieved");
 
@@ -357,7 +364,6 @@ function add_supp_invoice(&$supp_trans)
 					}
 				}
 			}
-			add_or_update_purchase_data($supp_trans->supplier_id, $entered_grn->item_code, $entered_grn->chg_price); 
 		}
 		update_purchase_value($entered_grn->item_code, $entered_grn->chg_price * $ex_rate);
 		add_supp_invoice_item($trans_type, $invoice_id, $entered_grn->item_code,
@@ -399,6 +405,8 @@ function add_supp_invoice(&$supp_trans)
 	}
 
 	reallocate_payments($invoice_id, ST_SUPPINVOICE, $date_, $to_allocate, $allocs, $supp_trans->supplier_id);
+	// reallocate_payments($invoice_id, ST_SUPPINVOICE, $date_, $net_total+$tax_total, $allocs, $supp_trans->supplier_id);
+	reallocate_payments($invoice_id, ST_SUPPINVOICE, $date_, $invoice_items_total+$tax_total, $allocs, $supp_trans->supplier_id);
 	$supp_trans->trans_no = $invoice_id;
 	hook_db_postwrite($supp_trans, $supp_trans->trans_type);
     commit_transaction();

@@ -133,6 +133,7 @@ function barcode_check($code, $return_value = false, $get_type = false)
 	
 function getTransactions($category, $location, $item_like)
 {
+    global $SysPrefs;
 	$sql = "SELECT item.category_id,
 			category.description AS cat_description,
 			item.stock_id, item.units,
@@ -162,8 +163,12 @@ function getTransactions($category, $location, $item_like)
 		category.description,
 		item.stock_id,
 		item.description
-		ORDER BY item.category_id,
-		item.stock_id";
+		ORDER BY item.category_id,";
+
+    if (@$SysPrefs->sort_item_list_desc)
+        $sql .= "item.description";
+    else
+        $sql .= "item.stock_id";
 
     return db_query($sql,"No transactions were returned");
 }
@@ -278,7 +283,10 @@ function print_stock_check()
 		$demandqty += get_demand_asm_qty($trans['stock_id'], $loc_code);
 		$onorder = get_on_porder_qty($trans['stock_id'], $loc_code);
 		$onorder += get_on_worder_qty($trans['stock_id'], $loc_code);
-		if ($no_zeros && $trans['QtyOnHand'] == 0 && $demandqty == 0 && $onorder == 0)
+		if ($no_zeros
+            && !floatcmp($trans['QtyOnHand'], 0)
+            && !floatcmp($demandqty, 0)
+            && !floatcmp($onorder,0))
 			continue;
 		if ($shortage && $trans['QtyOnHand'] - $demandqty >= 0)
 			continue;
@@ -298,7 +306,7 @@ function print_stock_check()
 		$dec = get_qty_dec($trans['stock_id']);
 		$rep->TextCol(0, 1, $trans['stock_id']);
 		$rep->TextCol(1, 2, $trans['description'].($trans['inactive']==1 ? " ("._("Inactive").")" : ""), -1);
-		$rep->TextCol(2, 3, $trans['units']);
+		$rep->TextCol(2, 3, ' ' . $trans['units']);
 		$rep->AmountCol(3, 4, $trans['QtyOnHand'], $dec);
 		if ($check)
 		{

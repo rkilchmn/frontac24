@@ -26,10 +26,13 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history(array('bank_account', 'bank_date', 'reconcile_date'));
 
 add_js_file('reconcile.js');
 
-page(_($help_context = "Reconcile Bank Account"), false, false, "", $js);
+page(_($help_context = "Reconcile Bank Account"), false, false, "", $js, false, "", true);
+
+set_posts(array('bank_account', 'bank_date', 'reconcile_date'));
 
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
 
@@ -52,7 +55,7 @@ function rec_checkbox($row)
 	$value = $row['reconciled'] != '';
 
 // save also in hidden field for testing during 'Reconcile'
-	return is_closed_trans($row['type'], $row['trans_no']) ? "--" : checkbox(null, $name, $value, true, _('Reconcile this transaction'))
+	return is_closed_trans($row['type'], $row['trans_no']) ? ($value ? '-X-' : '---') : checkbox(null, $name, $value, true, _('Reconcile this transaction'))
  		. hidden($hidden, $value, false);
 }
 
@@ -87,13 +90,23 @@ function fmt_credit($row)
 
 function fmt_person($trans)
 {
-	return get_counterparty_name($trans["type"], $trans["trans_no"]);
+    return payment_person_name_link($trans["person_type_id"],$trans["person_id"],true,sql2date($trans["trans_date"]));
 }
 
 function fmt_memo($row)
 {
 	$value = $row["memo_"];
 	return $value;
+}
+
+function edit_link($row)
+{
+    return trans_editor_link($row['type'], $row['trans_no']);
+}
+
+function delete_link($row)
+{
+    return is_closed_trans($row['type'], $row['trans_no']) ? "--" : pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_DELETE);
 }
 
 function update_data()
@@ -150,7 +163,26 @@ function set_tpl_flag($reconcile_id)
 	$Ajax->activate('difference');
 }
 
-if (!isset($_POST['reconcile_date'])) { // init page
+function clear_tpl_flag($reconcile_id)
+{
+	global	$Ajax;
+
+	if (!check_value("rec_".$reconcile_id))
+		return;
+
+	if (get_post('bank_date')=='')	// new reconciliation
+		$Ajax->activate('bank_date');
+
+	$reconcile_value =  'NULL';
+	
+	update_reconciled_values($reconcile_id, $reconcile_value, $_POST['reconcile_date'],
+		input_num('end_balance'), $_POST['bank_account']);
+		
+	$Ajax->activate('reconciled');
+	$Ajax->activate('difference');
+}
+
+if (!isset($_POST['reconcile_date'])) {
 	$_POST['reconcile_date'] = new_doc_date();
 //	$_POST['bank_date'] = date2sql(Today());
 }
@@ -188,6 +220,16 @@ if (isset($_POST['last']) && isset($_POST['ReconcileAll'])) {
 	set_focus('bank_date');
 	foreach($_POST['last'] as $id => $value)
 		set_tpl_flag($id);
+
+
+    $Ajax->activate('_page_body');
+}
+
+if (isset($_POST['ClearAll'])) {
+	set_focus('bank_date');
+	foreach($_POST['last'] as $id => $value)
+		clear_tpl_flag($id);
+
 
     $Ajax->activate('_page_body');
 }
@@ -271,10 +313,12 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 		_("Credit") => array('align'=>'right','insert'=>true, 'fun'=>'fmt_credit'), 
 	    _("Person/Item") => array('fun'=>'fmt_person'), 
 		_("Memo") => array('fun'=>'fmt_memo'),
+		"X"=>array('insert'=>true, 'fun'=>'rec_checkbox'),
 		array('insert'=>true, 'fun'=>'gl_view'),
-		"X"=>array('insert'=>true, 'fun'=>'rec_checkbox')
+        array('insert'=>true, 'fun'=>'edit_link'),
+        array('insert'=>true, 'fun'=>'delete_link')
 	   );
-	$table =& new_db_pager('trans_tbl', $sql, $cols);
+	$table =& new_db_pager('trans_tbl_short', $sql, $cols);
 
 	$table->width = "80%";
 	display_db_pager($table);
@@ -282,11 +326,12 @@ display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
 br(1);
 echo '<center>';
 submit('Reconcile', _("Reconcile"), true, '', null);
-submit('ReconcileAll', _("Reconcile All"), true, '');
+submit('ReconcileAll', _("Check All"), true, '');
+submit('ClearAll', _("Uncheck All"), true, '');
 echo '</center>';
 end_form();
 
 //------------------------------------------------------------------------------------------------
 
-end_page();
+end_page(true);
 

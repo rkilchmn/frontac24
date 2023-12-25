@@ -126,13 +126,37 @@ function get_item($stock_id)
 	return db_fetch_assoc($result);
 }
 
+function get_next_stock_id($stock_id)
+{
+global $SysPrefs;
+
+	$sql = "SELECT stock_id
+		FROM ".TB_PREF."stock_master";
+
+        if (@$SysPrefs->sort_item_list_desc)
+            $sql .= " WHERE stock_id != ".db_escape($stock_id) . "
+                AND description >=
+                (SELECT sm.description FROM ".TB_PREF."stock_master sm
+                    WHERE sm.stock_id = ".db_escape($stock_id) . ")
+                    ORDER BY description LIMIT 1";
+
+        else
+            $sql .= " WHERE stock_id > ".db_escape($stock_id)
+                ." ORDER BY stock_id LIMIT 1";
+
+	$result = db_query($sql,"an item could not be retreived");
+
+	$row = db_fetch($result);
+    return $row['stock_id'];
+}
+
 function get_items($fixed_asset = 0)
 {
 	$sql = "SELECT * FROM ".TB_PREF."stock_master WHERE fixed_asset=".db_escape($fixed_asset);
 	return db_query($sql,"items could not be retreived");
 }
 
-function item_in_foreign_codes($stock_id)
+function item_used($stock_id)
 {
 	$sqls=  array(
 	"SELECT COUNT(*) FROM "
@@ -159,36 +183,36 @@ function item_in_foreign_codes($stock_id)
 			$msg = $err; break;
 		}
 	}
-	if ($msg == '') {
-
-		$kits = get_where_used($stock_id);
-		$num_kits = db_num_rows($kits);
-		if ($num_kits) {
-			$msg = _("This item cannot be deleted because some code aliases 
-				or foreign codes was entered for it, or there are kits defined 
-				using this item as component")
-				.':<br>';
-
-			while($num_kits--) {
-				$kit = db_fetch($kits);
-				$msg .= "'".$kit[0]."'";
-				if ($num_kits) $msg .= ',';
-			}
-
-		}
-	}
-	return $msg;
+    return $msg;
 }
 
-function get_items_search($description, $type)
+function item_in_foreign_codes($stock_id)
+{
+    $msg = '';
+    $kits = get_where_used($stock_id);
+    $num_kits = db_num_rows($kits);
+    if ($num_kits) {
+        $msg = _("This item had some code aliases or foreign codes
+            or was used in a kit as a component")
+            .':<br>';
+
+        while($num_kits--) {
+            $kit = db_fetch($kits);
+            $msg .= "'".$kit[0]."'";
+            if ($num_kits) $msg .= ',';
+        }
+    }
+    return $msg;
+}
+
+function get_items_search_sql($description, $type)
 {
 	global $SysPrefs;
 
-	$sql = "SELECT COUNT(i.item_code) AS kit, i.item_code, i.description, c.description category
+	$sql = "SELECT COUNT(i.item_code) AS kit, i.item_code, IF(i.inactive = 0 AND s.inactive = 0,i.description,CONCAT('(INACTIVE) ',i.description)) AS description, c.description category, (i.inactive OR s.inactive) AS inact
 		FROM ".TB_PREF."stock_master s, ".TB_PREF."item_codes i
 			LEFT JOIN ".TB_PREF."stock_category c ON i.category_id=c.category_id
 		WHERE i.stock_id=s.stock_id
-			AND !i.inactive AND !s.inactive
 			AND (  i.item_code LIKE " . db_escape("%" . $description. "%") . " OR 
 				i.description LIKE " . db_escape("%" . get_post("description"). "%") . " OR 
 				c.description LIKE " . db_escape("%" . get_post("description"). "%") . ") ";
@@ -218,14 +242,9 @@ function get_items_search($description, $type)
 			break;
 	}
 
-	if (isset($SysPrefs->max_rows_in_search))
-		$limit = $SysPrefs->max_rows_in_search;
-	else
-		$limit = 10;
+	$sql .= " GROUP BY i.item_code ORDER BY inact, i.description ";
 
-	$sql .= " GROUP BY i.item_code ORDER BY i.description LIMIT 0,".(int)($limit);
-
-	return db_query($sql, "Failed in retreiving item list.");
+	return $sql;
 }
 
 function get_item_code_id($stock_id)

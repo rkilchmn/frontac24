@@ -63,7 +63,7 @@ function display_bom($item_check)
 		{
 			$total_cost += $item['labour_cost'];
 			alt_table_row_color($k);
-	        label_cells(_("Standard Labour Cost"), number_format2($item['labour_cost'],user_price_dec()),
+	        label_cells(_("Standard Cost 1"), number_format2($item['labour_cost'],user_price_dec()),
     	    	"colspan=6 align=left", "class=odd_row nowrap align=right");
     	    end_row();
 		}
@@ -71,7 +71,7 @@ function display_bom($item_check)
 		{
 			$total_cost += $item['overhead_cost'];
 			alt_table_row_color($k);
-	        label_cells(_("Standard Overhead Cost"), number_format2($item['overhead_cost'],user_price_dec()),
+	        label_cells(_("Standard Cost 2"), number_format2($item['overhead_cost'],user_price_dec()),
     	    	"colspan=6 align=left", "nowrap align=right");
     	    end_row();
 		}
@@ -250,7 +250,7 @@ function display_wo_payments($woid)
     else
     {
         start_table(TABLESTYLE);
-        $th = array(_("#"), _("Type"), _("Date"), _("Amount"));
+        $th = array(_("#"), _("Account"), _("Date"), _("Amount"));
 
         table_header($th);
 
@@ -260,7 +260,7 @@ function display_wo_payments($woid)
 			alt_table_row_color($k);
 
         	label_cell(get_gl_view_str( $myrow["trans_type"], $myrow["trans_no"], $myrow["trans_no"]));
-        	label_cell($wo_cost_types[$myrow['cost_type']]);
+        	label_cell($myrow["account"] . ' ' . get_gl_account_name($myrow["account"]));
         	$date = sql2date($myrow["tran_date"]);
         	label_cell($date);
 			amount_cell($myrow['amount']);
@@ -284,6 +284,9 @@ function display_wo_details($woid, $suppress_view_link=false)
     	display_note(_("The work order number sent is not valid."));
     	exit;
     }
+
+    if (!isset($_POST['date_']))
+        $_POST['date_'] = sql2date($myrow['date_']);
 
    	start_table(TABLESTYLE, "width='80%'");
 

@@ -78,11 +78,12 @@ function get_bank_account($id)
 
 function get_bank_accounts($show_inactive=false)
 {
-	$sql = "SELECT account.*, gl_account.account_name
+	$sql = "SELECT account.*, gl_account.account_name, gl_account.inactive as gl_inactive
 		FROM ".TB_PREF."bank_accounts account, ".TB_PREF."chart_master gl_account
 		WHERE account.account_code = gl_account.account_code";
 	if (!$show_inactive) $sql .= " AND !account.inactive";
-	$sql .= " ORDER BY account_code, bank_curr_code";
+	// $sql .= " ORDER BY account_code, bank_curr_code";
+	$sql .= " ORDER BY bank_account_name, account_code, bank_curr_code";
 
 	return db_query($sql,"could not get bank accounts");
 }
@@ -190,16 +191,6 @@ function has_quick_entries($type=null)
 
 	$result = db_query($sql, "could not retreive quick entries");
 	return db_num_rows($result) > 0;
-}
-
-function get_quick_entries($type = null)
-{
-	$sql = "SELECT * FROM ".TB_PREF."quick_entries";
-	if ($type != null)
-		$sql .= " WHERE type=".db_escape($type);
-	$sql .= " ORDER BY description";
-
-	return db_query($sql, "could not retreive quick entries");
 }
 
 function get_quick_entry($selected_id)
@@ -311,6 +302,7 @@ function get_default_bank_account($curr=null)
 {
 	/* default bank account is selected as first found account from:
 		. default account in $curr if any
+                . last bank trans if bank account uses $curr
 		. first defined account in $curr if any
 		. default account in home currency
 		. first defined account in home currency
@@ -319,8 +311,16 @@ function get_default_bank_account($curr=null)
 	if (!isset($curr))
 		$curr = $home_curr;
 
+        $last_bank_id = last_bank_trans("bank_act");
+
 	$sql = "SELECT b.*, b.bank_curr_code='$home_curr' as fall_back FROM "
-		.TB_PREF."bank_accounts b"
+		.TB_PREF."bank_accounts b WHERE b.id = "
+                . db_escape($last_bank_id)
+                    ." AND (b.bank_curr_code=".db_escape($curr)
+                        ." OR b.bank_curr_code='$home_curr')
+                UNION ALL
+                SELECT b.*, b.bank_curr_code='$home_curr' as fall_back FROM "
+		.TB_PREF."bank_accounts b" 
 		." WHERE b.bank_curr_code=".db_escape($curr)
 		." OR b.bank_curr_code='$home_curr'
 		ORDER BY fall_back, dflt_curr_act desc";

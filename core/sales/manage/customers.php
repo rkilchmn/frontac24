@@ -19,6 +19,7 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history(array("customer_id"));
 	
 page(_($help_context = "Customers"), @$_REQUEST['popup'], false, "", $js); 
 
@@ -27,6 +28,8 @@ include_once($path_to_root . "/includes/banking.inc");
 include_once($path_to_root . "/includes/ui.inc");
 include_once($path_to_root . "/includes/ui/contacts_view.inc");
 include_once($path_to_root . "/includes/ui/attachment.inc");
+
+set_posts(array("customer_id"));
 
 if (isset($_GET['debtor_no'])) 
 {
@@ -128,6 +131,9 @@ function handle_submit(&$selected_id)
 		}
 		commit_transaction();
 
+        set_global_customer($_POST['customer_id']);
+
+        meta_forward_referer(_("A new customer has been added."));
 		display_notification(_("A new customer has been added."));
 
 		if (isset($SysPrefs->auto_create_branch) && $SysPrefs->auto_create_branch == 1)
@@ -196,7 +202,9 @@ function customer_settings($selected_id)
 			$_POST['CustName'] = $_POST['cust_ref'] = $_POST['address'] = $_POST['tax_id']  = '';
 			$_POST['dimension_id'] = 0;
 			$_POST['dimension2_id'] = 0;
-			$_POST['sales_type'] = -1;
+			$_POST['sales_type'] = get_company_pref('default_sales_type');
+			$_POST['area'] = get_company_pref('default_sales_area');
+			$_POST['tax_group_id'] = get_company_pref('default_tax_group');
 			$_POST['curr_code']  = get_company_currency();
 			$_POST['credit_status']  = -1;
 			$_POST['payment_terms']  = $_POST['notes']  = '';
@@ -260,6 +268,7 @@ function customer_settings($selected_id)
 		email_row(_("E-mail:"), 'email', null, 35, 55);
 		text_row(_("Bank Account Number:"), 'bank_account', null, 30, 60);
 		sales_persons_list_row( _("Sales Person:"), 'salesman', null);
+        hidden('inactive', false);
 	}
 	table_section(2);
 
@@ -297,7 +306,7 @@ function customer_settings($selected_id)
 		locations_list_row(_("Default Inventory Location:"), 'location');
 		shippers_list_row(_("Default Shipping Company:"), 'ship_via');
 		sales_areas_list_row( _("Sales Area:"), 'area', null);
-		tax_groups_list_row(_("Tax Group:"), 'tax_group_id', null);
+		tax_groups_list_row(_("Tax Group:"), 'tax_group_id', null, false, false, true, false);
 	}
 	end_outer_table(1);
 

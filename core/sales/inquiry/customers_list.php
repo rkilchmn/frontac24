@@ -16,6 +16,7 @@
 ***********************************************************************/
 $page_security = "SA_SALESORDER";
 $path_to_root = "../..";
+include_once($path_to_root . "/includes/db_pager.inc");
 include_once($path_to_root . "/includes/session.inc");
 include_once($path_to_root . "/includes/ui.inc");
 include_once($path_to_root . "/sales/includes/db/customers_db.inc");
@@ -28,6 +29,20 @@ else
 
 page(_($help_context = "Customers"), true, false, "", $js);
 
+function select_customer($myrow)
+{
+    global $mode;
+
+    $name = $_GET["client_id"];
+    $value = $myrow['debtor_no'];
+    if ($mode != 0) {
+        $text = $myrow['name'];
+        return ahref_str(_("Select"), 'javascript:void(0)', '', 'setComboItem(window.opener.document, "'.$name.'",  "'.$value.'", "'.$text.'")');
+    }
+    else {
+        return ahref_str(_("Select"), 'javascript:void(0)', '', 'selectComboItem(window.opener.document, "'.$name.'", "'.$value.'")');
+    }
+}
 if(get_post("search")) {
   $Ajax->activate("customer_tbl");
 }
@@ -38,45 +53,19 @@ start_table(TABLESTYLE_NOBORDER);
 
 start_row();
 
-text_cells(_("Customer"), "customer");
+text_cells_ex(_("Customer"), "customer", null, null, null, null, null, null, true);
 submit_cells("search", _("Search"), "", _("Search customers"), "default");
 
 end_row();
 
 end_table();
 
+$th = array("" => array('fun' => 'select_customer'), _("Customer"), _("Short Name"), _("Address"), _("Tax ID"));
+$sql = get_customers_search_sql(get_post("customer"));
+$table =& new_db_pager('customer_tbl', $sql, $th);
+$table->width = "85%";
+display_db_pager($table);
+
 end_form();
-
-div_start("customer_tbl");
-
-start_table(TABLESTYLE);
-
-$th = array("", _("Customer"), _("Short Name"), _("Address"), _("Tax ID"));
-
-table_header($th);
-
-$k = 0;
-$name = $_GET["client_id"];
-$result = get_customers_search(get_post("customer"));
-while ($myrow = db_fetch_assoc($result)) {
-	alt_table_row_color($k);
-	$value = $myrow['debtor_no'];
-	if ($mode != 0) {
-		$text = $myrow['name'];
-  		ahref_cell(_("Select"), 'javascript:void(0)', '', 'setComboItem(window.opener.document, "'.$name.'",  "'.$value.'", "'.$text.'")');
-	}
-	else {
-  		ahref_cell(_("Select"), 'javascript:void(0)', '', 'selectComboItem(window.opener.document, "'.$name.'", "'.$value.'")');
-	}
-  	label_cell($myrow["name"]);
-  	label_cell($myrow["debtor_ref"]);
-  	label_cell($myrow["address"]);
-  	label_cell($myrow["tax_id"]);
-	end_row();
-}
-
-end_table(1);
-
-div_end();
 
 end_page(true);

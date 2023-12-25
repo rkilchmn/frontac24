@@ -117,12 +117,14 @@
 
 			$this->NewLine();
 		}
+/*
 		if (@$this->company['gst_no'])
 		{
 			$this->Text($ccol, _("Our VAT No."), $c2col);
 			$this->Text($c2col, $this->company['gst_no'], $mcol);
 			$this->NewLine();
 		}
+*/
 		if (@$this->formData['domicile'])
 		{
 			$this->Text($ccol, _("Domicile"), $c2col);
@@ -188,8 +190,22 @@
 
 		// Footer
 		$this->Font('italic');
-		$this->row = $iline7 - $this->lineHeight - 6;
 
+        // count the number of lines in the footer
+        $lines = 0;
+		foreach ($Footer as $line => $txt) {
+            $ret = $txt;
+            while (($ret = $this->calcTextWrap($ret, $right-$ccol, true)[1]) != "")
+                $lines++;
+        }
+
+        // if there are many lines, make them smaller
+        if ($lines > 6) {
+            $this->fontSize -= 3;
+            $this->lineHeight -= 3;
+        }
+
+		$this->row = $iline7 - $this->lineHeight -6;
 		foreach ($Footer as $line => $txt)
 		{
 			if (!is_numeric($line))	// title => link
@@ -198,16 +214,23 @@
 				$this->TextWrap($ccol, $this->row, $right - $ccol, $line, 'C');
 				$this->row -= $this->lineHeight;
 				$this->SetTextColor(0, 0, 255);
-				$this->TextWrap($ccol, $this->row, $right - $ccol, $txt, 'C');
+				$ret = $this->TextWrap($ccol, $this->row, $right - $ccol, $txt, 'C');
 				$this->SetTextColor(0, 0, 0);
 				$this->addLink($txt, $ccol, $this->row, $this->pageWidth - $this->rightMargin, $this->row + $this->lineHeight);
 				$this->fontSize += 2;
 			}
-			else
-				$this->TextWrap($ccol, $this->row, $right - $ccol, $txt, 'C');
+			else {
+                $ret = $txt;
+				while (($ret = $this->TextWrap($ccol, $this->row, $right - $ccol, $ret, 'C',null,null,null,null,true)) != "")
+                    $this->row -= $this->lineHeight;
+            }
 			$this->row -= $this->lineHeight;
-
 		}
+
+        if ($lines > 6) {
+            $this->fontSize += 3;
+            $this->lineHeight += 3;
+        }
 
 		$this->Font();
 		$temp = $iline6 - $this->lineHeight - 2;

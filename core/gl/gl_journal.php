@@ -59,7 +59,8 @@ if (isset($_GET['AddedID']))
     display_note(get_gl_view_str($trans_type, $trans_no, _("&View this Journal Entry")));
 
 	reset_focus();
-	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &New Journal Entry"), "NewJournal=Yes");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Edit Journal Entry"), "ModifyGL=Yes&trans_type=0&trans_no=$trans_no");
+	hyperlink_params($_SERVER['PHP_SELF'], _("Enter &New Journal Entry"), "NewJournal=Yes"."&date_=" . @$_GET['date_']);
 
 	hyperlink_params("$path_to_root/admin/attachments.php", _("Add an Attachment"), "filterType=$trans_type&trans_no=$trans_no");
 
@@ -73,6 +74,7 @@ if (isset($_GET['AddedID']))
 
     display_note(get_gl_view_str($trans_type, $trans_no, _("&View this Journal Entry")));
 
+	hyperlink_params($_SERVER['PHP_SELF'], _("Edit Journal Entry"), "ModifyGL=Yes&trans_type=0&trans_no=$trans_no");
    	hyperlink_no_params($path_to_root."/gl/inquiry/journal_inquiry.php", _("Return to Journal &Inquiry"));
 
 	display_footer_exit();
@@ -157,7 +159,11 @@ function create_cart($type=0, $trans_no=0)
 		$cart->tax_info = $tax_info;
 
 	} else {
-		$cart->tran_date = $cart->doc_date = $cart->event_date = new_doc_date();
+        if (isset($_GET['date_']))
+            $cart->tran_date  = $_GET['date_'];
+        else
+            $cart->tran_date = new_doc_date();
+		$cart->doc_date = $cart->event_date =  new_doc_date();
 		if (!is_date_in_fiscalyear($cart->tran_date))
 			$cart->tran_date = end_fiscalyear();
 		$cart->reference = $Refs->get_next(ST_JOURNAL, null, $cart->tran_date);
@@ -326,6 +332,7 @@ if (isset($_POST['Process']))
 	} else
 		$cart->tax_info = false;
 	$trans_no = write_journal_entries($cart);
+    if ($trans_no !== false) {
 
         // retain the reconciled status if desired by user
         if (isset($_POST['reconciled'])
@@ -336,13 +343,16 @@ if (isset($_POST['Process']))
             db_query($sql, "Can't change reconciliation status");
         }
 
-	$cart->clear_items();
-	new_doc_date($_POST['date_']);
-	unset($_SESSION['journal_items']);
-	if($new)
-		meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no");
-	else
-		meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$trans_no");
+        $cart->clear_items();
+        new_doc_date($_POST['date_']);
+        unset($_SESSION['journal_items']);
+
+        if ($new) {
+            $params = "AddedID=$trans_no&date_=".$_POST['date_']."&bank_account=".$_POST['bank_account'];
+        } else
+            $params = "UpdatedID=$trans_no";
+        meta_forward_self($params);
+    }
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -356,6 +366,7 @@ function check_item_data()
 		set_focus('code_id');
    		return false;
 	}
+/*
 	if (is_subledger_account(get_post('code_id'))) {
 		if(!get_post('person_id')) {
 	   		display_error(_("You must select subledger account."));
@@ -364,6 +375,7 @@ function check_item_data()
 	   		return false;
 	   	}
 	}
+*/
 	if (isset($_POST['dimension_id']) && $_POST['dimension_id'] != 0 && dimension_is_closed($_POST['dimension_id'])) 
 	{
 		display_error(_("Dimension is closed."));
@@ -568,8 +580,19 @@ tabbed_content_start('tabs', array(
 			end_table(1);
 			break;
 	};
+    hidden('bank_account', @$_GET['bank_account']);
+
+// Remove the Process button while journal items are edited;
+// Otherwise, if the user neglects to confirm, the work is lost unexpectantly.
+
+div_start("submit");
+global $Ajax;
+$Ajax->activate("submit");
+if (find_submit('Edit') == -1)
 	submit_center('Process', _("Process Journal Entry"), true , 
 		_('Process journal entry only if debits equal to credits'), 'default');
+div_end();
+
 br();
 tabbed_content_end();
 

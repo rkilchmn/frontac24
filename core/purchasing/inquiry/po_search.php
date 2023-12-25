@@ -24,10 +24,8 @@ if (user_use_date_picker())
 	$js .= get_js_date_picker();
 page(_($help_context = "Search Outstanding Purchase Orders"), false, false, "", $js);
 
-if (isset($_GET['order_number']))
-{
-	$_POST['order_number'] = $_GET['order_number'];
-}
+set_posts(array('order_number', 'OrdersAfterDate', 'OrdersToDate'));
+
 //-----------------------------------------------------------------------------------
 // Ajax updates
 //
@@ -61,8 +59,13 @@ start_table(TABLESTYLE_NOBORDER);
 start_row();
 ref_cells(_("#:"), 'order_number', '',null, '', true);
 
-date_cells(_("from:"), 'OrdersAfterDate', '', null, -user_transaction_days());
-date_cells(_("to:"), 'OrdersToDate');
+$days = user_transaction_days();
+date_cells(_("from:"), 'OrdersAfterDate', '', null, -abs($days));
+if ($days >= 0) {
+    date_cells(_("to:"), 'OrdersToDate');
+} else {
+    date_cells(_("to:"), 'OrdersToDate', '', null, 0, 2);
+}
 
 locations_list_cells(_("Location:"), 'StockLocation', null, true);
 end_row();

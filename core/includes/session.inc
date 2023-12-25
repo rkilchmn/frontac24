@@ -592,3 +592,8 @@ if (!defined('FA_LOGOUT_PHP_FILE')){
 // POST vars cleanup needed for direct reuse.
 // We quote all values later with db_escape() before db update.
 $_POST = strip_quotes($_POST);
+
+# Make sure the auto select box is not causing any conflicts with other
+# features.
+include_once($path_to_root . "/includes/auto_select_box.inc");
+

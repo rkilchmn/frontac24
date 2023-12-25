@@ -78,6 +78,16 @@ $type_shortcuts = array(
 	ST_DIMENSION => _("Dim")
 );
 
+if (!function_exists("get_systype_name")) {
+function get_systype_name($type, $amount)
+{
+    global $systypes_array;
+    if ($type == ST_SUPPAYMENT && $amount > 0)
+        return _("Supplier Refund");
+    else
+        return $systypes_array[$type];
+}
+}
 
 //----------------------------------------------------------------------------------
 //		Bank transaction types
@@ -118,9 +128,8 @@ $wo_types_array = array (
 	);
 
 $wo_cost_types = array(
-	WO_LABOUR => _("Labour Cost"),
-	WO_OVERHEAD => _("Overhead Cost"),
-	WO_MATERIALS => _("Materials")
+	WO_LABOUR => _("Cost 1"),
+	WO_OVERHEAD => _("Cost 2"),
 );
 
 //----------------------------------------------------------------------------------
@@ -158,7 +167,8 @@ $quick_entry_types = array(
 	QE_DEPOSIT => _("Bank Deposit"),
 	QE_PAYMENT => _("Bank Payment"),
 	QE_JOURNAL => _("Journal Entry"),
-	QE_SUPPINV => _("Supplier Invoice/Credit")
+	QE_SUPPINV => _("Supplier Invoice/Credit"),
+	QE_INACTIVE => _("Inactive")
 );
 
 //----------------------------------------------------------------------------------

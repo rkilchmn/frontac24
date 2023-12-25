@@ -214,7 +214,7 @@ function supplier_settings(&$supplier_id)
 	{
 		currencies_list_row(_("Supplier's Currency:"), 'curr_code', null);
 	}
-	tax_groups_list_row(_("Tax Group:"), 'tax_group_id', null);
+	tax_groups_list_row(_("Tax Group:"), 'tax_group_id', null, false, false, false, true);
 	text_row(_("Our Customer No:"), 'supp_account_no', null, 42, 40);
 
 	table_section_title(_("Purchasing"));

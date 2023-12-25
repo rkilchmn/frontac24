@@ -30,10 +30,7 @@ add_js_file('payalloc.js');
 
 page(_($help_context = "Supplier Payment Entry"), false, false, "", $js);
 
-if (isset($_GET['supplier_id']))
-{
-	$_POST['supplier_id'] = $_GET['supplier_id'];
-}
+set_posts(array('supplier_id', 'DatePaid'));
 
 //----------------------------------------------------------------------------------------
 
@@ -95,7 +92,7 @@ if (isset($_GET['AddedID'])) {
 	submenu_view(_("View this Payment"), ST_SUPPAYMENT, $payment_id);
     display_note(get_gl_view_str(ST_SUPPAYMENT, $payment_id, _("View the GL &Journal Entries for this Payment")), 0, 1);
 
-	submenu_option(_("Enter another supplier &payment"), "/purchasing/supplier_payment.php?supplier_id=".$_POST['supplier_id']);
+	submenu_option(_("Enter another supplier &payment"), "/purchasing/supplier_payment.php?supplier_id=".$_POST['supplier_id']."&DatePaid=".$_POST['DatePaid']);
 
 	submenu_option(_("Enter &Supplier Invoice"), "/purchasing/supplier_invoice.php?New=1");
 	submenu_option(_("Enter direct &Invoice"), "/purchasing/po_entry_items.php?NewInvoice=Yes");
@@ -109,17 +106,6 @@ if (isset($_GET['AddedID'])) {
 	display_footer_exit();
 }
 
-//----------------------------------------------------------------------------------------
-
-function get_default_supplier_payment_bank_account($supplier_id, $date)
-{
-	$previous_payment = get_supp_payment_before($supplier_id, date2sql($date));
-	if ($previous_payment)
-	{
-		return $previous_payment['bank_id'];
-	}
-	return get_default_supplier_bank_account($supplier_id);
-}
 //----------------------------------------------------------------------------------------
 
 function check_inputs()
@@ -172,8 +158,15 @@ function check_inputs()
 		return false;
 	}
 
+	if (input_num('refund') > 0) 
+	{
+		display_error(_("Refund must have a negative value."));
+		set_focus('amount');
+		return false;
+	}
+
 	//if (input_num('amount') - input_num('discount') <= 0) 
-	if (input_num('amount') <= 0) 
+	if (input_num('refund') == 0 && input_num('amount') <= 0) 
 	{
 		display_error(_("The total of the amount and the discount is zero or negative. Please enter positive values."));
 		set_focus('amount');
@@ -186,7 +179,6 @@ function check_inputs()
 		set_focus('bank_amount');
 		return false;
 	}
-
 
    	if (!is_date($_POST['DatePaid']))
    	{
@@ -232,8 +224,8 @@ function check_inputs()
 function handle_add_payment()
 {
 	$payment_id = write_supp_payment(0, $_POST['supplier_id'], $_POST['bank_account'],
-		$_POST['DatePaid'], $_POST['ref'], input_num('amount'),	input_num('discount'), $_POST['memo_'], 
-		input_num('charge'), input_num('bank_amount', input_num('amount')), $_POST['dimension_id'], $_POST['dimension2_id']);
+		$_POST['DatePaid'], $_POST['ref'], input_num('amount')+input_num('refund'),	input_num('discount'), $_POST['memo_'], 
+		input_num('charge'), input_num('bank_amount', input_num('amount')+input_num('refund')), $_POST['dimension_id'], $_POST['dimension2_id']);
 	new_doc_date($_POST['DatePaid']);
 
 	$_SESSION['alloc']->trans_no = $payment_id;
@@ -241,14 +233,13 @@ function handle_add_payment()
 	$_SESSION['alloc']->write();
 
    	unset($_POST['bank_account']);
-   	unset($_POST['DatePaid']);
    	unset($_POST['currency']);
    	unset($_POST['memo_']);
    	unset($_POST['amount']);
    	unset($_POST['discount']);
    	unset($_POST['ProcessSuppPayment']);
 
-	meta_forward($_SERVER['PHP_SELF'], "AddedID=$payment_id&supplier_id=".$_POST['supplier_id']);
+	meta_forward_self("AddedID=$payment_id&supplier_id=".$_POST['supplier_id']."&DatePaid=".$_POST['DatePaid']);
 }
 
 //----------------------------------------------------------------------------------------
@@ -291,7 +282,7 @@ start_form();
 
 	if (!list_updated('bank_account') && !get_post('__ex_rate_changed'))
 	{
-		$_POST['bank_account'] = get_default_supplier_payment_bank_account($_POST['supplier_id'], $_POST['DatePaid']);
+		set_post_last_used_bank_account(PT_SUPPLIER, $_POST['supplier_id']);
 	} else
 	{
 		$_POST['amount'] = price_format(0);
@@ -348,6 +339,12 @@ start_form();
 	start_table(TABLESTYLE, "width='60%'");
 	amount_row(_("Amount of Discount:"), 'discount', null, '', $supplier_currency);
 	amount_row(_("Amount of Payment:"), 'amount', null, '', $supplier_currency);
+
+    $supplier_record = get_supplier_details($_POST['supplier_id']);
+    if ($supplier_record  && $supplier_record['Balance'] < 0) {
+        $_POST['refund'] =  price_format($supplier_record['Balance']);
+        amount_row(_("Amount To Refund:"), 'refund', null, '', $supplier_currency);
+    }
 	textarea_row(_("Memo:"), 'memo_', null, 22, 4);
 	end_table(1);
 

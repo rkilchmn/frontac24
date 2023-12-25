@@ -41,6 +41,8 @@ if (isset($_GET['ModifyDelivery'])) {
 	processing_start();
 }
 
+set_posts(array('DirectInvoice'));
+
 page($_SESSION['page_title'], false, false, "", $js);
 
 if (isset($_GET['AddedID'])) {
@@ -305,11 +307,18 @@ if (isset($_POST['process_delivery']) && check_data()) {
 		$is_prepaid = $dn->is_prepaid() ? "&prepaid=Yes" : '';
 
 		processing_end();
-		if ($newdelivery) {
-			meta_forward($_SERVER['PHP_SELF'], "AddedID=$delivery_no$is_prepaid");
-		} else {
-			meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$delivery_no$is_prepaid");
-		}
+
+        if (get_post('DirectInvoice') == 1) {
+            $params="DeliveryNumber=".$delivery_no."&DirectInvoice=1";
+            meta_forward($path_to_root . "/sales/customer_invoice.php", $params);
+        }
+
+		if ($newdelivery)
+			$params="AddedID=$delivery_no$is_prepaid";
+		else
+			$params="UpdatedID=$delivery_no$is_prepaid";
+
+        meta_forward_self($params);
 	}
 }
 
@@ -319,6 +328,7 @@ if (isset($_POST['Update']) || isset($_POST['_Location_update']) || isset($_POST
 //------------------------------------------------------------------------------
 start_form();
 hidden('cart_id');
+hidden('DirectInvoice');
 
 start_table(TABLESTYLE2, "width='80%'", 5);
 echo "<tr><td>"; // outer table

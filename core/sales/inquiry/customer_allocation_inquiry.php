@@ -22,12 +22,12 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history(array("customer_id", "TransFromDate", "TransToDate", "filterType"));
+
 page(_($help_context = "Customer Allocation Inquiry"), false, false, "", $js);
 
-if (isset($_GET['customer_id']))
-{
-	$_POST['customer_id'] = $_GET['customer_id'];
-}
+unset ($_SESSION['filterType']);
+set_posts(array("customer_id", "TransFromDate", "TransToDate", "filterType"));
 
 //------------------------------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ start_row();
 
 customer_list_cells(_("Select a customer: "), 'customer_id', $_POST['customer_id'], true);
 
-date_cells(_("from:"), 'TransAfterDate', '', null, -user_transaction_days());
+date_cells(_("from:"), 'TransFromDate', '', null, -abs(user_transaction_days()));
 date_cells(_("to:"), 'TransToDate', '', null, 1);
 
 cust_allocations_list_cells(_("Type:"), 'filterType', null);
@@ -55,11 +55,6 @@ set_global_customer($_POST['customer_id']);
 end_row();
 end_table();
 //------------------------------------------------------------------------------------------------
-function check_overdue($row)
-{
-	return ($row['OverDue'] == 1 
-		&& (abs($row["TotalAmount"]) - $row["Allocated"] != 0));
-}
 
 function order_link($row)
 {
@@ -139,7 +134,7 @@ function fmt_credit($row)
 }
 //------------------------------------------------------------------------------------------------
 
-$sql = get_sql_for_customer_allocation_inquiry(get_post('TransAfterDate'), get_post('TransToDate'),
+$sql = get_sql_for_customer_allocation_inquiry(get_post('TransFromDate'), get_post('TransToDate'),
 		get_post('customer_id'), get_post('filterType'), check_value('showSettled'));
 
 //------------------------------------------------------------------------------------------------
@@ -165,7 +160,7 @@ if ($_POST['customer_id'] != ALL_TEXT) {
 }
 
 $table =& new_db_pager('doc_tbl', $sql, $cols);
-$table->set_marker('check_overdue', _("Marked items are overdue."));
+$table->set_marker('check_overdue_allocation', _("Marked items are overdue."));
 
 $table->width = "80%";
 

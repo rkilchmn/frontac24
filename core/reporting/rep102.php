@@ -53,7 +53,7 @@ function get_invoices($customer_id, $to, $all=true)
 			AND tran_date <= '$todate'
 			AND ABS($value) > " . FLOAT_COMP_DELTA;
 
-	$sql .= "ORDER BY tran_date";
+	$sql .= " ORDER BY tran_date";
 
 	return db_query($sql, "The customer transactions could not be retrieved");
 }
@@ -170,7 +170,6 @@ function print_aged_customer_analysis()
 		$rep->fontSize += 2;
 		$rep->TextCol(0, 2, $myrow["name"].($myrow['inactive']==1 ? " ("._("Inactive").")" : ""));
 		if ($convert) $rep->TextCol(2, 3,	$myrow['curr_code']);
-		$rep->fontSize -= 2;
 		$total[0] += ($custrec["Balance"] - $custrec["Due"]);
 		$total[1] += ($custrec["Due"]-$custrec["Overdue1"]);
 		$total[2] += ($custrec["Overdue1"]-$custrec["Overdue2"]);
@@ -178,6 +177,7 @@ function print_aged_customer_analysis()
 		$total[4] += $custrec["Balance"];
 		for ($i = 0; $i < count($str); $i++)
 			$rep->AmountCol($i + 3, $i + 4, $str[$i], $dec);
+		$rep->Font();
 		$rep->NewLine(1, 2);
 		if (!$summaryOnly)
 		{

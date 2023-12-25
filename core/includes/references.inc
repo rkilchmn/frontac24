@@ -183,6 +183,7 @@ class references
 				." WHERE ISNULL(v.id)"
 				.($type_fld ? " AND tbl.`$type_fld`=$type" : '')
 				." AND `$ref_fld` REGEXP ".db_escape('^'.preg_quote($prefix).'[0-9]*'.preg_quote($postfix).'$');
+// display_notification($sql);
 		$result = db_query($sql, 'cannot retrieve last reference');
 		$result = db_fetch_row($result);
 
@@ -219,6 +220,7 @@ class references
 		} else {
 			$sql .= " AND tbl.`$tno_fld`=".db_escape($trans_no);
 		}
+// display_notification($sql);
 
 		$result = db_query($sql, "could not test for unique reference");
 		if (!$result)
@@ -311,7 +313,10 @@ class references
 		$branch = @$context['branch'] ? $context['branch'] : '\d+';
 		$location = @$context['location'] ? $context['location'] : '[a-z0-9]+';
  		$pos = @$context['pos'] ? $context['pos'] : '\d+';
-		$user = sprintf("%02d", $_SESSION['wa_current_user']->user);
+
+        // allow any user to edit another user transaction
+		// $user = sprintf("%02d", $_SESSION['wa_current_user']->user);
+        $user = '\d{2,}';
 
 		$regex = preg_replace(
 			array(

@@ -243,7 +243,7 @@ function read_sales_trans($doc_type, $trans_no, &$cart)
 			$myrow["curr_code"], $myrow["discount"], $myrow["payment_terms"]);
 
 		$cart->set_branch($myrow["branch_code"], $myrow["tax_group_id"],
-			$myrow["tax_group_name"]);
+            $myrow["delivery_address"]);
 
 		$cart->reference = $myrow["reference"];
 		$cart->prepaid = $myrow["prepaid"];

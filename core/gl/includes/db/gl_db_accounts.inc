@@ -47,7 +47,7 @@ function get_gl_accounts($from=null, $to=null, $type=null)
 		$sql .= " AND coa.account_code <= ".db_escape($to);
 	if ($type != null)
 		$sql .= " AND account_type=".db_escape($type);
-	$sql .= " ORDER BY account_code";
+    $sql .= " ORDER BY account_code";
 
 	return db_query($sql, "could not get gl accounts");
 }
@@ -290,29 +290,25 @@ function is_bank_account($account_code)
 		return false;
 }
 
-function get_chart_accounts_search($like, $skip=false)
+function get_chart_accounts_search_sql($like, $skip=false)
 {
-	global $SysPrefs;
+    if ($skip)
+        $sql = "SELECT 1, chart.account_code, IF(chart.inactive=0, chart.account_name, CONCAT('(INACTIVE) ', chart.account_name)) as account_name, type.name, chart.inactive, type.id
+            FROM (".TB_PREF."chart_master chart,".TB_PREF."chart_types type) "
+            ."LEFT JOIN ".TB_PREF."bank_accounts acc "
+            ."ON chart.account_code=acc.account_code
+                WHERE acc.account_code  IS NULL
+            AND chart.account_type=type.id ";
+    else
+        $sql = "SELECT 1, chart.account_code, IF(chart.inactive=0, chart.account_name, CONCAT('(INACTIVE) ', chart.account_name)) as account_name, type.name, chart.inactive, type.id
+			FROM ".TB_PREF."chart_master chart,".TB_PREF."chart_types type
+			WHERE chart.account_type=type.id ";
+    $sql .= "AND (
+          name LIKE " . db_escape("%" . $like. "%") . " OR
+          chart.account_name LIKE " . db_escape("%" . $like. "%") . " OR
+          chart.account_code LIKE " . db_escape("%" . $like. "%") . "
+        ) 
+      	ORDER BY chart.inactive, chart.account_code ";
 
-	if (isset($SysPrefs->max_rows_in_search))
-		$limit = $SysPrefs->max_rows_in_search;
-	else
-		$limit = 10;
-
-	if ($skip)
-		$sql = "SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id
-			FROM (".TB_PREF."chart_master chart,".TB_PREF."chart_types type) "
-			."LEFT JOIN ".TB_PREF."bank_accounts acc "
-			."ON chart.account_code=acc.account_code
-				WHERE acc.account_code  IS NULL
-			AND chart.account_type=type.id ";
-	else		
-		$sql = "SELECT chart.account_code, chart.account_name, type.name, chart.inactive, type.id
-			FROM ".TB_PREF."chart_master chart,".TB_PREF."chart_types type WHERE chart.account_type=type.id ";
-	$sql .= "AND (
-          	chart.account_name LIKE " . db_escape("%" . $like. "%") . " OR
-          	chart.account_code LIKE " . db_escape("%" . $like. "%") . "
-        	) 
-    		ORDER BY chart.account_code LIMIT 0,".(int)($limit); // We only display 10 items.
-	return db_query($sql, "Failed in retreiving GL account list.");
+	return $sql;
 }

@@ -235,7 +235,7 @@ function branch_settings($selected_id, $num_branches) {
 	sales_groups_list_row(_("Sales Group:"), 'group_no', null, true);
 	locations_list_row(_("Default Inventory Location:"), 'default_location', null);
 	shippers_list_row(_("Default Shipping Company:"), 'default_ship_via', null);
-	tax_groups_list_row(_("Tax Group:"), 'tax_group_id', null);
+	tax_groups_list_row(_("Tax Group:"), 'tax_group_id', null, false, false, true, false);
 
 	table_section_title(_("GL Accounts"));
 

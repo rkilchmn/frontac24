@@ -229,7 +229,11 @@ function read_po_items($order_no, &$order, $open_items_only=false)
 {
 	/*now populate the line po array with the purchase order details records */
 
-	$sql = "SELECT poline.*, units, editable
+	$sql = "SELECT poline.*, units,
+            (SELECT COUNT(*) 
+                FROM ".TB_PREF."purch_order_details poline2
+                WHERE poline.item_code = poline2.item_code
+                    AND poline.description != poline2.description) AS dup
 		FROM ".TB_PREF."purch_order_details poline
 			LEFT JOIN ".TB_PREF."stock_master item	ON poline.item_code=item.stock_id
 		WHERE order_no =".db_escape($order_no);
@@ -245,11 +249,15 @@ function read_po_items($order_no, &$order, $open_items_only=false)
     {
 		while ($myrow = db_fetch($result))
         {
-			$data = get_purchase_data($order->supplier_id, $myrow['item_code']);
-			if ($data !== false && !$myrow['editable'] && $data['supplier_description'] != "" && 
-				$myrow['description'] != $data['supplier_description']) // backward compatibility
-				$myrow['description'] = $data['supplier_description'];
-			if (is_null($myrow["units"]))
+            if ($myrow['dup'] == 0) {
+                $data = get_purchase_data($order->supplier_id, $myrow['item_code']);
+                if ($data !== false)
+                {
+                    if ($data['supplier_description'] != "")
+                        $myrow['description'] = $data['supplier_description'];
+                }		
+            }
+            if (is_null($myrow["units"]))
             {
 		       	$units = "";
             }
@@ -304,6 +312,7 @@ function get_short_info($stock_id)
 function get_sql_for_po_search_completed($from, $to, $supplier_id=ALL_TEXT, $location=ALL_TEXT,
 	$order_number = '', $stock_id = '', $also_closed=false)
 {
+        $dec = user_price_dec();
 	$sql = "SELECT 
 		porder.order_no, 
 		porder.reference, 
@@ -312,7 +321,7 @@ function get_sql_for_po_search_completed($from, $to, $supplier_id=ALL_TEXT, $loc
 		porder.requisition_no, 
 		porder.ord_date, 
 		supplier.curr_code, 
-		Sum(line.unit_price*line.quantity_ordered) AS OrderValue,
+                Sum(Round(line.unit_price*line.quantity_ordered, $dec)) AS OrderValue,
 		Sum(line.delivery_date < '". date2sql(Today()) ."'
 		AND (line.quantity_ordered > line.quantity_received)) As OverDue,
 		porder.into_stock_location,
@@ -366,6 +375,7 @@ function get_sql_for_po_search_completed($from, $to, $supplier_id=ALL_TEXT, $loc
 
 function get_sql_for_po_search($from, $to, $supplier_id=ALL_TEXT, $location=ALL_TEXT, $order_number='', $stock_id='')
 {
+        $dec = user_price_dec();
 	$sql = "SELECT 
 		porder.order_no, 
 		porder.reference,
@@ -374,7 +384,7 @@ function get_sql_for_po_search($from, $to, $supplier_id=ALL_TEXT, $location=ALL_
 		porder.requisition_no, 
 		porder.ord_date,
 		supplier.curr_code,
-		Sum(line.unit_price*line.quantity_ordered) AS OrderValue,
+                Sum(Round(line.unit_price*line.quantity_ordered, $dec)) AS OrderValue,
 		Sum(line.delivery_date < '". date2sql(Today()) ."'
 		AND (line.quantity_ordered > line.quantity_received)) As OverDue
 		FROM ".TB_PREF."purch_orders as porder,"
@@ -414,4 +424,25 @@ function get_sql_for_po_search($from, $to, $supplier_id=ALL_TEXT, $location=ALL_
 	$sql .= " GROUP BY porder.order_no";
 	return $sql;
 }
+
+/*
+        This function returns the next suppliers ref
+        To work correctly, references should be numeric or end in a numeric.
+*/
+function next_supplier_ref($supplier_id) {
+$sql = "SELECT MAX(CONVERT(supp_reference, UNSIGNED)) FROM ".TB_PREF."supp_trans WHERE supplier_id="
+                .db_escape($supplier_id)
+                . " AND ov_amount!=0"; // ignore voided invoice references
+    $result = db_query($sql, "Can not find max supp_reference");
+    $row = db_fetch_row($result);
+    if (!$row[0]) return 1;
+    $offset= numeric_offset($row[0]);
+    $num=substr($row[0], $offset);
+    if (!is_numeric($num))
+        return null;
+    $num += 1;
+    return substr($row[0], 0, $offset) . $num;
+}
+
+
 

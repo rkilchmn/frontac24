@@ -41,11 +41,20 @@ function get_requirements_costs($woid)
 
 //--------------------------------------------------------------------------------------
 
-function create_wo_requirements($woid, $stock_id)
+function create_wo_requirements($woid, $bom)
 {
-	$sql = "INSERT INTO ".TB_PREF."wo_requirements (workorder_id, stock_id, workcentre, units_req, loc_code)
+    if ($bom == null)
+        return;
+
+    // bom can be array of components
+    // or a list of components indexed by parent stock_id in bom file
+    if (is_array($bom))
+        $sql = "INSERT INTO ".TB_PREF."wo_requirements (workorder_id, stock_id, workcentre, units_req, loc_code) VALUES("
+            . db_escape($woid) . "," . db_escape($bom['component']) ."," . db_escape($bom['workcentre_added']) . "," .  db_escape($bom['quantity']) . "," . db_escape($bom['loc_code']) .")";
+    else
+        $sql = "INSERT INTO ".TB_PREF."wo_requirements (workorder_id, stock_id, workcentre, units_req, loc_code)
 		SELECT ".db_escape($woid).", component, workcentre_added, quantity, loc_code
-		FROM ".TB_PREF."bom WHERE parent=".db_escape($stock_id);
+		FROM ".TB_PREF."bom WHERE parent=".db_escape($bom);
 
     db_query($sql, "The work order requirements could not be added");
 }

@@ -20,12 +20,16 @@ include_once($path_to_root . "/gl/includes/db/gl_db_bank_trans.inc");
 include_once($path_to_root . "/manufacturing/includes/manufacturing_db.inc");
 include_once($path_to_root . "/manufacturing/includes/manufacturing_ui.inc");
 
+$posts=array('selected_id', 'date_', 'cr_acc', 'costs', 'memo');
+
 $js = "";
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history($posts);
 page(_($help_context = "Work Order Additional Costs"), false, false, "", $js);
+set_posts($posts);
 
 if (isset($_GET['trans_no']) && $_GET['trans_no'] != "")
 {
@@ -108,7 +112,9 @@ if (isset($_POST['process']) && can_process($wo_details) == true)
 	add_wo_costs_journal($_POST['selected_id'], input_num('costs'), $_POST['PaymentType'], 
 		$_POST['cr_acc'], $date, $_POST['dim1'], $_POST['dim2'], $memo, $ref);
 
-	meta_forward($_SERVER['PHP_SELF'], "AddedID=".$_POST['selected_id']);
+    if (strpos(get_post('referer'), 'gl_account_inquiry.php') !== false)
+        unset($_POST['referer']);
+	meta_forward_self("AddedID=".$_POST['selected_id']);
 }
 
 //-------------------------------------------------------------------------------------
@@ -138,12 +144,20 @@ if (list_updated('PaymentType'))
 	$Ajax->activate('costs');
 
 $item = get_item($wo_details['stock_id']);
-$r = get_default_bank_account(get_company_pref('curr_default'));
-$_POST['cr_acc'] = $r['account_code'];
+if (!isset($_POST['cr_acc'])) {
+    $r = get_default_bank_account(get_company_pref('curr_default'));
+    $_POST['cr_acc'] = $r['account_code'];
+}
 $_POST['costs'] = price_format(get_post('PaymentType')==WO_OVERHEAD ? $item['overhead_cost'] : $item['labour_cost']);
 
-amount_row(_("Additional Costs:"), 'costs');
-gl_all_accounts_list_row(_("Credit Account"), 'cr_acc', null);
+if (isset($_GET['account'])) {
+    $_POST['costs'] += abs($_GET['amount']);
+}
+
+gl_all_accounts_list_row(_("Credit Account"), 'cr_acc', null, false, false, false, true);
+amount_row(
+        menu_link("gl/inquiry/gl_account_inquiry.php" . "?select=true&account=".$_POST['cr_acc'], _("Add Cost")),
+        'costs');
 textarea_row(_("Memo:"), 'memo', null, 40, 5);
 end_table(1);
 hidden('dim1', $item["dimension_id"]);

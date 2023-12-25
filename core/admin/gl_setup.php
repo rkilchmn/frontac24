@@ -118,7 +118,8 @@ if (isset($_POST['submit']) && can_process())
 		'no_zero_lines_amount', 'show_po_item_codes', 'accounts_alpha', 'loc_notification', 'print_invoice_no',
 		'allow_negative_prices', 'print_item_images_on_quote', 
 		'allow_negative_stock'=> 0, 'accumulate_shipping'=> 0,
-		'po_over_receive' => 0.0, 'po_over_charge' => 0.0, 'default_credit_limit'=>0.0
+		'po_over_receive' => 0.0, 'po_over_charge' => 0.0, 'default_credit_limit'=>0.0,
+        'default_sales_type', 'default_sales_area', 'default_tax_group'
 )));
 
 	display_notification(_("The general GL setup has been updated."));
@@ -149,6 +150,9 @@ $_POST['tax_algorithm'] = $myrow["tax_algorithm"];
 $_POST['default_sales_act'] = $myrow["default_sales_act"];
 $_POST['default_sales_discount_act']  = $myrow["default_sales_discount_act"];
 $_POST['default_prompt_payment_act']  = $myrow["default_prompt_payment_act"];
+$_POST['default_sales_type']  = $myrow["default_sales_type"];
+$_POST['default_sales_area']  = $myrow["default_sales_area"];
+$_POST['default_tax_group']  = $myrow["default_tax_group"];
 
 $_POST['default_inventory_act'] = $myrow["default_inventory_act"];
 $_POST['default_cogs_act'] = $myrow["default_cogs_act"];
@@ -243,6 +247,10 @@ gl_all_accounts_list_row(_("Prompt Payment Discount Account:"), 'default_prompt_
 text_row(_("Quote Valid Days:"), 'default_quote_valid_days', $_POST['default_quote_valid_days'], 6, 6, '', "", _("days"));
 
 text_row(_("Delivery Required By:"), 'default_delivery_required', $_POST['default_delivery_required'], 6, 6, '', "", _("days"));
+
+sales_types_list_row(_("Sales Type:"), 'default_sales_type');
+sales_areas_list_row(_("Sales Area:"), 'default_sales_area');
+tax_groups_list_row(_("Tax Group:"), 'default_tax_group');
 
 //---------------
 

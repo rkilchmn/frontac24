@@ -10,15 +10,18 @@
     See the License here <http://www.gnu.org/licenses/gpl-3.0.html>.
 ***********************************************************************/
 //--------------------------------------------------------------------------------------------------
-function pager_link($link_text, $url, $icon=false)
+function pager_link_absolute($link_text, $url, $icon=false)
 {
-	global $path_to_root;
-	
 	if (user_graphic_links() && $icon)
 		$link_text = set_icon($icon, $link_text);
 
-	$href = $path_to_root . $url;
-	return "<a href='$href'>" . $link_text . "</a>";
+	return "<a href='$url'>" . $link_text . "</a>";
+}
+
+function pager_link($link_text, $url, $icon=false)
+{
+	global $path_to_root;
+    return pager_link_absolute($link_text, $path_to_root . $url, $icon);
 }
 
 function navi_button($name, $value, $enabled=true, $icon = false) {
@@ -205,6 +208,9 @@ function display_db_pager(&$pager) {
    		display_note($pager->marker_txt, 0, 1, "class='$pager->notice_class'");
 
   div_end();
+//  breaks suppliers/customers->Transactions/Orders with objDiv is null
+//  scroll_down("_{$pager->name}_span");
+
   return true;
 }
 

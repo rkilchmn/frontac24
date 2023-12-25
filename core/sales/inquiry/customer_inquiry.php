@@ -23,7 +23,9 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
-page(_($help_context = "Customer Transactions"), isset($_GET['customer_id']), false, "", $js);
+$js .= get_js_history(array("customer_id", "type_group_id", "TransFromDate", "TransToDate", "filterType"));
+
+page(_($help_context = "Customer Transactions"), isset($_GET['customer_id']) && !isset($_GET['TransFromDate']), false, "", $js);
 
 //------------------------------------------------------------------------------------------------
 
@@ -88,8 +90,45 @@ function edit_link($row)
 	if ($page_nested)
 		return '';
 
-	return $row['type'] == ST_CUSTCREDIT && $row['order_'] ? '' : 	// allow  only free hand credit notes edition
-			trans_editor_link($row['type'], $row['trans_no']);
+    switch($row['type']) {
+        case ST_SALESINVOICE:
+
+            // Determine which editor can be used to edit the invoice
+            // Only direct invoices can be fully edited
+
+            $deliveries = get_sales_parent_numbers($row['type'], $row['trans_no']);
+
+            if ($deliveries !== 0
+                && count($deliveries) == 1
+                && get_reference(ST_CUSTDELIVERY, $deliveries[0]) == "auto") {
+                $str = "/sales/sales_order_entry.php?NewInvoice=".$row['order_']."&InvoiceNo=".$row['trans_no'];
+                return pager_link(_('Edit'), $str, ICON_EDIT);
+                break;
+            }
+        default:
+            return $row['type'] == ST_CUSTCREDIT && $row['order_'] ? '' : 	// allow  only free hand credit notes edition
+                trans_editor_link($row['type'], $row['trans_no']);
+    }
+}
+
+function attach_link($row)
+{
+	global $page_nested;
+
+	$str = '';
+	if ($page_nested)
+		return '';
+    return is_closed_trans($row['type'], $row['trans_no']) ? "--" : pager_link(_("Add an Attachment"), "/admin/attachments.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_ATTACH);
+}
+
+function delete_link($row)
+{
+	global $page_nested;
+
+	$str = '';
+	if ($page_nested)
+		return '';
+    return is_closed_trans($row['type'], $row['trans_no']) ? "--" : pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['type'], ICON_DELETE);
 }
 
 function prt_link($row)
@@ -102,11 +141,16 @@ function prt_link($row)
  		return print_document_link($row['trans_no']."-".$row['type'], _("Print"), true, $row['type'], ICON_PRINT);
 }
 
-function check_overdue($row)
+function email_link($row)
 {
-	return $row['OverDue'] == 1
-		&& floatcmp(ABS($row["TotalAmount"]), $row["Allocated"]) != 0;
+  	if ($row['type'] == ST_CUSTPAYMENT || $row['type'] == ST_BANKDEPOSIT) 
+		return print_document_link($row['trans_no']."-".$row['type'], _("Print Receipt"), true, ST_CUSTPAYMENT, ICON_DOC);
+  	elseif ($row['type'] == ST_BANKPAYMENT) // bank payment printout not defined yet.
+		return '';
+ 	else
+ 		return print_document_link($row['trans_no']."-".$row['type'], _("Email"), true, $row['type'], ICON_DOC, '', '', 1);
 }
+
 //------------------------------------------------------------------------------------------------
 
 function display_customer_summary($customer_record)
@@ -142,10 +186,8 @@ function display_customer_summary($customer_record)
 	end_table();
 }
 
-if (isset($_GET['customer_id']))
-{
-	$_POST['customer_id'] = $_GET['customer_id'];
-}
+unset($_SESSION['filterType']);
+set_posts(array("customer_id", "tax_group_id", "TransFromDate", "TransToDate", "filterType"));
 
 //------------------------------------------------------------------------------------------------
 
@@ -159,19 +201,34 @@ start_row();
 
 ref_cells(_("Reference:"), 'Ref', '', NULL, _('Enter reference fragment or leave empty'));
 
-if (!$page_nested)
+if (!$page_nested) {
 	customer_list_cells(_("Select a customer: "), 'customer_id', null, true, true, false, true);
+    if (get_post('customer_id') != null)
+        $cust = get_customer(get_post('customer_id'));
+    else
+        tax_groups_list_cells(null, 'tax_group_id', null, 'All Tax Groups', true);
+}
 
 cust_allocations_list_cells(null, 'filterType', null, true, true);
 
 if ($_POST['filterType'] != '2')
 {
-	date_cells(_("From:"), 'TransAfterDate', '', null, -user_transaction_days());
-	date_cells(_("To:"), 'TransToDate', '', null);
+    $days = user_transaction_days();
+    date_cells(_("From:"), 'TransFromDate', '', null, -abs($days));
+    if ($days >= 0) {
+        date_cells(_("To:"), 'TransToDate');
+    } else {
+        date_cells(_("To:"), 'TransToDate', '', null, 0, 2);
+    }
 }
+$_POST['show_voided'] = 1;
 check_cells(_("Zero values"), 'show_voided');
 
 submit_cells('RefreshInquiry', _("Search"),'',_('Refresh Inquiry'), 'default');
+
+end_row();
+start_row();
+label_row("", menu_link('sales/sales_order_entry.php?NewInvoice=0', 'Create Direct Invoice'));
 end_row();
 end_table();
 
@@ -193,8 +250,11 @@ if (get_post('RefreshInquiry') || list_updated('filterType'))
 	$Ajax->activate('_page_body');
 }
 //------------------------------------------------------------------------------------------------
-$sql = get_sql_for_customer_inquiry(get_post('TransAfterDate'), get_post('TransToDate'),
-	get_post('customer_id'), get_post('filterType'), check_value('show_voided'), get_post('Ref'));
+$tax_group_id = get_post('tax_group_id');
+if ($tax_group_id == -1)
+    $tax_group_id=null;
+$sql = get_sql_for_customer_inquiry(get_post('TransFromDate'), get_post('TransToDate'),
+	get_post('customer_id'), $tax_group_id, get_post('filterType'), check_value('show_voided'));
 
 //------------------------------------------------------------------------------------------------
 //db_query("set @bal:=0");
@@ -212,9 +272,12 @@ $cols = array(
 	_("Amount") => array('align'=>'right', 'fun'=>'fmt_amount'), 
 	_("Balance") => array('align'=>'right', 'type'=>'amount'),
 		array('insert'=>true, 'fun'=>'gl_view'),
-		array('insert'=>true, 'fun'=>'edit_link'),
+		array('insert'=>true, 'fun'=>'prt_link'),
+		array('insert'=>true, 'fun'=>'email_link'),
 		array('insert'=>true, 'fun'=>'credit_link'),
-		array('insert'=>true, 'fun'=>'prt_link')
+		array('insert'=>true, 'fun'=>'edit_link'),
+		array('insert'=>true, 'fun'=>'attach_link'),
+		array('insert'=>true, 'fun'=>'delete_link')
 	);
 
 
@@ -226,11 +289,11 @@ if ($_POST['filterType'] != '2')
 	$cols[_("Balance")] = 'skip';
 
 $table =& new_db_pager('trans_tbl', $sql, $cols);
-$table->set_marker('check_overdue', _("Marked items are overdue."));
+$table->set_marker('check_overdue_allocation', _("Marked items are overdue."));
 
 $table->width = "85%";
 
 display_db_pager($table);
 
 end_form();
-end_page();
+end_page(true);

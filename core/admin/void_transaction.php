@@ -26,10 +26,18 @@ if (user_use_date_picker())
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 	
+if (isset($_GET['trans_no'])
+    && isset($_GET['filterType'])) {
+    $_POST['FromTransNo'] = $_POST['ToTransNo'] = $_POST['selected_id'] = $_POST['trans_no'] = $_GET['trans_no'];
+    $_POST['filterType'] = $_GET['filterType'];
+    $_POST['ProcessVoiding'] = true;
+}
+
 page(_($help_context = "Void a Transaction"), false, false, "", $js);
 
 simple_page_mode(true);
 //----------------------------------------------------------------------------------------
+
 function exist_transaction($type, $type_no)
 {
 	$void_entry = get_voided_entry($type, $type_no);
@@ -312,6 +320,8 @@ function handle_void_transaction()
 
 		if (!$msg) 
 		{
+            meta_forward_referer("Void Completed");
+
 			display_notification_centered(_("Selected transaction has been voided."));
 			unset($_POST['trans_no']);
 			unset($_POST['memo_']);
@@ -349,6 +359,7 @@ if (isset($_POST['ConfirmVoiding']))
 
 if (isset($_POST['CancelVoiding']))
 {
+    meta_forward_referer("Void Completed");
 	$selected_id = -1;
 	$Ajax->activate('_page_body');
 }

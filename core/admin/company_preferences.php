@@ -156,7 +156,7 @@ if (isset($_POST['update']) && $_POST['update'] != "")
 				'base_sales', 'ref_no_auto_increase' => 0, 'dim_on_recurrent_invoice' => 0, 'long_description_invoice' => 0, 'max_days_in_docs' => 180, 'company_logo_on_views' => 0,
 				'time_zone' => 0, 'company_logo_report' => 0, 'barcodes_on_stock' => 0, 'print_dialog_direct' => 0, 
 				'add_pct', 'round_to', 'login_tout', 'auto_curr_reval', 'bcc_email', 'alternative_tax_include_on_docs', 
-				'suppress_tax_rates', 'use_manufacturing', 'use_fixed_assets'))
+				'suppress_tax_rates', 'tax_bank_payments', 'use_manufacturing', 'use_fixed_assets'))
 		);
 
 		$_SESSION['wa_current_user']->timeout = $_POST['login_tout'];
@@ -254,6 +254,7 @@ $_POST['del_coy_logo']  = 0;
 $_POST['bcc_email']  = $myrow["bcc_email"];
 $_POST['alternative_tax_include_on_docs']  = $myrow["alternative_tax_include_on_docs"];
 $_POST['suppress_tax_rates']  = $myrow["suppress_tax_rates"];
+$_POST['tax_bank_payments']  = $myrow["tax_bank_payments"];
 $_POST['use_manufacturing']  = $myrow["use_manufacturing"];
 $_POST['use_fixed_assets']  = $myrow["use_fixed_assets"];
 
@@ -297,6 +298,7 @@ text_row_ex(_("Tax Periods:"), 'tax_prd', 10, 10, '', null, null, _('Months.'));
 text_row_ex(_("Tax Last Period:"), 'tax_last', 10, 10, '', null, null, _('Months back.'));
 check_row(_("Put alternative Tax Include on Docs"), 'alternative_tax_include_on_docs', null);
 check_row(_("Suppress Tax Rates on Docs"), 'suppress_tax_rates', null);
+check_row(_("Tax Bank Payments and Deposits"), 'tax_bank_payments', null);
 check_row(_("Automatic Revaluation Currency Accounts"), 'auto_curr_reval', $_POST['auto_curr_reval']);
 
 table_section_title(_("Sales Pricing"));

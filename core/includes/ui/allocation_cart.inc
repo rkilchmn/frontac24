@@ -30,6 +30,7 @@ class allocation
 	var $currency;
 
 	var $allocs; /*array of transactions allocated to */
+    var $default_branch;
 
 	function __construct($type, $trans_no, $person_id = null, $person_type_id=null)
 	{
@@ -148,6 +149,9 @@ class allocation
 		 		$trans_items = get_allocatable_to_cust_transactions($this->person_id);
 			while ($myrow = db_fetch($trans_items))
 			{
+                // default branch is first alloc
+                if (!isset($this->default_branch) && isset($myrow['branch_code']))
+                    $this->default_branch = $myrow['branch_code'];
 				$this->add_item($myrow["type"], $myrow["trans_no"],
 					sql2date($myrow["tran_date"]),
 					sql2date($myrow["due_date"]),
@@ -219,7 +223,7 @@ class allocation
 		$dec = user_price_dec();
 		foreach ($this->allocs as $alloc_item)
 		{
-			if ($alloc_item->current_allocated > 0)
+			if ($alloc_item->current_allocated != 0)
 			{
 				$amount = round($alloc_item->current_allocated, $dec);
 
@@ -298,8 +302,6 @@ class allocation_item
 
 function show_allocatable($show_totals) {
 
-	global $systypes_array;
-	
     $k = $total_allocated = 0;
 
 	$cart = $_SESSION['alloc'];
@@ -316,20 +318,20 @@ function show_allocatable($show_totals) {
 
 		foreach ($cart->allocs as $id => $alloc_item)
 		{
-		    if (floatcmp(abs($alloc_item->amount), $alloc_item->amount_allocated))
+		    if (floatcmp($alloc_item->amount, $alloc_item->amount_allocated))
 		    {
 				alt_table_row_color($k);
-    			label_cell($systypes_array[$alloc_item->type]);
+    			label_cell(get_systype_name($alloc_item->type, $alloc_item->amount));
 	   			label_cell(get_trans_view_str($alloc_item->type, $alloc_item->type_no), "nowrap align='right'");
 		   		label_cell($alloc_item->ref);
     			label_cell($alloc_item->date_, "align=right");
     			label_cell($alloc_item->due_date, "align=right");
-	    		amount_cell(abs($alloc_item->amount));
+	    		amount_cell($alloc_item->amount);
 				amount_cell($alloc_item->amount_allocated);
 
 		    	$_POST['amount' . $id] = price_format($alloc_item->current_allocated);
 
-	    		$un_allocated = round((abs($alloc_item->amount) - $alloc_item->amount_allocated), 6);
+	    		$un_allocated = round(($alloc_item->amount - $alloc_item->amount_allocated), 6);
 	    		amount_cell($un_allocated, false,'', 'maxval'.$id);
     			amount_cells(null, "amount" . $id);//, input_num('amount' . $id));
 				label_cell("<a href='javascript:void(0)' name=Alloc$id onclick='allocate_all(this.name.substr(5));return true;'>"
@@ -346,18 +348,20 @@ function show_allocatable($show_totals) {
     	   	label_row(_("Total Allocated"), price_format($total_allocated),
 	    		"colspan=8 align=right", "align=right id='total_allocated'", 3);
 
-			$amount = abs($cart->amount);
+			$amount = $cart->amount;
+            if ($supp_ref)
+                $amount = abs($amount);
 
 			if (floatcmp($amount, $total_allocated) < 0)
 	        {
-        		$font1 = "<font color=red>";
-        		$font2 = "</font>";
+        		$font = "style=color:red ";
     	    }
 	        else
-        		$font1 = $font2 = "";
+        		$font = "";
+
 			$left_to_allocate = price_format($amount - $total_allocated);
-	        label_row(_("Left to Allocate"), $font1 . $left_to_allocate . $font2, 
-				"colspan=8 align=right", "nowrap align=right id='left_to_allocate'",
+	        label_row(_("Left to Allocate"), $left_to_allocate, 
+				"colspan=8 align=right", $font . "nowrap align=right id='left_to_allocate'",
 				 3);
 		}
 		end_table(1);
@@ -375,7 +379,11 @@ function check_allocations()
 	for ($counter = 0; $counter < get_post("TotalNumberOfAllocs"); $counter++)
 	{
 		if (!isset($_POST['amount'.$counter])) continue;
-		if (!check_num('amount' . $counter, 0))
+		$allocated = input_num('amount' . $counter);
+
+		if ((!$SysPrefs->allow_negative_invoice || $allocated > 0)
+            && !check_num('amount' . $counter, 0)
+		    || $allocated < 0 && !check_num('amount' . $counter, null, 0))
 		{
 			display_error(_("The entry for one or more amounts is invalid or negative."));
 			set_focus('amount'.$counter);
@@ -385,8 +393,7 @@ function check_allocations()
 		  /* Now check to see that the AllocAmt is no greater than the
 		 amount left to be allocated against the transaction under review;
 		 skip check if no allocation is set to avoid deadlock on mistakenly overallocated transactions*/
-		 $allocated = input_num('amount' . $counter);
-		 if ($allocated && ($allocated > input_num('un_allocated' . $counter)))
+		 if ($allocated && (abs($allocated) > abs(input_num('un_allocated' . $counter))))
 		 {
 			display_error(_("At least one transaction is overallocated."));
 			set_focus('amount'.$counter);
@@ -423,9 +430,9 @@ function check_allocations()
 
 	$amount = abs($_SESSION['alloc']->amount);
 
-	if ($total_allocated - ($amount + input_num('discount'))  > $SysPrefs->allocation_settled_allowance())
+	if (abs($total_allocated) - ($amount + input_num('discount'))  > $SysPrefs->allocation_settled_allowance())
 	{
-		display_error(_("These allocations cannot be processed because the amount allocated is more than the total amount left to allocate."));
+		display_error(_("These allocations cannot be processed because the amount allocated is more than the total amount left to allocate.") . "(" . abs($total_allocated) . ">" . ($amount + input_num('discount')) .")" );
 		return false;
 	}
 

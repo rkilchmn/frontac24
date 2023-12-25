@@ -103,8 +103,9 @@ function display_gl_items($title, &$order)
 	$dim = get_company_pref('use_dimension');
 
 	$id = find_submit('Edit');
-	$sub_type = is_subledger_account(get_post('code_id'));
-	$has_subaccounts = $order->has_sub_accounts();
+	$has_subaccounts = $order->has_sub_accounts()
+        || (!empty($_POST['code_id']) &&
+            is_subledger_account($_POST['code_id']));
 
     div_start('items_table');
 	start_table(TABLESTYLE, "width='95%'");
@@ -119,7 +120,7 @@ function display_gl_items($title, &$order)
 			_("Debit"), _("Credit"), _("Memo"), "");
 
 	if (count($order->gl_items)) $th[] = '';
-	if ($sub_type || $has_subaccounts)
+	if ($has_subaccounts)
 		array_insert($th, 2, _("Counterparty"));
 
 	table_header($th);
@@ -138,7 +139,7 @@ function display_gl_items($title, &$order)
 			$acc = $item->code_id . ($item->person_id ? sprintf(' %05d', $item->person_id) : '');
 			label_cells($acc, $item->description);
 
-		if ($sub_type || $has_subaccounts)
+		if ($has_subaccounts)
 			label_cell($item->person_name);
 
     		if ($dim >= 1)
@@ -170,11 +171,11 @@ function display_gl_items($title, &$order)
 	}
 
 	if ($id == -1)
-		gl_edit_item_controls($order, $dim, $sub_type);
+		gl_edit_item_controls($order, $dim, $has_subaccounts);
 
 	if ($order->count_gl_items()) 
 	{
-		$colspan = ($dim == 2 ? "4" : ($dim == 1 ? "3" : "2")) + ($sub_type || $has_subaccounts ? 1 : 0);
+		$colspan = ($dim == 2 ? "4" : ($dim == 1 ? "3" : "2")) + ($has_subaccounts ? 1 : 0);
 		start_row();
 		label_cell(_("Total"), "align=right colspan=" . $colspan);
 		amount_cell($order->gl_items_total_debit());
@@ -255,6 +256,10 @@ function gl_edit_item_controls(&$order, $dim, $sub_accounts, $Index=null)
 		if ($dim > 1)
 			dimensions_list_cells(null, 'dimension2_id', null, true, " ", false, 2);
 		$_POST['LineMemo'] = "";			
+        if ($order->gl_items_total() < 0)
+            $_POST['AmountDebit'] = round2(-$order->gl_items_total(), user_price_dec());
+        else
+            $_POST['AmountCredit'] = round2($order->gl_items_total(), user_price_dec());
 	}
 
 	if (get_post('_code_id_update'))

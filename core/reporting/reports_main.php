@@ -76,7 +76,9 @@ $reports->addReport(RC_CUSTOMER, 103, _('Customer &Detail Listing'),
 $reports->addReport(RC_CUSTOMER, 114, _('Sales &Summary Report'),
 	array(	_('Start Date') => 'DATEBEGINTAX',
 			_('End Date') => 'DATEENDTAX',
+			_('Customer') => 'CUSTOMERS_NO_FILTER',
 			_('Tax Id Only') => 'YES_NO',
+			_('Daily') => 'YES_NO',
 			_('Comments') => 'TEXTBOX',
 			_('Orientation') => 'ORIENTATION',
 			_('Destination') => 'DESTINATION'));
@@ -257,7 +259,7 @@ $reports->addReport(RC_INVENTORY, 304, _('Inventory &Sales Report'),
 			_('End Date') => 'DATEENDM',
 			_('Inventory Category') => 'CATEGORIES',
 			_('Location') => 'LOCATIONS',
-			_('Customer') => 'CUSTOMERS_NO_FILTER',
+			_('Customer/Branch') => 'CUSTOMER_BRANCHES_NO_FILTER',
 			_('Show Service Items') => 'YES_NO',
 			_('Comments') => 'TEXTBOX',
 			_('Orientation') => 'ORIENTATION',
@@ -359,7 +361,7 @@ if ($dim > 0)
 			_('Destination') => 'DESTINATION'));
 }
 $reports->addReportClass(_('Banking'), RC_BANKING);
-	$reports->addReport(RC_BANKING,  601, _('Bank &Statement'),
+	$reports->addReport(RC_BANKING,  601, _('Bank &Register'),
 	array(	_('Bank Accounts') => 'BANK_ACCOUNTS_NO_FILTER',
 			_('Start Date') => 'DATEBEGINM',
 			_('End Date') => 'DATEENDM',
@@ -367,7 +369,7 @@ $reports->addReportClass(_('Banking'), RC_BANKING);
 			_('Comments') => 'TEXTBOX',
 			_('Orientation') => 'ORIENTATION',
 			_('Destination') => 'DESTINATION'));
-	$reports->addReport(RC_BANKING,  602, _('Bank Statement w/ &Reconcile'),
+	$reports->addReport(RC_BANKING,  602, _('Bank Register w/ &Reconcile'),
 	array(	_('Bank Accounts') => 'BANK_ACCOUNTS',
 			_('Start Date') => 'DATEBEGINM',
 			_('End Date') => 'DATEENDM',
@@ -426,6 +428,7 @@ if ($dim == 2)
 			_('Compare to') => 'COMPARE',
 			_('Dimension')." 1" =>  'DIMENSIONS1',
 			_('Dimension')." 2" =>  'DIMENSIONS2',
+			_('Exclude Dimension') => 'YES_NO',
 			_('Account Tags') =>  'ACCOUNTTAGS',
 			_('Decimal values') => 'YES_NO',
 			_('Graphics') => 'GRAPHIC',
@@ -477,6 +480,7 @@ elseif ($dim == 1)
 			_('End Date') => 'DATEENDM',
 			_('Compare to') => 'COMPARE',
 			_('Dimension') => 'DIMENSIONS1',
+			_('Exclude Dimension') => 'YES_NO',
 			_('Account Tags') =>  'ACCOUNTTAGS',
 			_('Decimal values') => 'YES_NO',
 			_('Graphics') => 'GRAPHIC',
@@ -557,5 +561,7 @@ $reports->addReport(RC_GL, 710, _('Audit Trail'),
 add_custom_reports($reports);
 
 echo $reports->getDisplay();
+
+set_browser_title($_POST['_focus']);
 
 end_page();

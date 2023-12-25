@@ -480,11 +480,10 @@ class line_item
 		else
 			$this->item_description = $description;
 
-		if ($standard_cost == null)
+		if ($standard_cost === null)
 			$this->standard_cost = $item_row["purchase_cost"];
 		else
 			$this->standard_cost = $standard_cost;
-
 		$this->stock_id = $stock_id;
 		$this->quantity = $qty;
 		//$this->price = $price;

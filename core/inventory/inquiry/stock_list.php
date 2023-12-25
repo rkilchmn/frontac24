@@ -16,6 +16,7 @@
 ***********************************************************************/
 $page_security = "SA_ITEM";
 $path_to_root = "../..";
+include_once($path_to_root . "/includes/db_pager.inc");
 include_once($path_to_root . "/includes/session.inc");
 include_once($path_to_root . "/includes/ui.inc");
 include_once($path_to_root . "/inventory/includes/db/items_db.inc");
@@ -28,6 +29,20 @@ else
 
 page(_($help_context = "Items"), true, false, "", $js);
 
+function select_item($myrow)
+{
+    global $mode;
+    $name = $_GET["client_id"];
+	$value = $myrow['item_code'];
+	if ($mode != 0) {
+		$text = $myrow['description'];
+  		return ahref_str(_("Select"), 'javascript:void(0)', '', 'setComboItem(window.opener.document, "'.$name.'",  "'.$value.'", "'.$text.'")');
+	}
+	else {
+  		return ahref_str(_("Select"), 'javascript:void(0)', '', 'selectComboItem(window.opener.document, "'.$name.'", "'.$value.'")');
+	}
+}
+
 if(get_post("search")) {
   $Ajax->activate("item_tbl");
 }
@@ -38,43 +53,19 @@ start_table(TABLESTYLE_NOBORDER);
 
 start_row();
 
-text_cells(_("Description"), "description");
+text_cells_ex(_("Description"), "description", null, null, null, null, null, null, true);
 submit_cells("search", _("Search"), "", _("Search items"), "default");
 
 end_row();
 
 end_table();
 
+$th = array("" => array('fun' => 'select_item'), _("Item Code"), _("Description"), _("Category"));
+$sql = get_items_search_sql(get_post("description"), @$_GET['type']);
+$table =& new_db_pager('item_tbl', $sql, $th);
+$table->width = "85%";
+display_db_pager($table);
+
 end_form();
 
-div_start("item_tbl");
-start_table(TABLESTYLE);
-
-$th = array("", _("Item Code"), _("Description"), _("Category"));
-table_header($th);
-
-$k = 0;
-$name = $_GET["client_id"];
-$result = get_items_search(get_post("description"), @$_GET['type']);
-
-while ($myrow = db_fetch_assoc($result))
-{
-	alt_table_row_color($k);
-	$value = $myrow['item_code'];
-	if ($mode != 0) {
-		$text = $myrow['description'];
-  		ahref_cell(_("Select"), 'javascript:void(0)', '', 'setComboItem(window.opener.document, "'.$name.'",  "'.$value.'", "'.$text.'")');
-	}
-	else {
-  		ahref_cell(_("Select"), 'javascript:void(0)', '', 'selectComboItem(window.opener.document, "'.$name.'", "'.$value.'")');
-	}
-  	label_cell($myrow["item_code"]);
-	label_cell($myrow["description"]);
-  	label_cell($myrow["category"]);
-	end_row();
-}
-
-end_table(1);
-
-div_end();
 end_page(true);

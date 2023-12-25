@@ -370,12 +370,22 @@ function checkbox($label, $name, $value=null, $submit_on_change=false, $title=fa
 			$submit_on_change = 
 				"JsHttpRequest.request(\"_{$name}_update\", this.form);";
 	}
-	if ($value === null)
-		$value = get_post($name,0);
+
+    $checked = false;
+    if (substr($name, -2) == "[]") {
+        if (isset($_POST[substr($name,0, -2)]))
+            $checked = in_array($value, $_POST[substr($name,0, -2)]);
+    } else {
+        if ($value === null)
+            $checked = get_post($name,0);
+        else if ($value == 1)
+            $checked = true;
+        $value = 1;
+    }
 
 	$str .= "<input"
-	    .($value == 1 ? ' checked':'')
-	    ." type='checkbox' name='$name' value='1'"
+	    .($checked ? ' checked':'')
+	    ." type='checkbox' name='$name' value='" . $value ."'"
 	    .($submit_on_change ? " onclick='$submit_on_change'" : '')
 	    .($title ? " title='$title'" : '')
 	    ." >\n";
@@ -794,7 +804,7 @@ function percent_row($label, $name, $init=null)
 	small_amount_row($label, $name, $_POST[$name], null, "%", user_percent_dec());
 }
 
-function amount_cells_ex($label, $name, $size, $max=null, $init=null, $params=null, $post_label=null, $dec=null)
+function amount_cells_ex($label, $name, $size, $max=null, $init=null, $params=null, $post_label=null, $dec=null, $submit_on_blur=false, $background_color="none")
 {
 	global $Ajax;
 
@@ -820,8 +830,12 @@ function amount_cells_ex($label, $name, $size, $max=null, $init=null, $params=nu
 		echo "<td>";
 	else
 		echo "<td align='right'>";
+	echo "<input onClick='this.select();' class='amount' style=background-color:$background_color type=\"text\" name=\"$name\" size=\"$size\" maxlength=\"$max\" dec=\"$dec\" value=\"" . $_POST[$name] . "\"";
 
-	echo "<input class='amount' type=\"text\" name=\"$name\" size=\"$size\" maxlength=\"$max\" dec=\"$dec\" value=\"" . $_POST[$name]. "\">";
+     if ($submit_on_blur === true)
+         echo " onblur='JsHttpRequest.request(\"_{$name}_update\", this.form);'";
+
+        echo ">";
 
 	if ($post_label) {
 		echo "<span id='_{$name}_label'> $post_label</span>";
@@ -835,9 +849,9 @@ function amount_cells_ex($label, $name, $size, $max=null, $init=null, $params=nu
 
 //-----------------------------------------------------------------------------------
 
-function amount_cells($label, $name, $init=null, $params=null, $post_label=null, $dec=null)
+function amount_cells($label, $name, $init=null, $params=null, $post_label=null, $dec=null, $submit_on_blur=false, $background_color="none")
 {
-	amount_cells_ex($label, $name, 15, 15, $init, $params, $post_label, $dec);
+	amount_cells_ex($label, $name, 15, 15, $init, $params, $post_label, $dec, $submit_on_blur, $background_color);
 }
 
 //JAM  Allow entered unit prices to be fractional
@@ -865,12 +879,12 @@ function small_amount_row($label, $name, $init=null, $params=null, $post_label=n
 
 //-----------------------------------------------------------------------------------
 
-function qty_cells($label, $name, $init=null, $params=null, $post_label=null, $dec=null)
+function qty_cells($label, $name, $init=null, $params=null, $post_label=null, $dec=null, $submit_on_blur=false)
 {
 	if (!isset($dec))
 	  	$dec = user_qty_dec();
 
-	amount_cells_ex($label, $name, 15, 15, $init, $params, $post_label, $dec);
+	amount_cells_ex($label, $name, 15, 15, $init, $params, $post_label, $dec, $submit_on_blur);
 }
 
 function qty_row($label, $name, $init=null, $params=null, $post_label=null, $dec=null)
@@ -1012,18 +1026,12 @@ function bank_balance_row($bank_acc, $parms='')
 	$bal = get_balance_before_for_bank_account($bank_acc, $to);
 	label_row( _("Bank Balance:"),
 		"<a target='_blank' " . ($bal<0 ? 'class="redfg"' : '')
-		."href='$path_to_root/gl/inquiry/bank_inquiry.php?bank_account=".$bank_acc."'"
+		."href='$path_to_root/gl/inquiry/bank_inquiry.php?bank_account=".$bank_acc."&no_header=1"."'"		
 		." onclick=\"javascript:openWindow(this.href,this.target); return false;\" >&nbsp;"
 		. price_format($bal)
 		."</a>", $parms);
 }
 
-function ahref($label, $href, $target="", $onclick="") {
-  echo "<a href='$href' target='$target' onclick='$onclick'>$label</a>";
-}
-
-function ahref_cell($label, $href, $target="", $onclick="") {
-  echo "<td align='center'>&nbsp;&nbsp;";
-  ahref($label, $href, $target, $onclick);
-  echo "&nbsp;&nbsp;</td>";
+function ahref_str($label, $href, $target="", $onclick="") {
+  return "<a href='$href' target='$target' onclick='$onclick'>$label</a>";
 }

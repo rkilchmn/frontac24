@@ -80,7 +80,11 @@ class BoxReports
 
 			$style = $class_id==$cur_class ? '' : "style='display:none'";
 			$st_reports .= "<table class='repclass' id='TAB_" . $class_id ."' $style cellpadding='0' cellspacing='0' border='0' width='100%'><tr><td><b>" . _("Reports For Class: ") . "&nbsp;$name</b></td></tr>\n";
-			foreach($this->ar_reports[$class_id] as $rep_id => $report)
+            $sort_report = Array();
+			foreach($this->ar_reports[$class_id] as $report)
+                $sort_report[str_replace("&", "", $report->name)] = $report;
+            ksort($sort_report);
+			foreach($sort_report as $report)
 			{
 				$acc = access_string($report->name);
 				$st_reports .= "<tr><td><a class='repopts_link'"
@@ -219,9 +223,10 @@ class BoxReports
 					$st = "<input type='text' name='$name' value='$date'>";
 					if (user_use_date_picker())
 					{
+                        $todate = (strpos($type, "END") !== false) ? "true" : "false";
 						$calc_image = (file_exists("$path_to_root/themes/".user_theme()."/images/cal.gif")) ? 
 							"$path_to_root/themes/".user_theme()."/images/cal.gif" : "$path_to_root/themes/default/images/cal.gif";
-						$st .= "<a href=\"javascript:date_picker(document.forms[0].$name);\">"
+						$st .= "<a href=\"javascript:date_picker(document.forms[0].$name, $todate);\">"
 						. "	<img src='$calc_image' style='vertical-align:middle;padding-bottom:4px;width:16px;height:16px;border:0;' alt='"._('Click Here to Pick up the date')."'></a>\n";
 					}	
 					return $st;
@@ -248,7 +253,7 @@ class BoxReports
 					return array_selector($name, $def, $sel);
 
 				case 'COMPARE':
-					$sel = array(_("Accumulated"), _("Period Y-1"), _("Budget"));
+					$sel = array(_("Accumulated"), _("Period Y-1"), _("Budget"), _("None"));
 					return array_selector($name, null, $sel);
 
 				case 'GRAPHIC':
@@ -309,6 +314,13 @@ class BoxReports
 						return customer_list($name, null, _("No Customer Filter"));
 					else
 						return customer_list($name);
+
+				case 'CUSTOMER_BRANCHES_NO_FILTER':
+				case 'CUSTOMER_BRANCHES':
+					if ($type == 'CUSTOMER_BRANCHES_NO_FILTER')
+						return customer_branches_list(null, $name, null, _("No Branch Filter"));
+					else
+						return customer_branches_list(null, $name);
 
 				case 'SUPPLIERS_NO_FILTER':
 				case 'SUPPLIERS':

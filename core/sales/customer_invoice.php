@@ -33,6 +33,9 @@ if (user_use_date_picker()) {
 	$js .= get_js_date_picker();
 }
 
+if (isset($_GET['DirectInvoice']))
+    unset($_SERVER['HTTP_REFERER']);
+
 if (isset($_GET['ModifyInvoice'])) {
 	$_SESSION['page_title'] = sprintf(_("Modifying Sales Invoice # %d.") ,$_GET['ModifyInvoice']);
 	$help_context = "Modifying Sales Invoice";
@@ -370,9 +373,9 @@ if (isset($_POST['process_invoice']) && check_data()) {
 		processing_end();
 
 		if ($newinvoice) {
-			meta_forward($_SERVER['PHP_SELF'], "AddedID=$invoice_no");
+			meta_forward_self("AddedID=$invoice_no");
 		} else {
-			meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$invoice_no");
+			meta_forward_self("UpdatedID=$invoice_no");
 		}
 	}	
 }

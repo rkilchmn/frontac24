@@ -15,6 +15,512 @@ var _hotkeys = {
 	'focus': -1		// currently selected list element
 };
 
+/**
+ * ADDED AUTO-COMPLETE SELECT BOX BY ANOOP MB.
+ * http://frontaccounting.com/punbb/viewtopic.php?id=6198
+ */
+
+/*<----------MBCODE START------------>*/
+
+function mbselect(elm)
+{
+	var mbc = '';
+	var selectedvalue = null;
+	var selectedoption = null;
+	var selectedoptionkey = null;
+	var dispayitems = 0;
+	var optgropc = 0;
+	var selectedoptionold;
+	var selectedvalueold;
+	var selectedoptionkeyold;
+
+	var options = elm.getElementsByTagName('option');
+	if (options.length != 0) {
+		var rep="";
+		var tit="";
+		for (var j = 0; j < options.length; j++) {
+
+			if (options[j].selected) { // check if options is selected
+
+				selectedvalue = options[j].getAttribute('value');
+				selectedoption = document.createElement('LI');
+				selectedoption.className = "aselected";
+				selectedoption.id = options[j].getAttribute('value');
+				selectedoption.innerHTML = options[j].text;
+				selectedoptionkey = j;
+
+			}
+			if(options[j].parentNode.nodeName.toLowerCase() === 'optgroup' && rep!=options[j].parentNode.getAttribute('label')){
+				var optgroup=options[j].parentNode;
+				var l =optgroup.getAttribute('label');
+				mbc += '<li id="' + l.toUpperCase() + '" class="abbrs">' + l.toUpperCase() + '</li>';
+				rep=l;
+				tit=l;
+				dispayitems++;
+			}
+			mbc += '<li title="'+tit+'" class="anoselect" id="' + options[j].getAttribute('value') + '">' + options[j].text + '</li>';
+			dispayitems++;
+		}
+	}
+	else {
+		mbc +='<li class="abbrs">No Options</li>';
+		selectedoption = document.createElement('LI');
+		selectedoption.innerHTML ='';
+		dispayitems++;
+	}
+
+	var ih=elm.offsetHeight;
+	var iw=elm.offsetWidth;
+	elm.style.display = 'none';
+	elm.setAttribute("style","display:none");
+	var wrapper = document.createElement('div');
+	wrapper.setAttribute("style","display:inline-block;height:"+ih+"px;");
+	wrapper.style.display = 'inline-block';
+	wrapper.style.height =ih+"px";
+	var typer = document.createElement('INPUT');
+	typer.setAttribute("type","text");
+	typer.type = 'text';
+	typer.setAttribute("class","typer");
+	typer.setAttribute("autocomplete","off");
+	typer.className = "typer";
+	typer.setAttribute("name",elm.getAttribute("name")+"mselect");
+	var box_name =elm.getAttribute("rel");
+    if (box_name != null) {
+        typer.setAttribute("rel",box_name);
+        var box = document.getElementsByName(elm.getAttribute('rel'))[0];
+        box.setAttribute("rel",elm.getAttribute("name")+"mselect");
+        box.value='';
+    }
+	typer.setAttribute("style","display:inline-block;width:"+iw+"px");
+	typer.style.display = 'inline-block';
+	typer.setAttribute("style","width:"+iw+"px");
+	typer.style.width =iw+"px";
+	typer.value = decodeHtml(selectedoption.innerHTML);
+	typer.setAttribute("value",typer.value);
+	var hidden = document.createElement('INPUT');
+	hidden.setAttribute("type","hidden");
+	hidden.type = 'hidden';
+	hidden.setAttribute("name",elm.getAttribute("name"));
+	hidden.value = selectedvalue;
+
+	var totitems=dispayitems;
+	elm.parentNode.insertBefore(wrapper, elm);
+	var arrow = document.createElement('SPAN');
+	arrow.innerHTML = '\u25BC';
+	arrow.setAttribute("class","mb");
+	arrow.className = "mb";
+	wrapper.appendChild(typer);
+	wrapper.appendChild(arrow);
+	wrapper.appendChild(hidden);
+	elm.parentNode.removeChild(elm);
+
+	var popup = document.createElement('div');
+	var list = popup.getElementsByTagName('LI');
+
+       typer.select();
+
+	function pop(disp, cont) {
+		disp = disp || 'none';
+		cont = cont || null;
+		var rect = typer.getBoundingClientRect();
+
+		var left = rect.left;
+		var top = rect.bottom;
+		var width = typer.offsetWidth-2;
+
+		popup.className += " popups";
+		var contentmb = '<div class="lister"><ul class="mselect-rset">';
+
+		contentmb += mbc;
+		contentmb += '</ul></div>';
+		popup.innerHTML = contentmb;
+		if (cont != null) {
+
+			var opts = [];
+			var ullist = popup.getElementsByTagName('UL')[0];
+			var hlino = ullist.querySelectorAll('li.abbrs').length;
+			var gid = '#$%#';
+			var cu=0;
+			var co=0;
+			var ck=0;
+			var vk=0;
+			for (var nn = 0; nn < list.length; nn++) {
+
+				if (cont.test(list[nn].innerHTML)) {
+
+					if (list[nn].className == 'abbrs') {
+						opts.push('<li class="abbrs">' + list[nn].innerHTML.replace(cont, "<u>$1</u>") + '</li>');
+						gid = list[nn].id.toLowerCase();
+
+						cu=1;
+					}else{
+						if(cu!=1 &&ck!=list[nn].title &&hlino!=0){
+							opts.push('<li class="abbrs">'+list[nn].title.toUpperCase()+'</li>');
+							ck=list[nn].title;
+
+						}
+						if(vk!=1) {
+							opts.push('<li class="aselected"  id="' + list[nn].id+'">' + list[nn].innerHTML.replace(cont, "<u>$1</u>") + '</li>');
+							vk=1;
+							selectedoption=list[nn];
+							selectedoptionkey=nn;
+							selectedvalue=list[nn].id;
+						}
+						else
+						{
+							opts.push('<li class="anoselect "  id="' + list[nn].id+'">' + list[nn].innerHTML.replace(cont, "<u>$1</u>") + '</li>');
+
+						}
+						co=1;
+
+					}
+
+				}
+
+				if(gid==list[nn].title.toLowerCase() && co!=1)
+				{
+					if(vk!=1) {
+						opts.push('<li class="aselected"  id="' + list[nn].id+'">'+list[nn].innerHTML+'</li>');
+						vk=1;
+						selectedoption=list[nn];
+						selectedoptionkey=nn;
+						selectedvalue=list[nn].id;
+					}
+					else
+					{
+						opts.push('<li class="anoselect"  id="' + list[nn].id+'">'+list[nn].innerHTML+'</li>');
+					}
+				}
+			}
+			totitems =opts.length;
+			if(opts.length==0){
+				opts[0]='<li class="abbrs">Nothing Found</li>';
+				selectedoption=selectedoptionold;
+				selectedoptionkey=selectedoptionkeyold;
+			}
+
+			//alert(opts.join(""));
+			ullist.innerHTML = ullist.innerHTML.replace(ullist.innerHTML,opts.join(""));
+		}
+		popup.style.position = "fixed";
+		popup.style.left = left + "px";
+		popup.style.top = top + "px";
+		popup.style.width = width + "px";
+		typer.parentNode.appendChild(popup);
+		popup.style.display = disp;
+		optgropc = 0;
+		list = popup.getElementsByTagName('LI');
+
+		function clear() {
+
+			for (var mm = 0; mm < list.length; mm++) {
+				if (list[mm].className != 'abbrs') {
+					list[mm].className = ' anoselect';
+				}
+			}
+
+		}
+
+		function setlistindex() {
+			clear();
+			for (var mm = 0; mm < list.length; mm++) {
+
+				if (list[mm].className != 'abbrs') {
+
+					if (selectedoption.id == list[mm].id) {
+						list[mm].className = ' aselected';
+						list[mm].scrollIntoView(false);
+					}
+				}
+			}
+
+		}
+		selectedoptionold =selectedoption;
+		selectedvalueold =selectedvalue;
+		selectedoptionkeyold =selectedoptionkey;
+		if(list.length>0) {
+			setlistindex();
+			for (var mm = 0; mm < list.length; mm++) {
+				(function (mm) {
+					if (list[mm].className != 'abbrs') {
+						list[mm].onmousedown = function (event) {
+							typer.value = decodeHtml(this.innerHTML);
+							hidden.value = this.id;
+							selectedoption = this;
+							selectedvalue = this.id;
+							selectedoptionkey = mm;
+							selectedoptionold = selectedoption;
+							selectedvalueold = selectedvalue;
+							selectedoptionkeyold = selectedoptionkey;
+							typer.blur();
+
+							popup.style.display = 'none';
+
+							//JsHttpRequest.request(hidden);
+							//_update_box(hidden);
+
+                            if (validate(hidden)) {
+                                var sname = '_' + hidden.name + '_update';
+                                var update = document.getElementsByName(sname)[0];
+                                if (update) {
+                                    JsHttpRequest.request(update);
+                                }
+                            }
+							return false;
+
+						};
+						list[mm].onmouseover = function (event) {
+							clear();
+							optgropc = 0;
+							selectedoption = this;
+							selectedvalue = this.id;
+							selectedoptionkey = mm;
+							this.className = ' aselected';
+
+						};
+						list[mm].onmouseout = function (event) {
+
+							selectedoption = selectedoptionold;
+							selectedvalue = selectedvalueold;
+							selectedoptionkey = selectedoptionkeyold;
+							optgropc = 0;
+							this.className = ' anoselect';
+						};
+
+					}
+					else {
+						list[mm].onmousedown = function (event) {
+							typer.focus();
+							optgropc = 1;
+
+						}
+					}
+
+				})(mm);
+			}
+		}
+	}
+    typer.setvalue = function(id) {
+        for (var mm = 0; mm < list.length; mm++) {
+                if (id == list[mm].id) {
+                    selectedoption = list[mm];
+                    selectedvalue = id;
+                    list[mm].className = ' aselected';
+                    list[mm].scrollIntoView(false);
+                }
+        }
+        this.value = decodeHtml(selectedoption.innerHTML);
+		this.select();
+		this.focus();
+    }
+
+	typer.onmousedown = function (event) {
+		pop("block");
+	};
+	typer.onfocus = function (event) {
+		save_focus(typer);
+		typer.select();
+	};
+	window.onresize = function (event) {
+		popcl();
+	};
+	typer.onblur = function (event) {
+
+		if (optgropc != 1) {
+			pop("none");
+			optgropc = 0;
+			if (typer.value == null || typer.value == '' ||typer.value!=selectedoption.innerHTML) {
+				typer.value = decodeHtml(selectedoption.innerHTML);
+				hidden.value = selectedvalue;
+
+			}
+		} else {
+			optgropc = 0;
+			this.focus();
+		}
+	};
+	typer.onmouseout = function (event) {
+		optgropc = 0;
+	};
+	arrow.onclick = function(event) {
+		typer.select();
+		typer.focus();
+		pop("block");
+
+	};
+	typer.onkeydown = function (event) {
+		event = event || window.event;
+
+		if (event.which == 40) {
+
+			if(totitems>0){
+
+				var listsel = popup.querySelectorAll('li.aselected');
+				if(selectedoptionkey>list.length)selectedoptionkey=0;
+				if(list[selectedoptionkey].className=='abbrs')selectedoptionkey++;
+
+				selectedoptionkey++;
+
+				if(selectedoptionkey==list.length)selectedoptionkey=0;
+				if(list[selectedoptionkey].className=='abbrs')selectedoptionkey++;
+				listsel[0].className=listsel[0].className.replace('aselected','anoselect');
+
+				list[selectedoptionkey].className='aselected';
+				selectedoption = list[selectedoptionkey];
+				selectedvalue = list[selectedoptionkey].id;
+				selectedoption.scrollIntoView(false);
+
+			}
+
+			event.cancelBubble = true;
+			if (navigator.appName != 'Microsoft Internet Explorer')	{
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			return false;
+		}
+		if (event.which == 38) {
+
+			if(totitems>0){
+				var listsel = popup.querySelectorAll('li.aselected');
+				if(selectedoptionkey>list.length)selectedoptionkey=0;
+				if(list[selectedoptionkey].className=='abbrs')selectedoptionkey--;
+				selectedoptionkey--;
+				if(list[0].className=='abbrs')
+				{
+					if(selectedoptionkey<1)selectedoptionkey=list.length-1;
+				}else
+				{
+					if(selectedoptionkey<0)selectedoptionkey=list.length-1;
+				}
+
+				if(list[selectedoptionkey].className=='abbrs')selectedoptionkey--;
+				listsel[0].className=listsel[0].className.replace('aselected','anoselect');
+				list[selectedoptionkey].className='aselected';
+				selectedoption = list[selectedoptionkey];
+				selectedvalue = list[selectedoptionkey].id;
+				selectedoption.scrollIntoView(false);
+
+			}
+
+			event.cancelBubble = true;
+			if (navigator.appName != 'Microsoft Internet Explorer')	{
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			return false;
+		}
+
+		    key = event.keyCode||event.which;
+		    var box = document.getElementsByName(this.getAttribute('rel'))[0];
+//alert(box.className + ":" + box.name);
+            // F1 or ctrl-B (used for barcode reader) activates search
+		    if (box && (key == 112 || (key == 66 && event.ctrlKey)) ) {
+                this.style.display = 'none';
+                box.style.display = 'inline';
+                box.value='';
+                setFocus(box);
+			    return false;
+            }
+	}
+	typer.onkeypress = function (event) {
+		event = event || window.event;
+		if (event.which == 13) {
+			selectedoptionold =selectedoption;
+			selectedvalueold =selectedvalue;
+			selectedoptionkeyold =selectedoptionkey;
+			typer.value = decodeHtml(selectedoption.innerHTML);
+			hidden.value = selectedvalue;
+			typer.blur();
+			popcl();
+			//JsHttpRequest.request(hidden );
+			//_update_box(hidden);
+            if (validate(hidden)) {
+                var sname = '_'+hidden.name+'_update';
+                var update = document.getElementsByName(sname)[0];
+                if(update) {
+                    JsHttpRequest.request(update);
+                }
+            }
+			return false;
+		}
+	};
+	typer.onkeyup=function(event){
+		if(event.which!=13&&event.which!=16&&event.which!=17&&event.which!=18&&event.which!=19&&event.which!=20
+				&&event.which!=27&&event.which!=35&&event.which!=36&&event.which!=37&&event.which!=38
+				&&event.which!=39&&event.which!=40&&event.which!=91&&event.which!=93&&event.which!=224
+				&&event.which!=16&&event.which!=9){
+			if (typer.value != '' && typer.value != null) {
+				var tes = new RegExp('(' + escapeRegExp(typer.value) + ')', "i");
+				pop('block', tes);
+
+			}
+			else {
+				pop('block');
+			}
+
+		}else{
+
+			return false;
+		}
+	}
+	var myEfficientFn = debounce(function () {
+		var rect = typer.getBoundingClientRect();
+		var left = rect.left;
+		var top = rect.bottom;
+		popup.style.left = left + "px";
+		popup.style.top = top + "px";
+	}, 5);
+
+	window.addEventListener('scroll', myEfficientFn);
+
+}
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
+function popcl() {
+	// All the elements with class close or fade.
+	var els = document.querySelectorAll('.popups');
+	var ins = document.querySelectorAll('input.typer');
+	// Loop through the list.
+	for (var i = 0; i < els.length; i++) {
+		// Hide them.
+		els[i].style.display = 'none';
+	}
+	for (var i = 0; i < ins.length; i++) {
+		// Blur them.
+		ins[i].blur();
+	}
+
+}
+
+function escapeRegExp(str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
+
+function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    html = html.replace(/\<u\>/ig, '');
+    html = html.replace(/\<\/u\>/ig, '');
+    txt.innerHTML = html;
+    return txt.value;
+}
+
+/*<----------MBCODE END------------>*/
+
 function validate(e) {
 	if (e.name && (typeof _validate[e.name] == 'function'))
 		return _validate[e.name](e);
@@ -75,12 +581,12 @@ function _set_combo_input(e) {
 // submit request if there is submit_on_change option set and
 // search field has changed.
 
-		  if (button && (this.value != this.getAttribute('_last'))) {
-			JsHttpRequest.request(button);
-		  } else if(string_contains(this.className, 'combo2')) {
-				this.style.display = 'none';
-				select.style.display = 'inline';
-				setFocus(select);
+          if (button != null && (this.value != this.getAttribute('_last'))) {
+            JsHttpRequest.request(button);
+          } else if(string_contains(this.className, 'combo2')) {
+                this.style.display = 'none';
+                select.style.display = 'inline';
+                setFocus(select);
 		  }
 		  return false;
 		};
@@ -91,30 +597,34 @@ function _set_combo_input(e) {
 			  var byid = string_contains(this.className, 'combo') || string_contains(this.className, 'combo3');
 			  var ac = this.value.toUpperCase();
 			  select.options[select.selectedIndex].selected = false;
+			  var selIndex = -1;
 			  for (i = 0; i < len; i++) {
 				var txt = byid ? select.options[i].value : select.options[i].text;
 				if (string_contains(this.className, 'combo3')) {
 				  if(txt.toUpperCase().indexOf(ac) == 0) {
-					select.options[i].selected = true;
+					selIndex=i;
 				  	break;
 				  }
 				} else {
 				  if(txt.toUpperCase().indexOf(ac) >= 0) {
-					select.options[i].selected = true;
-				  	break;
-				  }
+					selIndex=i;
+					select.options[i].removeAttribute("hidden");
+				  } else
+					select.options[i].setAttribute("hidden", true);
 				}
 			  }
+			  if (selIndex != -1)
+				select.options[selIndex].selected = true;
 			}
 		};
     	e.onkeydown = function(ev) {
 	  		ev = ev||window.event;
 	  		key = ev.keyCode||ev.which;
 	  		if(key == 13) {
-			  this.blur();
+              this.blur();
 	  		  return false;
 	  		}
-		}
+		};
 }
 
 function _update_box(s) {
@@ -125,7 +635,7 @@ function _update_box(s) {
 			  var opt = s.options[s.selectedIndex];
 				if(box) {
 				  var old = box.value;
-				  box.value = byid ? opt.value : opt.text;
+				  box.value = byid ? opt.value : '';
 				  box.setAttribute('_last', box.value);
 				  return old != box.value
 				}
@@ -147,14 +657,12 @@ function _set_combo_select(e) {
 		e.onchange = function() {
 			var s = this;
 			this.setAttribute('_last', this.selectedIndex);
-			if(string_contains(s.className, 'combo') || string_contains(this.className, 'combo3'))
-			    _update_box(s);
-			if(s.selectedIndex>=0) {
+			_update_box(s);
+			if (validate(e) && s.selectedIndex>=0) {
 				 var sname = '_'+s.name+'_update';
 				 var update = document.getElementsByName(sname)[0];
-				 if(update) {
+				 if(update)
 					    JsHttpRequest.request(update);
-				}
 			}
 			return true;
 		}
@@ -166,11 +674,12 @@ function _set_combo_select(e) {
 				event.returnValue = false;
   			  	return false;
   			}
-		    if (box && (key == 32) && (string_contains(this.className, 'combo2'))) {
-			    this.style.display = 'none';
-			    box.style.display = 'inline';
-				box.value='';
-				setFocus(box);
+            // F1 or ctrl-B (used for barcode reader) activates search
+		    if (box && (key == 112 || (key == 66 && event.ctrlKey)) ) {
+                this.style.display = 'none';
+                box.style.display = 'inline';
+                box.value='';
+                setFocus(box);
 			    return false;
 			 } else {
 			 	if (key == 13 && !e.length) // prevent chrome issue (blocked cursor after CR on empty selector)
@@ -292,11 +801,12 @@ var inserts = {
    	  			e.onkeydown = function(ev) {
   					ev = ev||window.event;
   					key = ev.keyCode||ev.which;
- 	  				if(key == 13) {
-						if(e.className == 'searchbox') e.onblur();
-						return false;
+ 	  				if(key == 13 && e.className != 'typer') {
+						if(e.className == 'searchbox')
+                            e.onblur();
+                        return false;
 					}
-					return true;
+                    return true;
 	  			}
 			}
 	},
@@ -311,7 +821,7 @@ var inserts = {
 	    e.style.display = 'block';
 	},
 	'button': function(e) {
-		e.onclick = function(){
+            e.onclick = function(){
 			if (validate(e)) {
 				setTimeout(function() {	var asp = e.getAttribute('aspect');
 					if (asp && asp.indexOf('download') === -1 && asp.indexOf('popup') === -1)
@@ -409,23 +919,28 @@ var inserts = {
 		}
 	},
 	'select': function(e) {
-		if(e.onfocus==undefined) {
-			e.onfocus = function() {
-			    save_focus(this);
-			};
-		}
-  		var c = e.className;
-		if (string_contains(c, 'combo') || string_contains(c, 'combo2') || string_contains(c, 'combo3'))
-			_set_combo_select(e);
+		var c = e.className;
+		if (string_contains(c, 'mbselect'))
+		    mbselect(e);
 		else {
-			e.onkeydown = function(ev) {	// block unintentional page escape with 'history back' key pressed on buttons
-				ev = ev||window.event;
- 				key = ev.keyCode||ev.which;
-	  			if(key == 8 || (key=37 && ev.altKey)) {
-					ev.returnValue = false;
-	  			  	return false;
-  				}
-			}
+            if(e.onfocus==undefined) {
+                e.onfocus = function() {
+                    save_focus(this);
+                };
+            }
+            var c = e.className;
+            if (string_contains(c, 'combo') || string_contains(c, 'combo2') || string_contains(c, 'combo3'))
+                _set_combo_select(e);
+            else {
+                e.onkeydown = function(ev) {	// block unintentional page escape with 'history back' key pressed on buttons
+                    ev = ev||window.event;
+                    key = ev.keyCode||ev.which;
+                    if(key == 8 || (key=37 && ev.altKey)) {
+                        ev.returnValue = false;
+                        return false;
+                    }
+                }
+            }
 		}
 	},
 	'a.printlink': 	function(l) {
@@ -466,9 +981,10 @@ var inserts = {
 				 && !confirm(_validate._processing)) {
 					ev.returnValue = false;
 					return false;
-				}
+                }
 				if (_hotkeys.alt)	// ommit Chrome accesskeys
 					return false;
+                window.onbeforeunload = null;
  				window.location = e.href;
 			}
 	},

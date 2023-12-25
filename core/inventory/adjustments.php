@@ -72,7 +72,7 @@ function line_start_focus() {
   global 	$Ajax;
 
   $Ajax->activate('items_table');
-  set_focus('_stock_id_edit');
+  set_focus_searchbox('stock_id');
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -151,9 +151,9 @@ if (isset($_POST['Process']) && can_process()){
 	unset($_SESSION['adj_items']);
 
   if ($fixed_asset)
-   	meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no&FixedAsset=1");
+   	meta_forward_self("AddedID=$trans_no&FixedAsset=1");
   else
-   	meta_forward($_SERVER['PHP_SELF'], "AddedID=$trans_no");
+   	meta_forward_self("AddedID=$trans_no");
 
 } /*end of process credit note */
 
@@ -209,6 +209,12 @@ function handle_new_item()
 $id = find_submit('Delete');
 if ($id != -1)
 	handle_delete_item($id);
+
+if (isset($_POST['ZeroInv'])) {
+	$_POST['qty'] = -get_qoh_on_date($_POST['stock_id']);
+    if (check_item_data())
+        handle_new_item();
+}
 
 if (isset($_POST['AddItem']) && check_item_data()) {
 	handle_new_item();

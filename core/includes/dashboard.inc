@@ -82,7 +82,7 @@ function dashboard($sel_app)
 		display_dimension_topten();
 	elseif ($sel_app == "GL")
 		display_gl_info();
-	else	
+	elseif ($sel_app != "custom")
 		display_all();
 }
 
@@ -1180,7 +1180,7 @@ function bank_balance($today, $width)
 	while ($myrow = db_fetch($result))
 	{
 		alt_table_row_color($k);
-		label_cell(viewer_link($myrow["bank_account_name"], 'gl/inquiry/bank_inquiry.php?bank_account='.$myrow["bank_act"]));
+		label_cell(viewer_link($myrow["bank_account_name"], 'gl/inquiry/bank_inquiry.php?bank_account='.$myrow["bank_act"].'&no_header=1'));
 		label_cell($myrow["bank_curr_code"]);
 		amount_cell($myrow['balance']);
 		end_row();

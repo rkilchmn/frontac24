@@ -39,6 +39,7 @@ if(isset($_GET['NewCredit'])) {
 } elseif (isset($_GET['ModifyCredit'])) {
 	$_SESSION['page_title'] = sprintf(_("Modifying Customer Credit Note #%d"), $_GET['ModifyCredit']);
 	handle_new_credit($_GET['ModifyCredit']);
+    $_POST['customer_id'] = $_SESSION['Items']->customer_id;
 	$help_context = "Modifying Customer Credit Note";
 }
 
@@ -85,7 +86,7 @@ if (isset($_GET['AddedID'])) {
 function line_start_focus() {
   	global $Ajax;
   	$Ajax->activate('items_table');
-  	set_focus('_stock_id_edit');
+  	set_focus_searchbox('stock_id');
 }
 
 //-----------------------------------------------------------------------------

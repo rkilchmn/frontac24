@@ -75,7 +75,7 @@ function get_customer_details($customer_id, $to=null, $all=true)
 
 	$sign = "IF(trans.type IN(".implode(',',  array(ST_CUSTCREDIT,ST_CUSTPAYMENT,ST_BANKDEPOSIT))."), -1, 1)";
 	$value = "$sign*(IF(trans.prep_amount, trans.prep_amount,
-		ABS(trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount)) ".($all ? '' : "- trans.alloc").")";
+		trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount) ".($all ? '' : "+IF(`type` = ".ST_JOURNAL.",trans.alloc,-trans.alloc)").")";
 
 	$due = "IF (trans.type=".ST_SALESINVOICE.", trans.due_date, trans.tran_date)";
 	$sql = "SELECT debtor.name, debtor.curr_code, terms.terms,
@@ -97,6 +97,7 @@ function get_customer_details($customer_id, $to=null, $all=true)
 
 	if ($customer_id)
 		$sql .= " AND debtor.debtor_no = ".db_escape($customer_id);
+
 
 	if (!$all)
 		$sql .= " AND ABS(IF(trans.prep_amount, trans.prep_amount, ABS(trans.ov_amount) + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount) - trans.alloc) > ".FLOAT_COMP_DELTA;
@@ -206,21 +207,14 @@ function get_customer_currency($customer_id=null, $branch_id=null)
 	return $myrow ? $myrow[0] : get_company_currency();
 }
 
-function get_customers_search($customer)
+function get_customers_search_sql($customer)
 {
-	global $SysPrefs;
-
-	if (isset($SysPrefs->max_rows_in_search))
-		$limit = $SysPrefs->max_rows_in_search;
-	else
-		$limit = 10;
-
-	$sql = "SELECT debtor_no, name, debtor_ref, address, tax_id FROM ".TB_PREF."debtors_master 
+	$sql = "SELECT debtor_no, IF(inactive=0,name,CONCAT('(INACTIVE) ', name)) as name, debtor_ref, address, tax_id FROM ".TB_PREF."debtors_master 
 	  WHERE (  name LIKE " . db_escape("%" . $customer. "%") . " OR 
     		 debtor_ref LIKE " . db_escape("%" . $customer. "%") . " OR 
 	        address LIKE " . db_escape("%" . $customer. "%") . " OR 
     	     tax_id LIKE " . db_escape("%" . $customer. "%").")
-	  ORDER BY name LIMIT 0,".(int)($limit);
+	  ORDER BY inactive, name ";
 
-	return db_query($sql, "Failed in retreiving customer list.");
+	return $sql;
 }

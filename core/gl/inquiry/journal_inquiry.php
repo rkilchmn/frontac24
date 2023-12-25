@@ -23,8 +23,9 @@ if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(800, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history(array("Ref", "filterType", "FromDate", "ToDate", "Memo", "userid", "AlsoClosed"));
 
-page(_($help_context = "Journal Inquiry"), false, false, "", $js);
+page(_($help_context = "Journal Inquiry"), false, false, "", $js, false, "", true);
 
 //-----------------------------------------------------------------------------------
 // Ajax updates
@@ -34,6 +35,7 @@ if (get_post('Search'))
 	$Ajax->activate('journal_tbl');
 }
 //--------------------------------------------------------------------------------------
+set_posts(array("Ref", "filterType", "FromDate", "ToDate", "Memo", "userid", "AlsoClosed"));
 if (!isset($_POST['filterType']))
 	$_POST['filterType'] = -1;
 
@@ -45,8 +47,13 @@ start_row();
 ref_cells(_("Reference:"), 'Ref', '',null, _('Enter reference fragment or leave empty'));
 
 journal_types_list_cells(_("Type:"), "filterType");
-date_cells(_("From:"), 'FromDate', '', null, -user_transaction_days());
-date_cells(_("To:"), 'ToDate');
+$days=user_transaction_days();
+date_cells(_("From:"), 'FromDate', '', null, -abs($days));
+if ($days >= 0) {
+    date_cells(_("To:"), 'ToDate');
+} else {
+    date_cells(_("To:"), 'ToDate', '', null, 0, 2);
+}
 
 end_row();
 start_row();
@@ -54,7 +61,7 @@ ref_cells(_("Memo:"), 'Memo', '',null, _('Enter memo fragment or leave empty'));
 users_list_cells(_("User:"), 'userid', null, false);
 if (get_company_pref('use_dimension') && isset($_POST['dimension'])) // display dimension only, when started in dimension mode
 	dimensions_list_cells(_('Dimension:'), 'dimension', null, true, null, true);
-check_cells( _("Show closed:"), 'AlsoClosed', null);
+check_cells( _("Show closed:"), 'AlsoClosed', true);
 submit_cells('Search', _("Search"), '', '', 'default');
 end_row();
 end_table();
@@ -73,7 +80,7 @@ function systype_name($dummy, $type)
 
 function person_link($row) 
 {
-    return payment_person_name($row["person_type_id"],$row["person_id"]);
+    return payment_person_name_link($row["person_type_id"],$row["person_id"]);
 }
 
 function view_link($row) 
@@ -100,6 +107,12 @@ function edit_link($row)
 	return $ok ? trans_editor_link( $row["trans_type"], $row["trans_no"]) : '--';
 }
 
+function delete_link($row)
+{
+    return is_closed_trans($row['trans_type'], $row['trans_no']) ? "--" : pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $row['trans_no'] . "&filterType=". $row['trans_type'], ICON_DELETE);
+}
+
+
 function invoice_supp_reference($row)
 {
 	return $row['supp_reference'];
@@ -120,7 +133,8 @@ $cols = array(
 	_("Memo"),
 	_("User"),
 	_("View") => array('insert'=>true, 'fun'=>'gl_link'),
-	array('insert'=>true, 'fun'=>'edit_link')
+	array('insert'=>true, 'fun'=>'edit_link'),
+	array('insert'=>true, 'fun'=>'delete_link')
 );
 
 if (!check_value('AlsoClosed')) {

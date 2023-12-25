@@ -237,6 +237,9 @@ function void_sales_delivery($type, $type_no, $transactions=true)
 		while ($row = db_fetch($items_result)) {
 			update_parent_line(ST_CUSTDELIVERY, $row['src_id'], -$row['quantity'], $auto);
 		}
+        // BF deletes an auto sales order and FA leaves it with cleared quantities
+        if ($auto)
+            delete_sales_order($order, ST_SALESORDER);
 	}
 
 	// clear details after they've been reversed in the sales order

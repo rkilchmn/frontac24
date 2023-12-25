@@ -79,11 +79,10 @@ foreach ($purchase_order->line_items as $stock_item)
 	qty_cell($stock_item->qty_inv, false, $dec);
 	end_row();
 
-	$total += $line_total;
+	$total += round2($line_total, user_price_dec());
 }
 
-$display_sub_tot = number_format2($total,user_price_dec());
-label_row(_("Sub Total"), $display_sub_tot,
+label_row(_("Sub Total"), price_format($total),
 	"align=right colspan=6", "nowrap align=right",2);
 
 $taxes = $purchase_order->get_taxes();

@@ -23,11 +23,11 @@ function add_tax_group($name, $taxes, $tax_shippings)
 	commit_transaction();	
 }
 
-function update_tax_group($id, $name, $taxes, $tax_shippings)
+function update_tax_group($id, $name, $no_sale, $no_purchase, $taxes, $tax_shippings)
 {
 	begin_transaction();	
 
-    $sql = "UPDATE ".TB_PREF."tax_groups SET name=".db_escape($name)." WHERE id=".db_escape($id);
+    $sql = "UPDATE ".TB_PREF."tax_groups SET name=".db_escape($name).", no_sale=".db_escape($no_sale).", no_purchase=".db_escape($no_purchase)." WHERE id=".db_escape($id);
 	db_query($sql, "could not update tax group");
 	
 	delete_tax_group_items($id);
@@ -89,13 +89,10 @@ function delete_tax_group_items($id)
 //
 function get_tax_group_rates($group_id=null, $tax_shipping=false)
 {
-	global $SysPrefs;
-
 	$sql = 
-	"SELECT t.id as tax_type_id,"
-		.($SysPrefs->suppress_tax_rates() == 1 ? "t.name as tax_type_name,"
-			: "CONCAT(t.name, ' (', t.rate, '%)') as tax_type_name,")
-		."t.sales_gl_code,
+	"SELECT t.id as tax_type_id,
+          t.name as tax_type_name,
+		  t.sales_gl_code,
 		  t.purchasing_gl_code,
 		  IF(g.tax_type_id, t.rate, NULL) as rate,
 		  g.tax_shipping
@@ -105,21 +102,28 @@ function get_tax_group_rates($group_id=null, $tax_shipping=false)
 	. " WHERE !t.inactive";
 	if ($tax_shipping)
 		$sql .= " AND g.tax_shipping=1";
-
 	return db_query($sql, "cannot get tax types as array");
 }
 
-function get_tax_group_items_as_array($id)
+function get_tax_group_items_as_array($id, $address='')
 {
+	global $SysPrefs;
 	$ret_tax_array = array();
 	
-	$tax_group_items = get_tax_group_rates($id);
+	$tax_group_items = get_tax_group_rates($id, '');
 	
 	while ($tax_group_item = db_fetch($tax_group_items)) 
 	{
 		$tax_group_item['Value'] = 0;
-		$ret_tax_array[$tax_group_item['tax_type_id']] = $tax_group_item;
+        if (!is_null($tax_group_item['rate'])) {
+            $rate = hook_retrieve_tax_rate($tax_group_item['tax_type_name'], $address);
+            if (is_numeric($rate))
+                $tax_group_item['rate'] = $rate;
+        }
 
+		if ($SysPrefs->suppress_tax_rates() != 1 && is_numeric($tax_group_item['rate']))
+			$tax_group_item['tax_type_name'] .= ' (' . $tax_group_item['rate'] . '%)';
+		$ret_tax_array[$tax_group_item['tax_type_id']] = $tax_group_item;
 	}
 	
 	return $ret_tax_array;

@@ -60,7 +60,6 @@ class Cart
 	var $freight_cost = 0;
 
 	var $tax_group_id;
-	var $tax_group_name;
 	var $tax_group_array = null; // saves db queries
 	var $price_factor;	 // ditto for price calculations
 
@@ -82,7 +81,7 @@ class Cart
 	var $ex_rate;
 
 	var $fixed_asset = false;
-	var $bo_policy = null;
+	var $payment_info; // optional additional payment information
 
 	//-------------------------------------------------------------------------
 	//
@@ -91,7 +90,7 @@ class Cart
 	//  $trans_no!=0 && $prepare_child==true => prepare for child doc entry
 	//	$prepare_child is set to ST_SALESINVOICE for prepayment invoices
 	//
-	function __construct($type, $trans_no=0, $prepare_child=false) {
+	function __construct($type, $trans_no=0, $prepare_child=false, $doc_date=null) {
 		/*Constructor function initialises a new shopping cart */
 		$this->line_items = array();
 		$this->sales_type = "";
@@ -102,7 +101,7 @@ class Cart
 		$this->dimension_id = 0;
 		$this->dimension2_id = 0;
 		$this->pos = get_sales_point(user_pos());
-		$this->read($type, $trans_no, $prepare_child);
+		$this->read($type, $trans_no, $prepare_child, $doc_date);
 		$this->cart_id = uniqid('');
 	}
 
@@ -208,7 +207,7 @@ class Cart
 	//-------------------------------------------------------------------------
 	// Reading document into cart
 	//
-	function read($type, $trans_no=0, $prepare_child=false) {
+	function read($type, $trans_no=0, $prepare_child=false, $doc_date=null) {
 
 		global $SysPrefs, $Refs;
 
@@ -232,7 +231,8 @@ class Cart
 					$this->set_parent_constraints($sodata, $trans_no[0]);
 				}
 			}
-			// convert document into child and prepare qtys for entry
+
+            // convert document into child and prepare qtys for entry
 			if ($prepare_child)
 				$this->prepare_child($prepare_child);
 
@@ -245,7 +245,7 @@ class Cart
 			  $this->customer_id = get_global_customer();
 			else
 			  $this->customer_id = '';
-			$this->document_date = new_doc_date();
+			$this->document_date = ($doc_date != null ? $doc_date : new_doc_date());
 			if (!is_date_in_fiscalyear($this->document_date))
 				$this->document_date = end_fiscalyear();
 			$this->reference = $Refs->get_next($this->trans_type, null, array('date' => Today(),
@@ -342,7 +342,6 @@ class Cart
 		}
 
 		commit_transaction();
-
 		return $ret;
 	}
 
@@ -357,19 +356,19 @@ class Cart
 		$this->cash_discount = $cdiscount;
 
 		if ($this->payment_terms['cash_sale']) {
-			$this->Location = $this->pos['pos_location'];
-			$this->location_name = $this->pos['location_name'];
+			$this->Location = @$this->pos['pos_location'];
+			$this->location_name = @$this->pos['location_name'];
 		}
 		$this->credit = get_current_cust_credit($customer_id);
 	}
 
-	function set_branch($branch_id, $tax_group_id, $tax_group_name, $phone='', $email='')
+	function set_branch($branch_id, $tax_group_id, $address='', $phone='', $email='')
 	{
 		$this->Branch = $branch_id;
 		$this->phone = $phone;
 		$this->email = $email;
 		$this->tax_group_id = $tax_group_id;
-		$this->tax_group_array = get_tax_group_items_as_array($tax_group_id);
+		$this->tax_group_array = get_tax_group_items_as_array($tax_group_id, $address);
 	}
 
 	function set_sales_type($sales_type, $sales_name, $tax_included=0, $factor=0)
@@ -601,8 +600,9 @@ class Cart
 
 		foreach($qtys as $stock_id => $sum)
 		{
-			if (check_negative_stock($stock_id, -$sum['qty'], $location ? $location : $this->Location, $date ? $date : $this->document_date))
-				$low_stock[] = $stock_id;
+			$qty = check_negative_stock($stock_id, -$sum['qty'], $location ? $location : $this->Location, $date ? $date : $this->document_date);
+			if ($qty)
+				$low_stock[$stock_id] = $qty['qty'] + $qty['delta'];
 		}
 
 		return $low_stock;
@@ -628,7 +628,8 @@ class Cart
 	*/
 	function is_started()
 	{
-		if ($this->trans_no==0)
+		if ($this->trans_no==0
+            || $this->trans_type == ST_SALESINVOICE)
 			return false;
 		$order_no = array_keys($this->trans_no);
 

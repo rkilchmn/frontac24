@@ -51,6 +51,16 @@ function start_form($multi=false, $dummy=false, $action="", $name="")
 	else
 		echo "<form method='post' action='$action' $name>\n";
 
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $referer=parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH);
+        if (basename($referer) == "index.php")
+            hidden('referer');
+        else if ($referer != $_SERVER['PHP_SELF']) {
+            hidden('referer', $_SERVER['HTTP_REFERER']);
+            $_POST['referer'] = $_SERVER['HTTP_REFERER'];
+        } else
+            hidden('referer', @$_POST['referer']);
+    }
 }
 
 /*
@@ -166,6 +176,44 @@ function meta_forward($forward_to, $params="", $timeout=0, $return=false)
 	if ($params !='') $params = '?'.$params;
 	$Ajax->redirect($forward_to.$params);
 	if (!$return) exit;
+}
+
+// If the prior php page was an inquiry page,
+// then return control back to that page.
+// Otherwise, stay on the current page.
+function meta_forward_self($params_in="", $timeout=0, $return=false)
+{
+    $referer = "";
+    $params = "";
+    if (!isset($_POST['referer'])
+        || (strpos($_POST['referer'], "inquiry") === false && strpos($_POST['referer'], "search") === false))
+        $referer=$_SERVER['PHP_SELF'];
+    else {
+        $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+        $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
+        $params = preg_replace('/[&]*message.*/', '', $params);
+        if (!empty($params))
+            $params .= "&";
+        $params .= "message=Completed";
+        if ($params_in != "")
+            $params .= "&";
+    }
+    meta_forward($referer, $params . $params_in, $timeout, $return);
+}
+
+function meta_forward_referer($message)
+{
+    if (!isset($_POST['referer']))
+        return;
+
+    $referer=parse_url($_POST['referer'], PHP_URL_PATH);
+    $params = parse_url(htmlspecialchars_decode($_POST['referer']), PHP_URL_QUERY);
+    $params = preg_replace('/[&]*message.*/', '', $params);
+    if (!empty($params))
+        $params .= "&";
+    $params .= "message=$message";
+
+    meta_forward($referer, $params);
 }
 
 //-----------------------------------------------------------------------------------
@@ -396,7 +444,7 @@ function div_start($id='', $trigger=null, $non_ajax=false)
    		echo "<div style='display:none' class='js_only' ".($id !='' ? "id='$id'" : '').">";
 	} else { // ajax ready div
    		array_push($ajax_divs, array($id, $trigger===null ? $id : $trigger));
-   		echo "<div ". ($id !='' ? "id='$id'" : '').">";
+   		echo "<div ". ($id !='' ? "id='$id'" : '')." class=".$id.">";
    		ob_start();
 	}
 }
@@ -673,8 +721,14 @@ function page_processing($msg = false)
 	if ($msg === true)
 		$msg = _("Entered data has not been saved yet.\nDo you want to abandon changes?");
 
+
 	$js = "_validate._processing=" . (
 		$msg ? '\''.strtr($msg, array("\n"=>'\\n')) . '\';' : 'null;');
+
+	$js .= "window.onbeforeunload = function() { return " .
+		($msg ? '\''.strtr($msg, array("\n"=>'\\n')) . '\';' : 'null;');
+    $js .= "};";
+
 	if (in_ajax()) {
 		$Ajax->addScript(true, $js);
 	} else
@@ -686,6 +740,51 @@ function page_modified($status = true)
 	global $Ajax;
 
 	$js = "_validate._modified=" . ($status ? 1:0).';';
+	if (in_ajax()) {
+		$Ajax->addScript(true, $js);
+	} else
+		add_js_source($js);
+}
+
+function scroll_down($div)
+{
+	global $Ajax;
+
+    $js = "
+        var objDiv = document.getElementById('" . $div . "');
+        objDiv.scrollTop = objDiv.scrollHeight;
+    ";
+	if (in_ajax()) {
+		$Ajax->addScript(true, $js);
+	} else
+		add_js_source($js);
+}
+
+// Name browser tab titles more specifically
+
+// Renaming tabs with differing content makes it easier for
+// the user to keep track of multiple open tabs.
+// Set the browser tab title to the value of a search element on the page
+// Thus when the element changes value, the browser tab title changes as well.
+
+// For example, when the user does a bank account inquiry on a certain bank
+// account, the bank account name shows in the tab title rather than just
+// "Bank Account Inquiry".   Then if the user opens another tab and does
+// a bank account inquiry on a different bank account, the tabs have the
+// bank account names rather than the duplicate title "Bank Account Inquiry".
+function set_browser_title($name)
+{
+	global $Ajax;
+
+    $js = "
+    var e = document.getElementsByName('" . $name ."');
+    if (e[0]) {
+        if (e[0].nodeName == 'SELECT')
+            document.title = e[0].options[e[0].selectedIndex].text;
+        else if (e[0].nodeName == 'BUTTON')
+            document.title = e[0].value;
+    }
+    ";
 	if (in_ajax()) {
 		$Ajax->addScript(true, $js);
 	} else

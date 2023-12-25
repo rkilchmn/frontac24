@@ -13,6 +13,7 @@ function display_bank_header(&$order)
 {
 	global $Ajax;
 	$payment = $order->trans_type == ST_BANKPAYMENT;
+        $new = $order->order_id==0;
 
 	$customer_error = false;
 	div_start('pmt_header');
@@ -20,8 +21,22 @@ function display_bank_header(&$order)
 	start_outer_table(TABLESTYLE2, "width='90%'"); // outer table
 
 	table_section(1);
-	
-    date_row(_("Date:"), 'date_', '', true, 0, 0, 0, null, true);
+
+    // changed submit_on_change to false
+    // to fix erratic annoying bug where pressing the Process Payment button
+    // *sometimes* did not work the first time after changing the date
+    // but worked the second time.  This is somehow related to the request() call
+    // in the .date code in inserts.js because without it the bug disappears.
+    // The bug may be caused by an ordering/timing issue within the ajax
+    // code.  When the bug occurs, the .ajaxsubmit code is not called.
+    // I was unable to reproduce this bug on the demo site, which could
+    // be due to differing javascript code or server timing.
+    // I do not see the reason to set submit_on_change anyway
+    // because there is no code (unlike gl/includes/ui/gl_journal_ui.inc)
+    // that checks for _<name>_changed which is the only effect of calling request().
+    // Note that this bug may continue to exist in General Journal.
+
+    date_row(_("Date:"), 'date_', '', true, 0, 0, 0, null, false);
 
 	ref_row(_("Reference:"), 'ref', '', $order->reference, false, $order->trans_type, get_post('date_'));
 
@@ -32,25 +47,34 @@ function display_bank_header(&$order)
 		if (isset($_GET['PayType']))
 			$_POST['PayType'] = $_GET['PayType'];
 		else
-			$_POST['PayType'] = "";
+			$_POST['PayType'] = null;
 	}
 	if (!isset($_POST['person_id']))
 	{
 		if (isset($_GET['PayPerson']))
 			$_POST['person_id'] = $_GET['PayPerson'];
 		else
-			$_POST['person_id'] = "";
+            $_POST['person_id'] = null;
 	}
 	if (isset($_POST['_PayType_update'])) {
-		$_POST['person_id'] = '';
+		$_POST['person_id'] = null;
 		$Ajax->activate('pmt_header');
 		$Ajax->activate('code_id');
 		$Ajax->activate('pagehelp');
 		$Ajax->activate('editors');
 		$Ajax->activate('footer');
 	}
+
+    if ($_POST['PayType'] == null)
+        $_POST['PayType'] = last_bank_trans('person_type_id');
     payment_person_types_list_row( $payment ? _("Pay To:"):_("From:"),
 		 'PayType', $_POST['PayType'], true);
+
+
+    if ($_POST['person_id'] == null)
+        $_POST['person_id'] = last_bank_trans('person_id', $_POST['PayType']);
+
+    $desc = _("Amount:");
     switch ($_POST['PayType'])
     {
 		case PT_MISC :
@@ -94,23 +118,21 @@ function display_bank_header(&$order)
 				$Ajax->activate('footer');
 				$Ajax->activate('totamount');
 			}
-			amount_row($qid['base_desc'].":", 'totamount', price_format($qid['base_amount']),
-				 null, "&nbsp;&nbsp;".submit('go', _("Go"), false, false, true));
+            if (!isset($_POST['totamount']))
+                $_POST['totamount'] = price_format($qid['base_amount']);
+            $desc = $qid['base_desc'].":";
 			break;	
     }
+    amount_row($desc, 'totamount', null,
+         null, "&nbsp;&nbsp;".submit('go', _("Go"), false, false, true));
 
 	table_section(3, "33%");
 
-	if (!$order->order_id && !get_post('bank_account'))
-	{
-		if ($_POST['PayType'] == PT_CUSTOMER)
-			$_POST['bank_account'] = get_default_customer_bank_account($_POST['person_id']);
-		elseif ($_POST['PayType'] == PT_SUPPLIER)	
-			$_POST['bank_account'] = get_default_supplier_bank_account($_POST['person_id']);
-		else
-			unset($_POST['bank_account']);
-	}		
-    
+    if (!$order->order_id && !get_post('bank_account'))
+    {
+        set_post_last_used_bank_account($_POST['PayType'], $_POST['person_id']);
+    }
+
     bank_accounts_list_row( $payment ? _("From:") : _("Into:"), 'bank_account', null, true);
     if ($payment)
 		bank_balance_row($_POST['bank_account']);
@@ -118,6 +140,17 @@ function display_bank_header(&$order)
 	$bank_currency = get_bank_account_currency($_POST['bank_account']);
 
 	exchange_rate_display(get_company_currency(), $bank_currency, $_POST['date_']);
+
+        // Query the user to retain the reconciled status
+        if (!$new) {
+            $result = get_bank_trans($order->trans_type, $order->order_id);
+            $row = db_fetch($result);
+            if ($row
+                && $row['reconciled'] != "") {
+                check_row(_('Reconciled:'), 'reconciled', 1, false);
+                hidden('reconciled_date', $row['reconciled']);
+            }
+        }
 
 	end_outer_table(1); // outer table
 
@@ -188,12 +221,21 @@ function display_gl_items($title, &$order)
 		}
 	}
 
-	if ($id == -1)
+	if ($id == -1) {
+        if ($order->trans_type == ST_BANKDEPOSIT)
+            $total = -$order->gl_items_total();
+        else
+            $total = $order->gl_items_total();
+        if (isset($_POST['totamount'])
+            && input_num('totamount') > $total)
+            $_POST['amount'] = number_format2(input_num('totamount') - $total, user_price_dec());
 		gl_edit_item_controls($order, $dim);
+    }
 
 	if ($order->count_gl_items())
 		label_row(_("Total"), number_format2(abs($order->gl_items_total()), user_price_dec()),"colspan=" . $colspan . " align=right", "align=right",3);
 
+    hidden('pay_items', htmlentities(serialize($order)));
     end_table();
 	div_end();
 }
@@ -225,7 +267,8 @@ function gl_edit_item_controls(&$order, $dim, $Index=null)
 		if(isset($_POST['_code_id_update'])) {
 			    $Ajax->activate('code_id');
 		}
-		if (list_updated('PayType') || list_updated('person_id'))
+		if (!isset($_POST['code_id'])
+            || (list_updated('PayType') || list_updated('person_id')))
 		{
 			if ($_POST['PayType'] == PT_CUSTOMER)
 			{
@@ -302,7 +345,6 @@ function gl_options_controls($order)
   	echo "</table>";
   	div_end();
 }
-
 
 //---------------------------------------------------------------------------------
 

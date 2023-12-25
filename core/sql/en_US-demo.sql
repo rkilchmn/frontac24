@@ -523,7 +523,7 @@ DROP TABLE IF EXISTS `0_cust_allocations`;
 CREATE TABLE `0_cust_allocations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `person_id` int(11) DEFAULT NULL,
-  `amt` double unsigned DEFAULT NULL,
+  `amt` double DEFAULT NULL,
   `date_alloc` date NOT NULL DEFAULT '0000-00-00',
   `trans_no_from` int(11) DEFAULT NULL,
   `trans_type_from` int(11) DEFAULT NULL,
@@ -1652,7 +1652,7 @@ CREATE TABLE `0_stock_master` (
   `category_id` int(11) NOT NULL DEFAULT '0',
   `tax_type_id` int(11) NOT NULL DEFAULT '0',
   `description` varchar(200) NOT NULL DEFAULT '',
-  `long_description` tinytext NOT NULL,
+  `long_description` text NOT NULL,
   `units` varchar(20) NOT NULL DEFAULT 'each',
   `mb_flag` char(1) NOT NULL DEFAULT 'B',
   `sales_account` varchar(15) NOT NULL DEFAULT '',
@@ -1929,6 +1929,7 @@ INSERT INTO `0_sys_prefs` VALUES
 ('print_invoice_no','glsetup.sales', 'tinyint', 1, '0'),
 ('allow_negative_prices','glsetup.inventory', 'tinyint', 1, '1'),
 ('print_item_images_on_quote','glsetup.inventory', 'tinyint', 1, '0'),
+('tax_bank_payments','setup.company', 'tinyint', 1, '0'),
 ('suppress_tax_rates','setup.company', 'tinyint', 1, '0'),
 ('company_logo_report','setup.company', 'tinyint', 1, '0'),
 ('barcodes_on_stock','setup.company', 'tinyint', 1, '0'),
@@ -1940,8 +1941,10 @@ INSERT INTO `0_sys_prefs` VALUES
 ('dim_on_recurrent_invoice','setup.company', 'tinyint', 1, '0'),
 ('long_description_invoice','setup.company', 'tinyint', 1, '0'),
 ('max_days_in_docs','setup.company', 'smallint', 5, '180'),
-('use_fixed_assets','setup.company', 'tinyint', 1, '1'),
-('company_logo_on_views', 'setup.company', 'tinyint', '1', '0');
+('default_sales_type', 'glsetup.sales', 'tinyint', 1, '1'),
+('default_sales_area', 'glsetup.sales', 'tinyint', 1, '1'),
+('default_tax_group', 'glsetup.sales', 'tinyint', 1, '1'),
+('use_fixed_assets','setup.company', 'tinyint', 1, '1');
 
 -- Structure of table `0_tag_associations` --
 
@@ -1995,6 +1998,8 @@ CREATE TABLE `0_tax_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL DEFAULT '',
   `inactive` tinyint(1) NOT NULL DEFAULT '0',
+  `no_sale` tinyint(1) NOT NULL DEFAULT '0',
+  `no_purchase` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 ;
@@ -2002,8 +2007,8 @@ CREATE TABLE `0_tax_groups` (
 -- Data of table `0_tax_groups` --
 
 INSERT INTO `0_tax_groups` VALUES
-('1', 'Tax', '0'),
-('2', 'Tax Exempt', '0');
+('1', 'Tax', '0', '0', '0'),
+('2', 'Tax Exempt', '0', '0', '0');
 
 -- Structure of table `0_tax_types` --
 

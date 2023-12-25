@@ -482,6 +482,7 @@ function display_supp_trans_tax_details($tax_items, $columns)
 
 function display_edit_tax_items($taxes, $columns, $tax_included, $rightspan=0, $editable=false)
 {
+    global $Ajax;
 	$total = 0;
 
     foreach ($taxes as $taxitem)
@@ -489,19 +490,24 @@ function display_edit_tax_items($taxes, $columns, $tax_included, $rightspan=0, $
 		$amount = isset($taxitem['Override']) ? $taxitem['Override'] : $taxitem['Value'];
 		if ($taxitem['Value'] != 0){
 			if ($editable) {
-				if (!isset($_POST['mantax['.$taxitem['tax_type_id'].']']))
-					$_POST['mantax['.$taxitem['tax_type_id'].']'] = price_format($amount);
+                $override="none";
+				if (isset($taxitem['Override'])) {
+                        $Ajax->activate('mantax['.$taxitem['tax_type_id'].']');
+                        $amount = user_numeric($_POST['mantax'][$taxitem['tax_type_id']]);
+                        $override="powderblue";
+                }
+                $_POST['mantax['.$taxitem['tax_type_id'].']'] = price_format($amount);
 				start_row();
 				if ($tax_included) {
 					$colspan = $columns-1;
 					label_cell(_("Included") . " " . $taxitem['tax_type_name'].":",
 						"colspan={$colspan} align='right'");
 					amount_cells(null, 'mantax['.$taxitem['tax_type_id'].']',
-						null, "colspan=$columns align=right", '<td></td>', user_price_dec());
+						null, "colspan=$columns align=right", '<td></td>', user_price_dec(), true, $override);
 				} else {
 					label_cell($taxitem['tax_type_name'], "colspan=$columns align='right'");
 					amount_cells(null, 'mantax['.$taxitem['tax_type_id'].']',
-						null, "colspan=$columns align=right", null, user_price_dec());
+						null, "colspan=$columns align=right", null, user_price_dec(),true, $override);
 					$total +=  round2($amount, user_price_dec());
 				}
 				if ($rightspan)
@@ -923,13 +929,30 @@ function get_js_select_combo_item() {
 				}
 			}
 		} else {			
-			var stock_element = doc.getElementsByName('stock_id');
-	    	if( stock_element.length > 0) {
+            var element = doc.getElementsByName(client_id);
+            if (element[0] != null) {
+                element[0].value=value;
+                var sname = '_'+client_id+'_update';
+                var update = doc.getElementsByName(sname)[0];
+                if(update) {
+                    window.opener.JsHttpRequest.request(update);
+                } else {
+                    var element = doc.getElementsByName(client_id+'mselect');
+                    if (element[0] != null) {
+                            element[0].setvalue(value);
+                            // element[0].value=value;
+                    }
+                }
+            } else {
+
+                var stock_element = doc.getElementsByName('stock_id');
+                if( stock_element.length > 0) {
 				stock_element[0].value = value;	
-				var stock_id = doc.getElementById('_stock_id_edit'); 
-				stock_id.value=value;
-				stock_id.onblur();		
-			}
+                    var stock_id = doc.getElementById('_stock_id_edit'); 
+                    stock_id.value=value;
+                    stock_id.onblur();		
+                }
+            }
 		}			
 		window.close();
 	}";
@@ -950,15 +973,32 @@ function get_js_set_combo_item() {
 			element.selectedIndex = 0;
 			search.value = '';
 	        element.onchange();
-	    } else {
-			var stock_element = doc.getElementsByName('stock_id');
-	    	if( stock_element.length > 0) {
-				stock_element[0].value = value;	
-				var stock_id = doc.getElementById('_stock_id_edit'); 
-				stock_id.value=value;
-				stock_id.onblur();					
-			}
- 		}
+		} else {			
+            var element = doc.getElementsByName(client_id);
+            if (element[0] != null) {
+                element[0].value=value;
+                var sname = '_'+client_id+'_update';
+                var update = doc.getElementsByName(sname)[0];
+                if(update) {
+                    window.opener.JsHttpRequest.request(update);
+                } else {
+                    var element = doc.getElementsByName(client_id+'mselect');
+                    if (element[0] != null) {
+                            element[0].setvalue(value);
+                            // element[0].value=value;
+                    }
+                }
+            } else {
+
+                var stock_element = doc.getElementsByName('stock_id');
+                if( stock_element.length > 0) {
+                    stock_element.value = value;	
+                    var stock_id = doc.getElementById('_stock_id_edit'); 
+                    stock_id.value=value;
+                    stock_id.onblur();		
+                }
+            }
+		}			
 		window.close();
 	}";
 	return $js;
@@ -986,6 +1026,17 @@ function default_focus($name=null, $form_no=0) {
     }
 	return $name;
 }
+
+// focus on item if no search box
+function set_focus_searchbox($name)
+{
+    global $SysPrefs;
+    if (@$SysPrefs->auto_select_box)
+        set_focus($name);
+    else
+        set_focus("_" . $name . "_edit");
+}
+
 /*
 	Reset focus to next control element (e.g. link).
 */
@@ -1010,7 +1061,10 @@ function get_js_date_picker()
 	$months = array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
 	$wdays = array(_("Su"),_("Mo"),_("Tu"),_("We"),_("Th"),_("Fr"),_("Sa"));
 	$wno = _("W"); // week no
-	$back = _("Back");
+	$yearstart = _("Start Of Year");
+	$yearend = _("End Of Year");
+	$lastyearstart = _("Start Of Last Year");
+	$lastyearend = _("End Of Last Year");
 	if ($date_system == 1)
 		list($cyear, $cmon, $cday) = gregorian_to_jalali(date("Y"), date("n"), date("j"));
 	elseif ($date_system == 2)
@@ -1087,6 +1141,7 @@ function CC() {
   var selectedYear = 0;
   var selectedMonth = 0;
   var selectedDay = 0;
+  var toDate = false;
   var months = ['$months[0]','$months[1]','$months[2]','$months[3]','$months[4]','$months[5]','$months[6]','$months[7]','$months[8]','$months[9]','$months[10]','$months[11]'];
   var wdays = ['$wdays[0]', '$wdays[1]', '$wdays[2]', '$wdays[3]', '$wdays[4]', '$wdays[5]', '$wdays[6]'];
   var tmonths = ['$tmonths[0]','$tmonths[1]','$tmonths[2]','$tmonths[3]','$tmonths[4]','$tmonths[5]','$tmonths[6]','$tmonths[7]','$tmonths[8]','$tmonths[9]','$tmonths[10]','$tmonths[11]','$tmonths[12]'];
@@ -1282,9 +1337,9 @@ function CC() {
     var css_class = null; //CSS class for each day
     var table = \"<table cellspacing='0' cellpadding='0' border='0'>\";
     table += \"<tr class='header'>\";
-    table += \"  <td colspan='2' class='previous'><a href='javascript:changeCCMonth(-1);'>&lt;</a><br><a href='javascript:changeCCYear(-1);'>&laquo;</a></td>\";
+    table += \"  <td colspan='2' class='previous'><a href='javascript:changeCCMonth(-1);'>Prev</a><br><a href='javascript:changeCCYear(-1);'>\" + (currentYear - 1) + \"</a></td>\";
     table += \"  <td colspan='4' class='title'>\" + months[currentMonth-1] + \"<br>\" + currentYear + \"</td>\";
-    table += \"  <td colspan='2' class='next'><a href='javascript:changeCCMonth(1);'>&gt;</a><br><a href='javascript:changeCCYear(1);'>&raquo;</a></td>\";
+    table += \"  <td colspan='2' class='next'><a href='javascript:changeCCMonth(1);'>Next</a><br><a href='javascript:changeCCYear(1);'>\" + (currentYear + 1) + \"</a></td>\";
     table += \"</tr>\";
     table += \"<tr>\";
     table += \"<th class='weekno'>\"+wno+\"</th>\";
@@ -1332,12 +1387,20 @@ function CC() {
       }
       table += \"</tr>\";
     }
-    table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href='javascript:hideCC();'>$back</a></td></tr>\";
+    table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href=\\\"javascript:setCCDate(\"+getCurrentYear()+\",\"+getCurrentMonth()+\",\"+getCurrentDay()+\")\\\">Today</a></td></tr>\";
+    if (toDate) {
+        table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href=\\\"javascript:setCCDate(\"+thisYear+\",\"+12+\",\"+31+\")\\\">\"+\"$yearend</a></td></tr>\";
+        table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href=\\\"javascript:setCCDate(\"+lastYear+\",\"+12+\",\"+31+\")\\\">\"+\"$lastyearend</a></td></tr>\";
+    } else {
+        table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href=\\\"javascript:setCCDate(\"+thisYear+\",\"+1+\",\"+1+\")\\\">\"+\"$yearstart</a></td></tr>\";
+        table += \"<tr class='header'><th colspan='8' style='padding: 3px;text-align:center;'><a href=\\\"javascript:setCCDate(\"+lastYear+\",\"+1+\",\"+1+\")\\\">\"+\"$lastyearstart</a></td></tr>\";
+    }
     table += \"</table>\";
     return table;
   }
   this.show = show;
-  function show(field) {
+  function show(field, todate) {
+    toDate = todate;
     can_hide = 0;
     if (dateField == field) {
       return;
@@ -1411,9 +1474,13 @@ function CC() {
     currentMonth = selectedMonth;
     currentDay = selectedDay;
     currentYear = selectedYear;
+    thisMonth = getCurrentMonth();
+    thisYear = getCurrentYear();
+    endMonth =  getDaysInMonth(thisYear, thisMonth);
+    lastYear = thisYear - 1;
     if(document.getElementById){
       calendar = document.getElementById(calendarId);
-      calendar.innerHTML = calendarDrawTable(currentYear, currentMonth);
+      calendar.innerHTML = calendarDrawTable();
       var fieldPos = new positionInfo(dateField);
       var calendarPos = new positionInfo(calendarId);
       var x = fieldPos.getElementLeft();
@@ -1446,8 +1513,11 @@ function CC() {
   var can_hide = 0;
 }
 var cC = new CC();
-function date_picker(textField) {
-  cC.show(textField);
+function date_picker(textField, todate = (textField.name.indexOf(\"To\") != -1)) {
+  if (cC.visible()) {
+    cC.hide();
+  } else
+    cC.show(textField, todate);
 }
 function hideCC() {
   if (cC.visible()) {
@@ -1617,6 +1687,57 @@ function trans_editor_link($type, $trans_no)
 	return !isset($editor_url[$type]) ? '--' :
 		(is_closed_trans($type, $trans_no) ? set_icon(ICON_CLOSED, _('Closed')) :
 			pager_link(_("Edit"), sprintf($editor_url[$type], $trans_no, $type), ICON_EDIT));
+}
+
+// This script updates the browser history when
+// any of the passed variables change.
+// This way, if the user changes these variables,
+// then uses the back button to return, it returns to the page
+// as the user modified it.
+function get_js_history($vars)
+{
+    $js = ' 
+    function changeVar() {
+        var stateObj = { foo: "bar" };
+        var state = "";
+';
+
+    $first = true;
+    foreach ( $vars as $var ) {
+        $js .= '
+        var element = document.getElementsByName("' . $var. '");
+        if (element[0])';
+        if ($first) {
+            $first = false;
+            $js .= '
+            state += "?';
+        } else
+            $js .= '
+            state += "&';
+        $js .= $var .'="' . ' + element[0].value;';
+    }
+
+    $js .= '
+        history.replaceState(stateObj, "page 2", location.protocol + "//" + location.host + location.pathname + state);
+    }';
+    return $js;
+}
+
+function set_posts($vars)
+{
+    $self = pathinfo(basename($_SERVER['PHP_SELF']), PATHINFO_FILENAME);
+    foreach ( $vars as $var ) {
+        if (isset($_GET[$var]))
+            $_POST[$var] = $_GET[$var];
+        else if (isset($_POST[$var]))
+            $_SESSION[$self . $var] = $_POST[$var];
+        else if (isset($_SESSION[$self . $var]))
+            $_POST[$var] = $_SESSION[$self . $var];
+/*
+        if (isset($_SESSION[$var]))
+            display_notification($var . ":" . $_SESSION[$var]);
+*/
+    }
 }
 
 function company_logo_on_view()

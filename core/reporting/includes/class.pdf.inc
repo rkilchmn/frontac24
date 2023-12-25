@@ -108,7 +108,7 @@ class Cpdf extends FPDI {
 		$enc = $l['a_meta_charset'];
 		$uni = ($enc == 'UTF-8' || $enc == 'GB2312' ? true : false);
 		if ($uni)
-			ini_set("memory_limit", "48M");
+			ini_set("memory_limit", "512M");
 
 		$this->isunicode = $uni;
 		$this->setLanguageArray($l);
@@ -159,7 +159,7 @@ class Cpdf extends FPDI {
 					case "ar_EG" : 	$fontname = "ae_tholoth"; 	break;
 					case "zh_CN" : 	$fontname = "gbsn00lp"; 	break;
 					case "zh_TW" : 	$fontname = "chinese_traditional_cid0"; 	break;
-					default :      	$fontname = "dejavu"; 		break;
+					default :      	$fontname = "helvetica"; 		break;
 				}
 			}
 			elseif ($this->encoding === "ISO-8859-2")

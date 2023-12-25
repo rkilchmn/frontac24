@@ -758,6 +758,11 @@ class FrontReport extends Cpdf
 		return $this->TextWrap($this->cols[$c], $this->row - $r, $this->cols[$n] - $this->cols[$c] + $corr, $txt, $this->aligns[$c], $border, $fill, $link, $stretch);
 	}
 	
+	function RectangleCol($c, $n, $w, $h)
+	{
+		return $this->rectangle($this->cols[$c], $this->row +$h , $w, $h);
+	}
+	
 	function AmountCol($c, $n, $txt, $dec=0, $corr=0, $r=0, $border=0, $fill=0, $link=NULL, $stretch=1, $color_red=false)
 	{
 		if ($color_red && $txt < 0)
@@ -932,9 +937,9 @@ class FrontReport extends Cpdf
 
 		$this->pageNumber++;
 		parent::newPage();
+		$this->row = $this->pageHeight - $this->topMargin; // reset row
 
 		if ($this->tmplSize) {
-			$this->row = $this->pageHeight - $this->topMargin; // reset row
 			$id = $this->importPage(min($this->pageNumber, $this->tmplSize));
 			$this->useTemplate($id);
 		}
@@ -1006,7 +1011,7 @@ class FrontReport extends Cpdf
 
 	    				$to = str_replace(",", "", $contact['name'].' '.$contact['name2'])
 	    					." <" . $contact['email'] . ">";
-    					$msg = _("Dear") . " " . $contact['name2'] . ",\n\n" 
+    					$msg = _("Dear") . " " . $contact['name'] . ",\n\n" 
     						. _("Attached you will find ") . " " . $subject ."\n\n";
 
 						if (isset($this->formData['payment_service']))
@@ -1090,4 +1095,5 @@ class FrontReport extends Cpdf
 		}
 	}
 }
+
 

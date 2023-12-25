@@ -20,13 +20,19 @@ include_once($path_to_root . "/includes/data_checks.inc");
 include_once($path_to_root . "/manufacturing/includes/manufacturing_db.inc");
 include_once($path_to_root . "/manufacturing/includes/manufacturing_ui.inc");
 
+$posts=array('type', 'stock_id', 'quantity', 'date_', 'Labour', 'Costs', 'cr_lab_acc', 'cr_acc');
 $js = "";
 if ($SysPrefs->use_popup_windows)
 	$js .= get_js_open_window(900, 500);
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
+$js .= get_js_history($posts);
+
 page(_($help_context = "Work Order Entry"), false, false, "", $js);
 
+set_posts($posts);
+if (isset($_GET['select']))
+        $_POST[$_GET['select']] = abs($_GET['amount']);
 
 check_db_has_manufacturable_items(_("There are no manufacturable items defined in the system."));
 
@@ -133,7 +139,8 @@ function can_process()
     	}
 	}
 
-	if (!check_num('quantity', 1))
+	qty_format(1, $_POST['stock_id'], $dec);
+	if (!check_num('quantity', $dec == 0 ? 1 : 1 / ($dec * 10)))
 	{
 		display_error( _("The quantity entered is invalid or less than zero."));
 		set_focus('quantity');
@@ -155,13 +162,6 @@ function can_process()
 	// only check bom and quantites if quick assembly
 	if (!($_POST['type'] == WO_ADVANCED))
 	{
-        if (!has_bom($_POST['stock_id']))
-        {
-        	display_error(_("The selected item to manufacture does not have a bom."));
-			set_focus('stock_id');
-        	return false;
-        }
-
 		if ($_POST['Labour'] == "")
 			$_POST['Labour'] = price_format(0);
     	if (!check_num('Labour', 0))
@@ -184,7 +184,22 @@ function can_process()
         	if ($_POST['type'] == WO_ASSEMBLY)
         	{
         		// check bom if assembling
-                $result = get_bom($_POST['stock_id']);
+                $bom = $_POST['bom'];
+                if (isset($_POST['ComponentQuantity'])) {
+                    $item = get_item($bom);
+            		if (has_stock_holding($item["mb_flag"])) {
+                        $quantity = input_num('ComponentQuantity');
+
+                        if (check_negative_stock($bom, -$quantity, $_POST["ComponentLocation"], $_POST['date_']))
+                        {
+                            display_error(_("The work order cannot be processed because there is an insufficient quantity for component:") .
+                                " " . $bom . " - " .  $item["description"] . ".  " . _("Location:") . " " . $_POST["ComponentLocation"]);
+                            set_focus('ComponentQuantity');
+                            return false;
+                        }
+                    }
+                } else if ($bom != "") {
+                $result = get_bom($bom);
 
             	while ($bom_item = db_fetch($result))
             	{
@@ -204,6 +219,7 @@ function can_process()
             		}
             	}
         	}
+            }
         	elseif ($_POST['type'] == WO_UNASSEMBLY)
         	{
         		// if unassembling, check item to unassemble
@@ -237,6 +253,30 @@ function can_process()
 	return true;
 }
 
+function get_bom_array()
+{
+    if (!isset($_POST['bom']))
+        return $_POST['stock_id'];
+    else if (isset($_POST['ComponentQuantity'])) {
+        return array('component' => $_POST['bom'],
+            'workcentre_added' => $_POST['ComponentWorkCentre'],
+            'quantity' => $_POST['ComponentQuantity'] / $_POST['quantity'],
+            'loc_code' => $_POST['ComponentLocation']);
+    }
+    return $_POST['bom'];
+}
+
+//-------------------------------------------------------------------------------------
+
+if (isset($_POST['ADD_COST1'])) {
+    end_page();
+    meta_forward("../gl/inquiry/gl_account_inquiry.php", "select=Labour&account=".$_POST['cr_lab_acc']);
+}
+if (isset($_POST['ADD_COST2'])) {
+    end_page();
+    meta_forward("../gl/inquiry/gl_account_inquiry.php", "select=Costs&account=".$_POST['cr_acc']);
+}
+
 //-------------------------------------------------------------------------------------
 
 if (isset($_POST['ADD_ITEM']) && can_process())
@@ -246,11 +286,11 @@ if (isset($_POST['ADD_ITEM']) && can_process())
 	if (!isset($_POST['cr_lab_acc']))
 		$_POST['cr_lab_acc'] = "";
 	$id = add_work_order($_POST['wo_ref'], $_POST['StockLocation'], input_num('quantity'),
-		$_POST['stock_id'],  $_POST['type'], $_POST['date_'],
+		$_POST['stock_id'], get_bom_array(), $_POST['type'], $_POST['date_'],
 		$_POST['RequDate'], $_POST['memo_'], input_num('Costs'), $_POST['cr_acc'], input_num('Labour'), $_POST['cr_lab_acc']);
 
 	new_doc_date($_POST['date_']);
-	meta_forward($_SERVER['PHP_SELF'], "AddedID=$id&type=".$_POST['type']."&date=".$_POST['date_']);
+	meta_forward_self("AddedID=$id&type=".$_POST['type']."&date=".$_POST['date_']);
 }
 
 //-------------------------------------------------------------------------------------
@@ -259,9 +299,9 @@ if (isset($_POST['UPDATE_ITEM']) && can_process())
 {
 
 	update_work_order($selected_id, $_POST['StockLocation'], input_num('quantity'),
-		$_POST['stock_id'],  $_POST['date_'], $_POST['RequDate'], $_POST['memo_']);
+		$_POST['stock_id'], get_bom_array(),  $_POST['date_'], $_POST['RequDate'], $_POST['memo_']);
 	new_doc_date($_POST['date_']);
-	meta_forward($_SERVER['PHP_SELF'], "UpdatedID=$selected_id");
+	meta_forward_self("UpdatedID=$selected_id");
 }
 
 //--------------------------------------------------------------------------------------
@@ -286,7 +326,7 @@ if (isset($_POST['delete']))
 
 		// delete the actual work order
 		delete_work_order($selected_id, $_POST['stock_id'], $_POST['quantity'], $_POST['date_']);
-		meta_forward($_SERVER['PHP_SELF'], "DeletedID=$selected_id");
+		meta_forward_self("DeletedID=$selected_id");
 	}
 }
 
@@ -297,7 +337,7 @@ if (isset($_POST['close']))
 
 	// update the closed flag in the work order
 	close_work_order($selected_id);
-	meta_forward($_SERVER['PHP_SELF'], "ClosedID=$selected_id");
+	meta_forward_self("ClosedID=$selected_id");
 }
 
 //-------------------------------------------------------------------------------------
@@ -388,8 +428,7 @@ else
 if (!isset($_POST['quantity']))
 	$_POST['quantity'] = qty_format(1, $_POST['stock_id'], $dec);
 else
-	$_POST['quantity'] = qty_format($_POST['quantity'], $_POST['stock_id'], $dec);
-	
+	$_POST['quantity'] = qty_format(str_replace(",","", $_POST['quantity']), $_POST['stock_id'], $dec);
 
 if (get_post('type') == WO_ADVANCED)
 {
@@ -405,21 +444,30 @@ else
     date_row(_("Date") . ":", 'date_', '', true);
 	hidden('RequDate', '');
 
+    $last_acct = last_wo_costing_account();
+    if (!isset($_POST['cr_acc']))
+        $_POST['cr_acc'] = $last_acct['account'];
+    if (!isset($_POST['cr_lab_acc']))
+        $_POST['cr_lab_acc'] = $last_acct['account'];
+
 	if (!isset($_POST['Labour']) || list_updated('stock_id') || list_updated('type'))
 	{
-		$bank_act = get_default_bank_account();
 		$item = get_item(get_post('stock_id'));
 		$_POST['Labour'] = price_format(get_post('type') == WO_ASSEMBLY ? $item['labour_cost'] : 0);
-		$_POST['cr_lab_acc'] = $bank_act['account_code'];
 		$_POST['Costs'] = price_format(get_post('type') == WO_ASSEMBLY ? $item['overhead_cost'] : 0);
-		$_POST['cr_acc'] = $bank_act['account_code'];
 		$Ajax->activate('_page_body');
 	}
 
-	amount_row($wo_cost_types[WO_LABOUR], 'Labour');
-	gl_all_accounts_list_row(_("Credit Labour Account"), 'cr_lab_acc', null);
-	amount_row($wo_cost_types[WO_OVERHEAD], 'Costs');
-	gl_all_accounts_list_row(_("Credit Overhead Account"), 'cr_acc', null);
+    start_row();
+	gl_all_accounts_list_cells(
+        submit('ADD_COST1', $wo_cost_types[WO_LABOUR] . " " . _("Account"), false, ('Cost Account 1'), 'default'), 'cr_lab_acc');
+    end_row();
+	amount_row(_("Cost 1:"), 'Labour');
+    start_row();
+	gl_all_accounts_list_cells(
+        submit('ADD_COST1', $wo_cost_types[WO_OVERHEAD] . " " . _("Account"), false, ('Cost Account 1'), 'default'), 'cr_acc');
+    end_row();
+	amount_row(_("Cost 2:"), 'Costs');
 
 }
 
@@ -429,6 +477,40 @@ if (get_post('released'))
 textarea_row(_("Memo:"), 'memo_', null, 40, 5);
 
 end_table(1);
+
+if (!($_POST['type'] == WO_ADVANCED)) {
+
+    // If bom id is the same as stock id, then a bom is needed.
+    // Otherwise, it can be any purchasable or manufactured item.
+    // This is used to morph inventory items, such as functionally identical
+    // items (perhaps built with part substitutions on different BOMs).
+
+    if (list_updated('bom'))
+        $Ajax->activate('component');
+    else
+        $_POST['bom'] = $_POST['stock_id'];
+
+    div_start('component');
+    start_table(TABLESTYLE2);
+
+    stock_items_list_row(_("BOM or Component:"), 'bom', null, "No BOM" , true, false, true, array('editable' => 30, 'where'=>array("(NOT no_purchase
+            OR mb_flag='M') AND s.stock_id != ".db_escape($_POST['stock_id'])
+            . " OR EXISTS (SELECT * FROM ".TB_PREF."bom WHERE parent=".db_escape($_POST['stock_id']). ")")));
+
+
+    if ($_POST['bom'] != "" 
+        && $_POST['stock_id'] != $_POST['bom']) {
+        if (!isset($_POST['ComponentQuantity']))
+            $_POST['ComponentQuantity'] = $_POST['quantity'];
+        else
+            $_POST['ComponentQuantity'] = qty_format($_POST['ComponentQuantity'], $_POST['stock_id'], $dec);
+        locations_list_row(_("Component Location:"), 'ComponentLocation', null);
+        qty_row(_("Component Quantity:"), 'ComponentQuantity', null, null, null, $dec);
+        workcenter_list_row(_("Component Work Centre:"), 'ComponentWorkCentre', null);
+    }
+    end_table(1);
+    div_end();
+}
 
 if (isset($selected_id))
 {
@@ -450,4 +532,3 @@ else
 
 end_form();
 end_page();
-

@@ -217,11 +217,12 @@ function get_sql_for_supplier_inquiry($filter, $after_date, $to_date, $supplier_
     $date_after = date2sql($after_date);
     $date_to = date2sql($to_date);
 
+
     $sql = "SELECT trans.type, 
 		trans.trans_no,
 		trans.reference, 
 		supplier.supp_name, 
-		trans.supp_reference,
+        IF (trans.supp_reference='', c.memo_, trans.supp_reference) as supp_reference,
     	trans.tran_date, 
 		trans.due_date,
 		supplier.curr_code, 
@@ -233,7 +234,8 @@ function get_sql_for_supplier_inquiry($filter, $after_date, $to_date, $supplier_
 		trans.alloc AS Allocated,
 		((trans.type = ".ST_SUPPINVOICE." OR trans.type = ".ST_SUPPCREDIT.") AND trans.due_date < '" . date2sql(Today()) . "') AS OverDue,
     	(ABS(trans.ov_amount + trans.ov_gst  + trans.ov_discount) - trans.alloc <= ".FLOAT_COMP_DELTA.") AS Settled
-    	FROM ".TB_PREF."supp_trans as trans, ".TB_PREF."suppliers as supplier
+    	FROM ".TB_PREF."supp_trans as trans
+        LEFT JOIN ".TB_PREF."comments as c ON c.type = trans.type AND c.id = trans.trans_no, ".TB_PREF."suppliers as supplier
     	WHERE supplier.supplier_id = trans.supplier_id
 		AND trans.ov_amount != 0";	// exclude voided transactions
 
@@ -250,9 +252,13 @@ function get_sql_for_supplier_inquiry($filter, $after_date, $to_date, $supplier_
 		'' AS Allocated,
 		0 as OverDue,
     	1 as Settled
-    	FROM ".TB_PREF."grn_batch as trans, ".TB_PREF."suppliers as supplier, ".TB_PREF."purch_orders as po
-    	WHERE supplier.supplier_id = trans.supplier_id
-    	AND trans.purch_order_no = po.order_no";
+    	FROM ".TB_PREF."grn_batch as trans
+            LEFT JOIN ".TB_PREF."suppliers as supplier ON supplier.supplier_id = trans.supplier_id
+            LEFT JOIN ".TB_PREF."purch_orders as po ON trans.purch_order_no = po.order_no
+            LEFT JOIN ".TB_PREF."voided as v
+                ON trans.id=v.id AND v.type=" . ST_SUPPRECEIVE . "
+        WHERE supplier.supplier_id = trans.supplier_id
+        AND ISNULL(v.date_)"; // exclude voided transactions
 
 	if ($filter == '2')
 		$sql .= " AND ABS(trans.ov_amount + trans.ov_gst + trans.ov_discount) - trans.alloc>".FLOAT_COMP_DELTA;
@@ -279,7 +285,7 @@ function get_sql_for_supplier_inquiry($filter, $after_date, $to_date, $supplier_
    	{
    		if (($filter == '1')) 
    		{
-   			$sql .= " AND (trans.type = ".ST_SUPPINVOICE." OR trans.type = ".ST_BANKDEPOSIT.")";
+   			$sql .= " AND trans.type = ".ST_SUPPINVOICE;
    		} 
    		elseif ($filter == '3') 
    		{

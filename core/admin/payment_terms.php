@@ -73,12 +73,12 @@ if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM')
 
     	if ($selected_id != -1) 
     	{
-    		update_payment_terms($selected_id, $from_now, $_POST['terms'], $days); 
+    		update_payment_terms($selected_id, $from_now, $_POST['terms'], $days, $_POST['legal_text']); 
  			$note = _('Selected payment terms have been updated');
     	} 
     	else 
     	{
-			add_payment_terms($from_now, $_POST['terms'], $days);
+			add_payment_terms($from_now, $_POST['terms'], $days, $_POST['legal_text']);
 			$note = _('New payment terms have been added');
     	}
     	//run the sql from either of the above possibilites
@@ -124,7 +124,7 @@ $result = get_payment_terms_all(check_value('show_inactive'));
 
 start_form();
 start_table(TABLESTYLE);
-$th = array(_("Description"), _("Type"), _("Due After/Days"), "", "");
+$th = array(_("Description"), _("Type"), _("Due After/Days"), _("Legal Text On Invoice"),"", "");
 inactive_control_column($th);
 table_header($th);
 
@@ -138,6 +138,7 @@ while ($myrow = db_fetch($result))
     label_cell($myrow["terms"]);
     label_cell($pterm_types[$type]);
     label_cell($type == PTT_DAYS ? "$days "._("days") : ($type == PTT_FOLLOWING ? $days : _("N/A")));
+    label_cell($myrow["legal_text"]);
 	inactive_control_cell($myrow["terms_indicator"], $myrow["inactive"], 'payment_terms', "terms_indicator");
  	edit_button_cell("Edit".$myrow["terms_indicator"], _("Edit"));
  	delete_button_cell("Delete".$myrow["terms_indicator"], _("Delete"));
@@ -167,6 +168,7 @@ if ($selected_id != -1)
 		$_POST['terms']  = $myrow["terms"];
 		$_POST['DayNumber'] = term_days($myrow);
 		$_POST['type'] = term_type($myrow);
+		$_POST['legal_text']  = $myrow["legal_text"];
 	}
 	hidden('selected_id', $selected_id);
 }
@@ -174,6 +176,8 @@ if ($selected_id != -1)
 text_row(_("Terms Description:"), 'terms', null, 40, 40);
 
 payment_type_list_row(_("Payment type:"), 'type', null, true);
+
+textarea_row(_("Legal Text on Invoice:"), 'legal_text', null, 32, 4);
 
 if ( in_array(get_post('type'), array(PTT_FOLLOWING, PTT_DAYS))) 
 	text_row_ex(_("Days (Or Day In Following Month):"), 'DayNumber', 3);

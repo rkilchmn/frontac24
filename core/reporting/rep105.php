@@ -123,20 +123,23 @@ function print_order_status_list()
 
 	$aligns2 = $aligns;
 
-	$rep = new FrontReport(_('Order Status Listing'), "OrderStatusListing", user_pagesize(), 9, $orientation);
-    if ($orientation == 'L')
-    	recalculate_cols($cols);
-	$cols2 = $cols;
-	$rep->Font();
-	$rep->Info($params, $cols, $headers, $aligns, $cols2, $headers2, $aligns2);
-
-	$rep->NewPage();
 	$orderno = 0;
-	$grand_total = 0;
 
 	$result = GetSalesOrders($from, $to, $category, $location, $backorder);
+
+	$grand_total = 0;
 	while ($myrow=db_fetch($result))
 	{
+                if (!isset($rep)) {
+                    $rep = new FrontReport(_('Order Status Listing'), "OrderStatusListing", user_pagesize(), 9, $orientation);
+                if ($orientation == 'L')
+                    recalculate_cols($cols);
+                    $cols2 = $cols;
+                    $rep->Font();
+                    $rep->Info($params, $cols, $headers, $aligns, $cols2, $headers2, $aligns2);
+
+                    $rep->NewPage();
+                }
 		$rep->NewLine(0, 2, false, $orderno);
 		if ($orderno != $myrow['order_no'])
 		{
@@ -172,11 +175,15 @@ function print_order_status_list()
 		}
 		$rep->NewLine();
 	}
-	$rep->Line($rep->row);
+        if (!isset($rep))
+            display_notification("No sales orders found");
+        else {
+            $rep->Line($rep->row);
 	$rep->NewLine();
 	$rep->TextCol(1, 6, _("Grand Total")); 
 	$rep->AmountCol(6, 7, $grand_total);
 	$rep->Line($rep->row - 5);
-	$rep->End();
+            $rep->End();
+        }
 }
 

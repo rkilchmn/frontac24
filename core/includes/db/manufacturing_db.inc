@@ -184,11 +184,12 @@ function add_bom($selected_parent, $component, $workcentre_added, $loc_code, $qu
 }
 //--------------------------------------------------------------------------------------
 
-function update_bom($selected_parent, $selected_component, $workcentre_added, $loc_code, $quantity)
+function update_bom($selected_parent, $selected_component, $new_component, $workcentre_added, $loc_code, $quantity)
 {
 	$sql = "UPDATE ".TB_PREF."bom SET workcentre_added=".db_escape($workcentre_added)
 	 . ",loc_code=".db_escape($loc_code) . ",
-		quantity= " . $quantity . "
+		quantity= " . $quantity . ",
+		component=" . db_escape($new_component) . "
 		WHERE parent=".db_escape($selected_parent) . "
 		AND id=".db_escape($selected_component);
 	check_db_error("Could not update this bom component", $sql);

@@ -84,6 +84,10 @@ JsHttpRequest._request = function(trigger, form, tout, retry) {
 				set_mark(retry ? 'ajax-loader2.gif':'warning.png' );
 				if(retry)
 					JsHttpRequest._request(trigger, form, tout, retry-1);
+                else {
+                    location.reload(true);
+                    set_mark('warning.png' );
+                }
 			}, tout );
 
         JsHttpRequest.query(
@@ -283,7 +287,7 @@ function setFocus(name, byId) {
 			}
 	  }
       if (name)
-	    if(byId || !(el = document.getElementsByName(name)[0]))
+	    if(byId || !((el = document.getElementsByName(name+'mselect')[0]) || (el = document.getElementsByName(name)[0])))
 		  el = document.getElementById(name);
   }
   if (el != null && el.focus) {

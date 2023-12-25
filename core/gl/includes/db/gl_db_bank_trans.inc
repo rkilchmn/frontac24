@@ -16,7 +16,7 @@
 // $date_ is display date (non-sql)
 
 function add_bank_trans($type, $trans_no, $bank_act, $ref, $date_,
-	$amount, $person_type_id, $person_id, $currency="", $err_msg="", $rate=0)
+	$amount, $person_type_id, $person_id, $currency="", $err_msg="", $rate=0, $reconciled=null)
 {
 	$sqlDate = date2sql($date_);
 
@@ -34,17 +34,68 @@ function add_bank_trans($type, $trans_no, $bank_act, $ref, $date_,
 		$amount_bank = $amount;
 	$amount_bank = round2($amount_bank, user_price_dec());	
 
-	$sql = "INSERT INTO ".TB_PREF."bank_trans (type, trans_no, bank_act, ref,
-		trans_date, amount, person_type_id, person_id) ";
+    if (is_null($reconciled)) {
+        $sql = "INSERT INTO ".TB_PREF."bank_trans (type, trans_no, bank_act, ref,
+            trans_date, amount, person_type_id, person_id) ";
 
-	$sql .= "VALUES ($type, $trans_no, '$bank_act', ".db_escape($ref).", '$sqlDate',
-		".db_escape($amount_bank).", ".db_escape($person_type_id)
-		.", ". db_escape($person_id).")";
+        $sql .= "VALUES ($type, $trans_no, '$bank_act', ".db_escape($ref).", '$sqlDate',
+            ".db_escape($amount_bank).", ".db_escape($person_type_id)
+            .", ". db_escape($person_id) .")";
+    } else  {
+        $sql = "INSERT INTO ".TB_PREF."bank_trans (type, trans_no, bank_act, ref,
+            trans_date, amount, person_type_id, person_id, reconciled) ";
+
+        $sql .= "VALUES ($type, $trans_no, '$bank_act', ".db_escape($ref).", '$sqlDate',
+            ".db_escape($amount_bank).", ".db_escape($person_type_id)
+            .", ". db_escape($person_id). ", ". db_escape($reconciled) .")";
+    }
 
 	if ($err_msg == "")
 		$err_msg = "The bank transaction could not be inserted";
 
 	db_query($sql, $err_msg);
+}
+
+//----------------------------------------------------------------------------------------
+
+function last_bank_trans($field, $person_type=null, $person_id=null)
+{
+	$sql = "SELECT b." . $field . 
+		" FROM ".TB_PREF."bank_trans b
+        LEFT JOIN ".TB_PREF."audit_trail a ON a.type=b.type AND a.trans_no=b.trans_no
+        WHERE user=".db_escape($_SESSION["wa_current_user"]->user);
+
+    if ($person_type != null) {
+        $sql .= " AND person_type_id = ".db_escape($person_type);
+        if ($person_id != null)
+            $sql .= " AND person_id = " . db_escape($person_id);
+    }
+    $sql .= " ORDER BY b.id DESC LIMIT 1";
+
+	$last_query = db_query($sql, "query for last bank transaction");
+	$row = db_fetch_row($last_query);
+    return $row == false ? false : $row[0];
+}
+
+//----------------------------------------------------------------------------------------
+
+function last_bank_transfer($field, $to = false)
+{
+	$sql = "SELECT b." . $field . 
+		" FROM ".TB_PREF."bank_trans b
+        LEFT JOIN ".TB_PREF."audit_trail a ON a.type=b.type AND a.trans_no=b.trans_no
+        WHERE b.type = '" . ST_BANKTRANSFER . "'
+        AND user=".db_escape($_SESSION["wa_current_user"]->user);
+    if ($to)
+        $sql .= " AND amount > 0";
+    else
+        $sql .= " AND amount < 0";
+
+    $sql .= " ORDER BY b.id DESC LIMIT 1";
+
+	$last_query = db_query($sql, "query for last bank transfer");
+	$row = db_fetch_row($last_query);
+    return $row == false ? false : $row[0];
 }
 
 //----------------------------------------------------------------------------------------
@@ -172,7 +223,7 @@ function void_bank_trans($type, $type_no, $nested=false)
 *	Returns null or transaction in conflict. Running balance is checked on daily basis only, to enable ID change after edition.
 *	$delta_amount - tested change in bank balance at $date.
 **/
-function check_bank_account_history($delta_amount, $bank_account, $date=null, $user=null, $balance_offset = 0)
+function check_bank_account_history($delta_amount, $bank_account, $date=null, $user=null, $balance_offset = 0, $end_date = null)
 {
 	if ($delta_amount >= 0 && isset($date))
 		 return null;	// amount increase is always safe
@@ -196,6 +247,12 @@ function check_bank_account_history($delta_amount, $bank_account, $date=null, $u
 		$date = date2sql($date);
 		$sql .= " AND trans_date > '$date'";
 	}
+
+	if ($end_date)
+	{
+		$sql .= " AND trans_date < '$end_date'";
+	}
+
 	$sql .= " GROUP BY trans_date ORDER BY trans_date ASC";
 
 	$history = db_query($sql, "cannot retrieve cash account history");

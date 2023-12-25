@@ -130,7 +130,11 @@ text_row_ex(_("Point of Sale Name").':', 'name', 20, 30);
 if($cash) {
 	check_row(_('Allowed credit sale terms selection:'), 'credit', check_value('credit_sale'));
 	check_row(_('Allowed cash sale terms selection:'), 'cash',  check_value('cash_sale'));
-	cash_accounts_list_row(_("Default cash account").':', 'account');
+
+        // POS systems often allow direct deposit into bank accounts,
+        // so do not restrict the POS "cash sale" to cash accounts
+	// cash_accounts_list_row(_("Default cash account").':', 'account');
+	bank_accounts_list_row(_("Default account").':', 'account');
 } else {
 	hidden('credit', 1);
 	hidden('account', 0);

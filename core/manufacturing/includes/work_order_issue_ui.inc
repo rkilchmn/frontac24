@@ -138,7 +138,9 @@ function issue_edit_item_controls(&$order, $line_no=-1)
 	}
 	else
 	{
-		submit_cells('AddItem', _("Add Item"), "colspan=2",
+		submit_cells('ZeroInv', _("Use Entire Stock"), "colspan=1",
+		    _('Add entire inventory of new item to document'), true);
+		submit_cells('AddItem', _("Add Item"), "colspan=1",
 		    _('Add new item to document'), true);
 	}
 

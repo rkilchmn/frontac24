@@ -86,6 +86,7 @@ function copy_bom_items($stock_id, $new_stock_id)
 	}
 }
  
+
 //--------------------------------------------------------------------------------------------------
 
 function on_submit($selected_parent, $selected_component=-1)
@@ -99,7 +100,7 @@ function on_submit($selected_parent, $selected_component=-1)
 
 	if ($selected_component != -1)
 	{
-		update_bom($selected_parent, $selected_component, $_POST['workcentre_added'], $_POST['loc_code'],
+		update_bom($selected_parent, $selected_component, $_POST['component'], $_POST['workcentre_added'], $_POST['loc_code'],
 			input_num('quantity'));
 		display_notification(_('Selected component has been updated'));
 		$Mode = 'RESET';
@@ -185,6 +186,7 @@ end_form();
 if (get_post('stock_id') != '')
 { //Parent Item selected so display bom or edit component
 	$selected_parent = $_POST['stock_id'];
+
 	if ($Mode=='ADD_ITEM' || $Mode=='UPDATE_ITEM')
 		on_submit($selected_parent, $selected_id);
 	//--------------------------------------------------------------------------------------
@@ -206,24 +208,22 @@ start_form();
 			$_POST['component'] = $myrow["component"]; // by Tom Moulton
 			$_POST['workcentre_added']  = $myrow["workcentre_added"];
 			$_POST['quantity'] = number_format2($myrow["quantity"], get_qty_dec($myrow["component"]));
-			label_row(_("Component:"), $myrow["component"] . " - " . $myrow["description"]);
 		}
 		hidden('selected_id', $selected_id);
 	}
-	else
-	{
-		start_row();
-		label_cell(_("Component:"), "class='label'");
 
-		echo "<td>";
-		echo stock_component_items_list('component', $selected_parent, null, false, true);
-		if (get_post('_component_update')) 
-		{
-			$Ajax->activate('quantity');
-		}
-		echo "</td>";
-		end_row();
-	}
+    start_row();
+    label_cell(_("Component:"), "class='label'");
+
+    echo "<td>";
+    echo stock_component_items_list('component', $selected_parent, null, false, true);
+    if (get_post('_component_update')) 
+    {
+        $Ajax->activate('quantity');
+    }
+    echo "</td>";
+    end_row();
+
 //	hidden('stock_id', $selected_parent);
 
 	locations_list_row(_("Location to Draw From:"), 'loc_code', null);

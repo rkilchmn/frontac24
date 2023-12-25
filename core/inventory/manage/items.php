@@ -296,10 +296,8 @@ if (isset($_POST['addupdate']))
 				get_post('fa_class_id'));
 
 			display_notification(_("A new item has been added."));
-			$_POST['stock_id'] = $_POST['NewStockID'] = 
-			$_POST['description'] = $_POST['long_description'] = '';
-			$_POST['no_sale'] = $_POST['editable'] = $_POST['no_purchase'] =0;
-			set_focus('NewStockID');
+			$_POST['stock_id'] = $_POST['NewStockID'];
+			set_focus('stock_id');
 		}
 		$Ajax->activate('_page_body');
 	}
@@ -318,11 +316,16 @@ if (get_post('clone')) {
 
 function check_usage($stock_id, $dispmsg=true)
 {
-	$msg = item_in_foreign_codes($stock_id);
-
-	if ($msg != '')	{
+    $msg = item_used($stock_id);
+    if ($msg != '') {
 		if($dispmsg) display_error($msg);
 		return false;
+    }
+
+	$msg = item_in_foreign_codes($stock_id);
+	if ($msg != '')	{
+		if($dispmsg) display_warning($msg);
+		return true;
 	}
 	return true;
 }
@@ -335,15 +338,43 @@ if (isset($_POST['delete']) && strlen($_POST['delete']) > 1)
 	if (check_usage($_POST['NewStockID'])) {
 
 		$stock_id = $_POST['NewStockID'];
+		$_POST['stock_id'] = get_next_stock_id($stock_id);
 		delete_item($stock_id);
 		del_image($stock_id);
 		display_notification(_("Selected item has been deleted."));
-		$_POST['stock_id'] = '';
 		clear_data();
 		set_focus('stock_id');
 		$new_item = true;
 		$Ajax->activate('_page_body');
 	}
+}
+
+
+function numeric_offset($text) {
+    preg_match('/\d/', $text, $m, PREG_OFFSET_CAPTURE);
+    if (sizeof($m))
+        return $m[0][1];
+
+    // the case when there's no numbers in the string
+    return strlen($text);
+}
+
+
+/*
+	This function returns the next unused stock_id in stock_master.
+	To work correctly, stock_ids should be numeric or end in a numeric.
+*/
+function next_stock_id() {
+    $sql = "SELECT max(stock_id) as max FROM ".TB_PREF."stock_master";
+    $result = db_query($sql, "Can not find max stock_id");
+    $row = db_fetch_row($result);
+    if (!$row[0]) return null;
+    $offset= numeric_offset($row[0]);
+    $num=substr($row[0], $offset);
+    if (!is_numeric($num))
+	return null;
+    $num += 1;
+    return substr($row[0], 0, $offset) . $num;
 }
 
 function item_settings(&$stock_id, $new_item) 
@@ -359,7 +390,7 @@ function item_settings(&$stock_id, $new_item)
 	//------------------------------------------------------------------------------------
 	if ($new_item) 
 	{
-		$tmpCodeID=null;
+		$tmpCodeID=next_stock_id();
 		$post_label = null;
 		if (!empty($SysPrefs->prefs['barcodes_on_stock']))
 		{
@@ -382,7 +413,7 @@ function item_settings(&$stock_id, $new_item)
 		}
 		label_row(_("Item Code:"),$_POST['NewStockID']);
 		hidden('NewStockID', $_POST['NewStockID']);
-		set_focus('description');
+		set_focus('stock_id');
 	}
 	$fixed_asset = get_post('fixed_asset');
 
@@ -412,7 +443,7 @@ function item_settings(&$stock_id, $new_item)
 
 	}
 	$fresh_item = !isset($_POST['NewStockID']) || $new_item 
-		|| check_usage($_POST['stock_id'],false);
+		|| item_used($_POST['stock_id']) == "";
 
 	// show inactive item tax type in selector only if already set.
   item_tax_types_list_row(_("Item Tax Type:"), 'tax_type_id', null, !$new_item && item_type_inactive(get_post('tax_type_id')));
@@ -595,7 +626,7 @@ $tabs = (get_post('fixed_asset'))
 		'standard_cost' => array(_('Standard &Costs'), (user_check_access('SA_STANDARDCOST') ? $stock_id : null)),
 		'reorder_level' => array(_('&Reorder Levels'), (is_inventory_item($stock_id) && 
 			user_check_access('SA_REORDER') ? $stock_id : null)),
-		'movement' => array(_('&Transactions'), (user_check_access('SA_ITEMSTRANSVIEW') && is_inventory_item($stock_id) ? 
+		'movement' => array(_('&Transactions'), (user_check_access('SA_ITEMSTRANSVIEW') ? 
 			$stock_id : null)),
 		'status' => array(_('&Status'), (user_check_access('SA_ITEMSSTATVIEW') ? $stock_id : null)),
 		'attachments' => array(_('Attachments'), (user_check_access('SA_ATTACHDOCUMENT') ? get_item_code_id($stock_id) : null)),
@@ -631,8 +662,6 @@ tabbed_content_start('tabs', $tabs);
 			include_once($path_to_root."/inventory/reorder_level.php");
 			break;
 		case 'movement':
-			if (!is_inventory_item($stock_id))
-				break;
 			$_GET['stock_id'] = $stock_id;
 			include_once($path_to_root."/inventory/inquiry/stock_movements.php");
 			break;

@@ -239,7 +239,7 @@ function handle_commit_invoice()
     $_SESSION['supp_trans']->clear_items();
     unset($_SESSION['supp_trans']);
 
-	meta_forward($_SERVER['PHP_SELF'], "AddedID=$invoice_no");
+	meta_forward_self("AddedID=$invoice_no");
 }
 
 //--------------------------------------------------------------------------------------------------
