@@ -30,7 +30,7 @@ $js_static = array('JsHttpRequest.js', 'behaviour.js', 'utils.js', 'inserts.js')
 // additional js source included in header
 $js_lib = $js_userlib = array();
 
-function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $script_only=false, $css='')
+function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $script_only=false, $css='', $no_cache=false)
 {
 
    	global $path_to_root, $page_security, $page_nested;
@@ -41,7 +41,7 @@ function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $scri
 
    	include_once($path_to_root . "/includes/page/header.inc");
 
-   	page_header($title, $no_menu, $is_index, $onload, $js, $css);
+   	page_header($title, $no_menu, $is_index, $onload, $js, $css, $no_cache);
 	check_page_security($page_security);
 //	error_box();
 	if($script_only) {
@@ -52,6 +52,11 @@ function page($title, $no_menu=false, $is_index=false, $onload="", $js="", $scri
 	} else {
 		div_start('_page_body'); // whole page content for ajax reloading
 	}
+
+    if (isset($_GET['message']))
+    {
+        display_notification_centered($_GET['message']);
+    }
 }
 
 function end_page($no_menu=false, $is_index=false, $final_screen=false, $type_no=0, $trans_no=0)
@@ -62,12 +67,26 @@ function end_page($no_menu=false, $is_index=false, $final_screen=false, $type_no
 
 	if (!$is_index && function_exists('hyperlink_back'))
 		hyperlink_back(true, $no_menu, $type_no, $trans_no, $final_screen);
-	// Get the list of included files
-	$included_files = get_included_files();	
 	div_end();	// end of _page_body section
 
 	include_once($path_to_root . "/includes/page/footer.inc");
+
+    $updateXML = 'if (typeof xml_start === "function") xml_start();';
+    if (in_ajax()) {
+        global $Ajax;
+        $Ajax->addScript(true, $updateXML);
+    } else
+        add_js_source($updateXML);
+
 	page_footer($no_menu, $is_index);
+
+    $updateHistory = 'if (typeof changeVar === "function") changeVar();';
+
+    if (in_ajax()) {
+        global $Ajax;
+        $Ajax->addScript(true, $updateHistory);
+    } else
+        add_js_source($updateHistory);
 }
 
 function css_files_ensure_init() {
