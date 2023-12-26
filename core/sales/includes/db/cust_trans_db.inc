@@ -315,6 +315,7 @@ function post_void_customer_trans($type, $type_no)
 }
 
 //----------------------------------------------------------------------------------------
+
 function get_sql_for_customer_inquiry($from, $to, $cust_id = ALL_TEXT, $tax_group_id = null, $filter = ALL_TEXT, $show_zero = 0)
 {
 static $filterSql = array(
@@ -422,6 +423,7 @@ static $filterSql = array(
     		$sql .= " AND trans.due_date < '$today'
 				AND (ABS(trans.ov_amount) + trans.ov_gst + trans.ov_freight_tax + 
             trans.ov_freight + trans.ov_discount - trans.alloc > 0) ";
+		}
     }
 
     if ($tax_group_id != null)

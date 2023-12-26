@@ -62,6 +62,8 @@ function end_page($no_menu=false, $is_index=false, $final_screen=false, $type_no
 
 	if (!$is_index && function_exists('hyperlink_back'))
 		hyperlink_back(true, $no_menu, $type_no, $trans_no, $final_screen);
+	// Get the list of included files
+	$included_files = get_included_files();	
 	div_end();	// end of _page_body section
 
 	include_once($path_to_root . "/includes/page/footer.inc");
