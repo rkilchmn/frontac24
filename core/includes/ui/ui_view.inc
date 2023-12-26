@@ -1757,20 +1757,3 @@ function company_logo_on_view()
 		$text = $SysPrefs->prefs['coy_name'];
 	display_note($text, 0, $nl, "style='font-size:16px;font-weight:600'");
 }
-function company_logo_on_view()
-{
-	// Display View Header
-	global $SysPrefs;
-
-	$logo = company_path() . "/images/" . $SysPrefs->prefs['coy_logo'];
-	$nl = 1;
-	if (!empty($SysPrefs->prefs['company_logo_report']) && $SysPrefs->prefs['coy_logo'] != '' && file_exists($logo))
-	{
-		$size = getimagesize($logo);
-		$height = $size[0] > 150 ? $size[1] * 150 / $size[0] : 30; 
-		$text = "<img src='$logo' height=$height>";
-	}
-	else
-		$text = $SysPrefs->prefs['coy_name'];
-	display_note($text, 0, $nl, "style='font-size:16px;font-weight:600'");
-}
