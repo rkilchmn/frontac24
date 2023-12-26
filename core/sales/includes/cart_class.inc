@@ -22,6 +22,7 @@ include_once($path_to_root . "/inventory/includes/inventory_db.inc");
 include_once($path_to_root . "/taxes/tax_calc.inc");
 
 class Cart 
+class Cart 
 {
 	var $trans_type; // invoice, order, quotation, delivery note ...
 	var $trans_no = array();// array (num1=>ver1,..) or 0 for new
@@ -82,6 +83,7 @@ class Cart
 
 	var $fixed_asset = false;
 	var $payment_info; // optional additional payment information
+	var $bo_policy = null;
 
 	//-------------------------------------------------------------------------
 	//

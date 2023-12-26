@@ -158,6 +158,7 @@ function display_customer_summary($customer_record)
 	$past1 = get_company_pref('past_due_days');
 	$past2 = 2 * $past1;
     if ($customer_record && $customer_record["dissallow_invoices"] != 0)
+    if ($customer_record && $customer_record["dissallow_invoices"] != 0)
     {
     	echo "<center><font color=red size=4><b>" . _("CUSTOMER ACCOUNT IS ON HOLD") . "</font></b></center>";
     }

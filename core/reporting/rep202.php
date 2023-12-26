@@ -43,6 +43,9 @@ function get_invoices($supplier_id, $to, $all=true)
     	$value = "IF (trans.type=".ST_SUPPINVOICE." OR trans.type=".ST_BANKDEPOSIT." OR (trans.type=".ST_JOURNAL." AND (trans.ov_amount + trans.ov_gst + trans.ov_discount)>0),  
     		(trans.ov_amount + trans.ov_gst + trans.ov_discount - trans.alloc),
     		(trans.ov_amount + trans.ov_gst + trans.ov_discount + trans.alloc))";
+    	$value = "IF (trans.type=".ST_SUPPINVOICE." OR trans.type=".ST_BANKDEPOSIT." OR (trans.type=".ST_JOURNAL." AND (trans.ov_amount + trans.ov_gst + trans.ov_discount)>0),  
+    		(trans.ov_amount + trans.ov_gst + trans.ov_discount - trans.alloc),
+    		(trans.ov_amount + trans.ov_gst + trans.ov_discount + trans.alloc))";
 	$due = "IF (trans.type=".ST_SUPPINVOICE." OR trans.type=".ST_SUPPCREDIT.",trans.due_date,trans.tran_date)";
 	$sql = "SELECT trans.type,
 		trans.reference,

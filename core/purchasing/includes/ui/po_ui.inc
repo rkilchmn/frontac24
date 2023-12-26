@@ -409,6 +409,7 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
 	$new = $order->order_no == 0;
 
 	$dec2 = 6;
+	$dec2 = 6;
 	$id = find_submit('Edit');
 	if (($id != -1) && $line_no == $id)
 	{
@@ -486,7 +487,7 @@ function po_item_controls(&$order, &$rowcounter, $line_no=-1)
    		hidden('price', $_POST['price']);
    	}	
    	else	
-		amount_cells(null, 'price', null, null, null, $dec2, true);
+		unit_amount_cells(null, 'price');
 
 	amount_cell($line_total, false, '','line_total');
 

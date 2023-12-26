@@ -112,6 +112,7 @@ function write_customer_trans($trans_type, $trans_no, $debtor_no, $BranchNo,
 	db_query($sql, "The debtor transaction record could not be inserted");
 
 	if ($trans_type != ST_JOURNAL && $trans_type != ST_BANKDEPOSIT && $trans_type != ST_BANKPAYMENT) // skip for journal entries
+	if ($trans_type != ST_JOURNAL && $trans_type != ST_BANKDEPOSIT && $trans_type != ST_BANKPAYMENT) // skip for journal entries
 		add_audit_trail($trans_type, $trans_no, $date_, $new ? '': _("Updated."));
 
 	return $trans_no;
@@ -371,13 +372,12 @@ static $filterSql = array(
                         LEFT JOIN ".TB_PREF."users as user ON (audit.user=user.id)
 			LEFT JOIN ".TB_PREF."cust_branch as branch ON trans.branch_code=branch.branch_code,"
 			.TB_PREF."debtors_master as debtor
-		WHERE debtor.debtor_no = trans.debtor_no
-    	AND ISNULL(v.date_)"; // exclude voided transactions
-
-    // exclude self-balancing (journal) transactions:
-    if (!$show_zero) 	
-    	 	$sql .= " AND (trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount) != 0";
-
+		WHERE debtor.debtor_no = trans.debtor_no"; // exclude voided transactions and self-balancing (journal) transactions:
+    if (!$show_voided) 	
+    	 	$sql .= " AND ISNULL(v.date_) AND (trans.ov_amount + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount) != 0";
+    if ($ref) {
+    	$sql .= " AND trans.reference LIKE ". db_escape("%$ref%");
+    }	 
 	if ($filter == '2')
 		$sql .= " AND ABS(IF(prep_amount, prep_amount, ABS(trans.ov_amount) + trans.ov_gst + trans.ov_freight + trans.ov_freight_tax + trans.ov_discount)-trans.alloc)>"
 			.FLOAT_COMP_DELTA;

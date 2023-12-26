@@ -97,6 +97,12 @@ function add_po(&$po_obj)
 			if ($data !== false && $data['supplier_description'] != "")
 				$po_line->item_description = $data['supplier_description'];
       	}
+     	if (!$po_line->descr_editable)
+     	{
+			$data = get_purchase_data($po_obj->supplier_id, $po_line->stock_id);
+			if ($data !== false && $data['supplier_description'] != "")
+				$po_line->item_description = $data['supplier_description'];
+      	}
 		$sql = "INSERT INTO ".TB_PREF."purch_order_details (order_no, item_code, description, delivery_date,	unit_price,	quantity_ordered) VALUES (";
 		$sql .= $po_obj->order_no . ", " . db_escape($po_line->stock_id). "," .
 		db_escape($po_line->item_description). ",'" .

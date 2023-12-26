@@ -66,8 +66,10 @@ else
 start_form();
 start_table(TABLESTYLE_NOBORDER);
 start_row();
-bank_types_list_cells(null, "bank_type", null, true);
-bank_accounts_list_cells(_("Account:"), 'bank_account', null, true);
+if (!$page_nested) {
+	bank_types_list_cells(null, "bank_type", null, true);
+	bank_accounts_list_cells(_("Account:"), 'bank_account', null, true);
+}
 
 $days = user_transaction_days();
 date_cells(_("From:"), 'TransFromDate', '', null, -abs($days));
@@ -90,8 +92,12 @@ if (!isset($_POST['bank_account']))
 
 $result = get_bank_trans_for_bank_account($_POST['bank_account'], $_POST['TransFromDate'], $_POST['TransToDate']);	
 
-$act = get_bank_account($_POST["bank_account"]);
-display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
+div_start('trans_tbl');
+if (!$page_nested)
+{
+	$act = get_bank_account($_POST["bank_account"]);
+	display_heading($act['bank_account_name']." - ".$act['bank_curr_code']);
+}
 
 div_start('trans_tbl');
 start_table(TABLESTYLE);
@@ -136,10 +142,10 @@ while ($myrow = db_fetch($result))
 
 	label_cell(get_comments_string($myrow["type"], $myrow["trans_no"]));
 	label_cell(get_gl_view_str($myrow["type"], $myrow["trans_no"]));
-
-	label_cell(trans_editor_link($myrow["type"], $myrow["trans_no"]));
+	if (!$page_nested) {
+		label_cell(trans_editor_link($myrow["type"], $myrow["trans_no"]));
         label_cell(pager_link(_("Delete"), "/admin/void_transaction.php?trans_no=" . $myrow['trans_no'] . "&filterType=". $myrow['type'], ICON_DELETE));
-
+	}
 	end_row();
  	if ($myrow["amount"] > 0 ) 
  		$debit += $myrow["amount"];
