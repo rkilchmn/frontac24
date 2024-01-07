@@ -485,6 +485,12 @@ to a supplier or customer.
     mysql alter table 0_tax_groups add no_sale tinyint not null;
     mysql alter table 0_tax_groups add no_purchase tinyint not null;
 
+    or in SQL
+
+    ALTER TABLE 0_tax_groups 
+        ADD COLUMN no_sale TINYINT NOT NULL DEFAULT 0,
+        ADD COLUMN no_purchase TINYINT NOT NULL DEFAULT 0;
+
 ## BUGFIX:  0004606: Cannot add a zero price to an item with a purchase price in inventory adjustment
 ## BUGFIX:  0004614: Allocated journal entry payment shows in red (overdue) on customer transactions"
 ## FEATURE: manufacturing pick list costs from g/l accounts
