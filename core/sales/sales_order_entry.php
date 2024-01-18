@@ -292,7 +292,7 @@ function copy_to_cart()
 {
 	$cart = &$_POST['Items'];
 
-	$cart->reference = $_POST['ref'];
+	$cart->reference = get_post('ref');
 
 	$cart->Comments =  $_POST['Comments'];
 
