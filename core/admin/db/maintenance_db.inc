@@ -324,12 +324,17 @@ function db_import($filename, $connection, $force=true, $init=true, $protect=fal
 		$check_line_len = true;
 	} elseif (strpos($filename, ".zip") || strpos($filename, ".ZIP"))
 		$lines = db_unzip("lines", $filename);
+		if (empty($lines)) {
+			return false;
+		}
     else
         $lines = fopen($filename, "r");
 
 	// parse input file
 	$query_table = '';
 	$delimiter = ';';
+
+
 
     for ($line_no = 0; ($line = db_getline($lines, $line_no)) !== false; $line_no++)
 	{
@@ -514,9 +519,11 @@ function db_unzip($mode, $path)
     $filename = preg_replace("/.*\//", "", $path);
     $filename = substr($filename, 0, strlen($filename) - 4);
 
-    // compare filname in zip and filename from $_GET
-    if (substr($all, 30, strlen($filename)-4) . substr($all, 30+strlen($filename)+9, 4)
-	  != $filename) {
+	// compare filname in zip and filename from $_GET
+	$compressed_filename = substr($all, 30, strlen($filename)-4) . substr($all, 30+strlen($filename)+9, 4);
+    if ($compressed_filename != $filename) {
+		$msg = "Filename of zip file $filename does not match the compressed filename $compressed_filename.";
+		display_error( $msg);
 		return '';     // exit if names differ
     }
     else
@@ -535,7 +542,7 @@ function db_unzip($mode, $path)
         $comp = substr($comp, 0, (strlen($comp) - 80 - strlen($filename)-13));
 
         // fix the crc bugfix (see function save_to_file)
-        $comp = "xœ" . $comp . $suffix;
+        $comp = "xï¿½" . $comp . $suffix;
         $file_data = gzuncompress($comp);
     }
 
