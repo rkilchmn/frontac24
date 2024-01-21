@@ -1,4 +1,4 @@
-core/installed_extensions.php
+score/installed_extensions.php
 core/config_db.php
 core/config.php
 core/company/*
@@ -6,3 +6,5 @@ core/tmp/*
 core/lang/installed_languages.inc
 core/modules/*
 frontaccounting.code-workspace
+.vscode/launch.json
+core/installed_extensions.php
