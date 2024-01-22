@@ -216,16 +216,5 @@ function get_suppliers_search_sql($supplier)
 	return $sql;
 }
 
-function search_suppliers($supplier) {
-	$sql = get_suppliers_search_sql($supplier);
-
-	$res = db_query($sql, "could not get supplier");
-
-	while($supplier = db_fetch($res))
-		$results[] = $supplier;
-
-	return $results;
-}
-
 
 
