@@ -119,7 +119,9 @@ function print_invoices()
 //			}
 			
 			$baccount = get_default_bank_account($myrow['curr_code']);
-			$params['bankaccount'] = $baccount['id'];
+			if ($baccount !== false) {
+				$params['bankaccount'] = $baccount['id'];
+			}
 
 			$branch = get_branch($myrow["branch_code"]);
 			$sales_order = get_sales_order_header($myrow["order_"], ST_SALESORDER);
