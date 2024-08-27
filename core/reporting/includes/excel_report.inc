@@ -17,66 +17,6 @@ define('MAX_ROW_SHEET', 65530);
 // xls version
 class FrontReport extends Spreadsheet_Excel_Writer_Workbook
 {
-	/**
-     * @deprecated
-     * @var type
-     */
-    public $_string_sizeinfo;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $_str_total;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $_str_unique;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $_str_table;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $formatRight;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $formatLeft;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $formatTopHeaderLeft;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $formatBottomHeaderLeft;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $formatTopHeaderRight;
-
-    /**
-     * @deprecated
-     * @var type
-     */
-    public $formatBottomHeaderRight;
-
 	var $size;
 	var $company;
 	var $user;
