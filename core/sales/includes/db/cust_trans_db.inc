@@ -111,7 +111,7 @@ function write_customer_trans($trans_type, $trans_no, $debtor_no, $BranchNo,
 	}
 	db_query($sql, "The debtor transaction record could not be inserted");
 
-	if ($trans_type != ST_JOURNAL && $trans_type != ST_BANKDEPOSIT && $trans_type != ST_BANKPAYMENT) // skip for journal entries
+	
 	if ($trans_type != ST_JOURNAL && $trans_type != ST_BANKDEPOSIT && $trans_type != ST_BANKPAYMENT) // skip for journal entries
 		add_audit_trail($trans_type, $trans_no, $date_, $new ? '': _("Updated."));
 
@@ -316,19 +316,8 @@ function post_void_customer_trans($type, $type_no)
 }
 
 //----------------------------------------------------------------------------------------
-
-function get_sql_for_customer_inquiry($from, $to, $cust_id = ALL_TEXT, $tax_group_id = null, $filter = ALL_TEXT, $show_zero = 0)
+function get_sql_for_customer_inquiry($from, $to, $cust_id = ALL_TEXT, $filter = ALL_TEXT, $show_voided = 0, $ref='')
 {
-static $filterSql = array(
-    ALL_TEXT => " AND (trans.type <> ".ST_CUSTDELIVERY.") ",
-    1 => " AND (trans.type = ".ST_SALESINVOICE.") ",
-    " AND (trans.type <> ".ST_CUSTDELIVERY.") ",
-    " AND (trans.type = " . ST_CUSTPAYMENT 
-        ." OR trans.type = ".ST_BANKDEPOSIT." OR trans.type = ".ST_BANKPAYMENT.") ",
-    " AND trans.type = ".ST_CUSTCREDIT." ",
-    " AND trans.type = ".ST_CUSTDELIVERY." "
-   		);
-
     $date_after = date2sql($from);
     $date_to = date2sql($to);
 
@@ -422,18 +411,15 @@ static $filterSql = array(
     		$today =  date2sql(Today());
     		$sql .= " AND trans.due_date < '$today'
 				AND (ABS(trans.ov_amount) + trans.ov_gst + trans.ov_freight_tax + 
-            trans.ov_freight + trans.ov_discount - trans.alloc > 0) ";
-		}
-    }
-
-    if ($tax_group_id != null)
-        $sql .= " AND branch.tax_group_id = '$tax_group_id'";
+				trans.ov_freight + trans.ov_discount - trans.alloc > 0) ";
+    	}
+   	}
 
 	$sql .= " GROUP BY trans.trans_no, trans.type, trans.debtor_no";
-	$sql .= " ORDER BY trans.tran_date DESC";
 
    	return $sql;
 }
+
 
 function get_sql_for_sales_deliveries_view($from, $to, $customer_id, $stock_item, $location, $delivery, $outstanding=false)
 {

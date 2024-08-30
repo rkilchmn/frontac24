@@ -254,8 +254,10 @@ if (get_post('RefreshInquiry') || list_updated('filterType'))
 $tax_group_id = get_post('tax_group_id');
 if ($tax_group_id == -1)
     $tax_group_id=null;
-$sql = get_sql_for_customer_inquiry(get_post('TransFromDate'), get_post('TransToDate'),
-	get_post('customer_id'), $tax_group_id, get_post('filterType'), check_value('show_voided'));
+
+$sql = get_sql_for_customer_inquiry(get_post('TransAfterDate'), get_post('TransToDate'),
+	get_post('customer_id'), get_post('filterType'), check_value('show_voided'), get_post('Ref'),);
+
 
 //------------------------------------------------------------------------------------------------
 //db_query("set @bal:=0");
