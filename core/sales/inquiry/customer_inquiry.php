@@ -222,7 +222,10 @@ if ($_POST['filterType'] != '2')
         date_cells(_("To:"), 'TransToDate', '', null, 0, 2);
     }
 }
-$_POST['show_voided'] = 1;
+if (!array_key_exists('show_voided',$_POST)) {
+	// set by default
+	$_POST['show_voided']  = 1;
+}
 check_cells(_("Zero values"), 'show_voided');
 
 submit_cells('RefreshInquiry', _("Search"),'',_('Refresh Inquiry'), 'default');
