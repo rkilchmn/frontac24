@@ -16,6 +16,7 @@ class purch_order
 {
 
 	var $trans_type; // order/grn/invoice (direct)
+	var $trans_no; // caused error: Creation of dynamic property purch_order::$trans_no is deprecated 
 	var $line_items;
 	var $curr_code;
 	var $supp_ref;
