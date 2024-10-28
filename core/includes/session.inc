@@ -35,7 +35,8 @@ class SessionManager
 		if ($this->validateSession())
 		{
 			// Check to see if the session is new or a hijacking attempt
-			if(!$this->preventHijacking())
+			// 
+			if(1 == 0) // sugested solution if menu links dont work after some time: https://www.frontaccounting.com/punbb/viewtopic.php?id=6027
 			{
 				// Reset session data and regenerate id
 				$_SESSION = array();
