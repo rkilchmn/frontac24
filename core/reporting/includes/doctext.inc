@@ -26,21 +26,21 @@
 			'name' => @$this->formData['deliver_to'],
 			'address' => @$this->formData['delivery_address']
 	);
-    $Footer = array();
 
 	// default item column headers
 	$this->headers = array(_("Item Code"), _("Item Description"), _("Quantity"),
 		_("Unit"), _("Price"), _("Discount %"), _("Total"));
 
+	// for links use 'text' => 'url'
+	$Footer[0] = _("All amounts stated in") . " - " . @$this->formData['curr_code'];
+
 	if (!in_array($this->formData['doctype'], array(ST_STATEMENT, ST_WORKORDER)))
 	{
 		$row = get_payment_terms($this->formData['payment_terms']);
 		$Payment_Terms = _("Payment Terms") . ': ' . $row["terms"];
-		$Legal_Text = $row["legal_text"];
 		if ($this->formData['doctype'] == ST_SALESINVOICE && $this->formData['prepaid'])
 			$this->formData['prepaid'] = ($row['days_before_due'] >= 0) ? 'final' : 'partial';
-	} else
-        $Legal_Text = "";
+	}
 
 
 	switch ($this->formData['doctype'])
@@ -101,6 +101,8 @@
 		case ST_CUSTCREDIT:
 			$this->title = _("CREDIT NOTE");
 			$this->formData['document_name'] =_("Credit No.");
+			$Footer[0] = _("Please quote Credit no. when paying. All amounts stated in") . " - " . $this->formData['curr_code'];
+
 			$aux_info = array(
 				_("Customer's Reference") => @$this->formData["customer_ref"],
 				_("Sales Person") => get_salesman_name($this->formData['salesman']),
@@ -115,6 +117,8 @@
 				: ($this->formData['prepaid']=='final' ? _("FINAL INVOICE")  : _("INVOICE"));
 			$this->formData['document_name'] =_("Invoice No.");
 			$this->formData['domicile'] = $this->company['domicile'];
+			$Footer[0] = _("Please quote Invoice no. when paying. All amounts stated in"). " - " . $this->formData['curr_code'];
+
 			$deliveries = get_sales_parent_numbers(ST_SALESINVOICE, $this->formData['trans_no']);
 			if ($SysPrefs->print_invoice_no() == 0)
 			{
@@ -241,7 +245,7 @@
 				_("Delivery Date") => '',
 			);
 			$this->headers = array(_("Trans Type"), _("#"), _("Date"), _("DueDate"), _("Debits"),
-				_("Credits"), "", _("Outstanding"));
+				_("Credits"), _("Allocated"), _("Outstanding"));
 	}
 
 	// default values
@@ -251,6 +255,10 @@
 	if (!isset($this->formData['document_number']))
 		$this->formData['document_number'] = $SysPrefs->print_invoice_no() == 0 && isset($this->formData['reference'])
 			? $this->formData['reference'] : @$this->formData['trans_no'];
+
+	// footer generic content
+	if (@$this->formData['bank_name'])
+		$Footer[] = _("Bank"). ": ".$this->formData['bank_name']. ", " . _("Bank Account") . ": " . $this->formData['bank_account_number'];
 
 	if (@$this->formData['payment_service'])	//payment link
 	{
@@ -265,18 +273,15 @@
 		$Footer[_("You can pay through"). " $service: "] = "$url";
 	}
 
+	if ($this->formData['doctype'] == ST_CUSTPAYMENT)
+ 		$Footer[] = _("* Subject to Realisation of the Cheque.");
+
 	if ($this->params['comments'] != '')
 		$Footer[] = $this->params['comments'];
 
 	if (($this->formData['doctype'] == ST_SALESINVOICE || $this->formData['doctype'] == ST_STATEMENT) && $this->company['legal_text'] != "") 
 	{
 		foreach(explode("\n", $this->company['legal_text']) as $line)
-			$Footer[] = $line;
-	}
-
-	if (($this->formData['doctype'] == ST_SALESINVOICE || $this->formData['doctype'] == ST_STATEMENT || $this->formData['doctype'] == ST_SALESORDER) && $Legal_Text != "") 
-	{
-		foreach(explode("\n", $Legal_Text) as $line)
 			$Footer[] = $line;
 	}
 
