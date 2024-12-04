@@ -173,7 +173,7 @@ function print_GL_transactions()
 				if ($dim > 1)
 					$rep->TextCol(5, 6,	get_dimension_string($myrow['dimension2_id']));
 				$txt = payment_person_name($myrow["person_type_id"],$myrow["person_id"], false);
-				$memo = $myrow['memo_'];
+				$memo = $myrow['memo'];
 				if ($txt != "")
 				{
 					if ($memo != "")
