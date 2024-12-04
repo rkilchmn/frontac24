@@ -100,6 +100,9 @@ function print_bank_transactions()
 
 
 		$prev_balance = get_bank_balance_to($from, $account["id"]);
+		if (is_null($prev_balance)) {
+			$prev_balance = 0.0;
+		}
 
 		$trans = get_bank_transactions($from, $to, $account['id']);
 
