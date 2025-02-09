@@ -119,7 +119,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             IF(gl1.person_id, gl1.person_type_id, IF(sup.supplier_id,".  PT_SUPPLIER . "," .  "IF(debt.debtor_no," . PT_CUSTOMER . "," . 
             "IF(bt.person_id != '' AND !ISNULL(bt.person_id), bt.person_type_id, -1)))) as person_type_id,
             IFNULL(st.tran_date, IFNULL(dt.tran_date, IFNULL(bt.trans_date, IFNULL(grn.delivery_date, gl1.tran_date)))) as doc_date,
-            coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl1.memo_, CONCAT(gl1.memo_,' ',c.memo_)) AS memo,
+            coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl1.memo_, IF(gl1.type = ".ST_BANKACCOUNT.",c.memo_,CONCAT(gl1.memo_,' ',c.memo_))) AS memo,
             dt.order_,
             MAX(bt.reconciled) as reconciled
              FROM "
