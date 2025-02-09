@@ -273,7 +273,7 @@ function show_results()
     	label_cell($trandate);
     	
     	if ($_POST["account"] == null)
-    	    label_cell($myrow["account"] . ' ' . ($myrow["account"] != '' ? get_gl_account_name($myrow["account"]) : 'ERROR: Account Empty!'));
+    	    label_cell($myrow["account"] . ' ' . ($myrow["account"] != '' ? get_gl_account_name($myrow["account"]) : 'ERROR NO ACCOUNT: counter:'.$myrow["counter"].' type:'.$myrow["type"].' no: '.$myrow["type_no"]));
     	
 		if ($dim >= 1)
 			label_cell(get_dimension_string($myrow['dimension_id'], true));
