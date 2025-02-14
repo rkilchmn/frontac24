@@ -193,14 +193,16 @@ function print_GL_transactions()
 		}
 		$rep->Font('bold');
 		$rep->TextCol(4, 6,	_("Ending Balance"));
-		if ($total > 0.0)
-			$rep->AmountCol(8, 9, abs($total), $dec);
+			if ($total > 0.0)
+			$rep->TextCol(8, 9, number_format2($total, $dec)); // total is float and needs to be converted to decimal
+			// $rep->AmountCol(8, 9, abs($total), $dec);
 		else
-			$rep->AmountCol(9, 10, abs($total), $dec);
+			$rep->TextCol(9, 10, number_format2($total, $dec)); // total is float and needs to be converted to decimal
+			// $rep->AmountCol(9, 10, abs($total), $dec);
 		$rep->Font();
 		$rep->Line($rep->row - $rep->lineHeight + 4);
 		$rep->NewLine(2, 1);
-	}
+	}	
 	$rep->End();
 }
 
