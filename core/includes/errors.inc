@@ -204,10 +204,20 @@ function display_db_error($msg, $sql_statement=null, $exit=true)
 	if (!$SysPrefs->go_debug)
 		error_log($str);
 	else {
-		if($msg)
-			trigger_error($str, E_USER_ERROR);
-		else	// $msg can be null here only in debug mode, otherwise the error is ignored
-			trigger_error($str, E_USER_WARNING);
+		// PHP 8.4 deprecates trigger_error() with E_USER_ERROR
+		// Use direct message collection instead
+		$bt = $SysPrefs->go_debug > 1 ? get_backtrace(true, 1) : '';
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+		$file = isset($trace[0]['file']) ? $trace[0]['file'] : null;
+		$line = isset($trace[0]['line']) ? $trace[0]['line'] : null;
+		
+		if($msg) {
+			// Database error
+			$messages[] = array(E_USER_ERROR, $str, $file, $line, $bt);
+		} else {
+			// Database warning ($msg can be null here only in debug mode)
+			$messages[] = array(E_USER_WARNING, $str, $file, $line, $bt);
+		}
 	}
 	if ($exit)
 		exit;
