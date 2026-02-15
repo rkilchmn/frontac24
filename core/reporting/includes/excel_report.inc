@@ -40,6 +40,7 @@ class FrontReport extends Spreadsheet_Excel_Writer_Workbook
 	var $headers2;
 	var $aligns2;
 	var $cols2;
+	var $pageNumber;
 	var $fontSize;
 	var $oldFontSize;
 	var $currency;
