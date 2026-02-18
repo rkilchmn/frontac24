@@ -17,6 +17,10 @@ function add_exchange_variation($trans_no, $date_, $acc_id, $account,
 	if ($date_ == null)
 		$date_ = Today();
 	$for_amount = 0;
+	$for_amount_foreign = 0;
+
+	// Get the exchange rate for the bank account's currency (passed as parameter)
+	$rate = get_exchange_rate_from_home_currency($currency, $date_);
 
 	// We have to calculate all the currency accounts belonging to the GL account
 	// upto $date_ and calculate with the exchange rates. And then compare with the GL account balance.
@@ -29,7 +33,7 @@ function add_exchange_variation($trans_no, $date_, $acc_id, $account,
 	{
 		if ($row['for_amount'] == 0)
 			continue;
-		$rate = get_exchange_rate_from_home_currency($row['bank_curr_code'], $date_);
+		$for_amount_foreign = $row['for_amount'];
 		$for_amount += round2($row['for_amount'] * $rate, user_price_dec());
 	}	
 	$amount = get_gl_trans_from_to("", $date_, $account);
@@ -56,7 +60,17 @@ function add_exchange_variation($trans_no, $date_, $acc_id, $account,
     		_("Exchange Variance"), $diff, null, $person_type_id, $person_id);
 
 		if ($memo)
-			add_comments(ST_JOURNAL, $trans_no, $date_, $memo);
+		{
+			// Build detailed memo with calculation breakdown
+			$home_curr = get_company_currency();
+			$detail_memo = $memo . "\n";
+			$detail_memo .= "FX Balance: " . $currency . " " . number_format2($for_amount_foreign, user_price_dec()) 
+				. " @" . $currency . "." . $home_curr . " " . number_format2($rate, 5) 
+				. " = " . $home_curr . " " . number_format2($for_amount, user_price_dec()) . "\n";
+			$detail_memo .= "GL Balance: " . $home_curr . " " . number_format2($amount, user_price_dec()) . "\n";
+			$detail_memo .= "Adjustment: " . $home_curr . " " . number_format2(abs($diff), user_price_dec());
+			add_comments(ST_JOURNAL, $trans_no, $date_, $detail_memo);
+		}
 
 		$Refs->save(ST_JOURNAL, $trans_no, $ref);
 		add_audit_trail(ST_JOURNAL, $trans_no, $date_);
@@ -67,7 +81,8 @@ function add_exchange_variation($trans_no, $date_, $acc_id, $account,
 	return false;
 }
 
-function add_cust_supp_revaluation($ledger_act, $ex_act, $date, $amount, $person_type_id, $person_id, $memo)
+function add_cust_supp_revaluation($ledger_act, $ex_act, $date, $amount, $person_type_id, $person_id, $memo, 
+	$entity_id = '', $entity_name = '', $currency = '', $foreign_bal = 0, $exrate = 0, $home_bal = 0)
 {
 	global $Refs;
 	if ($amount == 0)
@@ -85,7 +100,21 @@ function add_cust_supp_revaluation($ledger_act, $ex_act, $date, $amount, $person
 		$amount, null, $person_type_id, $person_id);
 	add_gl_trans(ST_JOURNAL, $trans_no, $date, $ex_act, 0, 0, 
 		_("Exchange Variance"),	-$amount, null, $person_type_id, $person_id);
-	add_comments(ST_JOURNAL, $trans_no, $date, $memo);
+	
+	// Build detailed memo with calculation breakdown
+	if ($memo)
+	{
+		$home_curr = get_company_currency();
+		$detail_memo = $memo . "\n";
+		if ($entity_id && $entity_name)
+			$detail_memo .= "[" . $entity_id . "] " . $entity_name . "\n";
+		$detail_memo .= "FX Balance: " . $currency . " " . number_format2($foreign_bal, user_price_dec()) 
+			. " @" . $currency . "." . $home_curr . " " . number_format2($exrate, 5) 
+			. " = " . $home_curr . " " . number_format2(round2($foreign_bal * $exrate, user_price_dec()), user_price_dec()) . "\n";
+		$detail_memo .= "GL Balance: " . $home_curr . " " . number_format2($home_bal, user_price_dec()) . "\n";
+		$detail_memo .= "Adjustment: " . $home_curr . " " . number_format2(abs($amount), user_price_dec());
+		add_comments(ST_JOURNAL, $trans_no, $date, $detail_memo);
+	}
 	commit_transaction();
 }
 
@@ -176,7 +205,8 @@ function add_exchange_variation_all($date, $memo)
 		{
 			$amount = $foreign - $home;	
 			add_cust_supp_revaluation($row['receivables_account'], $exchange_act, $date, $amount, PT_CUSTOMER, 
-				$row['debtor_no'], $memo);
+				$row['debtor_no'], $memo, $row['debtor_no'], $row['name'], $row['curr_code'], 
+				$row['amount'], $exrate, $home);
 			$je++;	
 		}
 	}
@@ -192,7 +222,8 @@ function add_exchange_variation_all($date, $memo)
 		{
 			$amount = $foreign - $home;	
 			add_cust_supp_revaluation($row['payable_account'], $exchange_act, $date, $amount, PT_SUPPLIER, 
-				$row['supplier_id'], $memo);
+				$row['supplier_id'], $memo, $row['supplier_id'], $row['supp_name'], $row['curr_code'], 
+				$row['amount'], $exrate, $home);
 			$je++;	
 		}
 	}
