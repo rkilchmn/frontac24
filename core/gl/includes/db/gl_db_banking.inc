@@ -20,7 +20,7 @@ function add_exchange_variation($trans_no, $date_, $acc_id, $account,
 	$for_amount_foreign = 0;
 
 	// Get the exchange rate for the bank account's currency (passed as parameter)
-	$rate = get_exchange_rate_from_home_currency($currency, $date_);
+	$rate = get_exchange_rate_from_home_currency($currency, $date_, true);
 
 	// We have to calculate all the currency accounts belonging to the GL account
 	// upto $date_ and calculate with the exchange rates. And then compare with the GL account balance.
@@ -107,7 +107,10 @@ function add_cust_supp_revaluation($ledger_act, $ex_act, $date, $amount, $person
 		$home_curr = get_company_currency();
 		$detail_memo = $memo . "\n";
 		if ($entity_id && $entity_name)
-			$detail_memo .= "[" . $entity_id . "] " . $entity_name . "\n";
+		{
+			$entity_type_label = ($person_type_id == PT_CUSTOMER) ? 'Customer' : 'Supplier';
+			$detail_memo .= $entity_type_label . ": " . $entity_name . "\n";
+		}
 		$detail_memo .= "FX Balance: " . $currency . " " . number_format2($foreign_bal, user_price_dec()) 
 			. " @" . $currency . "." . $home_curr . " " . number_format2($exrate, 5) 
 			. " = " . $home_curr . " " . number_format2(round2($foreign_bal * $exrate, user_price_dec()), user_price_dec()) . "\n";
@@ -187,6 +190,7 @@ function add_exchange_variation_all($date, $memo)
 		$b_num++;
 	}
 
+	// $existingRate = get_date_exchange_rate($txn_currency, $date);
 	// revaluation of customer/supplier currencies
 
 	if ($date == null)
@@ -198,7 +202,7 @@ function add_exchange_variation_all($date, $memo)
 	
 	while($row = db_fetch($res)) 
 	{
-		$exrate = get_exchange_rate_from_home_currency($row['curr_code'], $date);
+		$exrate = get_exchange_rate_from_home_currency($row['curr_code'], $date, true);
 		$foreign = round2($row['amount']*$exrate, user_price_dec());
 		$home = round2(get_account_home_balance($row['debtor_no'], PT_CUSTOMER, $row['receivables_account'], $date), user_price_dec());
 		if ($foreign != $home) 
@@ -215,7 +219,7 @@ function add_exchange_variation_all($date, $memo)
 	
 	while($row = db_fetch($res)) 
 	{
-		$exrate = get_exchange_rate_from_home_currency($row['curr_code'], $date);
+		$exrate = get_exchange_rate_from_home_currency($row['curr_code'], $date, true);
 		$foreign = round2($row['amount']*$exrate, user_price_dec());
 		$home = round2(get_account_home_balance($row['supplier_id'], PT_SUPPLIER, $row['payable_account'], $date), user_price_dec());
 		if ($foreign != $home) 
@@ -554,7 +558,7 @@ function write_bank_transaction($trans_type, $trans_no, $from_account, $items, $
 		// store tax details if the gl account is a tax account
 
 		$amount = $gl_item->amount;
-		$ex_rate = get_exchange_rate_from_home_currency($currency, $date_);
+		$ex_rate = get_exchange_rate_from_home_currency($currency, $date_, true);
 
 		add_gl_tax_details($gl_item->code_id, $trans_type, $trans_no, -$amount,
 			$ex_rate, $date_, $memo_);

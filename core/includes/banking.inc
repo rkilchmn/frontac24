@@ -27,11 +27,31 @@ function get_company_currency()
 
 //----------------------------------------------------------------------------------
 
-function get_exchange_rate_from_home_currency($currency_code, $date_)
+function get_exchange_rate_from_home_currency($currency_code, $date_, $forceDate = false)
 {
 	if ($currency_code == get_company_currency() || $currency_code == null)
 		return 1.0000;
 
+	if ($forceDate) {
+		// need to make sure we have a rate for the specific date
+		$rate = get_date_exchange_rate($currency_code, $date_);
+		if ($rate) {
+			return $rate;
+		}
+		else {
+			// get rate from market provider
+			$rate = retrieve_exrate($currency_code, $date_);
+			global $SysPrefs;
+			if ($SysPrefs->xr_provider_authoritative) {
+			// store rate
+				add_exchange_rate($currency_code, $date_, $rate, $rate);
+				return $rate;
+			} else {
+				display_error("Rate $currency_code for $date_ determined but not stored: to store rate set configuration in config.php to xr_provider_authoritative=true");
+				return '';
+			}
+		}
+	}
 
 	$rate = get_last_exchange_rate($currency_code, $date_);
 
