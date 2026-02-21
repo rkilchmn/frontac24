@@ -533,7 +533,9 @@ if ($trans->trans_type == ST_SUPPINVOICE) {
     // so there is no reason to create allocations for delayed
     // payment.
     // cash_accounts_list_row(_("Payment:"), 'cash_account', null, false, _('Delayed'));
-    bank_accounts_list_row(_("Payment:"), 'cash_account', null, true, _('Delayed'));
+
+	// by setting $selected_id='' - we are selection 'Delayed' here
+    bank_accounts_list_row(_("Payment:"), 'cash_account', '', true, _('Delayed'));
 
 	if (!isset($_POST['due_date'])) {
 	    get_duedate_from_terms($trans);

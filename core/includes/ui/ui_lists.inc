@@ -1658,13 +1658,16 @@ function bank_accounts_list($name, $selected_id=null, $submit_on_change=false, $
 	$sql = "SELECT id, bank_account_name, bank_curr_code, inactive
 		FROM ".TB_PREF."bank_accounts";
 
+	if ($selected_id === null)
+		$selected_id = last_bank_trans('bank_act');
+
 	return combo_input($name, $selected_id, $sql, 'id', 'bank_account_name',
 		array(
 			'format' => '_format_add_curr',
 			'select_submit'=> $submit_on_change,
 			'spec_option' => $spec_option,
 			'spec_id' => '',
-			'default' => last_bank_trans('bank_act'),
+			'default' => $selected_id,
 			'async' => false
 		) );
 }
