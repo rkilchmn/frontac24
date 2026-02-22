@@ -27,6 +27,14 @@ if ($SysPrefs->use_popup_windows)
 if (user_use_date_picker())
 	$js .= get_js_date_picker();
 $js .= get_js_history(array('bank_account', 'TransFromDate', 'TransToDate'));
+
+// Add onchange handler for bank_account dropdown to submit form on change
+$js .= "\nfunction submitOnChange(elem, formName) {\n";
+$js .= "  if (elem.value != elem.defaultValue) {\n";
+$js .= "    var form = elem.form || document.getElementById(formName) || document.forms[0];\n";
+$js .= "    if (form) form.submit();\n";
+$js .= "  }\n";
+$js .= "}\n";
 page(_($help_context = "Bank Account Inquiry"), isset($_GET['bank_account']) && !isset($_GET['TransFromDate']), false, "", $js, false, "", true);
 
 check_db_has_bank_accounts(_("There are no bank accounts defined in the system."));
@@ -62,13 +70,30 @@ else
     $id = @$_POST['ID'];
 
 //------------------------------------------------------------------------------------------------
+// Handle bank_account selection change - submit form when changed
+if (isset($_POST['_bank_account_update'])) {
+    // Bank account dropdown was changed - the form has been submitted
+    // The value should already be in $_POST['bank_account'] from set_posts
+    $Ajax->activate('trans_tbl');
+}
+
+// Add inline script to submit form when bank_account dropdown changes
+$onchange_js = "<script type=\"text/javascript\">\n";
+$onchange_js .= "var bankSelect = document.getElementsByName('bank_account')[0];\n";
+$onchange_js .= "if (bankSelect) {\n";
+$onchange_js .= "  bankSelect.onchange = function() {\n";
+$onchange_js .= "    this.form.submit();\n";
+$onchange_js .= "  };\n";
+$onchange_js .= "}\n";
+$onchange_js .= "</script>\n";
 
 start_form();
+
 start_table(TABLESTYLE_NOBORDER);
 start_row();
 if (!$page_nested) {
 	bank_types_list_cells(null, "bank_type", null, true);
-	bank_accounts_list_cells(_("Account:"), 'bank_account', get_post('bank_account'), false);
+	bank_accounts_list_cells(_("Account:"), 'bank_account', get_post('bank_account'), true);
 }
 
 $days = user_transaction_days();
@@ -84,6 +109,8 @@ hidden('ID', $id);
 end_row();
 end_table();
 end_form();
+
+echo $onchange_js;
 
 //------------------------------------------------------------------------------------------------
 
