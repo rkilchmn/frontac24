@@ -68,7 +68,7 @@ start_table(TABLESTYLE_NOBORDER);
 start_row();
 if (!$page_nested) {
 	bank_types_list_cells(null, "bank_type", null, true);
-	bank_accounts_list_cells(_("Account:"), 'bank_account', null, true);
+	bank_accounts_list_cells(_("Account:"), 'bank_account', get_post('bank_account'), false);
 }
 
 $days = user_transaction_days();
