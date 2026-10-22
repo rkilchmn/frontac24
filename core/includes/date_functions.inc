@@ -375,6 +375,54 @@ function sql2date($date_)
 } // end function sql2date
 
 
+/*
+	Returns true if the given date string has the shape of a date in the current
+	date format, but some of its parts are not valid date parts. Such values are
+	converted into invalid dates by date2sql() and must not be used.
+	Values which are not in the current date format at all are not reported here,
+	it is up to the caller to validate them.
+*/
+function is_broken_date_string($date_)
+{
+	global $SysPrefs, $tmonths;
+
+	$date_ = trim($date_);
+	if ($date_ == "")
+		return false;
+
+	$how = user_date_format();
+	$sep = $SysPrefs->dateseps[user_date_sep()];
+
+	$parts = explode($sep, $date_);
+	if (count($parts) < 3) // not a date in the current format at all
+		return false;
+
+	// positions of the day and the year within the date parts
+	if ($how == 0 || $how == 3) // MMDDYYYY or MmmDDYYYY
+		$num_pos = array(1, 2);
+	else // DDMMYYYY, DDMmYYYY, YYYYMMDD or YYYYMmmDD
+		$num_pos = array(0, 2);
+
+	foreach ($num_pos as $pos)
+		if (!preg_match('/^\d{1,4}(\s+\d{1,2}:\d{2}(:\d{2})?)?$/', trim($parts[$pos])))
+			return true;
+
+	if ($how > 2) // the month is given by its name
+	{
+		$month_pos = ($how == 3) ? 0 : 1;
+		$month_name = trim($parts[$month_pos]);
+		if ($month_name == "" || array_search($month_name, $tmonths) === false)
+			return true;
+	}
+	else // the month is given as a number
+	{
+		$month_pos = ($how == 0) ? 0 : 1;
+		if (!preg_match('/^\d{1,2}$/', trim($parts[$month_pos])))
+			return true;
+	}
+	return false;
+}
+
 function date2sql($date_)
 {
 	global $SysPrefs, $tmonths;
@@ -388,20 +436,32 @@ and converts to a yyyy/mm/dd format */
 	if ($date_ == null || strlen($date_) == 0)
 		return "";
 
-    $year = $month = $day = 0;
+	$parts = explode($sep, $date_);
+	if (count($parts) < 3) // not a complete date
+		return "";
+	$parts = array_map('trim', $parts);
+
     // Split up the date by the separator based on "how" to split it
     if ($how == 0 || $how == 3) // MMDDYYYY or MmmDDYYYY
-        list($month, $day, $year) = explode($sep, $date_);
+        list($month, $day, $year) = $parts;
     elseif ($how == 1 || $how == 4) // DDMMYYYY or DDMmYYYY
-        list($day, $month, $year) = explode($sep, $date_);
+        list($day, $month, $year) = $parts;
     else // $how == 2 || $how == 5, YYYYMMDD or YYYYMmmDD
-        list($year, $month, $day) = explode($sep, $date_);
+        list($year, $month, $day) = $parts;
 
 	if ($how > 2)
 	{
 		global $tmonths;
 		$month = array_search($month, $tmonths);
+		if ($month === false || $month === 0) // unknown month name
+			return "";
 	}
+	// only numeric date parts may be used in the arithmetic below
+	if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day))
+		return "";
+	$year = (int)$year;
+	$month = (int)$month;
+	$day = (int)$day;
 	if ($year+$day+$month) {
 		//to modify assumption in 2030
 		if ($SysPrefs->date_system == 0 || $SysPrefs->date_system == 3)

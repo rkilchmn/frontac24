@@ -721,6 +721,13 @@ function passBack(value) {
 }
 
 /*
+	Returns true if the value is a plain number, that is - a valid date part.
+*/
+function is_date_part(value) {
+	return value !== undefined && value !== null && /^\d+$/.test(String(value).trim());
+}
+
+/*
 	Normalize date format using previous input value to guess missing date elements.
 	Helps fast date input field change with only single or double numbers (for day or day-and-month fragments)
 */
@@ -742,14 +749,14 @@ function fix_date(date, last)
 	} else {
 		day = dat[2]; month = dat[1]; year = dat[0];
 	}
-	if (cur[1] != undefined && cur[1] != "") // day or month entered, could be string 3
+	if (cur[1] != undefined && cur[1] != "")
 	{
 		if (user.datefmt == 0 || user.datefmt == 3 || ((user.datefmt == 2 || user.datefmt == 5) && (cur[2] == undefined || cur[2] == "")))
 			day = cur[1];
 		else
 			month = cur[1];
 	}
-	if (cur[0] != undefined && cur[0] != "") // day or month entered. could be string 3
+	if (cur[0] != undefined && cur[0] != "")
 	{
 		if (cur[1] == undefined || cur[1] == "")
 			day = cur[0];
@@ -760,18 +767,29 @@ function fix_date(date, last)
 		else
 			day = cur[0];
 	}
-	if (cur[2] != undefined && cur[2] != "") // year,
+	if (cur[2] != undefined && cur[2] != "")
 	{
 		if (user.datefmt == 2 || user.datefmt == 5)
 			day = cur[2];
 		else
 			year = cur[2];
 	}
+	// incomplete date: leave the entered value as it is, it cannot be padded
+	// without ending up as 'NaN' or 'undefined' in the date field
+	if (!is_date_part(day) || !is_date_part(year))
+		return date;
+	if (user.datefmt < 3) {
+		if (!is_date_part(month))
+			return date;
+	} else if (month === undefined || month === null || String(month).trim() == "") {
+		return date;
+	}
 	if (user.datefmt<3) {
 		if (day<10) day = '0'+parseInt(day, 10);
 		if (month<10) month = '0'+parseInt(month, 10);
 	}
 	if (year<100) year = year<60 ? (2000+parseInt(year,10)) : (1900+parseInt(year,10));
+
 
 //	console.info(day,month,year)
 	if (user.datefmt == 0 || user.datefmt==3)

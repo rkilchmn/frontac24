@@ -647,7 +647,7 @@ function date_cells($label, $name, $title = null, $check=null, $inc_days=0,
 {
 	global $path_to_root, $Ajax;
 
-	if (!isset($_POST[$name]) || $_POST[$name] == "")
+	if (!isset($_POST[$name]) || $_POST[$name] == "" || is_broken_date_string($_POST[$name]))
 	{
 		if ($inc_years == 1001)
 			$_POST[$name] = null;
