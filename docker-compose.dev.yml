@@ -1,0 +1,39 @@
+# Development overrides:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+#
+# Differences to the base compose file:
+#   * the PHP pool runs as the host user (so files written by the app stay
+#     editable for you, no root-owned files in the git checkout)
+#   * PHP shows errors on screen and the opcache is off
+#   * Xdebug is built into the image and switched on (VS Code debugging)
+#   * containers are not restarted automatically
+
+services:
+  php:
+    restart: "no"
+    build:
+      context: ./docker/php
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.4.10}
+        # build the debugger into the image (see docker/php/Dockerfile)
+        INSTALL_XDEBUG: "1"
+    environment:
+      FA_SECURE_ONLY: "0"
+      # Xdebug 3 connects to the IDE on the host: VS Code listens on 9003
+      FA_XDEBUG: "1"
+      FA_XDEBUG_MODE: ${XDEBUG_MODE:-develop,debug}
+      FA_XDEBUG_CLIENT_HOST: ${XDEBUG_CLIENT_HOST:-host.docker.internal}
+      FA_XDEBUG_CLIENT_PORT: ${XDEBUG_CLIENT_PORT:-9003}
+      # yes = every request opens a debug session, trigger = only when the
+      # request carries XDEBUG_TRIGGER (see DOCKER.md)
+      FA_XDEBUG_START_WITH_REQUEST: ${XDEBUG_START_WITH_REQUEST:-yes}
+    # the IDE runs on the host, not in the container network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./core:/var/www/html
+      - ./docker/generated/config_db.php:/var/www/html/config_db.php
+      - ./docker/php/php-dev.ini:/usr/local/etc/php/conf.d/zzz-fa-dev.ini:ro
+
+  nginx:
+    restart: "no"

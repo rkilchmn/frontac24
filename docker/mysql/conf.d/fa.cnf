@@ -1,0 +1,13 @@
+[mysqld]
+# FA databases were created long ago with utf8 (utf8mb3); keep the server
+# permissive enough to restore those dumps and to keep FA's habit of using
+# '0000-00-00' dates working.
+sql_mode = NO_ENGINE_SUBSTITUTION
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+max_allowed_packet = 256M
+innodb_buffer_pool_size = 256M
+innodb_flush_log_at_trx_commit = 1
+
+[client]
+default-character-set = utf8mb4

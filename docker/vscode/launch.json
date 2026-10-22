@@ -1,0 +1,65 @@
+{
+    // VS Code debug configuration for the FrontAccounting docker stack.
+    //
+    // The "php" debug type comes from the PHP Debug extension
+    // (xdebug.php-debug), the container side is set up by
+    // docker-compose.dev.yml (INSTALL_XDEBUG=1), see DOCKER.md.
+    //
+    // Note: the extension only declares the "launch" request. Listen mode
+    // is a "launch" without "program" and without "runtimeArgs" - that is
+    // how the extension itself starts its listener.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // VS Code listens on 9003, Xdebug in the fa-php container
+            // connects to it (Xdebug 3 "connect" mode).
+            //
+            // Start this configuration, then open the web UI in the
+            // browser: every request opens a debug session and stops on
+            // the first breakpoint.
+            "name": "Listen for Xdebug (fa-php container)",
+            "type": "php",
+            "request": "launch",
+            "port": 9003,
+            "pathMappings": {
+                // the container sees the application in /var/www/html,
+                // the host has it in core/
+                "/var/www/html": "${workspaceFolder}/core"
+            }
+        },
+        {
+            "name": "Launch currently open script",
+            "type": "php",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "port": 0,
+            "runtimeArgs": [
+                "-dxdebug.start_with_request=yes"
+            ],
+            "env": {
+                "XDEBUG_MODE": "debug,develop",
+                "XDEBUG_CONFIG": "client_port=${port}"
+            }
+        },
+        {
+            "name": "Launch Built-in web server",
+            "type": "php",
+            "request": "launch",
+            "runtimeArgs": [
+                "-dxdebug.mode=debug",
+                "-dxdebug.start_with_request=yes",
+                "-S",
+                "localhost:0"
+            ],
+            "program": "",
+            "cwd": "${workspaceFolder}",
+            "port": 9003,
+            "serverReadyAction": {
+                "pattern": "Development Server \\(http://localhost:([0-9]+)\\) started",
+                "uriFormat": "http://localhost:%s",
+                "action": "openExternally"
+            }
+        }
+    ]
+}

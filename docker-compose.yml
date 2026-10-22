@@ -1,0 +1,90 @@
+name: frontaccounting
+
+# Local development stack for FrontAccounting:
+#   db    - MariaDB 11.4 (data in the fa-db-data volume, never published)
+#   php   - PHP 8.4.10 FPM with the FA extensions
+#   nginx - plain HTTP reverse proxy in front of php-fpm
+#
+#   docker compose up -d --build      start
+#   docker compose logs -f php        follow the PHP log
+#   make restore FILE=dump.sql        import a production dump
+#
+# Everything is configured through .env (copy .env.example -> .env).
+
+services:
+  db:
+    image: mariadb:11.4
+    container_name: fa-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD is missing in .env}
+      MARIADB_DATABASE: ${DB_NAME:-frontacc}
+      MARIADB_USER: ${DB_USER:-frontacc}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is missing in .env}
+    volumes:
+      - fa-db-data:/var/lib/mysql
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    # no public port on purpose, use:
+    #   docker compose exec db mariadb -ufrontacc -p frontacc
+    # the line below publishes it on localhost only, for a desktop client
+    ports:
+      - "127.0.0.1:${DB_PORT_HOST:-3307}:3306"
+
+  php:
+    build:
+      context: ./docker/php
+      args:
+        # change PHP_VERSION in .env to test another PHP release
+        PHP_VERSION: ${PHP_VERSION:-8.4.10}
+    container_name: fa-php
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      FA_DB_HOST: db
+      FA_DB_PORT: "3306"
+      FA_DB_USER: ${DB_USER:-frontacc}
+      FA_DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is missing in .env}
+      FA_DB_NAME: ${DB_NAME:-frontacc}
+      FA_DEF_COY: ${FA_DEF_COY:-2}
+      FA_TB_PREF_COUNTER: ${FA_TB_PREF_COUNTER:-7}
+      FA_COMPANIES: ${FA_COMPANIES:?FA_COMPANIES is missing in .env}
+      FA_TIMEZONE: ${FA_TIMEZONE:-Europe/Berlin}
+      FA_SECURE_ONLY: ${FA_SECURE_ONLY:-0}
+      # numeric pool user, so files written by PHP stay owned by the host user
+      FA_POOL_USER: ${FA_POOL_USER:-}
+      FA_POOL_GROUP: ${FA_POOL_GROUP:-}
+    volumes:
+      - ./core:/var/www/html
+      # generated from the environment by the entrypoint, mounted over the
+      # placeholder so the FrontAccounting source tree stays untouched
+      - ./docker/generated/config_db.php:/var/www/html/config_db.php
+    expose:
+      - "9000"
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: fa-nginx
+    restart: unless-stopped
+    depends_on:
+      - php
+    ports:
+      # bound to 127.0.0.1 by default - the test stack is not reachable from
+      # the network. Set HTTP_BIND=0.0.0.0 in .env to expose it.
+      - "${HTTP_BIND:-127.0.0.1}:${HTTP_PORT:-8080}:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # nginx needs the code as well: it serves the static assets and
+      # resolves try_files before handing the request to php-fpm
+      - ./core:/var/www/html:ro
+
+volumes:
+  fa-db-data:
+    name: fa-db-data

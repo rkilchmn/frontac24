@@ -8,3 +8,18 @@ core/modules/*
 frontaccounting.code-workspace
 .vscode/launch.json
 core/installed_extensions.php
+
+# local docker configuration
+.env
+backups/
+docker/data/
+data/
+.venv/
+core/config_db.php.orig
+docker/generated/
+
+# credentials for the test user / LLM agents - never commit these
+Agents.md
+agent.env
+*.agent.env
+kilo.json
