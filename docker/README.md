@@ -16,8 +16,10 @@ nginx/default.conf      nginx server block
 mysql/conf.d/fa.cnf     MariaDB server configuration
 generated/              config_db.php (generated at startup) + the original
 vscode/launch.json      reference copy of the VS Code debug configuration
-                        (.vscode/launch.json itself is gitignored)
+                         (.vscode/launch.json itself is gitignored)
 ```
+
+phpMyAdmin is added as an optional service in `docker-compose.yml`. It runs on port 8081 (configurable via `PMA_PORT_HOST` in `.env`).
 
 Xdebug (development stack only) is not a file in here: the extension is
 built into the image with `INSTALL_XDEBUG=1` and the settings are rendered

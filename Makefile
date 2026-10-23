@@ -16,7 +16,7 @@ COMPOSE  := docker compose
 COMPOSE_DEV := $(COMPOSE) -f docker-compose.yml -f docker-compose.dev.yml
 PHP_PORT ?= $(HTTP_PORT)
 
-.PHONY: dev-env build up up-dev down restart logs ps shell db-shell restore backup \
+.PHONY: dev-env build up up-dev down restart logs ps shell db-shell pma-shell restore backup \
         prod-passwords dev-password clean php-version php-switch test-user \
         agent-creds agent-rotate xdebug
 
@@ -50,6 +50,9 @@ ps:
 shell:
 	$(COMPOSE) exec php bash
 
+pma-shell:
+	$(COMPOSE) exec phpmyadmin sh
+
 db-shell:
 	$(COMPOSE) exec db mariadb -u$(DB_USER) -p$(DB_PASSWORD) $(DB_NAME)
 
@@ -64,8 +67,9 @@ prod-passwords:
 	@scripts/restore-prod-passwords.sh $(FILE)
 
 # set a known password for all users of a company (dev only)
+#   make dev-password PASSWORD=secret COY=2 [USER=llm_agent]
 dev-password:
-	@scripts/set-dev-password.sh $(PASSWORD) $(COY)
+	@scripts/set-dev-password.sh $(PASSWORD) $(COY) $(USER)
 
 # create a test user as a copy of the admin user
 # make test-user USER=llm_agent PASSWORD=secret COY=2

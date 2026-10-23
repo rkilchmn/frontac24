@@ -9,6 +9,7 @@ seconds.
 | `db`    | `mariadb:11.4`            | the FA database (volume `fa-db-data`)             |
 | `php`   | `php:8.4.10-fpm-bookworm` | PHP 8.4.10 FPM with the extensions FA needs       |
 | `nginx` | `nginx:1.27-alpine`       | HTTP front end, replaces the `.htaccess` rules    |
+| `phpmyadmin` | `phpmyadmin/phpmyadmin` | web UI for the database (optional)               |
 
 The application code is **not** baked into an image - `core/` is bind mounted,
 so a `git pull` is live in the browser immediately. **Nothing in `core/` is
@@ -26,6 +27,7 @@ make up            # build + start (first time: also creates .env)
 | | |
 |---|---|
 | Web UI | <http://localhost:8090> (bound to `127.0.0.1` only) |
+| phpMyAdmin | <http://localhost:8081> (bound to `127.0.0.1` only) |
 | Login  | `admin` or `roger` + your **production password** |
 | Companies | GBC (0_), Demo Company (5_), FTSS (4_, preselected), Financial Technology Consulting Pty Ltd (6_) |
 | MariaDB | `127.0.0.1:3307` - user `frontacc`, password in `.env` |
@@ -64,6 +66,7 @@ The database survives `make down` / `make up`. It only disappears with
 ```bash
 make shell         # bash inside the php container
 make db-shell      # mariadb client, already logged in to the FA database
+make pma-shell     # shell inside the phpMyAdmin container (if running)
 ```
 
 Individual services:
@@ -72,6 +75,7 @@ Individual services:
 docker compose exec php bash
 docker compose exec db mariadb -ufrontacc -p frontacc
 docker compose exec nginx sh
+docker compose exec phpmyadmin sh
 ```
 
 ### Application logs
@@ -166,6 +170,7 @@ Everything is in `.env` (gitignored, created from `.env.example`):
 |----------|---------|
 | `HTTP_PORT` | port the web UI is published on |
 | `HTTP_BIND` | interface the web UI is bound to - `127.0.0.1` (default) or `0.0.0.0` |
+| `PMA_PORT_HOST` | port phpMyAdmin is published on (default `8081`) |
 | `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_ROOT_PASSWORD` | database credentials |
 | `FA_COMPANIES` | `<index>\|<name>\|<table prefix>` records, separated by `;` |
 | `FA_DEF_COY` | company preselected on the login screen |

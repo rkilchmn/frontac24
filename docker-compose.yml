@@ -85,6 +85,22 @@ services:
       # resolves try_files before handing the request to php-fpm
       - ./core:/var/www/html:ro
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: fa-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USER:-frontacc}
+      PMA_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is missing in .env}
+      UPLOAD_LIMIT: 64M
+    ports:
+      - "127.0.0.1:${PMA_PORT_HOST:-8081}:80"
+
 volumes:
   fa-db-data:
     name: fa-db-data
