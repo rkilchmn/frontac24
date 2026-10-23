@@ -9,11 +9,10 @@ seconds.
 | `db`    | `mariadb:11.4`            | the FA database (volume `fa-db-data`)             |
 | `php`   | `php:8.4.10-fpm-bookworm` | PHP 8.4.10 FPM with the extensions FA needs       |
 | `nginx` | `nginx:1.27-alpine`       | HTTP front end, replaces the `.htaccess` rules    |
-| `phpmyadmin` | `phpmyadmin/phpmyadmin` | web UI for the database (optional)               |
 
 The application code is **not** baked into an image - `core/` is bind mounted,
 so a `git pull` is live in the browser immediately. **Nothing in `core/` is
-modified** by the containers.
+modified** by the containers. phpMyAdmin is baked into the PHP image.
 
 ---
 
@@ -27,7 +26,7 @@ make up            # build + start (first time: also creates .env)
 | | |
 |---|---|
 | Web UI | <http://localhost:8090> (bound to `127.0.0.1` only) |
-| phpMyAdmin | <http://localhost:8081> (bound to `127.0.0.1` only) |
+| phpMyAdmin | <http://localhost:8090/phpmyadmin/> (same port, served via nginx) |
 | Login  | `admin` or `roger` + your **production password** |
 | Companies | GBC (0_), Demo Company (5_), FTSS (4_, preselected), Financial Technology Consulting Pty Ltd (6_) |
 | MariaDB | `127.0.0.1:3307` - user `frontacc`, password in `.env` |

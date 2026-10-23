@@ -16,7 +16,7 @@ COMPOSE  := docker compose
 COMPOSE_DEV := $(COMPOSE) -f docker-compose.yml -f docker-compose.dev.yml
 PHP_PORT ?= $(HTTP_PORT)
 
-.PHONY: dev-env build up up-dev down restart logs ps shell db-shell pma-shell restore backup \
+.PHONY: dev-env build up up-dev down restart logs ps shell db-shell restore backup \
         prod-passwords dev-password clean php-version php-switch test-user \
         agent-creds agent-rotate xdebug
 
@@ -49,9 +49,6 @@ ps:
 
 shell:
 	$(COMPOSE) exec php bash
-
-pma-shell:
-	$(COMPOSE) exec phpmyadmin sh
 
 db-shell:
 	$(COMPOSE) exec db mariadb -u$(DB_USER) -p$(DB_PASSWORD) $(DB_NAME)

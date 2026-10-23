@@ -84,6 +84,20 @@ RUN set -eux; \
 	rm -rf /tmp/xdebug.tar.gz "/tmp/xdebug-${XDEBUG_VERSION}"; \
 	php -r 'echo "xdebug ", phpversion("xdebug"), " installed\n";'
 
+# phpMyAdmin - installed in the image so it doesn't need to be in the bind-mounted volume
+ARG PMA_VERSION=5.2.3
+RUN set -eux; \
+	cd /tmp; \
+	curl -fsSL -o phpmyadmin.tar.gz "https://files.phpmyadmin.net/phpMyAdmin/${PMA_VERSION}/phpMyAdmin-${PMA_VERSION}-all-languages.tar.gz"; \
+	tar -xzf phpmyadmin.tar.gz; \
+	mv "phpMyAdmin-${PMA_VERSION}-all-languages" /usr/share/phpmyadmin; \
+	rm phpmyadmin.tar.gz; \
+	cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php; \
+	sed -i "s/\['blowfish_secret'\] = ''/\['blowfish_secret'\] = '$(openssl rand -hex 32)'/" /usr/share/phpmyadmin/config.inc.php; \
+	sed -i "s/\['host'\] = 'localhost'/\['host'\] = 'db'/" /usr/share/phpmyadmin/config.inc.php; \
+	sed -i "s/\['port'\] = ''/\['port'\] = '3306'/" /usr/share/phpmyadmin/config.inc.php; \
+	chown -R www-data:www-data /usr/share/phpmyadmin
+
 # FA is a classic PHP app: everything is served through index.php in the
 # document root, no rewrites required.
 WORKDIR /var/www/html

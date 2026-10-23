@@ -5,6 +5,7 @@ core/company/*
 core/tmp/*
 core/lang/installed_languages.inc
 core/modules/*
+core/phpmyadmin
 frontaccounting.code-workspace
 .vscode/launch.json
 core/installed_extensions.php
