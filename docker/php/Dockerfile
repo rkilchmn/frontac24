@@ -1,9 +1,8 @@
 # The PHP version is a build argument, change it in .env:
-#   PHP_VERSION=8.4.10     (matches the production server)
-#   PHP_VERSION=8.4        (latest 8.4 patch release)
-#   PHP_VERSION=8.5.11     (newer minor, needs testing)
+#   PHP_VERSION=8.5.12     (matches the production server)
+#   PHP_VERSION=8.5        (latest 8.5 patch release)
 # Available: https://hub.docker.com/_/php
-ARG PHP_VERSION=8.4.10
+ARG PHP_VERSION=8.5.12
 FROM php:${PHP_VERSION}-fpm-bookworm
 
 # FrontAccounting needs:
