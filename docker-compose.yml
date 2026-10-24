@@ -40,7 +40,6 @@ services:
     build:
       context: ./docker/php
       args:
-        # change PHP_VERSION in .env to test another PHP release
         PHP_VERSION: ${PHP_VERSION:-8.4.10}
     container_name: fa-php
     restart: unless-stopped
@@ -58,16 +57,15 @@ services:
       FA_COMPANIES: ${FA_COMPANIES:?FA_COMPANIES is missing in .env}
       FA_TIMEZONE: ${FA_TIMEZONE:-Europe/Berlin}
       FA_SECURE_ONLY: ${FA_SECURE_ONLY:-0}
-      # numeric pool user, so files written by PHP stay owned by the host user
       FA_POOL_USER: ${FA_POOL_USER:-}
       FA_POOL_GROUP: ${FA_POOL_GROUP:-}
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USER:-frontacc}
+      PMA_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is missing in .env}
     volumes:
       - ./core:/var/www/html
-      # generated from the environment by the entrypoint, mounted over the
-      # placeholder so the FrontAccounting source tree stays untouched
       - ./docker/generated/config_db.php:/var/www/html/config_db.php
-      # phpMyAdmin (installed in PHP image at /usr/share/phpmyadmin)
-      - phpmyadmin:/usr/share/phpmyadmin
     expose:
       - "9000"
 
@@ -78,15 +76,10 @@ services:
     depends_on:
       - php
     ports:
-      # bound to 127.0.0.1 by default - the test stack is not reachable from
-      # the network. Set HTTP_BIND=0.0.0.0 in .env to expose it.
       - "${HTTP_BIND:-127.0.0.1}:${HTTP_PORT:-8080}:80"
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      # nginx needs the code as well: it serves the static assets and
-      # resolves try_files before handing the request to php-fpm
       - ./core:/var/www/html:ro
-      # phpMyAdmin (installed in PHP image at /usr/share/phpmyadmin)
       - phpmyadmin:/usr/share/phpmyadmin:ro
 
 volumes:

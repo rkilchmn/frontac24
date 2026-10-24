@@ -92,11 +92,10 @@ RUN set -eux; \
 	tar -xzf phpmyadmin.tar.gz; \
 	mv "phpMyAdmin-${PMA_VERSION}-all-languages" /usr/share/phpmyadmin; \
 	rm phpmyadmin.tar.gz; \
-	cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php; \
-	sed -i "s/\['blowfish_secret'\] = ''/\['blowfish_secret'\] = '$(openssl rand -hex 32)'/" /usr/share/phpmyadmin/config.inc.php; \
-	sed -i "s/\['host'\] = 'localhost'/\['host'\] = 'db'/" /usr/share/phpmyadmin/config.inc.php; \
-	sed -i "s/\['port'\] = ''/\['port'\] = '3306'/" /usr/share/phpmyadmin/config.inc.php; \
+	cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php.bak; \
 	chown -R www-data:www-data /usr/share/phpmyadmin
+
+COPY phpmyadmin-config.inc.php /usr/share/phpmyadmin/config.inc.php
 
 # FA is a classic PHP app: everything is served through index.php in the
 # document root, no rewrites required.
