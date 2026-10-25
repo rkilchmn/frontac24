@@ -14,7 +14,11 @@ core/installed_extensions.php
 .env
 backups/
 docker/data/
-data/
+# data/ is tracked, but ignore generated csv/pdf/zip files
+!data/
+data/**/*.csv
+data/**/*.pdf
+data/**/*.zip
 .venv/
 core/config_db.php.orig
 docker/generated/
