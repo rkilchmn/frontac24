@@ -866,14 +866,16 @@ var inserts = {
 				if (validate(e)) {
 					save_focus(e);
 					var asp = e.getAttribute('aspect')
-					if (asp && (asp.indexOf('process') !== -1))
+					if (asp && (asp.indexOf('process') !== -1)) {
+						window.scrollTo(0,0);
 						JsHttpRequest.request(this, null, 600000); // ten minutes for backup
+					}
 					else
 						JsHttpRequest.request(this);
 				}
 				return false;
 			}
-	},
+		},
 	'.amount': function(e) {
 		if (e.onblur == undefined) {
 		  e.setAttribute('_last_val', e.value);

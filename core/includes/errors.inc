@@ -111,25 +111,18 @@ function fmt_errors($center=false) {
   	$type = E_USER_NOTICE;
   	$content = '';
 
-  	if (count($messages)) {
-		foreach($messages as $cnt=>$msg) {
-			if ($SysPrefs->go_debug && $msg[0]>E_USER_NOTICE)
-		 		$msg[0] = E_ERROR;
+    if (count($messages)) {
+        foreach($messages as $cnt=>$msg) {
+            if ($SysPrefs->go_debug && $msg[0]>E_USER_NOTICE)
+                $msg[0] = E_ERROR;
 
-			if ($msg[0]>$type) continue;
+            // Track highest severity (lowest number) for CSS class,
+            // but show all messages regardless of severity
+            if ($msg[0] < $type) {
+                $type = $msg[0];
+            }
 
-			if ($msg[0]<$type) { 
-				if ($msg[0] == E_USER_WARNING) {
-					$type = E_USER_WARNING; // user warnings 
-					$content = ''; 			// clean notices when we have errors
-				} else  {
-					$type = E_USER_ERROR; 	// php or user errors 
-					if($type == E_USER_WARNING)
-						$content = ''; 			// clean other messages
-				}
-			}
-
-	    	$str = $msg[1];
+            $str = $msg[1];
 			if (!in_array($msg[0], array(E_USER_NOTICE, E_USER_ERROR, E_USER_WARNING)) && $msg[2] != null)
 		  		$str .= ' '._('in file').': '.$msg[2].' '._('at line ').$msg[3];
 
