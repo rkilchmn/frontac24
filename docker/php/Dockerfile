@@ -64,7 +64,7 @@ RUN set -eux; \
 # pecl.php.net channel answers with a 504 from some networks, the release
 # tarball is stable and can be pinned to a version.
 ARG INSTALL_XDEBUG=0
-ARG XDEBUG_VERSION=3.4.3
+ARG XDEBUG_VERSION=3.5.2
 RUN set -eux; \
 	if [ "$INSTALL_XDEBUG" != "1" ]; then \
 		echo ">>> xdebug not requested (INSTALL_XDEBUG=$INSTALL_XDEBUG)"; \
