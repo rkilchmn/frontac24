@@ -127,24 +127,9 @@ function void_transaction($type, $type_no, $date_, $memo_)
 	}
 
 	// only add an entry if it's actually been voided
-	$debugInfo = "void_transaction: type={$type} no={$type_no} date={$date_}";
-	$debugInfo .= " | exists_gl_trans=" . (exists_gl_trans($type, $type_no) ? 'yes' : 'no');
-	$debugInfo .= " | check_wo_costing=" . (check_wo_costing($type, $type_no) ? 'yes' : 'no');
-	
 	add_audit_trail($type, $type_no, $date_, _("Voided.")."\n".$memo_);
 	$Refs->restore_last($type, $type_no);
 	add_voided_entry($type, $type_no, $date_, $memo_);
-	
-	// Verify the entry was added
-	$verifyEntry = get_voided_entry($type, $type_no);
-	$debugInfo .= " | verify_added=" . ($verifyEntry ? 'yes' : 'no');
-	
-	// Store debug info for display
-	if (!isset($GLOBALS['voidDebugInfo'])) {
-		$GLOBALS['voidDebugInfo'] = [];
-	}
-	$GLOBALS['voidDebugInfo'][] = $debugInfo;
-	
 	return false;
 }
 
