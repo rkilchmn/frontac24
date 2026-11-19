@@ -139,7 +139,12 @@ function void_transaction($type, $type_no, $date_, $memo_)
 	$verifyEntry = get_voided_entry($type, $type_no);
 	$debugInfo .= " | verify_added=" . ($verifyEntry ? 'yes' : 'no');
 	
-	error_log($debugInfo);
+	// Store debug info for display
+	if (!isset($GLOBALS['voidDebugInfo'])) {
+		$GLOBALS['voidDebugInfo'] = [];
+	}
+	$GLOBALS['voidDebugInfo'][] = $debugInfo;
+	
 	return false;
 }
 
