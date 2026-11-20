@@ -119,7 +119,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             IF(gl1.person_id, gl1.person_type_id, IF(sup.supplier_id,".  PT_SUPPLIER . "," .  "IF(debt.debtor_no," . PT_CUSTOMER . "," . 
             "IF(bt.person_id != '' AND !ISNULL(bt.person_id), bt.person_type_id, -1)))) as person_type_id,
             IFNULL(st.tran_date, IFNULL(dt.tran_date, IFNULL(bt.trans_date, IFNULL(grn.delivery_date, gl1.tran_date)))) as doc_date,
-            coa.account_name, ref.reference, IF(ISNULL(c.memo_), gl1.memo_, IF(gl1.type = ".ST_BANKTRANSFER." or gl1.type = ".ST_BANKPAYMENT." or gl1.type = ".ST_BANKDEPOSIT.",c.memo_,CONCAT(gl1.memo_,' ',c.memo_))) AS memo,
+            coa.account_name, refs.reference, IF(ISNULL(c.memo_), gl1.memo_, IF(gl1.type = ".ST_BANKTRANSFER." or gl1.type = ".ST_BANKPAYMENT." or gl1.type = ".ST_BANKDEPOSIT.",c.memo_,CONCAT(gl1.memo_,' ',c.memo_))) AS memo,
             dt.order_,
             MAX(bt.reconciled) as reconciled
              FROM "
@@ -140,7 +140,7 @@ function get_gl_transactions($from_date, $to_date, $trans_no=0,
             LEFT JOIN ".TB_PREF."audit_trail a ON a.type=gl1.type AND a.trans_no=gl1.type_no AND NOT ISNULL(gl_seq)
             LEFT JOIN ".TB_PREF."users u ON a.user=u.id
             LEFT JOIN ".TB_PREF."comments c ON c.id=gl1.type_no AND c.type=gl1.type
-            LEFT JOIN ".TB_PREF."refs ref ON ref.type=gl1.type AND ref.id=gl1.type_no";
+            LEFT JOIN ".TB_PREF."refs refs ON refs.type=gl1.type AND refs.id=gl1.type_no";
 
     // Retrieve the complete GL transaction, regardless of which side meets the search criteria
     if ($account == null)

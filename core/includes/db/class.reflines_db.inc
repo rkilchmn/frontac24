@@ -83,8 +83,8 @@ class reflines_db extends data_set {
 				LEFT JOIN ".TB_PREF."voided as v
 					ON r.id=v.id AND r.type=v.type
 				WHERE r.type=".db_escape($trans_type)." AND ISNULL(v.id)
-				) ref
-			LEFT JOIN ".TB_PREF."reflines line ON ref.type=line.trans_type AND substr(ref.reference,1, LENGTH(line.prefix))= line.prefix AND line.prefix<>''
+				) refs
+			LEFT JOIN ".TB_PREF."reflines line ON refs.type=line.trans_type AND substr(refs.reference,1, LENGTH(line.prefix))= line.prefix AND line.prefix<>''
 			WHERE ".($prefix == '' ? "ISNULL(prefix)" : "prefix=".db_escape($prefix));
 
 		$res = db_query($sql, "cannot check reference line");
