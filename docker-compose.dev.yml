@@ -27,6 +27,9 @@ services:
       # yes = every request opens a debug session, trigger = only when the
       # request carries XDEBUG_TRIGGER (see DOCKER.md)
       FA_XDEBUG_START_WITH_REQUEST: ${XDEBUG_START_WITH_REQUEST:-yes}
+      # 10 min: keep in sync with fastcgi_read_timeout (nginx) and
+      # request_terminate_timeout (php-fpm-debug.conf)
+      FA_MAX_EXECUTION_TIME: "600"
     # the IDE runs on the host, not in the container network
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -34,6 +37,8 @@ services:
       - ./core:/var/www/html
       - ./docker/generated/config_db.php:/var/www/html/config_db.php
       - ./docker/php/php-dev.ini:/usr/local/etc/php/conf.d/zzz-fa-dev.ini:ro
+      # dev-only php-fpm override: don't kill workers paused in the debugger
+      - ./docker/php/php-fpm-debug.conf:/usr/local/etc/php-fpm.d/zzz-fa-debug.conf:ro
 
   nginx:
     restart: "no"
