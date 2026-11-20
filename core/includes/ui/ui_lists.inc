@@ -1658,8 +1658,11 @@ function bank_accounts_list($name, $selected_id=null, $submit_on_change=false, $
 	$sql = "SELECT id, bank_account_name, bank_curr_code, inactive
 		FROM ".TB_PREF."bank_accounts";
 
-	if ($selected_id === null)
-		$selected_id = last_bank_trans('bank_act');
+	// Use the last used bank account only as fallback.  Forcing it into
+	// $selected_id here would make combo_input() treat the value as an
+	// explicit selection and ignore $_POST[$name], so changing the list
+	// would never stick (it always reverted to the last used account).
+	$default = $selected_id === null ? last_bank_trans('bank_act') : $selected_id;
 
 	return combo_input($name, $selected_id, $sql, 'id', 'bank_account_name',
 		array(
@@ -1667,7 +1670,7 @@ function bank_accounts_list($name, $selected_id=null, $submit_on_change=false, $
 			'select_submit'=> $submit_on_change,
 			'spec_option' => $spec_option,
 			'spec_id' => '',
-			'default' => $selected_id,
+			'default' => $default,
 			'async' => false
 		) );
 }
