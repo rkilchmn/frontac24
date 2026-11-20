@@ -1,7 +1,7 @@
 name: frontaccounting
 
 # Local development stack for FrontAccounting:
-#   db    - MariaDB 11.4 (data in the fa-db-data volume, never published)
+#   db    - MariaDB 13.0.2 (data in the fa-db-data volume, never published)
 #   php   - PHP 8.4.10 FPM with the FA extensions
 #   nginx - plain HTTP reverse proxy in front of php-fpm
 #
@@ -13,7 +13,7 @@ name: frontaccounting
 
 services:
   db:
-    image: mariadb:11.4
+    image: mariadb:13.0.2
     container_name: fa-db
     restart: unless-stopped
     environment:

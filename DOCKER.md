@@ -6,7 +6,7 @@ seconds.
 
 | service | image                     | job                                              |
 |---------|---------------------------|--------------------------------------------------|
-| `db`    | `mariadb:11.4`            | the FA database (volume `fa-db-data`)             |
+| `db`    | `mariadb:13.0.2`          | the FA database (volume `fa-db-data`), same as production |
 | `php`   | `php:8.4.10-fpm-bookworm` | PHP 8.4.10 FPM with the extensions FA needs       |
 | `nginx` | `nginx:1.27-alpine`       | HTTP front end, replaces the `.htaccess` rules    |
 
